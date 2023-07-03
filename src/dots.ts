@@ -1,19 +1,20 @@
 export class Dots {
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
-    private cameraOffset = {
+    private offset = {
         x: window.innerWidth / 2, y:
             window.innerHeight / 2
     }
-    private cameraZoom = 1
+    private zoom = 1
     private MAX_ZOOM = 5
     private MIN_ZOOM = 0.1
     private SCROLL_SENSITIVITY = 0.0025
     private isDragging = false
     private dragStart = {x: 0, y: 0}
     private initialPinchDistance: number = 0
-    private lastZoom = this.cameraZoom
+    private lastZoom = this.zoom
     private dots: Dot[] = []
+    private origin = {x: window.innerWidth / 2, y: window.innerHeight / 2}
 
     constructor(canvasId: string) {
         this.canvas = document.getElementById(canvasId)! as
@@ -41,10 +42,20 @@ export class Dots {
     public draw() {
         this.canvas.width = window.innerWidth
         this.canvas.height = window.innerHeight
-        this.ctx.translate(window.innerWidth / 2, window.innerHeight / 2)
-        this.ctx.scale(this.cameraZoom, this.cameraZoom)
-        this.ctx.translate(-window.innerWidth / 2 + this.cameraOffset.x,
-            -window.innerHeight / 2 + this.cameraOffset.y)
+
+        const scale = this.zoom
+
+        const translateVec = {
+            x: this.offset.x,
+            y: this.offset.y,
+        }
+
+        const mat_transform = new DOMMatrix([
+            scale, 0, //  Sx  Qx
+            0, scale, //  Qy  Sy
+            translateVec.x, translateVec.y, //  Tx  Ty
+        ])
+        this.ctx.setTransform(mat_transform)
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.fillStyle = "#700c0c"
         this.drawRect(-50, -50, 100, 100)
@@ -95,30 +106,22 @@ export class Dots {
     private onPointerDown(e: MouseEvent) {
         this.isDragging = true
         let point = this.getEventLocation(e)!
-        const scaledX = point.x / this.cameraZoom
-        const scaledY = point.y / this.cameraZoom
-//const halfWidth = window.innerWidth/2
-        this.dragStart.x = scaledX - this.cameraOffset.x
-        this.dragStart.y = scaledY - this.cameraOffset.y
-        const x = scaledX - this.cameraOffset.x / this.cameraZoom;
-//const y = scaledY - this.cameraOffset.y / this.cameraZoom;
-        console.log(this.cameraZoom, this.cameraOffset.x -
-            window.innerWidth / this.cameraZoom, "client x=" + point.x)//this.dots.push({x: x, y: y, size: 10, color: "red"})
+        this.dragStart = {x: point.x + this.origin.x - this.offset.x, y: point.y + this.origin.y - this.offset.y}
+        console.log(this.zoom, this.offset.x, "client x=" + point.x,)//
+        this.dots.push({x: x, y: y, size: 10, color: "red"})
     }
 
     private onPointerUp() {
         this.isDragging = false
         this.initialPinchDistance = 0
-        this.lastZoom = this.cameraZoom
+        this.lastZoom = this.zoom
     }
 
     private onPointerMove(e: any) {
         if (this.isDragging) {
             let point = this.getEventLocation(e)!
-            this.cameraOffset.x = point.x / this.cameraZoom -
-                this.dragStart.x
-            this.cameraOffset.y = point.y / this.cameraZoom -
-                this.dragStart.y
+            this.offset.x = point.x - this.dragStart.x + this.origin.x
+            this.offset.y = point.y - this.dragStart.y + this.origin.y
         }
     }
 
@@ -149,12 +152,12 @@ export class Dots {
     private adjustZoom(zoomAmount: any, zoomFactor: any) {
         if (!this.isDragging) {
             if (zoomAmount) {
-                this.cameraZoom -= zoomAmount
+                this.zoom -= zoomAmount
             } else if (zoomFactor) {
-                this.cameraZoom = zoomFactor * this.lastZoom
+                this.zoom = zoomFactor * this.lastZoom
             }
-            this.cameraZoom = Math.min(this.cameraZoom, this.MAX_ZOOM)
-            this.cameraZoom = Math.max(this.cameraZoom, this.MIN_ZOOM)
+            this.zoom = Math.min(this.zoom, this.MAX_ZOOM)
+            this.zoom = Math.max(this.zoom, this.MIN_ZOOM)
         }
     }
 }
@@ -165,3 +168,42 @@ interface Dot {
     color: string
     size: number
 }
+
+
+////
+
+//
+// const animate = function(dt) {
+//     clear()
+//     const scale = 1.5
+//     const translationFactor = {
+//         x: Math.sin(dt * 0.001) * 50,
+//         y: -Math.cos(dt * 0.001) * 50
+//     }
+//
+//     const origin = {
+//         x: (canvas.width / 2),
+//         y: (canvas.height / 2)
+//     }
+//
+//     const offset = {
+//         x: (1 - scale) * origin.x,
+//         y: (1 - scale) * origin.y
+//     }
+//
+//
+//     const translateVec = {
+//         x: translationFactor.x + offset.x,
+//         y: translationFactor.y + offset.y,
+//     }
+//
+//     const mat_transform = new DOMMatrix([
+//         scale, 0, //  Sx  Qx
+//         0, scale, //  Qy  Sy
+//         translateVec.x, translateVec.y, //  Tx  Ty
+//     ])
+//     ctx.setTransform(mat_transform)
+//     drawGrid()
+//     ctx.setTransform(1, 0, 0, 1, 0, 0)
+//     window.requestAnimationFrame(animate)
+// https://farazzshaikh.medium.com/affine-transformations-pan-zoom-skew-96a3adf38eb2
