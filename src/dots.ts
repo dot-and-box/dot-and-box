@@ -1,10 +1,7 @@
 export class Dots {
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
-    private offset = {
-        x: window.innerWidth / 2, y:
-            window.innerHeight / 2
-    }
+
     private zoom = 1
     private MAX_ZOOM = 5
     private MIN_ZOOM = 0.1
@@ -15,6 +12,9 @@ export class Dots {
     private lastZoom = this.zoom
     private dots: Dot[] = []
     private origin = {x: window.innerWidth / 2, y: window.innerHeight / 2}
+    private offset = {
+        x: 0, y: 0
+    }
 
     constructor(canvasId: string) {
         this.canvas = document.getElementById(canvasId)! as
@@ -46,8 +46,8 @@ export class Dots {
         const scale = this.zoom
 
         const translateVec = {
-            x: this.offset.x,
-            y: this.offset.y,
+            x: this.offset.x + this.origin.x,
+            y: this.offset.y + this.origin.y,
         }
 
         const mat_transform = new DOMMatrix([
@@ -106,9 +106,9 @@ export class Dots {
     private onPointerDown(e: MouseEvent) {
         this.isDragging = true
         let point = this.getEventLocation(e)!
-        this.dragStart = {x: point.x + this.origin.x - this.offset.x, y: point.y + this.origin.y - this.offset.y}
-        console.log(this.zoom, this.offset.x, "client x=" + point.x,)//
-        this.dots.push({x: x, y: y, size: 10, color: "red"})
+        this.dragStart = {x: point.x - this.offset.x, y: point.y - this.offset.y}
+        console.log(this.zoom, this.offset.x, "client x=" + point.x,)
+        this.dots.push({x: (this.dragStart.x - this.origin.x)/this.zoom, y: (this.dragStart.y - this.origin.y)/this.zoom, size: 10, color: "red"})
     }
 
     private onPointerUp() {
@@ -120,8 +120,8 @@ export class Dots {
     private onPointerMove(e: any) {
         if (this.isDragging) {
             let point = this.getEventLocation(e)!
-            this.offset.x = point.x - this.dragStart.x + this.origin.x
-            this.offset.y = point.y - this.dragStart.y + this.origin.y
+            this.offset.x = point.x - this.dragStart.x
+            this.offset.y = point.y - this.dragStart.y
         }
     }
 
