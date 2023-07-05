@@ -12,9 +12,7 @@ export class Dots {
     private lastZoom = this.zoom
     private dots: Dot[] = []
     private origin = {x: window.innerWidth / 2, y: window.innerHeight / 2}
-    private offset = {
-        x: 0, y: 0
-    }
+    private offset = {x: window.innerWidth / 2, y: window.innerHeight / 2}
 
     constructor(canvasId: string) {
         this.canvas = document.getElementById(canvasId)! as
@@ -43,19 +41,10 @@ export class Dots {
         this.canvas.width = window.innerWidth
         this.canvas.height = window.innerHeight
 
-        const scale = this.zoom
+        this.ctx.translate(this.origin.x, this.origin.y)
+        this.ctx.scale(this.zoom, this.zoom)
+        this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
 
-        const translateVec = {
-            x: this.offset.x + this.origin.x,
-            y: this.offset.y + this.origin.y,
-        }
-
-        const mat_transform = new DOMMatrix([
-            scale, 0, //  Sx  Qx
-            0, scale, //  Qy  Sy
-            translateVec.x, translateVec.y, //  Tx  Ty
-        ])
-        this.ctx.setTransform(mat_transform)
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.fillStyle = "#700c0c"
         this.drawRect(-50, -50, 100, 100)
@@ -68,8 +57,8 @@ export class Dots {
             this.ctx.stroke()
         }
         this.ctx.closePath()
-        this.ctx.fillStyle = "#a211dc"
-        this.drawText("Simple Pan and Zoom Canvas", -255, -100, 32,
+        this.ctx.fillStyle = "#295f6d"
+        this.drawText("Dots are ruling the world bro!", -255, -100, 32,
             "courier")
         for (const dot of this.dots) {
             this.drawDot(dot)
@@ -106,9 +95,16 @@ export class Dots {
     private onPointerDown(e: MouseEvent) {
         this.isDragging = true
         let point = this.getEventLocation(e)!
-        this.dragStart = {x: point.x - this.offset.x, y: point.y - this.offset.y}
-        console.log(this.zoom, this.offset.x, "client x=" + point.x,)
-        this.dots.push({x: (this.dragStart.x - this.origin.x)/this.zoom, y: (this.dragStart.y - this.origin.y)/this.zoom, size: 10, color: "red"})
+        this.dragStart = {x: point.x / this.zoom - this.offset.x, y: point.y / this.zoom - this.offset.y}
+
+        this.dots.push({
+            x: point.x / this.zoom - this.origin.x / this.zoom + (-this.offset.x + this.origin.x),
+            y: point.y / this.zoom - this.origin.y / this.zoom + (-this.offset.y + this.origin.y),
+            size: 10,
+            color: "red"
+        })
+        console.log(this.dragStart.x, this.dragStart.y)
+
     }
 
     private onPointerUp() {
@@ -120,8 +116,8 @@ export class Dots {
     private onPointerMove(e: any) {
         if (this.isDragging) {
             let point = this.getEventLocation(e)!
-            this.offset.x = point.x - this.dragStart.x
-            this.offset.y = point.y - this.dragStart.y
+            this.offset.x = point.x / this.zoom - this.dragStart.x
+            this.offset.y = point.y / this.zoom - this.dragStart.y
         }
     }
 
@@ -138,7 +134,6 @@ export class Dots {
         e.preventDefault()
         let touch1 = {x: e.touches[0].clientX, y: e.touches[0].clientY}
         let touch2 = {x: e.touches[1].clientX, y: e.touches[1].clientY}
-// This is distance squared, but no need for an expensive sqrt as it's only used in ratio
         let currentDistance = (touch1.x - touch2.x) ** 2 + (touch1.y -
             touch2.y) ** 2
         if (this.initialPinchDistance == null) {
@@ -168,42 +163,3 @@ interface Dot {
     color: string
     size: number
 }
-
-
-////
-
-//
-// const animate = function(dt) {
-//     clear()
-//     const scale = 1.5
-//     const translationFactor = {
-//         x: Math.sin(dt * 0.001) * 50,
-//         y: -Math.cos(dt * 0.001) * 50
-//     }
-//
-//     const origin = {
-//         x: (canvas.width / 2),
-//         y: (canvas.height / 2)
-//     }
-//
-//     const offset = {
-//         x: (1 - scale) * origin.x,
-//         y: (1 - scale) * origin.y
-//     }
-//
-//
-//     const translateVec = {
-//         x: translationFactor.x + offset.x,
-//         y: translationFactor.y + offset.y,
-//     }
-//
-//     const mat_transform = new DOMMatrix([
-//         scale, 0, //  Sx  Qx
-//         0, scale, //  Qy  Sy
-//         translateVec.x, translateVec.y, //  Tx  Ty
-//     ])
-//     ctx.setTransform(mat_transform)
-//     drawGrid()
-//     ctx.setTransform(1, 0, 0, 1, 0, 0)
-//     window.requestAnimationFrame(animate)
-// https://farazzshaikh.medium.com/affine-transformations-pan-zoom-skew-96a3adf38eb2
