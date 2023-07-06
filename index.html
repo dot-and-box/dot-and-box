@@ -11,9 +11,17 @@
             scrollbar-width: none;
             overflow: hidden;
         }
+        #menu {
+            position: absolute;
+            z-index: 200;
+        }
+
     </style>
 </head>
 <body>
+<div id="menu">
+    <button id="zoom-reset">1:1</button>
+</div>
 <canvas id="canvas"></canvas>
 <script type="module" src="/src/main.ts"></script>
 </body>

@@ -2,7 +2,7 @@ export class Dots {
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
 
-    private zoom = 1
+    public zoom = 1
     private MAX_ZOOM = 5
     private MIN_ZOOM = 0.1
     private SCROLL_SENSITIVITY = 0.0025
@@ -46,17 +46,9 @@ export class Dots {
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-        this.ctx.fillStyle = "#700c0c"
+        this.ctx.fillStyle = "#2d3696"
         this.drawRect(-50, -50, 100, 100)
-        this.ctx.beginPath()
-        this.ctx.lineWidth = 0.5
-        this.ctx.strokeStyle = "black"
-        for (let i = -100; i < 100; i += 10) {
-            this.ctx.moveTo(i * 10, -500);
-            this.ctx.lineTo(i * 10, 500);
-            this.ctx.stroke()
-        }
-        this.ctx.closePath()
+
         this.ctx.fillStyle = "#295f6d"
         this.drawText("Dots are ruling the world bro!", -255, -100, 32,
             "courier")
@@ -90,6 +82,11 @@ export class Dots {
         this.ctx.fillStyle = dot.color;
         this.ctx.fill();
         this.ctx.closePath()
+        this.ctx.font = `${dot.size}px courier`
+        this.ctx.fillStyle = "white"
+        const textOffset = dot.size / 2 - 2
+        const xOffset = textOffset * dot.text.length
+        this.ctx.fillText(dot.text, dot.x - xOffset, dot.y + textOffset)
     }
 
     private onPointerDown(e: MouseEvent) {
@@ -100,11 +97,10 @@ export class Dots {
         this.dots.push({
             x: point.x / this.zoom - this.origin.x / this.zoom + (-this.offset.x + this.origin.x),
             y: point.y / this.zoom - this.origin.y / this.zoom + (-this.offset.y + this.origin.y),
-            size: 10,
-            color: "red"
+            size: 12,
+            text: this.dots.length.toString(),
+            color: "#85154c"
         })
-        console.log(this.dragStart.x, this.dragStart.y)
-
     }
 
     private onPointerUp() {
@@ -162,4 +158,5 @@ interface Dot {
     y: number
     color: string
     size: number
+    text: string
 }
