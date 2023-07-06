@@ -1,3 +1,7 @@
+import {Point} from "./point.ts";
+import {Dot} from "./dot.ts";
+import {Tool} from "./tool.ts";
+
 export class Dots {
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
@@ -14,7 +18,17 @@ export class Dots {
     private origin = {x: window.innerWidth / 2, y: window.innerHeight / 2}
     private offset = {x: window.innerWidth / 2, y: window.innerHeight / 2}
 
+    public readonly EMPTY_TOOL: string = "empty-tool"
+    public readonly DOTS_TOOL: string = "dots-tool"
+    private tool: Tool = new EmptyTool()
+
+    private tools: Map<string, Tool> = new Map([
+        [this.EMPTY_TOOL, new EmptyTool()],
+        [this.DOTS_TOOL, new DotsTool(this.dots)]
+    ])
+
     constructor(canvasId: string) {
+        this.selectTool(this.DOTS_TOOL)
         this.canvas = document.getElementById(canvasId)! as
             HTMLCanvasElement
         this.ctx = this.canvas.getContext('2d')! as
@@ -35,6 +49,12 @@ export class Dots {
             this.handleTouch(e, this.onPointerMove))
         this.canvas.addEventListener('wheel', (e) =>
             this.adjustZoom(e.deltaY * this.SCROLL_SENSITIVITY, 1))
+    }
+
+    selectTool(toolName: string) {
+        if (this.tools.has(toolName)) {
+            this.tool = this.tools.get(toolName)!
+        }
     }
 
     public draw() {
@@ -58,12 +78,13 @@ export class Dots {
         requestAnimationFrame(() => this.draw())
     }
 
-    private getEventLocation(e: any) {
+    private getEventLocation(e: any): Point | null {
         if (e.touches && e.touches.length == 1) {
             return {x: e.touches[0].clientX, y: e.touches[0].clientY}
         } else if (e.clientX && e.clientY) {
             return {x: e.clientX, y: e.clientY}
         }
+        return null
     }
 
     drawRect(x: number, y: number, width: number, height: number) {
@@ -91,16 +112,17 @@ export class Dots {
 
     private onPointerDown(e: MouseEvent) {
         this.isDragging = true
-        let point = this.getEventLocation(e)!
-        this.dragStart = {x: point.x / this.zoom - this.offset.x, y: point.y / this.zoom - this.offset.y}
+        let clientPoint = this.getEventLocation(e)
+        if (clientPoint == null)
+            return
+        const point = {
+            x: clientPoint.x / this.zoom - this.origin.x / this.zoom + (-this.offset.x + this.origin.x),
+            y: clientPoint.y / this.zoom - this.origin.y / this.zoom + (-this.offset.y + this.origin.y)
+        }
+        this.dragStart = {x: clientPoint.x / this.zoom - this.offset.x, y: clientPoint.y / this.zoom - this.offset.y}
 
-        this.dots.push({
-            x: point.x / this.zoom - this.origin.x / this.zoom + (-this.offset.x + this.origin.x),
-            y: point.y / this.zoom - this.origin.y / this.zoom + (-this.offset.y + this.origin.y),
-            size: 12,
-            text: this.dots.length.toString(),
-            color: "#85154c"
-        })
+        this.tool.click(point)
+
     }
 
     private onPointerUp() {
@@ -153,10 +175,30 @@ export class Dots {
     }
 }
 
-interface Dot {
-    x: number
-    y: number
-    color: string
-    size: number
-    text: string
+
+class EmptyTool implements Tool {
+    click(point: Point): void {
+        console.log(point)
+    }
+
+}
+
+class DotsTool implements Tool {
+
+    dots: Dot[]
+
+    constructor(dots: Dot[]) {
+        this.dots = dots
+    }
+
+    click(point: Point): void {
+        this.dots.push({
+            x: point.x,
+            y: point.y,
+            size: 12,
+            text: this.dots.length.toString(),
+            color: "#85154c"
+        })
+    }
+
 }
