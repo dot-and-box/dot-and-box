@@ -6,25 +6,27 @@ export class Dots {
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
 
-    public zoom = 1
+    public zoom: number = 1
     private MAX_ZOOM = 5
     private MIN_ZOOM = 0.1
     private SCROLL_SENSITIVITY = 0.0025
-    private isDragging = false
+    public isDragging = false
     private dragStart = {x: 0, y: 0}
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
     private dots: Dot[] = []
-    private origin = {x: window.innerWidth / 2, y: window.innerHeight / 2}
-    private offset = {x: window.innerWidth / 2, y: window.innerHeight / 2}
+    private origin : Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
+    public offset: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
 
     public readonly EMPTY_TOOL: string = "empty-tool"
     public readonly DOTS_TOOL: string = "dots-tool"
+    public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private tool: Tool = new EmptyTool()
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
-        [this.DOTS_TOOL, new DotsTool(this.dots)]
+        [this.DOTS_TOOL, new DotsTool(this.dots)],
+        [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
     ])
 
     constructor(canvasId: string) {
@@ -115,14 +117,14 @@ export class Dots {
         let clientPoint = this.getEventLocation(e)
         if (clientPoint == null)
             return
+
         const point = {
-            x: clientPoint.x / this.zoom - this.origin.x / this.zoom + (-this.offset.x + this.origin.x),
-            y: clientPoint.y / this.zoom - this.origin.y / this.zoom + (-this.offset.y + this.origin.y)
+            x: clientPoint.x / this.zoom - this.offset.x + this.origin.x - this.origin.x / this.zoom,
+            y: clientPoint.y / this.zoom - this.offset.y + this.origin.y - this.origin.y / this.zoom
         }
-        this.dragStart = {x: clientPoint.x / this.zoom - this.offset.x, y: clientPoint.y / this.zoom - this.offset.y}
 
+        this.dragStart = point
         this.tool.click(point)
-
     }
 
     private onPointerUp() {
@@ -133,9 +135,11 @@ export class Dots {
 
     private onPointerMove(e: any) {
         if (this.isDragging) {
-            let point = this.getEventLocation(e)!
-            this.offset.x = point.x / this.zoom - this.dragStart.x
-            this.offset.y = point.y / this.zoom - this.dragStart.y
+            let clientPoint = this.getEventLocation(e)!
+            this.offset = {
+                x: clientPoint.x / this.zoom + this.origin.x - this.origin.x / this.zoom - this.dragStart.x,
+                y: clientPoint.y / this.zoom + this.origin.y - this.origin.y / this.zoom - this.dragStart.y,
+            }
         }
     }
 
@@ -176,22 +180,30 @@ export class Dots {
 }
 
 
-class EmptyTool implements Tool {
-    click(point: Point): void {
+class EmptyTool extends Tool {
+    override click(point: Point): void {
         console.log(point)
     }
 
+    override move(point: Point): void {
+        console.log(point)
+    }
+
+    override up(point: Point): void {
+        console.log(point)
+    }
 }
 
-class DotsTool implements Tool {
+class DotsTool extends Tool {
 
     dots: Dot[]
 
     constructor(dots: Dot[]) {
+        super()
         this.dots = dots
     }
 
-    click(point: Point): void {
+    override click(point: Point): void {
         this.dots.push({
             x: point.x,
             y: point.y,
@@ -202,3 +214,19 @@ class DotsTool implements Tool {
     }
 
 }
+
+class PanZoomTool extends Tool {
+
+    dots: Dots
+
+    constructor(dots: Dots) {
+        super()
+        this.dots = dots
+    }
+
+    override click(point: Point): void {
+        console.log(point)
+    }
+
+}
+
