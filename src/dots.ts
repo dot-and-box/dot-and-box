@@ -1,6 +1,7 @@
 import {Point} from "./point.ts";
 import {Control, Dot} from "./dot.ts";
 import {Tool} from "./tool.ts";
+import {Component} from "./component.ts";
 
 export class Dots {
     private canvas: HTMLCanvasElement
@@ -13,7 +14,7 @@ export class Dots {
     public isDragging = false
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
-    private controls: Control[] = []
+    public controls: Control[] = []
     private origin: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
     public offset: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
 
@@ -237,14 +238,16 @@ class ComponentTool extends Tool {
     override click(point: Point): void {
         this.dragStart = point
 
+        this.dots.controls.push(new Component(
+            point,
+            "rgba(37,33,133,0.68)",
+            {x: 50, y: 50},
+            this.dots.controls.length.toString(),
+        ))
+
     }
 
-    override move(movePoint: Point) {
-        this.dots.offset = {
-            x: movePoint.x - this.dragStart.x,
-            y: movePoint.y - this.dragStart.y,
-        }
-    }
+
 
 }
 
