@@ -1,5 +1,5 @@
 import {Point} from "./point.ts";
-import {Dot} from "./dot.ts";
+import {Control, Dot} from "./dot.ts";
 import {Tool} from "./tool.ts";
 
 export class Dots {
@@ -11,21 +11,22 @@ export class Dots {
     private MIN_ZOOM = 0.1
     private SCROLL_SENSITIVITY = 0.0025
     public isDragging = false
-    // private dragStart = {x: 0, y: 0}
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
-    private dots: Dot[] = []
-    private origin : Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
+    private controls: Control[] = []
+    private origin: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
     public offset: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
 
     public readonly EMPTY_TOOL: string = "empty-tool"
     public readonly DOTS_TOOL: string = "dots-tool"
+    public readonly COMPONENT_TOOL: string = "component-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private tool: Tool = new EmptyTool()
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
-        [this.DOTS_TOOL, new DotsTool(this.dots)],
+        [this.DOTS_TOOL, new DotsTool(this.controls)],
+        [this.COMPONENT_TOOL, new ComponentTool(this)],
         [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
     ])
 
@@ -74,8 +75,8 @@ export class Dots {
         this.ctx.fillStyle = "#295f6d"
         this.drawText("Dots are ruling the world bro!", -255, -100, 32,
             "courier")
-        for (const dot of this.dots) {
-            this.drawDot(dot)
+        for (const control of this.controls) {
+            control.draw(this.ctx)
         }
         requestAnimationFrame(() => this.draw())
     }
@@ -97,19 +98,6 @@ export class Dots {
         string) {
         this.ctx.font = `${size}px ${font}`
         this.ctx.fillText(text, x, y)
-    }
-
-    drawDot(dot: Dot) {
-        this.ctx.beginPath();
-        this.ctx.arc(dot.x, dot.y, dot.size, 0, 2 * Math.PI, false);
-        this.ctx.fillStyle = dot.color;
-        this.ctx.fill();
-        this.ctx.closePath()
-        this.ctx.font = `${dot.size}px courier`
-        this.ctx.fillStyle = "white"
-        const textOffset = dot.size / 2 - 2
-        const xOffset = textOffset * dot.text.length
-        this.ctx.fillText(dot.text, dot.x - xOffset, dot.y + textOffset)
     }
 
     private onPointerDown(e: MouseEvent) {
@@ -134,7 +122,7 @@ export class Dots {
     private onPointerMove(e: any) {
         if (this.isDragging) {
             let clientPoint = this.getEventLocation(e)!
-            let movePoint =  {
+            let movePoint = {
                 x: clientPoint.x / this.zoom + this.origin.x - this.origin.x / this.zoom,
                 y: clientPoint.y / this.zoom + this.origin.y - this.origin.y / this.zoom,
             }
@@ -195,21 +183,20 @@ class EmptyTool extends Tool {
 
 class DotsTool extends Tool {
 
-    dots: Dot[]
+    controls: Control[]
 
-    constructor(dots: Dot[]) {
+    constructor(controls: Control[]) {
         super()
-        this.dots = dots
+        this.controls = controls
     }
 
     override click(point: Point): void {
-        this.dots.push({
-            x: point.x,
-            y: point.y,
-            size: 12,
-            text: this.dots.length.toString(),
-            color: "#85154c"
-        })
+        this.controls.push(new Dot(
+            point,
+            "#85154c",
+            12,
+            this.controls.length.toString(),
+        ))
     }
 
 }
@@ -227,6 +214,31 @@ class PanZoomTool extends Tool {
     override click(point: Point): void {
         this.dragStart = point
     }
+
+    override move(movePoint: Point) {
+        this.dots.offset = {
+            x: movePoint.x - this.dragStart.x,
+            y: movePoint.y - this.dragStart.y,
+        }
+    }
+
+}
+
+class ComponentTool extends Tool {
+
+    dots: Dots
+    dragStart: Point = {x: 0, y: 0}
+
+    constructor(dots: Dots) {
+        super()
+        this.dots = dots
+    }
+
+    override click(point: Point): void {
+        this.dragStart = point
+
+    }
+
     override move(movePoint: Point) {
         this.dots.offset = {
             x: movePoint.x - this.dragStart.x,
