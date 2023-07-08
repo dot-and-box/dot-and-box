@@ -11,7 +11,7 @@ export class Dots {
     private MIN_ZOOM = 0.1
     private SCROLL_SENSITIVITY = 0.0025
     public isDragging = false
-    private dragStart = {x: 0, y: 0}
+    // private dragStart = {x: 0, y: 0}
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
     private dots: Dot[] = []
@@ -30,7 +30,7 @@ export class Dots {
     ])
 
     constructor(canvasId: string) {
-        this.selectTool(this.DOTS_TOOL)
+        this.selectTool(this.PAN_ZOOM_TOOL)
         this.canvas = document.getElementById(canvasId)! as
             HTMLCanvasElement
         this.ctx = this.canvas.getContext('2d')! as
@@ -122,8 +122,6 @@ export class Dots {
             x: clientPoint.x / this.zoom - this.offset.x + this.origin.x - this.origin.x / this.zoom,
             y: clientPoint.y / this.zoom - this.offset.y + this.origin.y - this.origin.y / this.zoom
         }
-
-        this.dragStart = point
         this.tool.click(point)
     }
 
@@ -136,10 +134,11 @@ export class Dots {
     private onPointerMove(e: any) {
         if (this.isDragging) {
             let clientPoint = this.getEventLocation(e)!
-            this.offset = {
-                x: clientPoint.x / this.zoom + this.origin.x - this.origin.x / this.zoom - this.dragStart.x,
-                y: clientPoint.y / this.zoom + this.origin.y - this.origin.y / this.zoom - this.dragStart.y,
+            let movePoint =  {
+                x: clientPoint.x / this.zoom + this.origin.x - this.origin.x / this.zoom,
+                y: clientPoint.y / this.zoom + this.origin.y - this.origin.y / this.zoom,
             }
+            this.tool.move(movePoint)
         }
     }
 
@@ -218,6 +217,7 @@ class DotsTool extends Tool {
 class PanZoomTool extends Tool {
 
     dots: Dots
+    dragStart: Point = {x: 0, y: 0}
 
     constructor(dots: Dots) {
         super()
@@ -225,7 +225,13 @@ class PanZoomTool extends Tool {
     }
 
     override click(point: Point): void {
-        console.log(point)
+        this.dragStart = point
+    }
+    override move(movePoint: Point) {
+        this.dots.offset = {
+            x: movePoint.x - this.dragStart.x,
+            y: movePoint.y - this.dragStart.y,
+        }
     }
 
 }
