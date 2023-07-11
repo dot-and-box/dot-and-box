@@ -2,10 +2,11 @@ import {Point} from "./point.ts";
 import {Control, Dot} from "./dot.ts";
 import {Tool} from "./tool.ts";
 import {Component} from "./component.ts";
+import {ActionType, MoveAction, Step} from "./step.ts";
 
 export class Dots {
     private canvas: HTMLCanvasElement
-    private ctx: CanvasRenderingContext2D
+    private readonly ctx: CanvasRenderingContext2D
 
     public zoom: number = 1
     private MAX_ZOOM = 5
@@ -15,6 +16,14 @@ export class Dots {
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
     public controls: Control[] = []
+    public steps: Step[] = [
+        {
+            duration: 5,
+            actions: [
+                new MoveAction({x: 140, y: 340}, 0)
+            ]
+        }
+    ]
     private origin: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
     public offset: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
 
@@ -61,6 +70,10 @@ export class Dots {
         }
     }
 
+    nextStep() {
+
+    }
+
     public draw() {
         this.canvas.width = window.innerWidth
         this.canvas.height = window.innerHeight
@@ -68,10 +81,6 @@ export class Dots {
         this.ctx.translate(this.origin.x, this.origin.y)
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
-
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-        this.ctx.fillStyle = "#2d3696"
-        this.drawRect(-50, -50, 100, 100)
 
         this.ctx.fillStyle = "#295f6d"
         this.drawText("Dots are ruling the world bro!", -255, -100, 32,
@@ -89,10 +98,6 @@ export class Dots {
             return {x: e.clientX, y: e.clientY}
         }
         return null
-    }
-
-    drawRect(x: number, y: number, width: number, height: number) {
-        this.ctx.fillRect(x, y, width, height)
     }
 
     drawText(text: string, x: number, y: number, size: number, font:
@@ -246,7 +251,6 @@ class ComponentTool extends Tool {
         ))
 
     }
-
 
 
 }
