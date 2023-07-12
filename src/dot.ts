@@ -1,6 +1,6 @@
 import {Point} from "./point.ts";
 
-export class Dot implements Control{
+export class Dot implements Control {
     public position: Point
     public color: string
     public size: number
@@ -12,6 +12,7 @@ export class Dot implements Control{
         this.size = size
         this.text = text
     }
+
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.beginPath();
         ctx.arc(this.position.x, this.position.y, this.size, 0, 2 * Math.PI, false);
@@ -26,6 +27,21 @@ export class Dot implements Control{
     }
 }
 
+export class Move {
+    start: Point;
+    end: Point
+    control: Control
+    finished: boolean = false
+
+    constructor(start: Point, end: Point, control: Control) {
+        this.start = start;
+        this.end = end;
+        this.control = control;
+    }
+}
+
 export interface Control {
     draw(ctx: CanvasRenderingContext2D): void
+
+    position: Point
 }

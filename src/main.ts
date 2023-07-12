@@ -10,4 +10,6 @@ document.getElementById("pan-zoom")!.onclick = _ => dots.selectTool(dots.PAN_ZOO
 document.getElementById("zoom-reset")!.onclick = _ => dots.zoom = 1;
 document.getElementById("dots")!.onclick = _ => dots.selectTool(dots.DOTS_TOOL)
 document.getElementById("comp")!.onclick = _ => dots.selectTool(dots.COMPONENT_TOOL)
-document.getElementById("next-step")!.onclick = _ => dots.nextStep()
+document.getElementById("back")!.onclick = _ => dots.back()
+document.getElementById("pause")!.onclick = _ => dots.togglePause()
+document.getElementById("forward")!.onclick = _ => dots.forward()

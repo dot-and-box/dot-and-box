@@ -1,5 +1,5 @@
 import {Point} from "./point.ts";
-import {Control, Dot} from "./dot.ts";
+import {Control, Dot, Move} from "./dot.ts";
 import {Tool} from "./tool.ts";
 import {Component} from "./component.ts";
 import {ActionType, MoveAction, Step} from "./step.ts";
@@ -16,14 +16,6 @@ export class Dots {
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
     public controls: Control[] = []
-    public steps: Step[] = [
-        {
-            duration: 5,
-            actions: [
-                new MoveAction({x: 140, y: 340}, 0)
-            ]
-        }
-    ]
     private origin: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
     public offset: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
 
@@ -39,6 +31,20 @@ export class Dots {
         [this.COMPONENT_TOOL, new ComponentTool(this)],
         [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
     ])
+
+    private step: number = 0
+    public steps: Step[] = [
+        {
+            duration: 5,
+            actions: [
+                new MoveAction({x: 140, y: 240}, 0)
+            ],
+            finished: false
+        }
+    ]
+
+    private currentMoves: Move[] = []
+    public pause = false;
 
     constructor(canvasId: string) {
         this.selectTool(this.PAN_ZOOM_TOOL)
@@ -70,9 +76,38 @@ export class Dots {
         }
     }
 
-    nextStep() {
+    forward() {
+        let currentStep = this.steps[this.step]
+        if (currentStep.finished) {
+            if (this.step < this.steps.length - 1) {
+                this.step++
+                this.currentMoves = []
+                currentStep = this.steps[this.step]
+            }
+        }
+
+        if (!currentStep.finished) {
+            for (const action of currentStep.actions) {
+                if (action.type == ActionType.MOVE) {
+                    this.handleMoveAction(action as MoveAction)
+                }
+            }
+        }
+    }
+
+    back() {
 
     }
+
+    handleMoveAction(action: MoveAction) {
+        const foundControl = this.controls[action.controlIndex]
+        if (foundControl) {
+            this.currentMoves.push(new Move(foundControl.position, action.targetPosition, foundControl))
+        }
+    }
+
+    readonly animationStep: number = 5;
+
 
     public draw() {
         this.canvas.width = window.innerWidth
@@ -82,13 +117,79 @@ export class Dots {
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
 
-        this.ctx.fillStyle = "#295f6d"
-        this.drawText("Dots are ruling the world bro!", -255, -100, 32,
+        this.ctx.fillStyle = "#d11ed7"
+        this.drawText("Dots are ruling the world bro!", -255, -100, 42,
             "courier")
+        if (!this.pause) {
+            this.handleMoves();
+        }
         for (const control of this.controls) {
             control.draw(this.ctx)
         }
         requestAnimationFrame(() => this.draw())
+    }
+
+
+    private handleMoves() {
+        if (this.currentMoves.length == 0)
+            return
+
+        let allMovesFinished = true;
+        for (const move of this.currentMoves) {
+            if (move.finished)
+                continue
+
+            allMovesFinished = false
+            let xFinished = false
+            let yFinished = false
+            if (move.control.position.x < move.end.x) {
+                const dx = move.end.x - move.control.position.x;
+                if (dx <= this.animationStep) {
+                    move.control.position.x += dx
+                    xFinished = true;
+                } else {
+                    move.control.position.x += this.animationStep
+                }
+            } else if (move.control.position.x > move.end.x) {
+                const dx = move.control.position.x - move.end.x;
+                if (dx <= this.animationStep) {
+                    move.control.position.x -= dx
+                    xFinished = true;
+                } else {
+                    move.control.position.x -= this.animationStep
+                }
+            } else {
+                xFinished = true
+            }
+
+            if (move.control.position.y < move.end.y) {
+                const dy = move.end.y - move.control.position.y;
+                if (dy <= this.animationStep) {
+                    move.control.position.y += dy
+                    yFinished = true;
+                } else {
+                    move.control.position.y += this.animationStep
+                }
+            } else if (move.control.position.y > move.end.y) {
+                const dy = move.control.position.y - move.end.y;
+                if (dy <= this.animationStep) {
+                    move.control.position.y -= dy
+                    yFinished = true;
+                } else {
+                    move.control.position.y -= this.animationStep
+                }
+            } else {
+                yFinished = true
+            }
+            if (xFinished && yFinished)
+                move.finished = true
+
+        }
+
+        if (allMovesFinished) {
+            this.steps[this.step].finished = true
+        }
+
     }
 
     private getEventLocation(e: any): Point | null {
@@ -169,6 +270,10 @@ export class Dots {
             this.zoom = Math.min(this.zoom, this.MAX_ZOOM)
             this.zoom = Math.max(this.zoom, this.MIN_ZOOM)
         }
+    }
+
+    togglePause() {
+        this.pause = !this.pause
     }
 }
 

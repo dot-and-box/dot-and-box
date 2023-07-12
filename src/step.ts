@@ -3,6 +3,7 @@ import {Point} from "./point.ts";
 export interface Step {
     duration: number
     actions: Action[]
+    finished: boolean
 }
 
 export enum ActionType {

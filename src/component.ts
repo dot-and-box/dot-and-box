@@ -16,7 +16,7 @@ export class Component implements Control {
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.position.x,this.position.y,this.size.x,this.size.y);
+        ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
         ctx.font = `${this.size}px courier`
         ctx.fillStyle = "white"
         const textOffset = this.size.x / 2 - 2
