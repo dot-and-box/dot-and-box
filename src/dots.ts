@@ -37,7 +37,8 @@ export class Dots {
         {
             duration: 5,
             actions: [
-                new MoveAction({x: 140, y: 240}, 0)
+                new MoveAction({x: 140, y: 240}, 0),
+                new MoveAction({x: 510, y: 100}, 1)
             ],
             finished: false
         }
@@ -304,11 +305,20 @@ class DotsTool extends Tool {
     override click(point: Point): void {
         this.controls.push(new Dot(
             point,
-            "#85154c",
-            12,
+            DotsTool.colors[this.controls.length % DotsTool.colors.length ],
+            DotsTool.sizes[this.controls.length % DotsTool.sizes.length],
             this.controls.length.toString(),
         ))
     }
+
+    static readonly colors = [
+        "#c20f2f",
+        "#5aaf3a",
+        "#0734a4",
+        "#cb691c",
+        "#3d3633",
+    ]
+    static readonly sizes = [22,14,16,17,12,32]
 
 }
 
