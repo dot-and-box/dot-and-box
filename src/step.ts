@@ -1,12 +1,16 @@
 import {Point} from "./point.ts";
+import {ControlBase} from "./dot.ts";
 
+export interface DotsModel {
+    controls: ControlBase[],
+    steps: Step[]
+}
 export interface Step {
     duration: number
     actions: Action[]
     finished: boolean
     direction: Direction
 }
-
 
 export enum Direction {
     FORWARD,

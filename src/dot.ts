@@ -40,8 +40,10 @@ export class Move {
     }
 }
 
-export interface Control {
-    draw(ctx: CanvasRenderingContext2D): void
-
+export interface ControlBase {
     position: Point
+}
+
+export interface Control extends ControlBase{
+    draw(ctx: CanvasRenderingContext2D): void
 }

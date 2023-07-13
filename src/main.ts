@@ -1,10 +1,29 @@
 import {Dots} from "./dots.ts";
+import {Direction, MoveAction} from "./step.ts";
+import {Point} from "./point.ts";
 
 const dots = new Dots("canvas");
 dots.draw()
 // @ts-ignore
 window.dots = dots
 
+
+dots.parse({
+    controls: [
+        {position: new Point(-150, 100)},
+        {position: new Point(-480, 340)},
+        {position: new Point(180, 240)}
+    ],
+    steps: [{
+        duration: 5,
+        actions: [
+            new MoveAction(new Point(140, 240), 0),
+            new MoveAction(new Point(510, 100), 1)
+        ],
+        direction: Direction.FORWARD,
+        finished: false
+    }]
+})
 
 document.getElementById("pan-zoom")!.onclick = _ => dots.selectTool(dots.PAN_ZOOM_TOOL);
 document.getElementById("zoom-reset")!.onclick = _ => dots.zoom = 1;

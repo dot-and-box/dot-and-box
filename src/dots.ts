@@ -2,7 +2,7 @@ import {Point} from "./point.ts";
 import {Control, Dot, Move} from "./dot.ts";
 import {Tool} from "./tool.ts";
 import {Component} from "./component.ts";
-import {ActionType, Direction, MoveAction, Step} from "./step.ts";
+import {ActionType, Direction, DotsModel, MoveAction, Step} from "./step.ts";
 import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./constants.ts";
 
 export class Dots {
@@ -20,7 +20,7 @@ export class Dots {
     public readonly DOTS_TOOL: string = "dots-tool"
     public readonly COMPONENT_TOOL: string = "component-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
-    private tool: Tool = new EmptyTool()
+    private tool: Tool = new PanZoomTool(this)
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
@@ -30,17 +30,18 @@ export class Dots {
     ])
 
     private step: number = 0
-    public steps: Step[] = [
-        {
-            duration: 5,
-            actions: [
-                new MoveAction(new Point(140, 240), 0),
-                new MoveAction(new Point(510, 100), 1)
-            ],
-            direction: Direction.FORWARD,
-            finished: false
+    private steps: Step[] = []
+
+    public parse(model: DotsModel) {
+        this.step = 0
+        for (const control of model.controls) {
+            this.tools.get(this.DOTS_TOOL)!.click(control.position)
         }
-    ]
+        this.steps = model.steps;
+        if (this.steps.length > 0) {
+            this.initStep()
+        }
+    }
 
     private currentMoves: Move[] = []
     public pause = false;
@@ -75,27 +76,29 @@ export class Dots {
         }
     }
 
+
+    private initStep(): Step {
+        const currentStep = this.steps[this.step]
+        this.currentMoves = []
+        for (const action of currentStep.actions) {
+            if (action.type == ActionType.MOVE) {
+                this.handleMoveAction(action as MoveAction)
+            }
+        }
+        return currentStep
+    }
+
     forward() {
         let currentStep = this.steps[this.step]
         if (currentStep.finished) {
             if (this.step < this.steps.length - 1) {
                 this.step++
-                this.currentMoves = []
-                currentStep = this.steps[this.step]
+                currentStep = this.initStep()
             }
         }
-
-        // TODO - extract step initialization to other function
-        if (!currentStep.finished && currentStep.direction == Direction.FORWARD) {
-            for (const action of currentStep.actions) {
-                if (action.type == ActionType.MOVE) {
-                    this.handleMoveAction(action as MoveAction)
-                }
-            }
-        } else {
-            this.swapMovePoints();
+        if (currentStep.direction != Direction.FORWARD) {
             currentStep.direction = Direction.FORWARD
-
+            this.swapMovePoints();
         }
     }
 
