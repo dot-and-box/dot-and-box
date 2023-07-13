@@ -3,16 +3,12 @@ import {Control, Dot, Move} from "./dot.ts";
 import {Tool} from "./tool.ts";
 import {Component} from "./component.ts";
 import {ActionType, MoveAction, Step} from "./step.ts";
-import {colors, sizes} from "./colors.ts";
+import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./constants.ts";
 
 export class Dots {
     private canvas: HTMLCanvasElement
     private readonly ctx: CanvasRenderingContext2D
-
     public zoom: number = 1
-    private MAX_ZOOM = 5
-    private MIN_ZOOM = 0.1
-    private SCROLL_SENSITIVITY = 0.0025
     public isDragging = false
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
@@ -69,7 +65,7 @@ export class Dots {
         this.canvas.addEventListener('touchmove', (e) =>
             this.handleTouch(e, this.onPointerMove))
         this.canvas.addEventListener('wheel', (e) =>
-            this.adjustZoom(e.deltaY * this.SCROLL_SENSITIVITY, 1))
+            this.adjustZoom(e.deltaY * SCROLL_SENSITIVITY, 1))
     }
 
     selectTool(toolName: string) {
@@ -130,7 +126,7 @@ export class Dots {
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
 
-        this.ctx.fillStyle = colors[this.controls.length % colors.length]
+        this.ctx.fillStyle = COLORS[this.controls.length % COLORS.length]
         this.drawText("Dots are ruling the world bro!", -255, -100, 42,
             "courier")
         if (!this.pause && this.currentMoves.length > 0) {
@@ -278,8 +274,8 @@ export class Dots {
             } else if (zoomFactor) {
                 this.zoom = zoomFactor * this.lastZoom
             }
-            this.zoom = Math.min(this.zoom, this.MAX_ZOOM)
-            this.zoom = Math.max(this.zoom, this.MIN_ZOOM)
+            this.zoom = Math.min(this.zoom, MAX_ZOOM)
+            this.zoom = Math.max(this.zoom, MIN_ZOOM)
         }
     }
 
@@ -315,8 +311,8 @@ class DotsTool extends Tool {
     override click(point: Point): void {
         this.controls.push(new Dot(
             point,
-            colors[this.controls.length % colors.length],
-            sizes[this.controls.length % sizes.length],
+            COLORS[this.controls.length % COLORS.length],
+            SIZES[this.controls.length % SIZES.length],
             this.controls.length.toString(),
         ))
     }
