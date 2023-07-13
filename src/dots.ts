@@ -130,7 +130,7 @@ export class Dots {
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
 
-        this.ctx.fillStyle = "#d11ed7"
+        this.ctx.fillStyle = colors[this.controls.length % colors.length]
         this.drawText("Dots are ruling the world bro!", -255, -100, 42,
             "courier")
         if (!this.pause && this.currentMoves.length > 0) {
@@ -320,8 +320,6 @@ class DotsTool extends Tool {
             this.controls.length.toString(),
         ))
     }
-
-
 
 }
 
