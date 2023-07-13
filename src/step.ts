@@ -4,7 +4,15 @@ export interface Step {
     duration: number
     actions: Action[]
     finished: boolean
+    direction: Direction
 }
+
+
+export enum Direction {
+    FORWARD,
+    BACKWARD
+}
+
 
 export enum ActionType {
     MOVE,

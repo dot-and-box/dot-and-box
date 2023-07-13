@@ -2,7 +2,7 @@ import {Point} from "./point.ts";
 import {Control, Dot, Move} from "./dot.ts";
 import {Tool} from "./tool.ts";
 import {Component} from "./component.ts";
-import {ActionType, MoveAction, Step} from "./step.ts";
+import {ActionType, Direction, MoveAction, Step} from "./step.ts";
 import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./constants.ts";
 
 export class Dots {
@@ -37,6 +37,7 @@ export class Dots {
                 new MoveAction(new Point(140, 240), 0),
                 new MoveAction(new Point(510, 100), 1)
             ],
+            direction: Direction.FORWARD,
             finished: false
         }
     ]
@@ -84,27 +85,37 @@ export class Dots {
             }
         }
 
-        if (!currentStep.finished) {
+        // TODO - extract step initialization to other function
+        if (!currentStep.finished && currentStep.direction == Direction.FORWARD) {
             for (const action of currentStep.actions) {
                 if (action.type == ActionType.MOVE) {
                     this.handleMoveAction(action as MoveAction)
                 }
             }
+        } else {
+            this.swapMovePoints();
+            currentStep.direction = Direction.FORWARD
+
+        }
+    }
+
+    private swapMovePoints() {
+        for (let i = this.currentMoves.length - 1; i >= 0; i--) {
+            const move = this.currentMoves[i]
+            const p = new Point(move.end.x, move.end.y)
+            move.end = move.start
+            move.start = p;
+            move.finished = false
         }
     }
 
     back() {
         let currentStep = this.steps[this.step]
 
-        if (currentStep.finished) {
-            for (let i = this.currentMoves.length - 1; i >= 0; i--) {
-                const move = this.currentMoves[i]
-                const p = new Point(move.end.x, move.end.y)
-                move.end = move.start
-                move.start = p;
-                move.finished = false
-            }
+        if (currentStep.finished && currentStep.direction == Direction.FORWARD) {
+            currentStep.direction = Direction.BACKWARD
             currentStep.finished = false
+            this.swapMovePoints()
         }
     }
 
@@ -192,9 +203,9 @@ export class Dots {
                 move.finished = true
 
         }
-
-        if (allMovesFinished) {
-            this.steps[this.step].finished = true
+        const currentStep = this.steps[this.step]
+        if (allMovesFinished && currentStep.direction == Direction.FORWARD) {
+            currentStep.finished = true
         }
 
     }
