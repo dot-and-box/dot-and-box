@@ -34,8 +34,8 @@ export class Move {
     finished: boolean = false
 
     constructor(start: Point, end: Point, control: Control) {
-        this.start = start;
-        this.end = end;
+        this.start = start.clone();
+        this.end = end.clone();
         this.control = control;
     }
 }

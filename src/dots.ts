@@ -16,8 +16,8 @@ export class Dots {
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
     public controls: Control[] = []
-    private origin: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
-    public offset: Point = {x: window.innerWidth / 2, y: window.innerHeight / 2}
+    private origin: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
+    public offset: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
 
     public readonly EMPTY_TOOL: string = "empty-tool"
     public readonly DOTS_TOOL: string = "dots-tool"
@@ -37,8 +37,8 @@ export class Dots {
         {
             duration: 5,
             actions: [
-                new MoveAction({x: 140, y: 240}, 0),
-                new MoveAction({x: 510, y: 100}, 1)
+                new MoveAction(new Point(140, 240), 0),
+                new MoveAction(new Point(510, 100), 1)
             ],
             finished: false
         }
@@ -97,7 +97,18 @@ export class Dots {
     }
 
     back() {
+        let currentStep = this.steps[this.step]
 
+        if (currentStep.finished) {
+            for (let i = this.currentMoves.length - 1; i >= 0; i--) {
+                const move = this.currentMoves[i]
+                const p = new Point(move.end.x, move.end.y)
+                move.end = move.start
+                move.start = p;
+                move.finished = false
+            }
+            currentStep.finished = false
+        }
     }
 
     handleMoveAction(action: MoveAction) {
@@ -121,7 +132,7 @@ export class Dots {
         this.ctx.fillStyle = "#d11ed7"
         this.drawText("Dots are ruling the world bro!", -255, -100, 42,
             "courier")
-        if (!this.pause) {
+        if (!this.pause && this.currentMoves.length > 0) {
             this.handleMoves();
         }
         for (const control of this.controls) {
@@ -132,8 +143,6 @@ export class Dots {
 
 
     private handleMoves() {
-        if (this.currentMoves.length == 0)
-            return
 
         let allMovesFinished = true;
         for (const move of this.currentMoves) {
@@ -195,9 +204,9 @@ export class Dots {
 
     private getEventLocation(e: any): Point | null {
         if (e.touches && e.touches.length == 1) {
-            return {x: e.touches[0].clientX, y: e.touches[0].clientY}
+            return new Point(e.touches[0].clientX, e.touches[0].clientY)
         } else if (e.clientX && e.clientY) {
-            return {x: e.clientX, y: e.clientY}
+            return new Point(e.clientX, e.clientY)
         }
         return null
     }
@@ -214,10 +223,10 @@ export class Dots {
         if (clientPoint == null)
             return
 
-        const point = {
-            x: clientPoint.x / this.zoom - this.offset.x + this.origin.x - this.origin.x / this.zoom,
-            y: clientPoint.y / this.zoom - this.offset.y + this.origin.y - this.origin.y / this.zoom
-        }
+        const point = new Point(
+            clientPoint.x / this.zoom - this.offset.x + this.origin.x - this.origin.x / this.zoom,
+            clientPoint.y / this.zoom - this.offset.y + this.origin.y - this.origin.y / this.zoom
+        )
         this.tool.click(point)
     }
 
@@ -230,10 +239,10 @@ export class Dots {
     private onPointerMove(e: any) {
         if (this.isDragging) {
             let clientPoint = this.getEventLocation(e)!
-            let movePoint = {
-                x: clientPoint.x / this.zoom + this.origin.x - this.origin.x / this.zoom,
-                y: clientPoint.y / this.zoom + this.origin.y - this.origin.y / this.zoom,
-            }
+            let movePoint = new Point(
+                clientPoint.x / this.zoom + this.origin.x - this.origin.x / this.zoom,
+                clientPoint.y / this.zoom + this.origin.y - this.origin.y / this.zoom
+            )
             this.tool.move(movePoint)
         }
     }
@@ -305,7 +314,7 @@ class DotsTool extends Tool {
     override click(point: Point): void {
         this.controls.push(new Dot(
             point,
-            DotsTool.colors[this.controls.length % DotsTool.colors.length ],
+            DotsTool.colors[this.controls.length % DotsTool.colors.length],
             DotsTool.sizes[this.controls.length % DotsTool.sizes.length],
             this.controls.length.toString(),
         ))
@@ -318,14 +327,14 @@ class DotsTool extends Tool {
         "#cb691c",
         "#3d3633",
     ]
-    static readonly sizes = [22,14,16,17,12,32]
+    static readonly sizes = [22, 14, 16, 17, 12, 32]
 
 }
 
 class PanZoomTool extends Tool {
 
     dots: Dots
-    dragStart: Point = {x: 0, y: 0}
+    dragStart: Point = Point.zero()
 
     constructor(dots: Dots) {
         super()
@@ -337,10 +346,10 @@ class PanZoomTool extends Tool {
     }
 
     override move(movePoint: Point) {
-        this.dots.offset = {
-            x: movePoint.x - this.dragStart.x,
-            y: movePoint.y - this.dragStart.y,
-        }
+        this.dots.offset = new Point(
+            movePoint.x - this.dragStart.x,
+            movePoint.y - this.dragStart.y
+        )
     }
 
 }
@@ -348,7 +357,7 @@ class PanZoomTool extends Tool {
 class ComponentTool extends Tool {
 
     dots: Dots
-    dragStart: Point = {x: 0, y: 0}
+    dragStart: Point = Point.zero()
 
     constructor(dots: Dots) {
         super()
@@ -361,7 +370,7 @@ class ComponentTool extends Tool {
         this.dots.controls.push(new Component(
             point,
             "rgba(37,33,133,0.68)",
-            {x: 50, y: 50},
+            new Point(50, 50),
             this.dots.controls.length.toString(),
         ))
 
