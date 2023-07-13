@@ -3,6 +3,7 @@ import {Control, Dot, Move} from "./dot.ts";
 import {Tool} from "./tool.ts";
 import {Component} from "./component.ts";
 import {ActionType, MoveAction, Step} from "./step.ts";
+import {colors, sizes} from "./colors.ts";
 
 export class Dots {
     private canvas: HTMLCanvasElement
@@ -314,20 +315,13 @@ class DotsTool extends Tool {
     override click(point: Point): void {
         this.controls.push(new Dot(
             point,
-            DotsTool.colors[this.controls.length % DotsTool.colors.length],
-            DotsTool.sizes[this.controls.length % DotsTool.sizes.length],
+            colors[this.controls.length % colors.length],
+            sizes[this.controls.length % sizes.length],
             this.controls.length.toString(),
         ))
     }
 
-    static readonly colors = [
-        "#c20f2f",
-        "#5aaf3a",
-        "#0734a4",
-        "#cb691c",
-        "#3d3633",
-    ]
-    static readonly sizes = [22, 14, 16, 17, 12, 32]
+
 
 }
 
