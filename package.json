@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "jest": "^29.6.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.9"
   }

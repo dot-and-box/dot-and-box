@@ -14,17 +14,16 @@ dots.parse({
         {position: new Point(-480, 340)},
         {position: new Point(180, 240)}
     ],
-    steps: [{
-        duration: 5,
-        changes: [
-            new MoveChange(new Point(140, 240), 0),
-            new MoveChange(new Point(510, 100), 1)
-        ],
-        direction: Direction.FORWARD,
-        finished: false
-    },
+    steps: [
         {
-            duration: 5,
+            changes: [
+                new MoveChange(new Point(140, 240), 0),
+                new MoveChange(new Point(510, 100), 1)
+            ],
+            direction: Direction.FORWARD,
+            finished: false
+        },
+        {
             changes: [
                 new MoveChange(new Point(240, 40), 0),
                 new MoveChange(new Point(10, 160), 1)

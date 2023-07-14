@@ -6,7 +6,6 @@ export interface DotsModel {
     steps: Step[]
 }
 export interface Step {
-    duration: number
     changes: Change[]
     finished: boolean
     direction: Direction

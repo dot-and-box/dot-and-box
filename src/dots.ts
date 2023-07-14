@@ -142,6 +142,8 @@ export class Dots {
         this.canvas.width = window.innerWidth
         this.canvas.height = window.innerHeight
 
+        this.drawText("rate", window.innerWidth-50, 20, 22, "courier")
+
         this.ctx.translate(this.origin.x, this.origin.y)
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
@@ -162,54 +164,54 @@ export class Dots {
     private handleMoves() {
 
         let allMovesFinished = true;
-        for (const move of this.changes) {
-            if (move.finished)
+        for (const change of this.changes) {
+            if (change.finished)
                 continue
 
             allMovesFinished = false
             let xFinished = false
             let yFinished = false
-            if (move.control.position.x < move.end.x) {
-                const dx = move.end.x - move.control.position.x;
+            if (change.control.position.x < change.end.x) {
+                const dx = change.end.x - change.control.position.x;
                 if (dx <= this.animationStep) {
-                    move.control.position.x += dx
+                    change.control.position.x += dx
                     xFinished = true;
                 } else {
-                    move.control.position.x += this.animationStep
+                    change.control.position.x += this.animationStep
                 }
-            } else if (move.control.position.x > move.end.x) {
-                const dx = move.control.position.x - move.end.x;
+            } else if (change.control.position.x > change.end.x) {
+                const dx = change.control.position.x - change.end.x;
                 if (dx <= this.animationStep) {
-                    move.control.position.x -= dx
+                    change.control.position.x -= dx
                     xFinished = true;
                 } else {
-                    move.control.position.x -= this.animationStep
+                    change.control.position.x -= this.animationStep
                 }
             } else {
                 xFinished = true
             }
 
-            if (move.control.position.y < move.end.y) {
-                const dy = move.end.y - move.control.position.y;
+            if (change.control.position.y < change.end.y) {
+                const dy = change.end.y - change.control.position.y;
                 if (dy <= this.animationStep) {
-                    move.control.position.y += dy
+                    change.control.position.y += dy
                     yFinished = true;
                 } else {
-                    move.control.position.y += this.animationStep
+                    change.control.position.y += this.animationStep
                 }
-            } else if (move.control.position.y > move.end.y) {
-                const dy = move.control.position.y - move.end.y;
+            } else if (change.control.position.y > change.end.y) {
+                const dy = change.control.position.y - change.end.y;
                 if (dy <= this.animationStep) {
-                    move.control.position.y -= dy
+                    change.control.position.y -= dy
                     yFinished = true;
                 } else {
-                    move.control.position.y -= this.animationStep
+                    change.control.position.y -= this.animationStep
                 }
             } else {
                 yFinished = true
             }
             if (xFinished && yFinished)
-                move.finished = true
+                change.finished = true
 
         }
         const currentStep = this.steps[this.step]
