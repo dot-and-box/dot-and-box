@@ -7,7 +7,7 @@ export interface DotsModel {
 }
 export interface Step {
     duration: number
-    actions: Action[]
+    changes: Change[]
     finished: boolean
     direction: Direction
 }
@@ -18,16 +18,16 @@ export enum Direction {
 }
 
 
-export enum ActionType {
+export enum ChangeType {
     MOVE,
     CREATE_DOT,
     CREATE_COMPONENT
 }
 
-export interface Action {
-    type: ActionType
+export interface Change {
+    type: ChangeType
 }
-export class MoveAction implements Action {
+export class MoveChange implements Change {
 
     constructor(targetPosition: Point, controlIndex: number) {
         this.targetPosition = targetPosition;
@@ -36,5 +36,5 @@ export class MoveAction implements Action {
 
     targetPosition: Point;
     controlIndex: number
-    readonly type: ActionType = ActionType.MOVE
+    readonly type: ChangeType = ChangeType.MOVE
 }

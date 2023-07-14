@@ -27,7 +27,7 @@ export class Dot implements Control {
     }
 }
 
-export class Move {
+export class Change {
     start: Point;
     end: Point
     control: Control

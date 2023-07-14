@@ -1,8 +1,8 @@
 import {Point} from "./point.ts";
-import {Control, Dot, Move} from "./dot.ts";
+import {Control, Dot, Change} from "./dot.ts";
 import {Tool} from "./tool.ts";
 import {Component} from "./component.ts";
-import {ActionType, Direction, DotsModel, MoveAction, Step} from "./step.ts";
+import {ChangeType, Direction, DotsModel, MoveChange, Step} from "./step.ts";
 import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./constants.ts";
 
 export class Dots {
@@ -43,7 +43,7 @@ export class Dots {
         }
     }
 
-    private currentMoves: Move[] = []
+    private changes: Change[] = []
     public pause = false;
 
     constructor(canvasId: string) {
@@ -79,10 +79,10 @@ export class Dots {
 
     private initStep(): Step {
         const currentStep = this.steps[this.step]
-        this.currentMoves = []
-        for (const action of currentStep.actions) {
-            if (action.type == ActionType.MOVE) {
-                this.handleMoveAction(action as MoveAction)
+        this.changes = []
+        for (const change of currentStep.changes) {
+            if (change.type == ChangeType.MOVE) {
+                this.handleMoveChange(change as MoveChange)
             }
         }
         return currentStep
@@ -103,8 +103,8 @@ export class Dots {
     }
 
     private swapMovePoints() {
-        for (let i = this.currentMoves.length - 1; i >= 0; i--) {
-            const move = this.currentMoves[i]
+        for (let i = this.changes.length - 1; i >= 0; i--) {
+            const move = this.changes[i]
             const p = new Point(move.end.x, move.end.y)
             move.end = move.start
             move.start = p;
@@ -119,13 +119,19 @@ export class Dots {
             currentStep.direction = Direction.BACKWARD
             currentStep.finished = false
             this.swapMovePoints()
+        } else if (currentStep.finished && currentStep.direction == Direction.BACKWARD) {
+            if (this.step > 0) {
+                this.step--
+                this.initStep()
+                this.swapMovePoints()
+            }
         }
     }
 
-    handleMoveAction(action: MoveAction) {
-        const foundControl = this.controls[action.controlIndex]
+    handleMoveChange(change: MoveChange) {
+        const foundControl = this.controls[change.controlIndex]
         if (foundControl) {
-            this.currentMoves.push(new Move(foundControl.position, action.targetPosition, foundControl))
+            this.changes.push(new Change(foundControl.position, change.targetPosition, foundControl))
         }
     }
 
@@ -143,7 +149,7 @@ export class Dots {
         this.ctx.fillStyle = COLORS[this.controls.length % COLORS.length]
         this.drawText("Dots are ruling the world bro!", -255, -100, 42,
             "courier")
-        if (!this.pause && this.currentMoves.length > 0) {
+        if (!this.pause && this.changes.length > 0) {
             this.handleMoves();
         }
         for (const control of this.controls) {
@@ -156,7 +162,7 @@ export class Dots {
     private handleMoves() {
 
         let allMovesFinished = true;
-        for (const move of this.currentMoves) {
+        for (const move of this.changes) {
             if (move.finished)
                 continue
 
