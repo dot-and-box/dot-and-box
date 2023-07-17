@@ -24,12 +24,12 @@ export class Component implements Control {
             ctx.strokeStyle = "black"
         }
         ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
-        ctx.font = `${this.size}px courier`
-        ctx.fillStyle = "white"
+        ctx.font = `22px courier`
+        ctx.fillStyle = "orange"
 
-        const textOffset = this.size.x / 2 - this.size.x / 4 + 1
-        const xOffset = textOffset * this.text.length
-        ctx.fillText(this.text, this.position.x - xOffset, this.position.y + textOffset)
+        const textOffset = this.size.x / 2
+        const xOffset = textOffset - this.text.length * 8
+        ctx.fillText(this.text, this.position.x + xOffset, this.position.y + this.size.y / 2)
     }
 
     selected: boolean;
