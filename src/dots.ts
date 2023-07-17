@@ -1,8 +1,8 @@
 import {Point} from "./point.ts";
-import {Control, Dot, Change} from "./dot.ts";
+import {Control, Dot} from "./dot.ts";
 import {Tool} from "./tool.ts";
 import {Component} from "./component.ts";
-import {ChangeType, Direction, DotsModel, MoveChange, Step} from "./step.ts";
+import {Change, ChangeType, DotsModel, Move, MoveChange, StepImpl, StepState} from "./step.ts";
 import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./constants.ts";
 
 export class Dots {
@@ -29,21 +29,24 @@ export class Dots {
         [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
     ])
 
-    private step: number = 0
-    private steps: Step[] = []
+
+    private steps: StepImpl[] = []
+    private currentStepIndex = 0;
+    private currentStep = new StepImpl()
 
     public parse(model: DotsModel) {
-        this.step = 0
         for (const control of model.controls) {
             this.tools.get(this.DOTS_TOOL)!.click(control.position)
         }
-        this.steps = model.steps;
-        if (this.steps.length > 0) {
-            this.initStep()
-        }
+        this.steps = []
+        model.steps.forEach(s => {
+            const step = new StepImpl()
+            this.initStep(step, s.changes)
+            this.steps.push(step)
+        })
+        this.currentStep = this.steps[this.currentStepIndex]
     }
 
-    private changes: Change[] = []
     public pause = false;
 
     constructor(canvasId: string) {
@@ -77,72 +80,49 @@ export class Dots {
     }
 
 
-    private initStep(): Step {
-        const currentStep = this.steps[this.step]
-        this.changes = []
-        for (const change of currentStep.changes) {
+    private initStep(step: StepImpl, changes: Change[]) {
+        for (const change of changes) {
             if (change.type == ChangeType.MOVE) {
-                this.handleMoveChange(change as MoveChange)
+                const moveChange = change as MoveChange
+                const foundControl = this.controls[moveChange.controlIndex]
+                if (foundControl) {
+                    step.changes.push(new Move(foundControl.position, moveChange.targetPosition, foundControl))
+                }
             }
         }
-        return currentStep
     }
 
     forward() {
-        let currentStep = this.steps[this.step]
-        if (currentStep.finished) {
-            if (this.step < this.steps.length - 1) {
-                this.step++
-                currentStep = this.initStep()
+        this.currentStep.reset()
+
+        if (this.currentStep.state == StepState.END) {
+            if (this.currentStepIndex < this.steps.length - 1) {
+                this.currentStepIndex++
+                this.currentStep = this.steps[this.currentStepIndex]
+                this.currentStep.updateChanges()
             }
         }
-        if (currentStep.direction != Direction.FORWARD) {
-            currentStep.direction = Direction.FORWARD
-            this.swapMovePoints();
-        }
+        this.currentStep.animationStep = 0.01
     }
 
-    private swapMovePoints() {
-        for (let i = this.changes.length - 1; i >= 0; i--) {
-            const move = this.changes[i]
-            const p = new Point(move.end.x, move.end.y)
-            move.end = move.start
-            move.start = p;
-            move.finished = false
-        }
-    }
 
     back() {
-        let currentStep = this.steps[this.step]
+        this.currentStep.reset()
 
-        if (currentStep.finished && currentStep.direction == Direction.FORWARD) {
-            currentStep.direction = Direction.BACKWARD
-            currentStep.finished = false
-            this.swapMovePoints()
-        } else if (currentStep.finished && currentStep.direction == Direction.BACKWARD) {
-            if (this.step > 0) {
-                this.step--
-                this.initStep()
-                this.swapMovePoints()
+        if (this.currentStep.state == StepState.START) {
+            if (this.currentStepIndex > 0) {
+                this.currentStepIndex--
+                this.currentStep = this.steps[this.currentStepIndex]
             }
         }
+        this.currentStep.animationStep = -0.01
     }
-
-    handleMoveChange(change: MoveChange) {
-        const foundControl = this.controls[change.controlIndex]
-        if (foundControl) {
-            this.changes.push(new Change(foundControl.position, change.targetPosition, foundControl))
-        }
-    }
-
-    readonly animationStep: number = 5;
-
 
     public draw() {
         this.canvas.width = window.innerWidth
         this.canvas.height = window.innerHeight
 
-        this.drawText("rate", window.innerWidth-50, 20, 22, "courier")
+        this.drawText("rate", window.innerWidth - 50, 20, 22, "courier")
 
         this.ctx.translate(this.origin.x, this.origin.y)
         this.ctx.scale(this.zoom, this.zoom)
@@ -151,8 +131,8 @@ export class Dots {
         this.ctx.fillStyle = COLORS[this.controls.length % COLORS.length]
         this.drawText("Dots are ruling the world bro!", -255, -100, 42,
             "courier")
-        if (!this.pause && this.changes.length > 0) {
-            this.handleMoves();
+        if (!this.pause && this.currentStep && this.currentStep.changes.length > 0) {
+            this.updateChanges();
         }
         for (const control of this.controls) {
             control.draw(this.ctx)
@@ -161,64 +141,42 @@ export class Dots {
     }
 
 
-    private handleMoves() {
-
-        let allMovesFinished = true;
-        for (const change of this.changes) {
+    private updateChanges() {
+        for (const change of this.currentStep.changes) {
             if (change.finished)
                 continue
-
-            allMovesFinished = false
-            let xFinished = false
-            let yFinished = false
-            if (change.control.position.x < change.end.x) {
-                const dx = change.end.x - change.control.position.x;
-                if (dx <= this.animationStep) {
-                    change.control.position.x += dx
-                    xFinished = true;
-                } else {
-                    change.control.position.x += this.animationStep
-                }
-            } else if (change.control.position.x > change.end.x) {
-                const dx = change.control.position.x - change.end.x;
-                if (dx <= this.animationStep) {
-                    change.control.position.x -= dx
-                    xFinished = true;
-                } else {
-                    change.control.position.x -= this.animationStep
-                }
-            } else {
-                xFinished = true
+            if (change.type == ChangeType.MOVE) {
+                this.handleMove(change as Move)
             }
-
-            if (change.control.position.y < change.end.y) {
-                const dy = change.end.y - change.control.position.y;
-                if (dy <= this.animationStep) {
-                    change.control.position.y += dy
-                    yFinished = true;
-                } else {
-                    change.control.position.y += this.animationStep
-                }
-            } else if (change.control.position.y > change.end.y) {
-                const dy = change.control.position.y - change.end.y;
-                if (dy <= this.animationStep) {
-                    change.control.position.y -= dy
-                    yFinished = true;
-                } else {
-                    change.control.position.y -= this.animationStep
-                }
-            } else {
-                yFinished = true
-            }
-            if (xFinished && yFinished)
-                change.finished = true
-
         }
-        const currentStep = this.steps[this.step]
-        if (allMovesFinished && currentStep.direction == Direction.FORWARD) {
-            currentStep.finished = true
-        }
+    }
 
+    private handleMove(move: Move) {
+        if (this.currentStep.animationStep == 0)
+            return
+        let newProgress = move.progress + this.currentStep.animationStep
+        if (newProgress <= 0 || newProgress >= 1) {
+            newProgress = newProgress <= 0 ? 0 : 1
+        }
+        move.progress = newProgress
+
+        const dx = move.end.x - move.start.x
+        const dy = move.end.y - move.start.y
+
+        if (move.progress == 0) {
+            move.control.position.x = move.start.x
+            move.control.position.y = move.start.y
+        } else if (move.progress == 1) {
+            move.control.position.x = move.start.x + dx
+            move.control.position.y = move.start.y + dy
+        } else {
+            move.control.position.x = move.start.x + dx * move.progress
+            move.control.position.y = move.start.y + dy * move.progress
+        }
+        if (newProgress <= 0 || newProgress >= 1) {
+            move.finished = true
+            this.currentStep.notifyFinished()
+        }
     }
 
     private getEventLocation(e: any): Point | null {
@@ -279,8 +237,7 @@ export class Dots {
         e.preventDefault()
         let touch1 = {x: e.touches[0].clientX, y: e.touches[0].clientY}
         let touch2 = {x: e.touches[1].clientX, y: e.touches[1].clientY}
-        let currentDistance = (touch1.x - touch2.x) ** 2 + (touch1.y -
-            touch2.y) ** 2
+        let currentDistance = (touch1.x - touch2.x) ** 2 + (touch1.y - touch2.y) ** 2
         if (this.initialPinchDistance == null) {
             this.initialPinchDistance = currentDistance
         } else {
@@ -307,19 +264,6 @@ export class Dots {
 }
 
 
-class EmptyTool extends Tool {
-    override click(point: Point): void {
-        console.log(point)
-    }
-
-    override move(point: Point): void {
-        console.log(point)
-    }
-
-    override up(point: Point): void {
-        console.log(point)
-    }
-}
 
 class DotsTool extends Tool {
 
@@ -337,6 +281,19 @@ class DotsTool extends Tool {
             SIZES[this.controls.length % SIZES.length],
             this.controls.length.toString(),
         ))
+    }
+
+}
+
+class EmptyTool extends Tool {
+
+    // @ts-ignore
+    override click(point: Point): void {
+    }
+
+    // @ts-ignore
+    override move(movePoint: Point) {
+
     }
 
 }

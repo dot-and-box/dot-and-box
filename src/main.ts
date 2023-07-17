@@ -1,5 +1,5 @@
 import {Dots} from "./dots.ts";
-import {Direction, MoveChange} from "./step.ts";
+import {MoveChange} from "./step.ts";
 import {Point} from "./point.ts";
 
 const dots = new Dots("canvas");
@@ -17,19 +17,16 @@ dots.parse({
     steps: [
         {
             changes: [
-                new MoveChange(new Point(140, 240), 0),
+                new MoveChange(new Point(400, 400), 0),
                 new MoveChange(new Point(510, 100), 1)
             ],
-            direction: Direction.FORWARD,
-            finished: false
         },
         {
             changes: [
                 new MoveChange(new Point(240, 40), 0),
                 new MoveChange(new Point(10, 160), 1)
             ],
-            direction: Direction.FORWARD,
-            finished: false
+
         }
     ]
 })

@@ -27,18 +27,6 @@ export class Dot implements Control {
     }
 }
 
-export class Change {
-    start: Point;
-    end: Point
-    control: Control
-    finished: boolean = false
-
-    constructor(start: Point, end: Point, control: Control) {
-        this.start = start.clone();
-        this.end = end.clone();
-        this.control = control;
-    }
-}
 
 export interface ControlBase {
     position: Point
