@@ -8,7 +8,7 @@ import {EmptyTool} from "./emptyTool.ts";
 import {PanZoomTool} from "./panZoomTool.ts";
 import {ComponentTool} from "./componentTool.ts";
 
-export class Dots {
+export class DotsJustDots {
     private readonly canvas: HTMLCanvasElement
     private readonly ctx: CanvasRenderingContext2D
     public zoom: number = 1
@@ -62,7 +62,6 @@ export class Dots {
     }
 
     private attachCanvasEventHandlers() {
-        this.addCanvasEvent('mousedown', (e: any) => this.onPointerDown(e))
         this.addCanvasEvent('mousedown', (e: any) => this.onPointerDown(e))
         this.addCanvasEvent('touchstart', (e: any) => this.handleTouch(e, this.onPointerDown))
         this.addCanvasEvent('mouseup', (_: any) => this.onPointerUp())

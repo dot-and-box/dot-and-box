@@ -1,14 +1,14 @@
 import {Tool} from "./tool.ts";
 import {Point} from "./point.ts";
 import {Component} from "./component.ts";
-import {Dots} from "./dots.ts";
+import {DotsJustDots} from "./dotsJustDots.ts";
 
 export class ComponentTool extends Tool {
 
-    dots: Dots
+    dots: DotsJustDots
     dragStart: Point = Point.zero()
 
-    constructor(dots: Dots) {
+    constructor(dots: DotsJustDots) {
         super()
         this.dots = dots
     }

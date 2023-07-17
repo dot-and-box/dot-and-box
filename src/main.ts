@@ -1,8 +1,8 @@
-import {Dots} from "./dots.ts";
+import {DotsJustDots} from "./dotsJustDots.ts";
 import {MoveChange} from "./step.ts";
 import {Point} from "./point.ts";
 
-const dots = new Dots("canvas");
+const dots = new DotsJustDots("canvas");
 dots.draw()
 // @ts-ignore
 window.dots = dots
