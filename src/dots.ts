@@ -1,9 +1,12 @@
 import {Point} from "./point.ts";
-import {Control, Dot} from "./dot.ts";
+import {Control} from "./dot.ts";
 import {Tool} from "./tool.ts";
-import {Component} from "./component.ts";
 import {Change, ChangeType, DotsModel, Move, MoveChange, StepImpl, StepState} from "./step.ts";
-import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./constants.ts";
+import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY} from "./constants.ts";
+import {DotsTool} from "./dotsTool.ts";
+import {EmptyTool} from "./emptyTool.ts";
+import {PanZoomTool} from "./panZoomTool.ts";
+import {ComponentTool} from "./componentTool.ts";
 
 export class Dots {
     private canvas: HTMLCanvasElement
@@ -86,7 +89,7 @@ export class Dots {
                 const moveChange = change as MoveChange
                 const foundControl = this.controls[moveChange.controlIndex]
                 if (foundControl) {
-                    step.changes.push(new Move(foundControl.position, moveChange.targetPosition, foundControl))
+                    step.changes.push(new Move(moveChange.targetPosition, foundControl))
                 }
             }
         }
@@ -99,7 +102,7 @@ export class Dots {
             if (this.currentStepIndex < this.steps.length - 1) {
                 this.currentStepIndex++
                 this.currentStep = this.steps[this.currentStepIndex]
-                this.currentStep.updateChanges()
+                this.currentStep.forward()
             }
         }
         this.currentStep.animationStep = 0.01
@@ -264,85 +267,4 @@ export class Dots {
 }
 
 
-
-class DotsTool extends Tool {
-
-    controls: Control[]
-
-    constructor(controls: Control[]) {
-        super()
-        this.controls = controls
-    }
-
-    override click(point: Point): void {
-        this.controls.push(new Dot(
-            point,
-            COLORS[this.controls.length % COLORS.length],
-            SIZES[this.controls.length % SIZES.length],
-            this.controls.length.toString(),
-        ))
-    }
-
-}
-
-class EmptyTool extends Tool {
-
-    // @ts-ignore
-    override click(point: Point): void {
-    }
-
-    // @ts-ignore
-    override move(movePoint: Point) {
-
-    }
-
-}
-
-class PanZoomTool extends Tool {
-
-    dots: Dots
-    dragStart: Point = Point.zero()
-
-    constructor(dots: Dots) {
-        super()
-        this.dots = dots
-    }
-
-    override click(point: Point): void {
-        this.dragStart = point
-    }
-
-    override move(movePoint: Point) {
-        this.dots.offset = new Point(
-            movePoint.x - this.dragStart.x,
-            movePoint.y - this.dragStart.y
-        )
-    }
-
-}
-
-class ComponentTool extends Tool {
-
-    dots: Dots
-    dragStart: Point = Point.zero()
-
-    constructor(dots: Dots) {
-        super()
-        this.dots = dots
-    }
-
-    override click(point: Point): void {
-        this.dragStart = point
-
-        this.dots.controls.push(new Component(
-            point,
-            "rgba(37,33,133,0.68)",
-            new Point(50, 50),
-            this.dots.controls.length.toString(),
-        ))
-
-    }
-
-
-}
 

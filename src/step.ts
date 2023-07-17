@@ -36,8 +36,8 @@ export class StepImpl {
     }
 
     //TODO refactor naming
-    updateChanges() {
-        this.changes.forEach(c => c.onStateStart())
+    forward() {
+        this.changes.forEach(c => c.onBeforeStateForward())
     }
 }
 
@@ -79,7 +79,7 @@ abstract class ChangeBase {
         this.type = type
     }
 
-    onStateStart(){
+    onBeforeStateForward(){
 
     }
 }
@@ -89,15 +89,15 @@ export class Move extends ChangeBase {
     end: Point
     control: Control
 
-    constructor(start: Point, end: Point, control: Control) {
+    constructor(end: Point, control: Control) {
         super(ChangeType.MOVE)
-        this.start = start.clone();
+        this.start = control.position.clone();
         this.end = end.clone();
         this.control = control;
     }
 
-    override onStateStart() {
-        super.onStateStart();
+    override onBeforeStateForward() {
+        super.onBeforeStateForward();
         this.start = this.control.position.clone()
     }
 
