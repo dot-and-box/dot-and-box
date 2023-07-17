@@ -21,7 +21,7 @@ export class Dot implements Control {
         ctx.closePath()
         ctx.font = `${this.size}px courier`
         ctx.fillStyle = "white"
-        const textOffset = this.size / 2 - 2
+        const textOffset = this.size / 2 - this.size / 4 + 1
         const xOffset = textOffset * this.text.length
         ctx.fillText(this.text, this.position.x - xOffset, this.position.y + textOffset)
     }
@@ -32,6 +32,6 @@ export interface ControlBase {
     position: Point
 }
 
-export interface Control extends ControlBase{
+export interface Control extends ControlBase {
     draw(ctx: CanvasRenderingContext2D): void
 }

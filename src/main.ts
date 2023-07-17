@@ -24,7 +24,8 @@ dots.parse({
         {
             changes: [
                 new MoveChange(new Point(240, 40), 0),
-                new MoveChange(new Point(10, 160), 1)
+                new MoveChange(new Point(-100, 60), 1),
+                new MoveChange(new Point(-100, -60), 2)
             ],
 
         }
