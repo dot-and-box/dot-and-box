@@ -9,7 +9,7 @@ import {PanZoomTool} from "./panZoomTool.ts";
 import {ComponentTool} from "./componentTool.ts";
 
 export class Dots {
-    private canvas: HTMLCanvasElement
+    private readonly canvas: HTMLCanvasElement
     private readonly ctx: CanvasRenderingContext2D
     public zoom: number = 1
     public isDragging = false
@@ -53,27 +53,28 @@ export class Dots {
     public pause = false;
 
     constructor(canvasId: string) {
-        this.selectTool(this.PAN_ZOOM_TOOL)
-        this.canvas = document.getElementById(canvasId)! as
-            HTMLCanvasElement
-        this.ctx = this.canvas.getContext('2d')! as
-            CanvasRenderingContext2D
-        this.canvas.width = window.innerWidth
-        this.canvas.height = window.innerHeight
-        this.canvas.addEventListener('mousedown', (e) =>
-            this.onPointerDown(e))
-        this.canvas.addEventListener('touchstart', (e) =>
-            this.handleTouch(e, this.onPointerDown))
-        this.canvas.addEventListener('mouseup', (_) =>
-            this.onPointerUp())
-        this.canvas.addEventListener('touchend', (e) =>
-            this.handleTouch(e, this.onPointerUp))
-        this.canvas.addEventListener('mousemove', (e) =>
-            this.onPointerMove(e))
-        this.canvas.addEventListener('touchmove', (e) =>
-            this.handleTouch(e, this.onPointerMove))
-        this.canvas.addEventListener('wheel', (e) =>
-            this.adjustZoom(e.deltaY * SCROLL_SENSITIVITY, 1))
+        const canvas = document.getElementById(canvasId)! as HTMLCanvasElement
+        this.ctx = canvas.getContext('2d')! as CanvasRenderingContext2D
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        this.canvas = canvas;
+        this.attachCanvasEventHandlers()
+    }
+
+    private attachCanvasEventHandlers() {
+        this.addCanvasEvent('mousedown', (e: any) => this.onPointerDown(e))
+        this.addCanvasEvent('mousedown', (e: any) => this.onPointerDown(e))
+        this.addCanvasEvent('touchstart', (e: any) => this.handleTouch(e, this.onPointerDown))
+        this.addCanvasEvent('mouseup', (_: any) => this.onPointerUp())
+        this.addCanvasEvent('touchend', (e: any) => this.handleTouch(e, this.onPointerUp))
+        this.addCanvasEvent('mousemove', (e: any) => this.onPointerMove(e))
+        this.addCanvasEvent('touchmove', (e: any) => this.handleTouch(e, this.onPointerMove))
+        this.addCanvasEvent('wheel',
+            (e: any) => this.adjustZoom(e.deltaY * SCROLL_SENSITIVITY, 1))
+    }
+
+    private addCanvasEvent(eventName: string, lambda: any) {
+        this.canvas.addEventListener(eventName, lambda)
     }
 
     selectTool(toolName: string) {
@@ -81,7 +82,6 @@ export class Dots {
             this.tool = this.tools.get(toolName)!
         }
     }
-
 
     private initStep(step: StepImpl, changes: Change[]) {
         for (const change of changes) {
@@ -238,14 +238,13 @@ export class Dots {
 
     private handlePinch(e: any) {
         e.preventDefault()
-        let touch1 = {x: e.touches[0].clientX, y: e.touches[0].clientY}
-        let touch2 = {x: e.touches[1].clientX, y: e.touches[1].clientY}
+        let touch1 = {x: e.touches[0].clientX as number, y: e.touches[0].clientY as number}
+        let touch2 = {x: e.touches[1].clientX as number, y: e.touches[1].clientY as number}
         let currentDistance = (touch1.x - touch2.x) ** 2 + (touch1.y - touch2.y) ** 2
         if (this.initialPinchDistance == null) {
             this.initialPinchDistance = currentDistance
         } else {
-            this.adjustZoom(null, currentDistance /
-                this.initialPinchDistance)
+            this.adjustZoom(null, currentDistance / this.initialPinchDistance)
         }
     }
 
