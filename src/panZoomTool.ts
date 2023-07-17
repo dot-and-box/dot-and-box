@@ -14,7 +14,6 @@ export class PanZoomTool extends Tool {
 
     override click(point: Point): void {
         this.dragStart = point
-        console.log(point)
         this.dots.controls.forEach(c=> c.hitTest(point))
     }
 
