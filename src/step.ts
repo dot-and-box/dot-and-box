@@ -1,9 +1,13 @@
 import {Point} from "./point.ts";
 import {Control, ControlBase} from "./dot.ts";
 
-export interface DotsModel {
-    controls: ControlBase[],
+export class DotsModel {
+    controls: ControlBase[]
     steps: Step[]
+    constructor(controls: ControlBase[], steps: Step[]) {
+        this.controls = controls;
+        this.steps = steps;
+    }
 }
 
 export interface Step {

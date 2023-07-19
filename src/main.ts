@@ -1,5 +1,5 @@
 import {DotsJustDots} from "./dotsJustDots.ts";
-import {MoveChange} from "./step.ts";
+import {DotsModel, MoveChange} from "./step.ts";
 import {Point} from "./point.ts";
 
 const canvas = document.getElementById("canvas")! as HTMLCanvasElement
@@ -10,13 +10,13 @@ dots.draw()
 window.dots = dots
 
 
-dots.parse({
-    controls: [
+dots.parse(new DotsModel(
+     [
         {position: new Point(-150, 100)},
         {position: new Point(-480, 340)},
         {position: new Point(180, 240)}
     ],
-    steps: [
+     [
         {
             changes: [
                 new MoveChange(new Point(400, 400), 0),
@@ -31,8 +31,8 @@ dots.parse({
             ],
 
         }
-    ]
-})
+    ])
+)
 
 document.getElementById("pan-zoom")!.onclick = _ => dots.selectTool(dots.PAN_ZOOM_TOOL);
 document.getElementById("zoom-reset")!.onclick = _ => dots.zoom = 1;
