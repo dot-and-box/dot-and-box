@@ -1,8 +1,8 @@
 import {Point} from "./point.ts";
-import {Control} from "./dot.ts";
+import {Control, Dot} from "./dot.ts";
 import {Tool} from "./tool.ts";
 import {Change, ChangeType, DotsModel, Move, MoveChange, StepImpl, StepState} from "./step.ts";
-import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY} from "./constants.ts";
+import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./constants.ts";
 import {DotsTool} from "./dotsTool.ts";
 import {EmptyTool} from "./emptyTool.ts";
 import {PanZoomTool} from "./panZoomTool.ts";
@@ -21,6 +21,7 @@ export class DotsJustDots {
     public origin: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
     public offset: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
     public showFps = true
+    public pause = false;
 
 
     public readonly EMPTY_TOOL: string = "empty-tool"
@@ -31,7 +32,7 @@ export class DotsJustDots {
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
-        [this.DOTS_TOOL, new DotsTool(this.controls)],
+        [this.DOTS_TOOL, new DotsTool(this)],
         [this.COMPONENT_TOOL, new ComponentTool(this)],
         [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
     ])
@@ -42,10 +43,12 @@ export class DotsJustDots {
     private currentStep = new StepImpl()
 
     public parse(model: DotsModel) {
-        for (const control of model.controls) {
-            this.tools.get(this.DOTS_TOOL)!.click(control.position)
-        }
         this.steps = []
+        this.controls = []
+
+        for (const control of model.controls) {
+            this.addDot(control.position)
+        }
         model.steps.forEach(s => {
             const step = new StepImpl()
             this.initStep(step, s.changes)
@@ -54,7 +57,14 @@ export class DotsJustDots {
         this.currentStep = this.steps[this.currentStepIndex]
     }
 
-    public pause = false;
+    public addDot(point: Point) {
+        this.controls.push(new Dot(
+            point,
+            COLORS[this.controls.length % COLORS.length],
+            SIZES[this.controls.length % SIZES.length],
+            this.controls.length.toString(),
+        ))
+    }
 
     constructor(canvas: HTMLCanvasElement) {
         this.ctx = canvas.getContext('2d')! as CanvasRenderingContext2D

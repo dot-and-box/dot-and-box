@@ -1,24 +1,18 @@
 import {Tool} from "./tool.ts";
-import {Control, Dot} from "./dot.ts";
 import {Point} from "./point.ts";
-import {COLORS, SIZES} from "./constants.ts";
+import {DotsJustDots} from "./dotsJustDots.ts";
 
 export class DotsTool extends Tool {
 
-    controls: Control[]
+    dots: DotsJustDots
 
-    constructor(controls: Control[]) {
+    constructor(dots: DotsJustDots) {
         super()
-        this.controls = controls
+        this.dots = dots
     }
 
     override click(point: Point): void {
-        this.controls.push(new Dot(
-            point,
-            COLORS[this.controls.length % COLORS.length],
-            SIZES[this.controls.length % SIZES.length],
-            this.controls.length.toString(),
-        ))
+        this.dots.addDot(point)
     }
 
 }
