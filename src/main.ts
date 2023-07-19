@@ -2,7 +2,9 @@ import {DotsJustDots} from "./dotsJustDots.ts";
 import {MoveChange} from "./step.ts";
 import {Point} from "./point.ts";
 
-const dots = new DotsJustDots("canvas");
+const canvas = document.getElementById("canvas")! as HTMLCanvasElement
+
+const dots = new DotsJustDots(canvas);
 dots.draw()
 // @ts-ignore
 window.dots = dots

@@ -15,9 +15,13 @@ export class DotsJustDots {
     public isDragging = false
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
+    private fps = 1
+    private last_time: number = 0
     public controls: Control[] = []
-    private origin: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
+    public origin: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
     public offset: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
+    public showFps = true
+
 
     public readonly EMPTY_TOOL: string = "empty-tool"
     public readonly DOTS_TOOL: string = "dots-tool"
@@ -52,8 +56,7 @@ export class DotsJustDots {
 
     public pause = false;
 
-    constructor(canvasId: string) {
-        const canvas = document.getElementById(canvasId)! as HTMLCanvasElement
+    constructor(canvas: HTMLCanvasElement) {
         this.ctx = canvas.getContext('2d')! as CanvasRenderingContext2D
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
@@ -70,10 +73,24 @@ export class DotsJustDots {
         this.addCanvasEvent('touchmove', (e: any) => this.handleTouch(e, this.onPointerMove))
         this.addCanvasEvent('wheel',
             (e: any) => this.adjustZoom(e.deltaY * SCROLL_SENSITIVITY, 1))
+        this.addDocumentEvent('keydown', (e: any) => this.handleKeyDown(e))
+
+    }
+
+    private handleKeyDown(k: KeyboardEvent) {
+        if (k.key === "ArrowLeft") {
+            this.back()
+        } else if (k.key === "ArrowRight") {
+            this.forward()
+        }
     }
 
     private addCanvasEvent(eventName: string, lambda: any) {
         this.canvas.addEventListener(eventName, lambda)
+    }
+
+    private addDocumentEvent(eventName: string, lambda: any) {
+        document.addEventListener(eventName, lambda)
     }
 
     selectTool(toolName: string) {
@@ -123,9 +140,12 @@ export class DotsJustDots {
     public draw() {
         this.canvas.width = window.innerWidth
         this.canvas.height = window.innerHeight
-
-        this.drawText("rate", window.innerWidth - 50, 20, 22, "courier")
-
+        if (this.showFps) {
+            const time = performance.now()
+            this.fps = 1 / ((performance.now() - this.last_time) / 1000);
+            this.last_time = time
+            this.drawText(Math.round(this.fps).toString(), window.innerWidth - 70, 20, 22, "courier")
+        }
         this.ctx.translate(this.origin.x, this.origin.y)
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
@@ -139,6 +159,8 @@ export class DotsJustDots {
         for (const control of this.controls) {
             control.draw(this.ctx)
         }
+
+
         requestAnimationFrame(() => this.draw())
     }
 
