@@ -11,4 +11,4 @@ Project goal is to create markdown like notation visualizer for simple animation
 ### TODO
 
 - select component (select dot and change size name etc) 
-
+- add parser for declarative syntax (see docs)
