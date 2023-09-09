@@ -1,14 +1,12 @@
 import {ParseResult} from "./parseResult.ts";
 import {TokenType} from "./tokenType.ts";
 import {Token} from "./token.ts";
+import {COLON, COMMA, NEW_LINE} from "./tokens.ts";
 
 export class Parser {
-    public static  SWAP: string = "SWAP"
-    public static  SWP: string = "SWAP"
-    public static  keywords: string[] = [Parser.SWAP]
     public parse(data: string): ParseResult {
         const result = new ParseResult()
-        const lines = data.split("\n")
+        const lines = data.split(NEW_LINE)
         const tokens = []
         let buffer = []
         for(let l = 0; l < lines.length;l++){
@@ -17,10 +15,10 @@ export class Parser {
             while(n < line.length){
                 const c = line.charAt(n)
                 switch(c){
-                    case ":":
+                    case COLON:
                         tokens.push(new Token(TokenType.COLON))
                         break;
-                    case ",":
+                    case COMMA:
                         tokens.push(new Token(TokenType.COMMA))
                         break;
                     default:
