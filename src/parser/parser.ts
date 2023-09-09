@@ -3,9 +3,9 @@ import {TokenType} from "./tokenType.ts";
 import {Token} from "./token.ts";
 
 export class Parser {
-    static readonly SWAP: string = "SWAP"
-    static readonly SWP: string = "SWAP"
-    static readonly keywords: string[] = [Parser.SWAP,]
+    public static  SWAP: string = "SWAP"
+    public static  SWP: string = "SWAP"
+    public static  keywords: string[] = [Parser.SWAP]
     public parse(data: string): ParseResult {
         const result = new ParseResult()
         const lines = data.split("\n")

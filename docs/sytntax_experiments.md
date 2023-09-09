@@ -7,9 +7,9 @@ Idea 1 - Visualise sorting algorithm
 ```text
 
 title: bubble sort
-dots (at: 120, 160): 1, 2, 7, 4
-component (size: 230, 450): trash
-locations: A(373,738), 
+dots (at: 120, 160): 1, 2, 7, 4  // at is optional defaults to center 
+component (size: 230, 450): trash // size is optional
+locations: A(373,738)
 animate: 4 <-> 7,  2 -> trash, 7 -> A
 
 ```
