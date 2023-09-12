@@ -1,14 +1,10 @@
 import { expect, test } from 'vitest'
 import {Parser} from "../src/parser/parser";
 
-// test('parser not null', () => {
-//     let p = new Parser()
-//     expect(p).not.eq(null)
-// })
-//
-
-
-
+test('parser not null', () => {
+    let p = new Parser()
+    expect(p).not.eq(null)
+})
 
 test('parser simple', () => {
     let eg1 = "title: bubble sort\n" +

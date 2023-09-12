@@ -29,12 +29,11 @@ export class Parser {
                 case ',':
                     this.addToken(TokenType.COMMA)
                     break;
-                case 'd':
-                    this.match('o')
-                    break
                 default:
                     if (this.isDigit(c)) {
                         this.number()
+                    }else if (this.isAlpha(c)) {
+                        this.identifier();
                     }
             }
             this.start = this.position
@@ -80,4 +79,17 @@ export class Parser {
         let val = this.source.substring(this.start, this.position)
         this.addTokenValue(TokenType.NUMBER, val)
     }
+
+    isAlpha(c): boolean {
+        return (c >= 'a' && c <= 'z') ||
+            (c >= 'A' && c <= 'Z') ||
+            c == '_';
+    }
+
+    identifier() {
+        while (this.isAlpha(this.peek())) this.advance();
+        let val = this.source.substring(this.start, this.position)
+        this.addTokenValue(TokenType.IDENTIFIER, val)
+    }
+
 }
