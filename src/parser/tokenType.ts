@@ -1,3 +1,3 @@
 export enum TokenType {
-    IDENTIFIER, KEYWORD, COMMA, COLON
+    IDENTIFIER= "IDENTIFIER", NUMBER="NUMBER", COMMA = ",", COLON = ":", LEFT_BRACKET = "(", RIGHT_BRACKET = ")"
 }
