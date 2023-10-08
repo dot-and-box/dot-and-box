@@ -2,7 +2,7 @@
   "name": "dotsjustdots",
   "private": true,
   "version": "0.0.1",
-  "description": "dots just dots is markdown for animations experiment",
+  "description": "dots and boxes is markdown for animations experiment",
   "type": "module",
   "scripts": {
     "dev": "vite",

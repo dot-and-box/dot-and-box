@@ -161,7 +161,7 @@ export class DotsAndBoxes {
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
 
         this.ctx.fillStyle = COLORS[this.controls.length % COLORS.length]
-        this.drawText("Dots are ruling the world bro!", -255, -100, 42,
+        this.drawText("Dots and boxes are ruling the world bro!", -255, -100, 42,
             "courier")
         if (!this.pause && this.currentStep && this.currentStep.changes.length > 0) {
             this.updateChanges();
