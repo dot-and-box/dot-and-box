@@ -29,15 +29,40 @@ export class Parser {
                 case ',':
                     this.addToken(TokenType.COMMA)
                     break;
+                case '<':
+                    if(!this.matchSwap())
+                        this.addToken(TokenType.LESS_THAN)
+                    break;
+                case '-':
+                    if(this.match('>'))
+                        this.addToken(TokenType.MOVE_TO)
+                    else
+                        this.addToken(TokenType.MINUS)
+                    break;
+                case '=':
+                    this.addToken(TokenType.EQUALS)
+                    break;
+                case '>':
+                    this.addToken(TokenType.GREATER_THAN)
+                    break;
                 default:
                     if (this.isDigit(c)) {
                         this.number()
-                    }else if (this.isAlpha(c)) {
+                    } else if (this.isAlpha(c)) {
                         this.identifier();
                     }
             }
             this.start = this.position
         }
+    }
+
+    matchSwap(): boolean {
+        if (this.match("-"))
+            if (this.match(">")) {
+                this.addToken(TokenType.SWAP)
+                return true
+            }
+        return false;
     }
 
     addToken(tokenType: TokenType) {
