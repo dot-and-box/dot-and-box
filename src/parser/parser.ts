@@ -1,6 +1,7 @@
 import {TokenType} from "./tokenType.ts";
 import {Token} from "./token.ts";
 
+//todo: extract scanner, then parse toekns to dots and boexes model
 export class Parser {
     start: number = 0;
     position = 0;
