@@ -5,21 +5,44 @@ Here I am gathering use cases and proposed syntax
 Idea 1 - Visualise sorting algorithm
 
 ```text
-
 title: bubble sort
-dots (at: 120, 160): 1, 2, 7, 4  // at is optional defaults to center 
-component (size: 230, 450): trash // size is optional
-locations: A(373,738)
-animate: 4 <-> 7,  2 -> trash, 7 -> A
+dots: 
+    at: 120, 160 // at is optional defaults to center
+    size: 45
+    data: 1, 2, 7, 4   
+boxes: 
+    at: 120, 160  
+animate: 
+    1: 4 <-> 7
+    2: 1 <-> 2
+```
 
+
+```text
+title: two controls group dance
+group: few controls
+    at: 123, 322
+    layout: horizontal
+    color: red
+    dot: 1 
+    box: trash 
+    dot: 3
+    dot: 4
+    dot: A    
+    dot: 7    
+dots: group name id
+    at: 323, 322
+    data: 45, 23, 23, 78
+animate: 
+    1: 1s, 4 <-> 7,  2 -> trash, 7 -> A
+    2: 400ms, 4 <-> 7,  4 -> trash, 7 -> A
 ```
 
 Idea 2 - Visualise components communicating over message bus in event driven architecture
 
+TODO: syntax is really wrong
 
 ```text
-
-
 title: EDA example
 domain: customer
 components: customer, orders, profile, payments
