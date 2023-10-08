@@ -1,14 +1,14 @@
-import {Tool} from "./tool.ts";
-import {Point} from "./point.ts";
-import {Component} from "./component.ts";
-import {DotsJustDots} from "./dotsJustDots.ts";
+import {Tool} from "../shared/tool.ts";
+import {Point} from "../shared/point.ts";
+import {Box} from "./box.ts";
+import {DotsAndBoxes} from "../dotsAndBoxes.ts";
 
-export class ComponentTool extends Tool {
+export class BoxTool extends Tool {
 
-    dots: DotsJustDots
+    dots: DotsAndBoxes
     dragStart: Point = Point.zero()
 
-    constructor(dots: DotsJustDots) {
+    constructor(dots: DotsAndBoxes) {
         super()
         this.dots = dots
     }
@@ -16,7 +16,7 @@ export class ComponentTool extends Tool {
     override click(point: Point): void {
         this.dragStart = point
 
-        this.dots.controls.push(new Component(
+        this.dots.controls.push(new Box(
             point,
             "rgba(37,33,133,0.68)",
             new Point(50, 50),

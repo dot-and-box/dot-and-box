@@ -1,14 +1,14 @@
-import {Point} from "./point.ts";
-import {Control, Dot} from "./dot.ts";
-import {Tool} from "./tool.ts";
-import {Change, ChangeType, DotsModel, Move, MoveChange, StepImpl, StepState} from "./step.ts";
-import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./constants.ts";
-import {DotsTool} from "./dotsTool.ts";
-import {EmptyTool} from "./emptyTool.ts";
-import {PanZoomTool} from "./panZoomTool.ts";
-import {ComponentTool} from "./componentTool.ts";
+import {Point} from "./shared/point.ts";
+import {Control, Dot} from "./dot/dot.ts";
+import {Tool} from "./shared/tool.ts";
+import {Change, ChangeType, DotsAndBoxesModel, Move, MoveChange, StepImpl, StepState} from "./shared/step.ts";
+import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./shared/constants.ts";
+import {DotsTool} from "./dot/dotsTool.ts";
+import {EmptyTool} from "./shared/emptyTool.ts";
+import {PanZoomTool} from "./panzoom/panZoomTool.ts";
+import {BoxTool} from "./box/boxTool.ts";
 
-export class DotsJustDots {
+export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
     private readonly ctx: CanvasRenderingContext2D
     public zoom: number = 1
@@ -26,14 +26,14 @@ export class DotsJustDots {
 
     public readonly EMPTY_TOOL: string = "empty-tool"
     public readonly DOTS_TOOL: string = "dots-tool"
-    public readonly COMPONENT_TOOL: string = "component-tool"
+    public readonly BOX_TOOL: string = "box-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private tool: Tool = new PanZoomTool(this)
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
         [this.DOTS_TOOL, new DotsTool(this)],
-        [this.COMPONENT_TOOL, new ComponentTool(this)],
+        [this.BOX_TOOL, new BoxTool(this)],
         [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
     ])
 
@@ -42,7 +42,7 @@ export class DotsJustDots {
     private currentStepIndex = 0;
     private currentStep = new StepImpl()
 
-    public parse(model: DotsModel) {
+    public parse(model: DotsAndBoxesModel) {
         this.steps = []
         this.controls = []
 

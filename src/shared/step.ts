@@ -1,7 +1,7 @@
 import {Point} from "./point.ts";
-import {Control, ControlBase} from "./dot.ts";
+import {Control, ControlBase} from "../dot/dot.ts";
 
-export class DotsModel {
+export class DotsAndBoxesModel {
     controls: ControlBase[]
     steps: Step[]
     constructor(controls: ControlBase[], steps: Step[]) {
@@ -55,7 +55,7 @@ export enum StepState {
 export enum ChangeType {
     MOVE,
     CREATE_DOT,
-    CREATE_COMPONENT
+    CREATE_BOX
 }
 
 export interface Change {

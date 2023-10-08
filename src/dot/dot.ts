@@ -1,5 +1,5 @@
-import {Point} from "./point.ts";
-import {SELECTION_STROKE_STYLE} from "./constants.ts";
+import {Point} from "../shared/point.ts";
+import {SELECTION_STROKE_STYLE} from "../shared/constants.ts";
 
 export class Dot implements Control {
     public position: Point

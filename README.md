@@ -1,6 +1,4 @@
-## Dots just Dots
-
-Looking for fancy name
+## Dots and Boxes
 
 Project goal is to create markdown like notation visualizer for simple animations
 

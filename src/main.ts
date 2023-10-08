@@ -1,16 +1,16 @@
-import {DotsJustDots} from "./dotsJustDots.ts";
-import {DotsModel, MoveChange} from "./step.ts";
-import {Point} from "./point.ts";
+import {DotsAndBoxes} from "./dotsAndBoxes.ts";
+import {DotsAndBoxesModel, MoveChange} from "./shared/step.ts";
+import {Point} from "./shared/point.ts";
 
 const canvas = document.getElementById("canvas")! as HTMLCanvasElement
 
-const dots = new DotsJustDots(canvas);
-dots.draw()
+const dotsAndBoxes = new DotsAndBoxes(canvas);
+dotsAndBoxes.draw()
 // @ts-ignore
-window.dots = dots
+window.dots = dotsAndBoxes
 
 
-dots.parse(new DotsModel(
+dotsAndBoxes.parse(new DotsAndBoxesModel(
      [
         {position: new Point(-150, 100)},
         {position: new Point(-480, 340)},
@@ -34,10 +34,10 @@ dots.parse(new DotsModel(
     ])
 )
 
-document.getElementById("pan-zoom")!.onclick = _ => dots.selectTool(dots.PAN_ZOOM_TOOL);
-document.getElementById("zoom-reset")!.onclick = _ => dots.zoom = 1;
-document.getElementById("dots")!.onclick = _ => dots.selectTool(dots.DOTS_TOOL)
-document.getElementById("comp")!.onclick = _ => dots.selectTool(dots.COMPONENT_TOOL)
-document.getElementById("back")!.onclick = _ => dots.back()
-document.getElementById("pause")!.onclick = _ => dots.togglePause()
-document.getElementById("forward")!.onclick = _ => dots.forward()
+document.getElementById("pan-zoom")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.PAN_ZOOM_TOOL);
+document.getElementById("zoom-reset")!.onclick = _ => dotsAndBoxes.zoom = 1;
+document.getElementById("dot")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.DOTS_TOOL)
+document.getElementById("box")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.BOX_TOOL)
+document.getElementById("back")!.onclick = _ => dotsAndBoxes.back()
+document.getElementById("pause")!.onclick = _ => dotsAndBoxes.togglePause()
+document.getElementById("forward")!.onclick = _ => dotsAndBoxes.forward()

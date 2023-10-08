@@ -1,13 +1,13 @@
-import {Tool} from "./tool.ts";
-import {Point} from "./point.ts";
-import {DotsJustDots} from "./dotsJustDots.ts";
+import {Tool} from "../shared/tool.ts";
+import {Point} from "../shared/point.ts";
+import {DotsAndBoxes} from "../dotsAndBoxes.ts";
 
 export class PanZoomTool extends Tool {
 
-    dots: DotsJustDots
+    dots: DotsAndBoxes
     dragStart: Point = Point.zero()
 
-    constructor(dots: DotsJustDots) {
+    constructor(dots: DotsAndBoxes) {
         super()
         this.dots = dots
     }

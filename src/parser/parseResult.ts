@@ -1,15 +1,15 @@
-import {DotsModel} from "../step.ts";
+import {DotsAndBoxesModel} from "../shared/step.ts";
 
 
 export class ParseResult {
     success: boolean
-    result: DotsModel
+    result: DotsAndBoxesModel
     errors: string[]
 
     constructor() {
         this.errors = []
         this.errors = []
         this.success = true
-        this.result = new DotsModel([],[])
+        this.result = new DotsAndBoxesModel([],[])
     }
 }

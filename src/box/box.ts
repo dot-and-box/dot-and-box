@@ -1,8 +1,8 @@
-import {Point} from "./point.ts";
-import {Control} from "./dot.ts";
-import {SELECTION_STROKE_STYLE} from "./constants.ts";
+import {Point} from "../shared/point.ts";
+import {Control} from "../dot/dot.ts";
+import {SELECTION_STROKE_STYLE} from "../shared/constants.ts";
 
-export class Component implements Control {
+export class Box implements Control {
     public position: Point
     public color: string
     public size: Point
