@@ -7,11 +7,18 @@ test('parser not null', () => {
 })
 
 test('parser simple', () => {
-    let eg1 = "title: bubble sort\n" +
-        "dots (at: 120, 160): 1, 2, 7, 4\n" +
-        "component (size: 230, 450): trash\n" +
-        "locations: A(373,738)\n" +
-        "animate: 4 <-> 7,  2 -> trash, 7 -> A"
+    let eg1= "title: bubble sort\n" +
+                    "dots: \n" +
+                    "    at: 120, 160\n" +
+                    "    size: 45\n" +
+                    "    data: 1, 2, 7, 4   \n" +
+                    "boxes: \n" +
+                    "    at: 120, 160  \n" +
+                    "animate: \n" +
+                    "    1: 4 <-> 7\n" +
+                    "    2: 1 <-> 2"
+
+
     let p = new Parser()
     p.parse(eg1)
     console.log(p.tokens)
