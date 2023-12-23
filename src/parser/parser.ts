@@ -1,7 +1,8 @@
 import {TokenType} from "./tokenType.ts";
 import {Token} from "./token.ts";
+import {Keywords} from "./keywords.ts"
 
-//todo: extract scanner, then parse toekns to dots and boexes model
+//todo: extract scanner, then parse tokens to dots and boxes model
 export class Parser {
     start: number = 0;
     position = 0;
@@ -16,6 +17,10 @@ export class Parser {
             switch (c) {
                 case ' ':
                 case '\r':
+                    break;
+                case '\n':
+                    this.line++;
+                    break;
                 case '\t':
                     break;
                 case '(':
@@ -25,17 +30,18 @@ export class Parser {
                     this.addToken(TokenType.RIGHT_BRACKET)
                     break;
                 case ':':
-                    this.addToken(TokenType.COLON)
+                    console.log('decode keyword ' + this.tokens[this.tokens.length - 1].value)
+                    //this.addToken(TokenType.COLON)
                     break;
                 case ',':
                     this.addToken(TokenType.COMMA)
                     break;
                 case '<':
-                    if(!this.matchSwap())
+                    if (!this.matchSwap())
                         this.addToken(TokenType.LESS_THAN)
                     break;
                 case '-':
-                    if(this.match('>'))
+                    if (this.match('>'))
                         this.addToken(TokenType.MOVE_TO)
                     else
                         this.addToken(TokenType.MINUS)
@@ -51,6 +57,8 @@ export class Parser {
                         this.number()
                     } else if (this.isAlpha(c)) {
                         this.identifier();
+                    } else {
+                        throw new Error(`line: ${this.line} Unexpected character ${c} charcode: ${c.charCodeAt(0)}`)
                     }
             }
             this.start = this.position
@@ -107,15 +115,19 @@ export class Parser {
     }
 
     isAlpha(c): boolean {
-        return (c >= 'a' && c <= 'z') ||
-            (c >= 'A' && c <= 'Z') ||
-            c == '_';
+        const alphaRegExp = /[\p{Letter}\p{Mark}]+/gu
+        return alphaRegExp.test(c) || c == '_';
+    }
+
+    isAlphanumeric(c): boolean {
+        return this.isAlpha(c) || this.isDigit(c)
     }
 
     identifier() {
-        while (this.isAlpha(this.peek())) this.advance();
+        while (this.isAlphanumeric(this.peek())) this.advance();
         let val = this.source.substring(this.start, this.position)
-        this.addTokenValue(TokenType.IDENTIFIER, val)
+        const tokenType = Keywords.isKeyword(val) ? Keywords.getKeywordByName(val) : TokenType.IDENTIFIER
+        this.addTokenValue(tokenType, val)
     }
 
 }
