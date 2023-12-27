@@ -1,7 +1,7 @@
 import {Point} from "../shared/point.ts";
 import {SELECTION_STROKE_STYLE} from "../shared/constants.ts";
 
-export class Dot implements Control {
+export class DotControl implements Control {
     public position: Point
     public color: string
     public size: number

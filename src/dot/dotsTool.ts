@@ -12,7 +12,7 @@ export class DotsTool extends Tool {
     }
 
     override click(point: Point): void {
-        this.dots.addDot(point)
+        this.dots.addDotControl(point)
     }
 
 }

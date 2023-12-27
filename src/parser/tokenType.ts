@@ -18,6 +18,6 @@ export enum TokenType {
     AT = "at",
     SIZE = "size",
     DATA = "data",
-    BOXES = "boxes",
-    ANIMATE = "animate"
+    BOX = "box",
+    ACTIONS = "actions"
 }

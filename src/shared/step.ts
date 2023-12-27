@@ -1,34 +1,36 @@
 import {Point} from "./point.ts";
-import {Control, ControlBase} from "../dot/dot.ts";
+import {Control, ControlBase} from "../dot/dotControl.ts";
 
 export class DotsAndBoxesModel {
+    title: string
     controls: ControlBase[]
     steps: Step[]
-    constructor(controls: ControlBase[], steps: Step[]) {
+    constructor(title: string, controls: ControlBase[], steps: Step[]) {
+        this.title = title;
         this.controls = controls;
         this.steps = steps;
     }
 }
 
 export interface Step {
-    changes: Change[]
+    actions: Action[]
 }
 
 export class StepImpl {
-    changes: ChangeBase[];
+    actions: ActionBase[];
     finishedChanges = 0;
     public animationStep = 0.0;
     public state: StepState = StepState.START
 
     notifyFinished() {
         this.finishedChanges++;
-        if (this.finishedChanges == this.changes.length) {
+        if (this.finishedChanges == this.actions.length) {
             this.state = this.animationStep > 0 ? StepState.END : StepState.START
         }
     }
 
     public reset() {
-        this.changes.forEach(c => {
+        this.actions.forEach(c => {
             c.finished = false
         })
         this.finishedChanges = 0
@@ -36,12 +38,12 @@ export class StepImpl {
     }
 
     constructor() {
-        this.changes = [];
+        this.actions = [];
     }
 
     //TODO refactor naming
     forward() {
-        this.changes.forEach(c => c.onBeforeStateForward())
+        this.actions.forEach(c => c.onBeforeStateForward())
     }
 }
 
@@ -52,17 +54,17 @@ export enum StepState {
 }
 
 
-export enum ChangeType {
+export enum ActionType {
     MOVE,
     CREATE_DOT,
     CREATE_BOX
 }
 
-export interface Change {
-    type: ChangeType
+export interface Action {
+    type: ActionType
 }
 
-export class MoveChange implements Change {
+export class MoveAction implements Action {
     constructor(targetPosition: Point, controlIndex: number) {
         this.targetPosition = targetPosition;
         this.controlIndex = controlIndex;
@@ -70,16 +72,16 @@ export class MoveChange implements Change {
 
     targetPosition: Point;
     controlIndex: number
-    readonly type: ChangeType = ChangeType.MOVE
+    readonly type: ActionType = ActionType.MOVE
 }
 
 
-abstract class ChangeBase {
+abstract class ActionBase {
     finished: boolean = false
     progress: number = 0
-    readonly type: ChangeType
+    readonly type: ActionType
 
-    protected constructor(type: ChangeType) {
+    protected constructor(type: ActionType) {
         this.type = type
     }
 
@@ -88,13 +90,13 @@ abstract class ChangeBase {
     }
 }
 
-export class Move extends ChangeBase {
+export class Move extends ActionBase {
     start: Point;
     end: Point
     control: Control
 
     constructor(end: Point, control: Control) {
-        super(ChangeType.MOVE)
+        super(ActionType.MOVE)
         this.start = control.position.clone();
         this.end = end.clone();
         this.control = control;

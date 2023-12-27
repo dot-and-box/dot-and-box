@@ -2,6 +2,12 @@
 
 Project goal is to create markdown like notation visualizer for simple animations
 
+### Run
+
+```shell
+npm run dev
+```
+
 #### Use cases
 - create notation examples for bubble sort algorithm
 - event driven architecture communication visualization

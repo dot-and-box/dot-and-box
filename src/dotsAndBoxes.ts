@@ -1,12 +1,13 @@
 import {Point} from "./shared/point.ts";
-import {Control, Dot} from "./dot/dot.ts";
+import {Control, DotControl} from "./dot/dotControl.ts";
 import {Tool} from "./shared/tool.ts";
-import {Change, ChangeType, DotsAndBoxesModel, Move, MoveChange, StepImpl, StepState} from "./shared/step.ts";
+import {Action, ActionType, DotsAndBoxesModel, Move, MoveAction, StepImpl, StepState} from "./shared/step.ts";
 import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./shared/constants.ts";
 import {DotsTool} from "./dot/dotsTool.ts";
 import {EmptyTool} from "./shared/emptyTool.ts";
 import {PanZoomTool} from "./panzoom/panZoomTool.ts";
 import {BoxTool} from "./box/boxTool.ts";
+import {TextControl} from "./text/textControl.ts";
 
 export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
@@ -42,23 +43,24 @@ export class DotsAndBoxes {
     private currentStepIndex = 0;
     private currentStep = new StepImpl()
 
-    public parse(model: DotsAndBoxesModel) {
+    public apply(model: DotsAndBoxesModel) {
         this.steps = []
         this.controls = []
 
         for (const control of model.controls) {
-            this.addDot(control.position)
+            this.controls.push(control as Control);
         }
         model.steps.forEach(s => {
             const step = new StepImpl()
-            this.initStep(step, s.changes)
+            this.initStep(step, s.actions)
             this.steps.push(step)
         })
         this.currentStep = this.steps[this.currentStepIndex]
     }
 
-    public addDot(point: Point) {
-        this.controls.push(new Dot(
+    //TODO: move to tool or tool operating on model ?
+    public addDotControl(point: Point) {
+        this.controls.push(new DotControl(
             point,
             COLORS[this.controls.length % COLORS.length],
             SIZES[this.controls.length % SIZES.length],
@@ -109,13 +111,13 @@ export class DotsAndBoxes {
         }
     }
 
-    private initStep(step: StepImpl, changes: Change[]) {
-        for (const change of changes) {
-            if (change.type == ChangeType.MOVE) {
-                const moveChange = change as MoveChange
-                const foundControl = this.controls[moveChange.controlIndex]
+    private initStep(step: StepImpl, actions: Action[]) {
+        for (const action of actions) {
+            if (action.type == ActionType.MOVE) {
+                const moveAction = action as MoveAction
+                const foundControl = this.controls[moveAction.controlIndex]
                 if (foundControl) {
-                    step.changes.push(new Move(moveChange.targetPosition, foundControl))
+                    step.actions.push(new Move(moveAction.targetPosition, foundControl))
                 }
             }
         }
@@ -160,27 +162,28 @@ export class DotsAndBoxes {
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
 
-        this.ctx.fillStyle = COLORS[this.controls.length % COLORS.length]
-        this.drawText("Dots and boxes are ruling the world bro!", -255, -100, 42,
-            "courier")
-        if (!this.pause && this.currentStep && this.currentStep.changes.length > 0) {
-            this.updateChanges();
+        if (!this.pause && this.currentStep && this.currentStep.actions.length > 0) {
+            this.updateActions();
         }
+        console.log('lol')
         for (const control of this.controls) {
             control.draw(this.ctx)
         }
 
 
+        //TODO: clean
+        // if(this.controls.length > 0) {
         requestAnimationFrame(() => this.draw())
+        //}
     }
 
 
-    private updateChanges() {
-        for (const change of this.currentStep.changes) {
-            if (change.finished)
+    private updateActions() {
+        for (const action of this.currentStep.actions) {
+            if (action.finished)
                 continue
-            if (change.type == ChangeType.MOVE) {
-                this.handleMove(change as Move)
+            if (action.type == ActionType.MOVE) {
+                this.handleMove(action as Move)
             }
         }
     }

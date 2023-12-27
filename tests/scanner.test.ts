@@ -1,13 +1,12 @@
 import {expect, test} from 'vitest'
 import {Scanner} from "../src/parser/scanner";
-import {Parser} from "../src/parser/parser";
 
-test('parser not null', () => {
+test('scanner not null', () => {
     let p = new Scanner()
     expect(p).not.eq(null)
 })
 
-test('parser simple', () => {
+test('scanner simple', () => {
     let eg1 = `title: bubble sort
                      box: 
                        name: router
@@ -22,8 +21,8 @@ test('parser simple', () => {
                      1 <-> 2
                      1 -> router
                     `
-    let p = new Parser()
-    p.parse(eg1)
+    let p = new Scanner()
+    p.scan(eg1)
     console.log(p.tokens)
 
     expect(p).not.eq(null)

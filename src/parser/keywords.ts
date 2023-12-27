@@ -4,10 +4,10 @@ export class Keywords {
     private static KEYWORDS_MAP = new Map<string, TokenType>([
         [TokenType.DOTS.toString(), TokenType.DOTS],
         [TokenType.TITLE.toString(), TokenType.TITLE],
-        [TokenType.BOXES.toString(), TokenType.BOXES],
+        [TokenType.BOX.toString(), TokenType.BOX],
         [TokenType.AT.toString(), TokenType.AT],
         [TokenType.DATA.toString(), TokenType.DATA],
-        [TokenType.ANIMATE.toString(), TokenType.ANIMATE],
+        [TokenType.ACTIONS.toString(), TokenType.ACTIONS],
     ]);
 
     public static isKeyword(tokenName: string): boolean {
