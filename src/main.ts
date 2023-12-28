@@ -12,9 +12,13 @@ window.dots = dotsAndBoxes
 let eg1 = `
 title: bubble sort
 box: 
-  name: router
+  name: raz
   at: -120, -160
-  size: 100, 250
+  size: 60, 50
+box: 
+  name: dwa
+  at: 120, -160
+  size: 250, 50
 dots:
   at: 50, 160
   size: 35

@@ -71,7 +71,15 @@ export class Parser {
     }
 
     size() {
-        return new Point(50, 50)
+        let x = this.number()
+        // noinspection JSSuspiciousNameCombination
+        let y = x;
+
+        let token = this.advance()
+        if (token.type == TokenType.COMMA) {
+             y = this.number()
+        }
+        return new Point(x, y)
     }
 
     at() {

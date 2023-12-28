@@ -7,6 +7,7 @@ export class Keywords {
         [TokenType.NAME.toString(), TokenType.NAME],
         [TokenType.BOX.toString(), TokenType.BOX],
         [TokenType.AT.toString(), TokenType.AT],
+        [TokenType.SIZE.toString(), TokenType.SIZE],
         [TokenType.DATA.toString(), TokenType.DATA],
         [TokenType.ACTIONS.toString(), TokenType.ACTIONS],
     ]);
