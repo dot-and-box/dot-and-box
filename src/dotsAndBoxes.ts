@@ -165,7 +165,6 @@ export class DotsAndBoxes {
         if (!this.pause && this.currentStep && this.currentStep.actions.length > 0) {
             this.updateActions();
         }
-        console.log('lol')
         for (const control of this.controls) {
             control.draw(this.ctx)
         }

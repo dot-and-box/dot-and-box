@@ -14,6 +14,7 @@ export enum TokenType {
     NUMBER = "NUMBER",
     // keywords
     TITLE = "title",
+    NAME = "name",
     DOTS = "dots",
     AT = "at",
     SIZE = "size",

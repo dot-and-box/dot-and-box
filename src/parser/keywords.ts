@@ -4,6 +4,7 @@ export class Keywords {
     private static KEYWORDS_MAP = new Map<string, TokenType>([
         [TokenType.DOTS.toString(), TokenType.DOTS],
         [TokenType.TITLE.toString(), TokenType.TITLE],
+        [TokenType.NAME.toString(), TokenType.NAME],
         [TokenType.BOX.toString(), TokenType.BOX],
         [TokenType.AT.toString(), TokenType.AT],
         [TokenType.DATA.toString(), TokenType.DATA],

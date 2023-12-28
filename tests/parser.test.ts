@@ -11,7 +11,7 @@ test('parser simple', () => {
     let eg1 = `title: bubble sort
                      box: 
                        name: router
-                       at: 120, 160
+                       at: 120, -160
                        size: 100, 150
                      dots:
                        at: 50, 160
@@ -23,8 +23,7 @@ test('parser simple', () => {
                      1 -> router
                     `
     let p = new Parser()
-    p.parse(eg1)
-    console.log(p.tokens)
+    const model = p.parse(eg1)
 
-    expect(p).not.eq(null)
+    expect(model).not.eq(null)
 })
