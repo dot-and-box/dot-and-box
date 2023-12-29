@@ -1,22 +1,21 @@
 import {Point} from "./point.ts";
-import {Control, ControlBase} from "../dot/dotControl.ts";
+import {Control} from "../dot/dotControl.ts";
+import {ActionType} from "./actionType.ts";
+import {ActionBase} from "./actionBase.ts";
 
 export class DotsAndBoxesModel {
     title: string
-    controls: ControlBase[]
+    controls: Control[]
     steps: Step[]
-    constructor(title: string, controls: ControlBase[], steps: Step[]) {
+
+    constructor(title: string, controls: Control[], steps: Step[]) {
         this.title = title;
         this.controls = controls;
         this.steps = steps;
     }
 }
 
-export interface Step {
-    actions: Action[]
-}
-
-export class StepImpl {
+export class Step {
     actions: ActionBase[];
     finishedChanges = 0;
     public animationStep = 0.0;
@@ -51,43 +50,6 @@ export enum StepState {
     START,
     IN_PROGRESS,
     END
-}
-
-
-export enum ActionType {
-    MOVE,
-    CREATE_DOT,
-    CREATE_BOX
-}
-
-export interface Action {
-    type: ActionType
-}
-
-export class MoveAction implements Action {
-    constructor(targetPosition: Point, controlIndex: number) {
-        this.targetPosition = targetPosition;
-        this.controlIndex = controlIndex;
-    }
-
-    targetPosition: Point;
-    controlIndex: number
-    readonly type: ActionType = ActionType.MOVE
-}
-
-
-abstract class ActionBase {
-    finished: boolean = false
-    progress: number = 0
-    readonly type: ActionType
-
-    protected constructor(type: ActionType) {
-        this.type = type
-    }
-
-    onBeforeStateForward(){
-
-    }
 }
 
 export class Move extends ActionBase {

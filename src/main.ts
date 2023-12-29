@@ -1,6 +1,4 @@
 import {DotsAndBoxes} from "./dotsAndBoxes.ts";
-import {DotsAndBoxesModel, MoveAction} from "./shared/step.ts";
-import {Point} from "./shared/point.ts";
 import {Parser} from "./parser/parser.ts";
 
 const canvas = document.getElementById("canvas")! as HTMLCanvasElement
@@ -12,21 +10,20 @@ window.dots = dotsAndBoxes
 let eg1 = `
 title: bubble sort
 box: 
-  name: raz
-  at: -120, -160
-  size: 60, 50
+ name: b1 
+ at: -120, -10
+ size: 60, 50
 box: 
-  name: dwa
-  at: 120, -160
-  size: 250, 50
-dots:
-  at: 50, 160
-  size: 35
-  data: 3,6,8,9,4,7,1,2
-actions:
-4 <-> 7
-1 <-> 2
-1 -> router
+ at: 120, -160
+ size: 250, 50
+dot:
+ name: dt1
+ color: orange
+ at: -50, 100
+ size: 20
+steps:
+dt1 <-> b1
+b1 <-> dt1
                     `
 const model = new Parser().parse(eg1)
 dotsAndBoxes.apply(model);
@@ -48,13 +45,13 @@ document.getElementById("forward")!.onclick = _ => dotsAndBoxes.forward()
 //     ],
 //     [
 //         {
-//             actions: [
+//             steps: [
 //                 new MoveAction(new Point(400, 400), 0),
 //                 new MoveAction(new Point(510, 100), 1)
 //             ],
 //         },
 //         {
-//             actions: [
+//             steps: [
 //                 new MoveAction(new Point(240, 40), 0),
 //                 new MoveAction(new Point(-100, 60), 1),
 //                 new MoveAction(new Point(-100, -60), 2)

@@ -1,13 +1,13 @@
 import {Point} from "./shared/point.ts";
 import {Control, DotControl} from "./dot/dotControl.ts";
 import {Tool} from "./shared/tool.ts";
-import {Action, ActionType, DotsAndBoxesModel, Move, MoveAction, StepImpl, StepState} from "./shared/step.ts";
+import {DotsAndBoxesModel, Move, Step, StepState} from "./shared/step.ts";
 import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./shared/constants.ts";
 import {DotsTool} from "./dot/dotsTool.ts";
 import {EmptyTool} from "./shared/emptyTool.ts";
 import {PanZoomTool} from "./panzoom/panZoomTool.ts";
 import {BoxTool} from "./box/boxTool.ts";
-import {TextControl} from "./text/textControl.ts";
+import {ActionType} from "./shared/actionType.ts";
 
 export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
@@ -39,9 +39,9 @@ export class DotsAndBoxes {
     ])
 
 
-    private steps: StepImpl[] = []
+    private steps: Step[] = []
     private currentStepIndex = 0;
-    private currentStep = new StepImpl()
+    private currentStep = new Step()
 
     public apply(model: DotsAndBoxesModel) {
         this.steps = []
@@ -51,10 +51,9 @@ export class DotsAndBoxes {
             this.controls.push(control as Control);
         }
         model.steps.forEach(s => {
-            const step = new StepImpl()
-            this.initStep(step, s.actions)
-            this.steps.push(step)
+            this.steps.push(s);
         })
+        console.log(model)
         this.currentStep = this.steps[this.currentStepIndex]
     }
 
@@ -108,18 +107,6 @@ export class DotsAndBoxes {
     selectTool(toolName: string) {
         if (this.tools.has(toolName)) {
             this.tool = this.tools.get(toolName)!
-        }
-    }
-
-    private initStep(step: StepImpl, actions: Action[]) {
-        for (const action of actions) {
-            if (action.type == ActionType.MOVE) {
-                const moveAction = action as MoveAction
-                const foundControl = this.controls[moveAction.controlIndex]
-                if (foundControl) {
-                    step.actions.push(new Move(moveAction.targetPosition, foundControl))
-                }
-            }
         }
     }
 

@@ -15,10 +15,12 @@ export enum TokenType {
     // keywords
     TITLE = "title",
     NAME = "name",
+    DOT = "dot",
     DOTS = "dots",
     AT = "at",
     SIZE = "size",
+    COLOR = "color",
     DATA = "data",
     BOX = "box",
-    ACTIONS = "actions"
+    STEPS = "steps"
 }

@@ -1,6 +1,6 @@
 export const MAX_ZOOM = 5
 export const MIN_ZOOM = 0.1
-export const SCROLL_SENSITIVITY = 0.0025
+export const SCROLL_SENSITIVITY = 0.0020
 
 export const SELECTION_STROKE_STYLE = 'yellow'
 export const DEFAULT_FONT = '22px courier'
