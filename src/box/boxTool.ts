@@ -15,12 +15,13 @@ export class BoxTool extends Tool {
 
     override click(point: Point): void {
         this.dragStart = point
-
+        const id = `box ${BoxControl.counter++}`
         this.dots.controls.push(new BoxControl(
+            id,
             point,
             "rgba(37,33,133,0.68)",
-            new Point(50, 50),
-            this.dots.controls.length.toString(),
+            new Point(100, 50),
+            id,
         ))
 
     }

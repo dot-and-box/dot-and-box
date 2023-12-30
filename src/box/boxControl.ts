@@ -1,6 +1,6 @@
 import {Point} from "../shared/point.ts";
 import {Control} from "../dot/dotControl.ts";
-import {SELECTION_STROKE_STYLE} from "../shared/constants.ts";
+import {SELECTION_STROKE_STYLE, DEFAULT_FONT} from "../shared/constants.ts";
 
 export class BoxControl implements Control {
     public position: Point
@@ -8,6 +8,7 @@ export class BoxControl implements Control {
     public size: Point
     public text: string
     public id: string
+    static counter = 1
 
 
     constructor(id: string, position: Point, color: string, size: Point, text: string) {
@@ -24,11 +25,14 @@ export class BoxControl implements Control {
         if (this.selected) {
             ctx.strokeStyle = SELECTION_STROKE_STYLE
         } else {
-            ctx.strokeStyle = "black"
+            ctx.strokeStyle = this.color
         }
         ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
-        ctx.font = `22px courier`
-        ctx.fillStyle = "orange"
+        ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
+        ctx.font = DEFAULT_FONT
+        ctx.fillStyle = this.color != "white"
+            ? "white"
+            : "black"
 
         const textOffset = this.size.x / 2
         const xOffset = textOffset - this.text.length * 8

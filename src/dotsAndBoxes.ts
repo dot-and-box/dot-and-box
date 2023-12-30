@@ -2,7 +2,15 @@ import {Point} from "./shared/point.ts";
 import {Control, DotControl} from "./dot/dotControl.ts";
 import {Tool} from "./shared/tool.ts";
 import {DotsAndBoxesModel, Step, StepState} from "./shared/step.ts";
-import {COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, SIZES} from "./shared/constants.ts";
+import {
+    COLORS,
+    MAX_ZOOM,
+    MIN_ZOOM,
+    SCROLL_SENSITIVITY,
+    SIZES,
+    DEFAULT_FONT,
+    TITLE_FONT_SIZE
+} from "./shared/constants.ts";
 import {DotsTool} from "./dot/dotsTool.ts";
 import {EmptyTool} from "./shared/emptyTool.ts";
 import {PanZoomTool} from "./panzoom/panZoomTool.ts";
@@ -24,6 +32,8 @@ export class DotsAndBoxes {
     public offset: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
     public showFps = true
     public pause = false;
+    public showTitle = false;
+    public title = '';
     public marginLeft = 0;
     public marginTop = 0;
 
@@ -48,7 +58,10 @@ export class DotsAndBoxes {
     public apply(model: DotsAndBoxesModel) {
         this.steps = []
         this.controls = []
-
+        if (model.title) {
+            this.showTitle = true
+            this.title = model.title
+        }
         for (const control of model.controls) {
             this.controls.push(control as Control);
         }
@@ -78,8 +91,8 @@ export class DotsAndBoxes {
         this.attachCanvasEventHandlers()
     }
 
-    public updateCanvasPosition(){
-        const style= getComputedStyle( this.canvas);
+    public updateCanvasPosition() {
+        const style = getComputedStyle(this.canvas);
         this.marginLeft = parseInt(style.marginLeft, 10)
         this.marginTop = parseInt(style.marginTop, 10)
     }
@@ -151,7 +164,10 @@ export class DotsAndBoxes {
             const time = performance.now()
             this.fps = 1 / ((performance.now() - this.last_time) / 1000);
             this.last_time = time
-            this.drawText(Math.round(this.fps).toString(), window.innerWidth - 70, 20, 22, "courier")
+            this.drawText(Math.round(this.fps).toString(), 20, this.marginTop + 20, 12, DEFAULT_FONT)
+        }
+        if (this.showTitle) {
+            this.drawText(this.title, 20, 30, TITLE_FONT_SIZE, DEFAULT_FONT)
         }
         this.ctx.translate(this.origin.x, this.origin.y)
         this.ctx.scale(this.zoom, this.zoom)
@@ -203,7 +219,7 @@ export class DotsAndBoxes {
         if (e.touches && e.touches.length == 1) {
             return new Point(e.touches[0].clientX, e.touches[0].clientY)
         } else if (e.clientX && e.clientY) {
-            return new Point(e.clientX - this.marginLeft, e.clientY- this.marginTop)
+            return new Point(e.clientX - this.marginLeft, e.clientY - this.marginTop)
         }
         return null
     }

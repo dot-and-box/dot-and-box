@@ -2,7 +2,6 @@ import {Scanner} from "./scanner.ts";
 import {DotsAndBoxesModel, Step} from "../shared/step.ts";
 import {TokenType} from "./tokenType.ts";
 import {Token} from "./token.ts";
-import {TextControl} from "../text/textControl.ts";
 import {Point} from "../shared/point.ts";
 import {BoxControl} from "../box/boxControl.ts";
 import {Control, DotControl} from "../dot/dotControl.ts";
@@ -53,11 +52,11 @@ export class Parser {
     }
 
     box() {
-        const box_tokens = [TokenType.SIZE, TokenType.AT, TokenType.NAME]
+        const box_tokens = [TokenType.SIZE, TokenType.AT, TokenType.NAME, TokenType.COLOR]
         let size = new Point(100, 100)
         let at = new Point(0, 0)
         let name = 'box'
-        let color = 'black'
+        let color = 'white'
         while (box_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -69,6 +68,9 @@ export class Parser {
                     break;
                 case TokenType.SIZE:
                     size = this.size()
+                    break;
+                case TokenType.COLOR:
+                    color = this.color()
                     break;
             }
         }
@@ -160,9 +162,6 @@ export class Parser {
 
     title() {
         this.model.title = this.name()
-        if (this.model.title) {
-            this.model.controls.push(new TextControl(Point.zero(), 'red', new Point(200, 10), this.model.title))
-        }
     }
 
     steps() {

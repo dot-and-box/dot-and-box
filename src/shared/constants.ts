@@ -3,7 +3,8 @@ export const MIN_ZOOM = 0.1
 export const SCROLL_SENSITIVITY = 0.0020
 
 export const SELECTION_STROKE_STYLE = 'yellow'
-export const DEFAULT_FONT = '22px courier'
+export const DEFAULT_FONT = 'courier'
+export const TITLE_FONT_SIZE = 22
 export const COLORS: string [] = [
     "#c20f2f",
     "#5aaf3a",
