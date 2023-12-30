@@ -1,15 +1,14 @@
-import {Action} from "./action.ts";
-import {ActionType} from "./actionType.ts";
+import {Point} from "./point.ts";
 
-export abstract class ActionBase implements Action {
+export abstract class ActionBase {
     finished: boolean = false
     progress: number = 0
-    readonly type: ActionType
+    start: Point;
+    end: Point
+    value: Point
 
-    protected constructor(type: ActionType) {
-        this.type = type
+    updateValue(x: number, y: number){
     }
-
     onBeforeStateForward() {
 
     }

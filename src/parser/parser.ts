@@ -1,17 +1,24 @@
 import {Scanner} from "./scanner.ts";
-import {DotsAndBoxesModel, Move, Step} from "../shared/step.ts";
+import {DotsAndBoxesModel, Step} from "../shared/step.ts";
 import {TokenType} from "./tokenType.ts";
 import {Token} from "./token.ts";
 import {TextControl} from "../text/textControl.ts";
 import {Point} from "../shared/point.ts";
 import {BoxControl} from "../box/boxControl.ts";
-import {DotControl} from "../dot/dotControl.ts";
+import {Control, DotControl} from "../dot/dotControl.ts";
+import {ActionBase} from "../shared/actionBase.ts";
+import {Move} from "../shared/move.ts";
+import {Swap} from "../shared/swap.ts";
 
 export class Parser {
     scanner = new Scanner()
     model = new DotsAndBoxesModel('', [], [])
     position = 0;
     tokens: Token[];
+
+    public eof(): boolean {
+        return this.tokens.length <= this.position;
+    }
 
     public advance(): Token {
         return this.tokens[this.position++];
@@ -65,14 +72,14 @@ export class Parser {
                     break;
             }
         }
-        this.model.controls.push(new BoxControl(at, color, size, name))
+        this.model.controls.push(new BoxControl(name, at, color, size, name))
     }
 
     dot() {
         const dot_tokens = [TokenType.SIZE, TokenType.AT, TokenType.NAME, TokenType.COLOR]
         let size = new Point(20, 20)
         let at = new Point(0, 0)
-        let name = 'dot'
+        let name = 'dot' + this.model.controls.length
         let color = 'red'
         while (dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
@@ -91,7 +98,7 @@ export class Parser {
                     break;
             }
         }
-        this.model.controls.push(new DotControl(at, color, size.x, name))
+        this.model.controls.push(new DotControl(name, at, color, size.x, name))
     }
 
     name(): string {
@@ -100,7 +107,7 @@ export class Parser {
             const token = this.advance();
             result += ' ' + token.value;
         }
-        return result
+        return result.trim()
     }
 
     color(): string {
@@ -120,19 +127,13 @@ export class Parser {
         let token = this.peek()
         if (token.type == TokenType.COMMA) {
             this.advance()
-             y = this.number()
+            y = this.number()
         }
         return new Point(x, y)
     }
 
     at() {
-        let x = this.number()
-        let token = this.advance()
-        if (token.type != TokenType.COMMA) {
-            throw new Error(`Expected comma at position: ${token.position} got token ${token} instead`)
-        }
-        let y = this.number()
-        return new Point(x, y)
+        return this.point()
     }
 
     number() {
@@ -160,9 +161,69 @@ export class Parser {
     }
 
     steps() {
-        const step = new Step()
-        step.actions.push(new Move(new Point(400, 400), this.model.controls[2])) //TODO implement step actions parse
-        this.model.steps.push(step)
+        let action = this.action();
+        while (action != null) {
+            const step = new Step()
+            step.actions.push(action)
+            this.model.steps.push(step)
+
+            action = this.action()
+        }
+
+    }
+
+    action(): ActionBase | null {
+        if (this.eof())
+            return null;
+
+        let token = this.advance()
+        if (token.type == TokenType.IDENTIFIER) {
+            const leftControlId = token.value;
+            const control = this.findControl(leftControlId)
+
+            token = this.peek()
+            switch (token.type) {
+                case TokenType.MOVE_TO:
+                    this.advance();
+                    const point = this.point();
+                    if (control) {
+                        return new Move(point, control);
+                    }
+                    break;
+                case TokenType.SWAP:
+                    this.advance()
+                    token = this.peek()
+                    const rightControl = this.findControl(token.value)
+                    if (control && rightControl) {
+                        this.advance()
+                        return new Swap(control, rightControl);
+                    }
+
+                    break;
+
+            }
+        } else {
+            this.error('Expected identifier while handling step')
+        }
+        return null;
+    }
+
+    findControl(identifier: string): Control | undefined {
+        return this.model.controls.find(c => c.id == identifier)
+    }
+
+    point() {
+        let x = this.number()
+        let token = this.advance()
+        if (token.type != TokenType.COMMA) {
+            throw new Error(`Expected comma at position: ${token.position} got token ${token} instead`)
+        }
+        let y = this.number()
+        return new Point(x, y)
+    }
+
+    error(message: String) {
+        throw new Error(message)
     }
 
 }

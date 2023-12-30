@@ -1,6 +1,4 @@
-import {Point} from "./point.ts";
 import {Control} from "../dot/dotControl.ts";
-import {ActionType} from "./actionType.ts";
 import {ActionBase} from "./actionBase.ts";
 
 export class DotsAndBoxesModel {
@@ -40,7 +38,6 @@ export class Step {
         this.actions = [];
     }
 
-    //TODO refactor naming
     forward() {
         this.actions.forEach(c => c.onBeforeStateForward())
     }
@@ -52,23 +49,4 @@ export enum StepState {
     END
 }
 
-export class Move extends ActionBase {
-    start: Point;
-    end: Point
-    control: Control
-
-    constructor(end: Point, control: Control) {
-        super(ActionType.MOVE)
-        this.start = control.position.clone();
-        this.end = end.clone();
-        this.control = control;
-    }
-
-    override onBeforeStateForward() {
-        super.onBeforeStateForward();
-        this.start = this.control.position.clone()
-    }
-
-
-}
 

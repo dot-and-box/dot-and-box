@@ -7,8 +7,11 @@ export class BoxControl implements Control {
     public color: string
     public size: Point
     public text: string
+    public id: string
 
-    constructor(position: Point, color: string, size: Point, text: string) {
+
+    constructor(id: string, position: Point, color: string, size: Point, text: string) {
+        this.id = id
         this.position = position
         this.color = color
         this.size = size
@@ -44,4 +47,5 @@ export class BoxControl implements Control {
         }
         return isHit
     }
+
 }

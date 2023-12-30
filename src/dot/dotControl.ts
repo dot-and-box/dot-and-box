@@ -7,8 +7,11 @@ export class DotControl implements Control {
     public size: number
     public text: string
     public selected: boolean;
+    public id: string;
 
-    constructor(position: Point, color: string, size: number, text: string) {
+
+    constructor(id: string, position: Point, color: string, size: number, text: string) {
+        this.id = id;
         this.position = position
         this.color = color
         this.size = size
@@ -43,14 +46,17 @@ export class DotControl implements Control {
         return isHit
     }
 
+
 }
 
 
 export interface ControlBase {
+    id: string
     position: Point
 }
 
 export interface Control extends ControlBase {
+
     selected: boolean
 
     draw(ctx: CanvasRenderingContext2D): void

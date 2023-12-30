@@ -25,7 +25,10 @@ dot:
 steps:
 dt1 <-> b1
 b1 <-> dt1
+b1 -> 34,56
                     `
+    //dt1 <-> b1
+    // b1 <-> dt1
     let p = new Parser()
     const model = p.parse(eg1)
     expect(model).not.eq(null)
