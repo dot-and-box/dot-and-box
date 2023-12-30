@@ -49,6 +49,15 @@ export class Scanner {
                 case '>':
                     this.addToken(TokenType.GREATER_THAN)
                     break;
+                case '/':
+                    if (this.match('/')) {
+                        while (this.peek() != '\n' && !this.isAtEnd())
+                            this.advance();
+                    }
+                    break;
+                case "'":
+                    this.string();
+                    break;
                 default:
                     if (this.isDigit(c)) {
                         this.number()
@@ -121,10 +130,29 @@ export class Scanner {
         return this.isAlpha(c) || this.isDigit(c)
     }
 
+    string() {
+        while (this.peek() != "'" && !this.isAtEnd()) {
+            if (this.peek() == '\n') this.line++;
+                this.advance();
+        }
+
+        if (this.isAtEnd()) {
+            throw new Error(`line: ${this.line} Unterminated String`)
+        }
+
+        this.advance();
+
+        let val = this.source.substring(this.start+1, this.position-1)
+        this.addTokenValue(TokenType.STRING,val)
+    }
+
     identifier() {
-        while (this.isAlphanumeric(this.peek())) this.advance();
+        while (this.isAlphanumeric(this.peek()))
+            this.advance();
         let val = this.source.substring(this.start, this.position)
-        const tokenType = Keywords.isKeyword(val) ? Keywords.getKeywordByName(val) : TokenType.IDENTIFIER
+        const tokenType = Keywords.isKeyword(val)
+            ? Keywords.getKeywordByName(val)
+            : TokenType.IDENTIFIER
         this.addTokenValue(tokenType, val)
     }
 

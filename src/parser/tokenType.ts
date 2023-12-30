@@ -12,6 +12,7 @@ export enum TokenType {
     // literals
     IDENTIFIER = "IDENTIFIER",
     NUMBER = "NUMBER",
+    STRING = "STRING",
     // keywords
     TITLE = "title",
     NAME = "name",

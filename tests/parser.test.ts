@@ -9,7 +9,12 @@ test('parser not null', () => {
 
 test('parser simple', () => {
     let eg1 = ` 
-title: bubble sort
+title: 'bubble sort'
+dot:
+ name: '99'
+ color: purple
+ at: 0, 20
+ size: 20
 box: 
  name: b1 
  at: -120, -10
@@ -22,13 +27,16 @@ dot:
  color: orange
  at: -50, 100
  size: 20
+dot:
+ name: '2'
+ color: red
+ at: 50, 100
+ size: 20
 steps:
 dt1 <-> b1
 b1 <-> dt1
 b1 -> 34,56
                     `
-    //dt1 <-> b1
-    // b1 <-> dt1
     let p = new Parser()
     const model = p.parse(eg1)
     expect(model).not.eq(null)

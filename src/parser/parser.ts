@@ -102,10 +102,15 @@ export class Parser {
     }
 
     name(): string {
+
+        if (this.peek().type == TokenType.STRING) {
+            return this.advance().value;
+        }
+
         let result = ''
         while (this.peek().type == TokenType.IDENTIFIER) {
             const token = this.advance();
-            result += ' ' + token.value;
+            result += ' ' + token.value.toString();
         }
         return result.trim()
     }
@@ -177,7 +182,7 @@ export class Parser {
             return null;
 
         let token = this.advance()
-        if (token.type == TokenType.IDENTIFIER) {
+        if (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING) {
             const leftControlId = token.value;
             const control = this.findControl(leftControlId)
 
