@@ -5,12 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Dots just dots</title>
     <style>
-        canvas, body {
+        body {
             padding: 0;
-            margin: 0;
             scrollbar-width: none;
             overflow: hidden;
             user-select: none;
+        }
+        canvas {
+            padding: 0;
+            margin-top: 50px;
+            margin-left: 250px;
+            scrollbar-width: none;
+            overflow: hidden;
+            user-select: none;
+            background-color: whitesmoke;
+        }
+
+        #definition {
+            position: absolute;
+            height: 100%;
+            padding: 0;
+            margin-top: 50px;
+            margin-left: 0;
+            width: 250px;
+            scrollbar-width: none;
+        }
+
+        #definition-text{
+            width: 100%;
+            height: 400px;
         }
         #menu {
             position: absolute;
@@ -26,6 +49,7 @@
 </head>
 <body>
 <div id="menu">
+    <button id="apply">apply</button>
     <button id="pan-zoom">pan-zoom</button>
     <button id="zoom-reset">1:1</button>
     <button id="dot">dot</button>
@@ -33,6 +57,31 @@
     <button title="back" id="back"> &lt;= </button>
     <button title="pause" id="pause"> || </button>
     <button title="forward" id="forward"> =&gt; </button>
+</div>
+<div id="definition">
+    <textarea id="definition-text">
+title: bubble sort
+box:
+ name: b1
+ at: -120, -10
+ size: 60, 50
+box:
+ name: b2
+ at: 120, -160
+ size: 250, 50
+dot:
+ name: dt1
+ color: red
+ at: -50, 100
+ size: 20
+steps:
+dt1 <-> b1
+b1 <-> b2
+b1 -> 45,-500
+
+
+
+    </textarea>
 </div>
 <canvas id="canvas"></canvas>
 <script type="module" src="/src/main.ts"></script>

@@ -7,7 +7,6 @@ import {DotsTool} from "./dot/dotsTool.ts";
 import {EmptyTool} from "./shared/emptyTool.ts";
 import {PanZoomTool} from "./panzoom/panZoomTool.ts";
 import {BoxTool} from "./box/boxTool.ts";
-import {ActionType} from "./shared/actionType.ts";
 import {Move} from "./shared/move.ts";
 import {ActionBase} from "./shared/actionBase.ts";
 
@@ -25,7 +24,8 @@ export class DotsAndBoxes {
     public offset: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
     public showFps = true
     public pause = false;
-
+    public marginLeft = 0;
+    public marginTop = 0;
 
     public readonly EMPTY_TOOL: string = "empty-tool"
     public readonly DOTS_TOOL: string = "dots-tool"
@@ -55,7 +55,7 @@ export class DotsAndBoxes {
         model.steps.forEach(s => {
             this.steps.push(s);
         })
-        console.log(model)
+        this.currentStepIndex = 0;
         this.currentStep = this.steps[this.currentStepIndex]
     }
 
@@ -76,6 +76,12 @@ export class DotsAndBoxes {
         canvas.height = window.innerHeight
         this.canvas = canvas;
         this.attachCanvasEventHandlers()
+    }
+
+    public updateCanvasPosition(){
+        const style= getComputedStyle( this.canvas);
+        this.marginLeft = parseInt(style.marginLeft, 10)
+        this.marginTop = parseInt(style.marginTop, 10)
     }
 
     private attachCanvasEventHandlers() {
@@ -197,7 +203,7 @@ export class DotsAndBoxes {
         if (e.touches && e.touches.length == 1) {
             return new Point(e.touches[0].clientX, e.touches[0].clientY)
         } else if (e.clientX && e.clientY) {
-            return new Point(e.clientX, e.clientY)
+            return new Point(e.clientX - this.marginLeft, e.clientY- this.marginTop)
         }
         return null
     }

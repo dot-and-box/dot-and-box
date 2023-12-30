@@ -14,13 +14,19 @@ export class Swap extends ActionBase {
     }
 
     override updateValue(x: number, y: number) {
+        const dx = x - this.left.position.x
+        const dy = y - this.left.position.y
+
         this.left.position.x = x;
         this.left.position.y = y;
-        //TODO implement moving right to left
+
+        this.right.position.x -= dx
+        this.right.position.y -= dy
     }
 
     override onBeforeStateForward() {
         this.start = this.left.position.clone();
-        this.end = this.right.position.clone();    }
+        this.end = this.right.position.clone();
+    }
 
 }
