@@ -24,9 +24,4 @@ export class Swap extends ActionBase {
         this.right.position.y -= dy
     }
 
-    override onBeforeStateForward() {
-        this.start = this.left.position.clone();
-        this.end = this.right.position.clone();
-    }
-
 }

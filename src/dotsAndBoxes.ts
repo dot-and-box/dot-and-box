@@ -26,7 +26,6 @@ export class DotsAndBoxes {
     public origin: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
     public offset: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
     public showFps = true
-    public pause = false;
     public showTitle = false;
     public title = '';
     public marginLeft = 0;
@@ -133,10 +132,9 @@ export class DotsAndBoxes {
             if (this.currentStepIndex < this.steps.length - 1) {
                 this.currentStepIndex++
                 this.currentStep = this.steps[this.currentStepIndex]
-                this.currentStep.forward()
             }
         }
-        this.currentStep.animationStep = 0.04
+        this.currentStep.forward()
     }
 
 
@@ -149,7 +147,7 @@ export class DotsAndBoxes {
                 this.currentStep = this.steps[this.currentStepIndex]
             }
         }
-        this.currentStep.animationStep = -0.04
+        this.currentStep.back()
     }
 
     drawFps() {
@@ -172,7 +170,7 @@ export class DotsAndBoxes {
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
 
-        if (!this.pause && this.currentStep && this.currentStep.actions.length > 0) {
+        if (this.currentStep && !this.currentStep.pause) {
             this.updateActions();
         }
         for (const control of this.controls) {
@@ -292,7 +290,9 @@ export class DotsAndBoxes {
     }
 
     togglePause() {
-        this.pause = !this.pause
+        if(this.currentStep){
+            this.currentStep.togglePause()
+        }
     }
 }
 

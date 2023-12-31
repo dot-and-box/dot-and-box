@@ -18,8 +18,4 @@ export class Move extends ActionBase {
         this.control.position.y = y;
     }
 
-    override onBeforeStateForward() {
-        this.start = this.control.position.clone()
-    }
-
 }

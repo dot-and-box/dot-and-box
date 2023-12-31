@@ -9,7 +9,5 @@ export abstract class ActionBase {
 
     updateValue(x: number, y: number){
     }
-    onBeforeStateForward() {
 
-    }
 }

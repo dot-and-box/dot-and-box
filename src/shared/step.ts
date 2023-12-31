@@ -16,6 +16,7 @@ export class DotsAndBoxesModel {
 export class Step {
     actions: ActionBase[];
     finishedChanges = 0;
+    public _pause = false;
     public animationStep = 0.0;
     public state: StepState = StepState.START
 
@@ -27,11 +28,11 @@ export class Step {
     }
 
     public reset() {
+        this._pause = false
         this.actions.forEach(c => {
             c.finished = false
         })
         this.finishedChanges = 0
-
     }
 
     constructor() {
@@ -39,7 +40,25 @@ export class Step {
     }
 
     forward() {
-        this.actions.forEach(c => c.onBeforeStateForward())
+        this.animationStep = 0.01
+    }
+
+    back() {
+        this.animationStep = -0.01
+    }
+
+    get pause(): boolean {
+        return this._pause || this.actions.length == 0;
+    }
+
+    set pause(pause: boolean) {
+        this._pause = pause;
+    }
+
+    togglePause() {
+        if (this.animationStep != 0 && this.actions.length > 0) {
+            this._pause = !this._pause;
+        }
     }
 }
 
