@@ -4,6 +4,7 @@ export const SCROLL_SENSITIVITY = 0.0020
 
 export const SELECTION_STROKE_STYLE = 'yellow'
 export const DEFAULT_FONT = 'courier'
+export const DEFAULT_FONT_SIZE = 14
 export const TITLE_FONT_SIZE = 22
 export const COLORS: string [] = [
     "#c20f2f",

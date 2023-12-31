@@ -1,6 +1,6 @@
 import {Point} from "../shared/point.ts";
 import {Control} from "../dot/dotControl.ts";
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT} from "../shared/constants.ts";
+import {SELECTION_STROKE_STYLE, DEFAULT_FONT, DEFAULT_FONT_SIZE} from "../shared/constants.ts";
 
 export class BoxControl implements Control {
     public position: Point
@@ -9,6 +9,7 @@ export class BoxControl implements Control {
     public text: string
     public id: string
     static counter = 1
+    public tag: object;
 
 
     constructor(id: string, position: Point, color: string, size: Point, text: string) {
@@ -21,28 +22,26 @@ export class BoxControl implements Control {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.fillStyle =  this.color != "white"
+        ctx.fillStyle = this.color != "white"
             ? "white"
             : "black"
 
         if (this.selected) {
             ctx.strokeStyle = SELECTION_STROKE_STYLE
         } else {
-            ctx.strokeStyle  = 'black'
+            ctx.strokeStyle = 'black'
         }
 
-        ctx.font = DEFAULT_FONT
+        ctx.font = `${DEFAULT_FONT_SIZE}px ${DEFAULT_FONT}`
 
         ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
-        if(this.color) {
+        if (this.color) {
             ctx.fillStyle = this.color
             ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
         }
-
-        const textOffset = this.size.x / 2
-        const xOffset = textOffset - this.text.length * 8
-        ctx.fillStyle =  this.color  != "white" ? "white" : 'black'
-        ctx.fillText(this.text, this.position.x + xOffset, this.position.y + this.size.y / 2)
+        const textOffset = this.size.x / 2 - ctx.measureText(this.text).width / 2
+        ctx.fillStyle = this.color != "white" ? "white" : 'black'
+        ctx.fillText(this.text, this.position.x + textOffset, this.position.y + this.size.y / 2)
     }
 
     selected: boolean;
@@ -55,6 +54,7 @@ export class BoxControl implements Control {
         if (isHit) {
             this.selected = !this.selected
         }
+        console.log(this.tag)
         return isHit
     }
 
