@@ -82,10 +82,10 @@ export class Scanner {
     }
 
     addToken(tokenType: TokenType) {
-        this.addTokenValue(tokenType, null)
+        this.addTokenValue(tokenType)
     }
 
-    addTokenValue(tokenType: TokenType, value) {
+    addTokenValue(tokenType: TokenType, value?: string) {
         this.tokens.push(new Token(this.start, tokenType, value))
     }
 
@@ -101,7 +101,7 @@ export class Scanner {
         return this.isAtEnd() ? '\0' : this.source.charAt(this.position)
     }
 
-    match(expected) {
+    match(expected: string) {
         if (this.isAtEnd()) return false;
         if (this.source.charAt(this.position) != expected) return false;
 
@@ -121,12 +121,12 @@ export class Scanner {
         this.addTokenValue(TokenType.NUMBER, val)
     }
 
-    isAlpha(c): boolean {
+    isAlpha(c: string): boolean {
         const alphaRegExp = /[\p{Letter}\p{Mark}]+/gu
         return alphaRegExp.test(c) || c == '_';
     }
 
-    isAlphanumeric(c): boolean {
+    isAlphanumeric(c: string): boolean {
         return this.isAlpha(c) || this.isDigit(c)
     }
 
@@ -153,7 +153,7 @@ export class Scanner {
         const tokenType = Keywords.isKeyword(val)
             ? Keywords.getKeywordByName(val)
             : TokenType.IDENTIFIER
-        this.addTokenValue(tokenType, val)
+        this.addTokenValue(tokenType!, val)
     }
 
 }

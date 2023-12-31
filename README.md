@@ -8,6 +8,18 @@ Project goal is to create markdown like notation visualizer for simple animation
 npm run dev
 ```
 
+### Build
+
+```shell
+npm run build
+```
+
+### Test
+
+```shell
+npm run test
+```
+
 #### Use cases
 - create notation examples for bubble sort algorithm
 - event driven architecture communication visualization

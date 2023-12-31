@@ -7,7 +7,13 @@ export abstract class ActionBase {
     end: Point
     value: Point
 
-    updateValue(x: number, y: number){
+    protected constructor() {
+        this.start = Point.zero()
+        this.end = Point.zero()
+        this.value = Point.zero()
     }
+
+    abstract updateValue(x: number, y: number): void;
+
 
 }

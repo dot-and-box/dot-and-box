@@ -11,9 +11,4 @@ export class Token {
         this.value = value ? value : "";
     }
 
-    public override toString() {
-        return TokenType[this.type]
-    }
-
-
 }

@@ -19,7 +19,7 @@ export class Keywords {
         return this.KEYWORDS_MAP.has(tokenName)
     }
 
-    public static getKeywordByName(tokenName: string): TokenType {
+    public static getKeywordByName(tokenName: string): TokenType | undefined{
         return this.KEYWORDS_MAP.get(tokenName)
     }
 

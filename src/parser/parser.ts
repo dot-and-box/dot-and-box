@@ -13,7 +13,7 @@ export class Parser {
     scanner = new Scanner()
     model = new DotsAndBoxesModel('', [], [])
     position = 0;
-    tokens: Token[];
+    tokens: Token[] = []
 
     public eof(): boolean {
         return this.tokens.length <= this.position;
@@ -27,7 +27,7 @@ export class Parser {
         return this.tokens[this.position];
     }
 
-    public parse(source): DotsAndBoxesModel {
+    public parse(source: string): DotsAndBoxesModel {
         this.tokens = this.scanner.scan(source)
         this.model.title = ''
         while (this.position < this.tokens.length) {
@@ -234,7 +234,7 @@ export class Parser {
         return new Point(x, y)
     }
 
-    error(message: String) {
+    error(message: string) {
         throw new Error(message)
     }
 
