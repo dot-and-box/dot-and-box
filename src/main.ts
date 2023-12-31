@@ -10,11 +10,15 @@ window.addEventListener('load', function () {
 // @ts-ignore
     window.dots = dotsAndBoxes
     const codeTextControl = document.getElementById("code") as HTMLTextAreaElement
+    const applyButton = document.getElementById("apply") as HTMLButtonElement
     const model = new Parser().parse(codeTextControl.value)
     dotsAndBoxes.apply(model);
-    document.getElementById("apply")!.onclick = _ => {
+    applyButton!.onclick = _ => {
         if (!codeTextControl.hidden) {
+            applyButton.textContent = "code"
             dotsAndBoxes.apply(new Parser().parse(codeTextControl.value));
+        } else {
+            applyButton.textContent = "apply"
         }
         codeTextControl.hidden = !codeTextControl.hidden;
     }
