@@ -21,21 +21,27 @@ export class BoxControl implements Control {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.fillStyle = this.color;
-        if (this.selected) {
-            ctx.strokeStyle = SELECTION_STROKE_STYLE
-        } else {
-            ctx.strokeStyle = this.color
-        }
-        ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
-        ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
-        ctx.font = DEFAULT_FONT
-        ctx.fillStyle = this.color != "white"
+        ctx.fillStyle =  this.color != "white"
             ? "white"
             : "black"
 
+        if (this.selected) {
+            ctx.strokeStyle = SELECTION_STROKE_STYLE
+        } else {
+            ctx.strokeStyle  = 'black'
+        }
+
+        ctx.font = DEFAULT_FONT
+
+        ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
+        if(this.color) {
+            ctx.fillStyle = this.color
+            ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
+        }
+
         const textOffset = this.size.x / 2
         const xOffset = textOffset - this.text.length * 8
+        ctx.fillStyle =  this.color  != "white" ? "white" : 'black'
         ctx.fillText(this.text, this.position.x + xOffset, this.position.y + this.size.y / 2)
     }
 

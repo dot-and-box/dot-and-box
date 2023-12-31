@@ -3,13 +3,8 @@ import {Control, DotControl} from "./dot/dotControl.ts";
 import {Tool} from "./shared/tool.ts";
 import {DotsAndBoxesModel, Step, StepState} from "./shared/step.ts";
 import {
-    COLORS,
-    MAX_ZOOM,
-    MIN_ZOOM,
-    SCROLL_SENSITIVITY,
-    SIZES,
-    DEFAULT_FONT,
-    TITLE_FONT_SIZE
+    COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY,
+    SIZES, DEFAULT_FONT, TITLE_FONT_SIZE
 } from "./shared/constants.ts";
 import {DotsTool} from "./dot/dotsTool.ts";
 import {EmptyTool} from "./shared/emptyTool.ts";
@@ -141,7 +136,7 @@ export class DotsAndBoxes {
                 this.currentStep.forward()
             }
         }
-        this.currentStep.animationStep = 0.01
+        this.currentStep.animationStep = 0.04
     }
 
 
@@ -154,17 +149,21 @@ export class DotsAndBoxes {
                 this.currentStep = this.steps[this.currentStepIndex]
             }
         }
-        this.currentStep.animationStep = -0.01
+        this.currentStep.animationStep = -0.04
+    }
+
+    drawFps() {
+        const time = performance.now()
+        this.fps = 1 / ((performance.now() - this.last_time) / 1000);
+        this.last_time = time
+        this.drawText(Math.round(this.fps).toString(), 20, this.marginTop + 20, 12, DEFAULT_FONT)
     }
 
     public draw() {
         this.canvas.width = window.innerWidth
         this.canvas.height = window.innerHeight
         if (this.showFps) {
-            const time = performance.now()
-            this.fps = 1 / ((performance.now() - this.last_time) / 1000);
-            this.last_time = time
-            this.drawText(Math.round(this.fps).toString(), 20, this.marginTop + 20, 12, DEFAULT_FONT)
+            this.drawFps()
         }
         if (this.showTitle) {
             this.drawText(this.title, 20, 30, TITLE_FONT_SIZE, DEFAULT_FONT)
@@ -224,8 +223,7 @@ export class DotsAndBoxes {
         return null
     }
 
-    drawText(text: string, x: number, y: number, size: number, font:
-        string) {
+    drawText(text: string, x: number, y: number, size: number, font: string) {
         this.ctx.font = `${size}px ${font}`
         this.ctx.fillText(text, x, y)
     }

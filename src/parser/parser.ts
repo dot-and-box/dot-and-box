@@ -123,7 +123,7 @@ export class Parser {
             const token = this.advance();
             result += ' ' + token.value;
         }
-        return result
+        return result.trim()
     }
 
     size() {
