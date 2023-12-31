@@ -9,8 +9,6 @@ export class BoxControl implements Control {
     public text: string
     public id: string
     static counter = 1
-    public tag: object;
-
 
     constructor(id: string, position: Point, color: string, size: Point, text: string) {
         this.id = id
@@ -54,7 +52,6 @@ export class BoxControl implements Control {
         if (isHit) {
             this.selected = !this.selected
         }
-        console.log(this.tag)
         return isHit
     }
 

@@ -9,10 +9,16 @@ window.addEventListener('load', function () {
     dotsAndBoxes.draw()
 // @ts-ignore
     window.dots = dotsAndBoxes
-    const definitionText = document.getElementById("code") as HTMLTextAreaElement
-    const model = new Parser().parse(definitionText.value)
+    const codeTextControl = document.getElementById("code") as HTMLTextAreaElement
+    const model = new Parser().parse(codeTextControl.value)
     dotsAndBoxes.apply(model);
-    document.getElementById("apply")!.onclick = _ => dotsAndBoxes.apply( new Parser().parse(definitionText.value));
+    document.getElementById("apply")!.onclick = _ => {
+        if (!codeTextControl.hidden) {
+            dotsAndBoxes.apply(new Parser().parse(codeTextControl.value));
+        }
+        codeTextControl.hidden = !codeTextControl.hidden;
+    }
+
     document.getElementById("pan-zoom")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.PAN_ZOOM_TOOL);
     document.getElementById("zoom-reset")!.onclick = _ => dotsAndBoxes.zoom = 1;
     document.getElementById("dot")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.DOTS_TOOL)
@@ -20,6 +26,5 @@ window.addEventListener('load', function () {
     document.getElementById("back")!.onclick = _ => dotsAndBoxes.back()
     document.getElementById("pause")!.onclick = _ => dotsAndBoxes.togglePause()
     document.getElementById("forward")!.onclick = _ => dotsAndBoxes.forward()
-
 })
 
