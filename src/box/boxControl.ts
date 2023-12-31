@@ -23,19 +23,16 @@ export class BoxControl implements Control {
         ctx.fillStyle = this.color != "white"
             ? "white"
             : "black"
-
-        if (this.selected) {
-            ctx.strokeStyle = SELECTION_STROKE_STYLE
-        } else {
-            ctx.strokeStyle = 'black'
-        }
-
+        ctx.strokeStyle = 'black'
         ctx.font = `${DEFAULT_FONT_SIZE}px ${DEFAULT_FONT}`
 
-        ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
         if (this.color) {
             ctx.fillStyle = this.color
             ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
+        }
+        if (this.selected) {
+            ctx.strokeStyle = SELECTION_STROKE_STYLE
+            ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
         }
         const textOffset = this.size.x / 2 - ctx.measureText(this.text).width / 2
         ctx.fillStyle = this.color != "white" ? "white" : 'black'

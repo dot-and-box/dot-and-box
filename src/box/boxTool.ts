@@ -2,6 +2,7 @@ import {Tool} from "../shared/tool.ts";
 import {Point} from "../shared/point.ts";
 import {BoxControl} from "./boxControl.ts";
 import {DotsAndBoxes} from "../dotsAndBoxes.ts";
+import {DEFAULT_BOX_COLOR} from "../shared/constants.ts";
 
 export class BoxTool extends Tool {
 
@@ -19,7 +20,7 @@ export class BoxTool extends Tool {
         this.dots.controls.push(new BoxControl(
             id,
             point,
-            "rgba(37,33,133,0.68)",
+            DEFAULT_BOX_COLOR,
             new Point(100, 50),
             id,
         ))
