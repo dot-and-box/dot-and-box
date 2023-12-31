@@ -52,16 +52,20 @@ export class Parser {
     }
 
     box() {
-        const box_tokens = [TokenType.SIZE, TokenType.AT, TokenType.NAME, TokenType.COLOR]
+        const box_tokens = [TokenType.ID,TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
         let size = new Point(100, 100)
         let at = new Point(0, 0)
-        let name = 'box'
+        let text = 'box' + this.model.controls.length
+        let id = null
         let color = 'white'
         while (box_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
-                case TokenType.NAME:
-                    name = this.name()
+                case TokenType.ID:
+                    id = this.text()
+                    break;
+                case TokenType.TEXT:
+                    text = this.text()
                     break;
                 case TokenType.AT:
                     at = this.at()
@@ -74,20 +78,24 @@ export class Parser {
                     break;
             }
         }
-        this.model.controls.push(new BoxControl(name, at, color, size, name))
+        this.model.controls.push(new BoxControl(id != null ? id : text, at, color, size, text))
     }
 
     dot() {
-        const dot_tokens = [TokenType.SIZE, TokenType.AT, TokenType.NAME, TokenType.COLOR]
+        const dot_tokens = [TokenType.ID,TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
         let size = new Point(20, 20)
         let at = new Point(0, 0)
-        let name = 'dot' + this.model.controls.length
+        let text = 'dot' + this.model.controls.length
+        let id = null
         let color = 'red'
         while (dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
-                case TokenType.NAME:
-                    name = this.name()
+                case TokenType.ID:
+                    id = this.text()
+                    break;
+                case TokenType.TEXT:
+                    text = this.text()
                     break;
                 case TokenType.COLOR:
                     color = this.color()
@@ -100,10 +108,10 @@ export class Parser {
                     break;
             }
         }
-        this.model.controls.push(new DotControl(name, at, color, size.x, name))
+        this.model.controls.push(new DotControl( id != null ? id : text, at, color, size.x, text))
     }
 
-    name(): string {
+    text(): string {
 
         if (this.peek().type == TokenType.STRING) {
             return this.advance().value;
@@ -161,7 +169,7 @@ export class Parser {
     }
 
     title() {
-        this.model.title = this.name()
+        this.model.title = this.text()
     }
 
     steps() {

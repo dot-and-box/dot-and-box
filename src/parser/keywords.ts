@@ -2,10 +2,11 @@ import {TokenType} from "./tokenType.ts";
 
 export class Keywords {
     private static KEYWORDS_MAP = new Map<string, TokenType>([
+        [TokenType.ID.toString(), TokenType.ID],
         [TokenType.DOT.toString(), TokenType.DOT],
         [TokenType.DOTS.toString(), TokenType.DOTS],
         [TokenType.TITLE.toString(), TokenType.TITLE],
-        [TokenType.NAME.toString(), TokenType.NAME],
+        [TokenType.TEXT.toString(), TokenType.TEXT],
         [TokenType.BOX.toString(), TokenType.BOX],
         [TokenType.AT.toString(), TokenType.AT],
         [TokenType.SIZE.toString(), TokenType.SIZE],

@@ -9,7 +9,7 @@ window.addEventListener('load', function () {
     dotsAndBoxes.draw()
 // @ts-ignore
     window.dots = dotsAndBoxes
-    const definitionText = document.getElementById("definition-text") as HTMLTextAreaElement
+    const definitionText = document.getElementById("code") as HTMLTextAreaElement
     const model = new Parser().parse(definitionText.value)
     dotsAndBoxes.apply(model);
     document.getElementById("apply")!.onclick = _ => dotsAndBoxes.apply( new Parser().parse(definitionText.value));

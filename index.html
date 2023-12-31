@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Dots just dots</title>
+    <title>Dots and boxes</title>
     <style>
         body {
             padding: 0;
@@ -21,7 +21,7 @@
             background-color: whitesmoke;
         }
 
-        #definition {
+        #left-menu {
             position: absolute;
             height: 100%;
             padding: 0;
@@ -31,7 +31,7 @@
             scrollbar-width: none;
         }
 
-        #definition-text{
+        #code{
             width: 100%;
             height: 400px;
         }
@@ -58,35 +58,35 @@
     <button title="pause" id="pause"> || </button>
     <button title="forward" id="forward"> =&gt; </button>
 </div>
-<div id="definition">
-    <textarea id="definition-text">
+<div id="left-menu">
+    <textarea id="code">
 title: bubble sort
 box:
- name: 'bubble sort'
+ text: 'bubble sort'
  at: -180, -120
  size: 260, 80
 dot:
- name: '1'
+ text: '1'
  color: red
- at: -150, 0
- size: 20
-dot:
- name: '2'
- color: purple
  at: -100, 0
  size: 20
 dot:
- name: '3'
+ text: '2'
+ color: purple
+ at: -150, 0
+ size: 20
+dot:
+ text: '3'
  color: orange
+ at: 0, 0
+ size: 20
+dot:
+ text: '4'
+ color: green
  at: -50, 0
  size: 20
 dot:
- name: '4'
- color: green
- at: -0, 0
- size: 20
-dot:
- name: '5'
+ text: '5'
  color: blue
  at: 50, 0
  size: 20

@@ -12,19 +12,19 @@ test('parser simple', () => {
     let eg1 = ` 
 title: 'bubble sort'
 box: 
- name: b1 
+ text: b1 
  at: -120, -10
  size: 60, 50
 box: 
  at: 120, -160
  size: 250, 50
 dot:
- name: dt1
+ text: dt1
  color: orange
  at: -50, 100
  size: 20
 dot:
- name: '2'
+ text: '2'
  color: red
  at: 50, 100
  size: 20
@@ -41,9 +41,8 @@ b1 -> 34,56
 
 test('parse box size', () => {
     let eg1 = ` 
-title: 'box size'
 box:
- name: 'This dds string'
+ text: 'This dds string'
  color: purple
  at: -150, 0
  size: 100, 50
