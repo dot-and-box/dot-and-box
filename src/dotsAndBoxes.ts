@@ -25,7 +25,7 @@ export class DotsAndBoxes {
     public controls: Control[] = []
     public origin: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
     public offset: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
-    public showFps = true
+    public showDebug = true
     public showTitle = false;
     public title = '';
     public marginLeft = 0;
@@ -150,18 +150,18 @@ export class DotsAndBoxes {
         this.currentStep.back()
     }
 
-    drawFps() {
+    drawDebug() {
         const time = performance.now()
         this.fps = 1 / ((performance.now() - this.last_time) / 1000);
         this.last_time = time
-        this.drawText(Math.round(this.fps).toString(), 20, this.marginTop + 20, 12, DEFAULT_FONT)
+        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100}`, 20, this.marginTop + 20, 12, DEFAULT_FONT)
     }
 
     public draw() {
         this.canvas.width = window.innerWidth
         this.canvas.height = window.innerHeight
-        if (this.showFps) {
-            this.drawFps()
+        if (this.showDebug) {
+            this.drawDebug()
         }
         if (this.showTitle) {
             this.drawText(this.title, 20, 30, TITLE_FONT_SIZE, DEFAULT_FONT)
