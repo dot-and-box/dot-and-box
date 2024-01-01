@@ -154,7 +154,7 @@ export class DotsAndBoxes {
         const time = performance.now()
         this.fps = 1 / ((performance.now() - this.last_time) / 1000);
         this.last_time = time
-        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100}`, 20, this.marginTop + 20, 12, DEFAULT_FONT)
+        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex}`, 20, this.marginTop + 20, 12, DEFAULT_FONT)
     }
 
     public draw() {
