@@ -2,6 +2,7 @@ import {expect, test} from 'vitest'
 import {Scanner} from "../src/parser/scanner";
 import {Parser} from "../src/parser/parser";
 import {BoxControl} from "../src/box/boxControl";
+import {DotControl} from "../src/dot/dotControl";
 
 test('parser not null', () => {
     let p = new Scanner()
@@ -39,21 +40,39 @@ b1 -> 34,56
 })
 
 
-test('parse box size', () => {
+test('parse control size and position', () => {
     let eg1 = ` 
+title: 'This is string'
 box:
- text: 'This dds string'
+ id: b1
+ text: 'box'
  color: purple
- at: -150, 0
- size: 100, 50
+ at: -150, 30
+ size: (100, 50)
+dot:
+ text: '1'
+ color: purple
+ at: (250, 20)
+ size: 55
 steps:
-'2' <-> '1'
-'3' <-> '4'
+b1 <-> '1'
+'1' <-> b1
 `
     let p = new Parser()
     const model = p.parse(eg1)
     const box = model.controls[0] as BoxControl
     expect(box).not.eq(null)
+    expect(box.id).eq('b1')
+    expect(box.text).eq('box')
     expect(box.size.x).eq(100)
     expect(box.size.y).eq(50)
+    expect(box.position.x).eq(-150)
+    expect(box.position.y).eq(30)
+
+    const dot = model.controls[1] as DotControl
+    expect(dot).not.eq(null)
+    expect(dot.size).eq(55)
+    expect(dot.position.x).eq(250)
+    expect(dot.position.y).eq(20)
 })
+

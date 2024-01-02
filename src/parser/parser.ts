@@ -52,7 +52,7 @@ export class Parser {
     }
 
     box() {
-        const box_tokens = [TokenType.ID,TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
+        const box_tokens = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
         let size = new Point(100, 100)
         let at = new Point(0, 0)
         let text = 'box' + this.model.controls.length
@@ -71,7 +71,7 @@ export class Parser {
                     at = this.at()
                     break;
                 case TokenType.SIZE:
-                    size = this.size()
+                    size = this.point()
                     break;
                 case TokenType.COLOR:
                     color = this.color()
@@ -82,8 +82,8 @@ export class Parser {
     }
 
     dot() {
-        const dot_tokens = [TokenType.ID,TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
-        let size = new Point(20, 20)
+        const dot_tokens = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
+        let size = 20
         let at = new Point(0, 0)
         let text = 'dot' + this.model.controls.length
         let id = null
@@ -104,11 +104,11 @@ export class Parser {
                     at = this.at()
                     break;
                 case TokenType.SIZE:
-                    size = this.size()
+                    size = this.number()
                     break;
             }
         }
-        this.model.controls.push(new DotControl( id != null ? id : text, at, color, size.x, text))
+        this.model.controls.push(new DotControl(id != null ? id : text, at, color, size, text))
     }
 
     text(): string {
@@ -132,19 +132,6 @@ export class Parser {
             result += ' ' + token.value;
         }
         return result.trim()
-    }
-
-    size() {
-        let x = this.number()
-        // noinspection JSSuspiciousNameCombination
-        let y = x;
-
-        let token = this.peek()
-        if (token.type == TokenType.COMMA) {
-            this.advance()
-            y = this.number()
-        }
-        return new Point(x, y)
     }
 
     at() {
@@ -178,7 +165,6 @@ export class Parser {
             const step = new Step()
             step.actions.push(action)
             this.model.steps.push(step)
-
             action = this.action()
         }
 
@@ -225,13 +211,25 @@ export class Parser {
     }
 
     point() {
+        const hasLeftBracket = this.match(TokenType.LEFT_BRACKET);
         let x = this.number()
         let token = this.advance()
         if (token.type != TokenType.COMMA) {
             throw new Error(`Expected comma at position: ${token.position} got token ${token} instead`)
         }
         let y = this.number()
+        if (hasLeftBracket && !this.match(TokenType.RIGHT_BRACKET)){
+            throw new Error(`Expected right bracket at position: ${token.position} got token ${token} instead`)
+        }
         return new Point(x, y)
+    }
+
+    match(tokenType: TokenType) {
+        if (this.eof()) return false;
+        if (this.peek().type != tokenType) return false;
+
+        this.position++;
+        return true;
     }
 
     error(message: string) {
