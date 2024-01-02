@@ -40,13 +40,13 @@ b1 -> 34,56
 })
 
 
-test('parse control size and position', () => {
+test('parse controls and actions', () => {
     let eg1 = ` 
 title: 'This is string'
 box:
  id: b1
  text: 'box'
- color: purple
+ color: black
  at: -150, 30
  size: (100, 50)
 dot:
@@ -54,9 +54,14 @@ dot:
  color: purple
  at: (250, 20)
  size: 55
+dot:
+ text: '2'
+ color: red
+ at: (250, 20)
+ size: 55
 steps:
-b1 <-> '1'
-'1' <-> b1
+b1 <-> '1', '2'-> 50, 45
+'1' <-> b1, '2' -> (67,80)
 `
     let p = new Parser()
     const model = p.parse(eg1)
@@ -74,5 +79,10 @@ b1 <-> '1'
     expect(dot.size).eq(55)
     expect(dot.position.x).eq(250)
     expect(dot.position.y).eq(20)
+
+    expect(model.steps.length).eq(2)
+    expect(model.steps[0].actions.length).eq(2)
+
+
 })
 

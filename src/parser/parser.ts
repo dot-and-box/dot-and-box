@@ -160,14 +160,20 @@ export class Parser {
     }
 
     steps() {
+        let step = new Step()
+
         let action = this.action();
         while (action != null) {
-            const step = new Step()
             step.actions.push(action)
-            this.model.steps.push(step)
+            if (!this.match(TokenType.COMMA)) {
+                this.model.steps.push(step)
+                step = new Step()
+            }
             action = this.action()
         }
-
+        if (step.actions.length > 0) {
+            this.model.steps.push(step)
+        }
     }
 
     action(): ActionBase | null {
@@ -218,7 +224,7 @@ export class Parser {
             throw new Error(`Expected comma at position: ${token.position} got token ${token} instead`)
         }
         let y = this.number()
-        if (hasLeftBracket && !this.match(TokenType.RIGHT_BRACKET)){
+        if (hasLeftBracket && !this.match(TokenType.RIGHT_BRACKET)) {
             throw new Error(`Expected right bracket at position: ${token.position} got token ${token} instead`)
         }
         return new Point(x, y)
