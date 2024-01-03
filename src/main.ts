@@ -13,16 +13,7 @@ window.addEventListener('load', function () {
     const applyButton = document.getElementById("apply") as HTMLButtonElement
     const model = new Parser().parse(codeTextControl.value)
     dotsAndBoxes.apply(model);
-    applyButton!.onclick = _ => {
-        if (!codeTextControl.hidden) {
-            applyButton.textContent = "code"
-            dotsAndBoxes.apply(new Parser().parse(codeTextControl.value));
-        } else {
-            applyButton.textContent = "apply"
-        }
-        codeTextControl.hidden = !codeTextControl.hidden;
-    }
-
+    applyButton!.onclick = _ => dotsAndBoxes.apply(new Parser().parse(codeTextControl.value))
     document.getElementById("pan-zoom")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.PAN_ZOOM_TOOL);
     document.getElementById("zoom-reset")!.onclick = _ => dotsAndBoxes.zoom = 1;
     document.getElementById("dot")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.DOTS_TOOL)
