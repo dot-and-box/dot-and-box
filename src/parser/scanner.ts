@@ -112,9 +112,12 @@ export class Scanner {
     private isDigit(c: string): boolean {
         return c >= '0' && c <= '9';
     }
+    private isDigitOrDot(c: string): boolean {
+        return this.isDigit(c) || c == '.'
+    }
 
     private number() {
-        while (this.isDigit(this.peek())) {
+        while (this.isDigitOrDot(this.peek())) {
             this.advance()
         }
         let val = this.source.substring(this.start, this.position)

@@ -46,7 +46,7 @@ title: 'This is string'
 box:
  id: b1
  text: 'box'
- color: black
+ color: rgba(223,123,8,0.68)
  at: -150, 30
  size: (100, 50)
 dot:

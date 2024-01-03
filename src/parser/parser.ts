@@ -127,11 +127,25 @@ export class Parser {
 
     color(): string {
         let result = ''
-        while (this.peek().type == TokenType.IDENTIFIER) {
-            const token = this.advance();
-            result += ' ' + token.value;
+
+        if (this.peek().type == TokenType.IDENTIFIER) {
+            let token = this.advance();
+            result += token.value;
+            if (this.match(TokenType.LEFT_BRACKET)) {
+                result += '('
+                result += this.number().toString()
+                while (this.match(TokenType.COMMA)) {
+                    result += ','
+                    result += this.number().toString()
+                }
+                if(this.match(TokenType.RIGHT_BRACKET)){
+                    result += ')'
+                } else {
+                    throw new Error(`Expected closing bracket at ${this.peek().position} got token ${this.peek().value} instead`)
+                }
+            }
         }
-        return result.trim()
+        return result;
     }
 
     at() {
@@ -148,7 +162,7 @@ export class Parser {
         token = this.advance()
 
         if (token.type == TokenType.NUMBER) {
-            let result = parseInt(token.value)
+            let result = token.value.includes('.') ? parseFloat(token.value) : parseInt(token.value, 10)
             return minus ? -result : result;
         } else {
             throw new Error(`Expected number at position: ${token.position} got token ${token.value} instead`)

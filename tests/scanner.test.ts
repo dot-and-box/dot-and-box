@@ -14,7 +14,7 @@ test('scanner simple', () => {
                        size: 100, 150
                      dots:
                        at: 50, 160
-                       size: 35
+                       size: 35.6
                        data: 3,6,8,9,4,7,1,2
                      actions:
                      4 <-> 7
