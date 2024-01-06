@@ -17,15 +17,7 @@ export class BoxTool extends Tool {
     override click(point: Point): void {
         this.dragStart = point
         const id = `box ${BoxControl.counter++}`
-        this.dots.controls.push(new BoxControl(
-            id,
-            point,
-            DEFAULT_BOX_COLOR,
-            new Point(100, 50),
-            id,
-        ))
-
+        this.dots.controls.push(new BoxControl(id, point, new Point(100, 50), DEFAULT_BOX_COLOR, id))
     }
-
 
 }

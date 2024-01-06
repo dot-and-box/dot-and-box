@@ -7,20 +7,22 @@ test('scanner not null', () => {
 })
 
 test('scanner simple', () => {
-    let eg1 = `title: bubble sort
-                     box: 
-                       name: router
-                       at: 120, 160
-                       size: 100, 150
-                     dots:
-                       at: 50, 160
-                       size: 35.6
-                       data: 3,6,8,9,4,7,1,2
-                     actions:
-                     4 <-> 7
-                     1 <-> 2
-                     1 -> router
-                    `
+    let eg1 = `
+    title: bubble sort
+    box: 
+     name: router
+     at: 120, 160
+     size: 100, 150
+    dot:
+     text: '2'
+     color: red
+     at: (250, 20)
+     size: 55
+     actions:
+     '4' <-> '7'
+     '1' <-> '2'
+     '3' *-> '12'
+     `
     let p = new Scanner()
     p.scan(eg1)
     console.log(p.tokens)

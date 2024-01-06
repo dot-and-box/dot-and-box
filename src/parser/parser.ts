@@ -8,6 +8,7 @@ import {Control, DotControl} from "../dot/dotControl.ts";
 import {ActionBase} from "../shared/actionBase.ts";
 import {Move} from "../shared/move.ts";
 import {Swap} from "../shared/swap.ts";
+import {Clone} from "../shared/clone.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -78,7 +79,7 @@ export class Parser {
                     break;
             }
         }
-        this.model.controls.push(new BoxControl(id != null ? id : text, at, color, size, text))
+        this.model.controls.push(new BoxControl(id != null ? id : text, at, size, color, text))
     }
 
     dot() {
@@ -108,7 +109,7 @@ export class Parser {
                     break;
             }
         }
-        this.model.controls.push(new DotControl(id != null ? id : text, at, color, size, text))
+        this.model.controls.push(new DotControl(id != null ? id : text, at, size, color, text))
     }
 
     text(): string {
@@ -216,7 +217,14 @@ export class Parser {
                         this.advance()
                         return new Swap(control, rightControl);
                     }
-
+                    break;
+                case TokenType.CLONE:
+                    this.advance()
+                    token = this.peek()
+                    if (control && token.type == TokenType.IDENTIFIER) {
+                        this.advance()
+                        return new Clone(control,  token.value);
+                    }
                     break;
 
             }

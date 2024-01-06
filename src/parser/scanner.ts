@@ -37,6 +37,10 @@ export class Scanner {
                     if (!this.matchSwap())
                         this.addToken(TokenType.LESS_THAN)
                     break;
+                case '*':
+                    if (!this.matchClone())
+                        this.addToken(TokenType.ASTERIX)
+                    break;
                 case '-':
                     if (this.match('>'))
                         this.addToken(TokenType.MOVE_TO)
@@ -76,6 +80,15 @@ export class Scanner {
         if (this.match("-"))
             if (this.match(">")) {
                 this.addToken(TokenType.SWAP)
+                return true
+            }
+        return false;
+    }
+
+    matchClone(): boolean {
+        if (this.match("-"))
+            if (this.match(">")) {
+                this.addToken(TokenType.CLONE)
                 return true
             }
         return false;

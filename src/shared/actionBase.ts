@@ -1,19 +1,12 @@
-import {Point} from "./point.ts";
+import {Step} from "./step.ts";
 
 export abstract class ActionBase {
-    finished: boolean = false
-    progress: number = 0
-    start: Point;
-    end: Point
-    value: Point
+    step: Step
 
-    protected constructor() {
-        this.start = Point.zero()
-        this.end = Point.zero()
-        this.value = Point.zero()
-    }
+    onBeforeForward(): void {}
 
-    abstract updateValue(x: number, y: number): void;
+    onBeforeBackward(): void{}
 
+    updateValue(progress: number): void{}
 
 }

@@ -6,7 +6,9 @@ export enum TokenType {
     LEFT_BRACKET = "(",
     RIGHT_BRACKET = ")",
     LESS_THAN = "<",
+    ASTERIX = "*",
     GREATER_THAN = ">",
+    CLONE = "*->",
     SWAP = "<->",
     MOVE_TO = "->",
     // literals

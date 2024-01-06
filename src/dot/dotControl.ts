@@ -10,7 +10,7 @@ export class DotControl implements Control {
     public id: string;
 
 
-    constructor(id: string, position: Point, color: string, size: number, text: string) {
+    constructor(id: string, position: Point, size: number, color: string, text: string) {
         this.id = id;
         this.position = position
         this.color = color
@@ -39,16 +39,19 @@ export class DotControl implements Control {
     hitTest(point: Point): boolean {
         let tx = this.position.x - point.x;
         let ty = this.position.y - point.y;
-        const isHit = tx * tx + ty * ty <= this.size  * this.size
+        const isHit = tx * tx + ty * ty <= this.size * this.size
         if (isHit) {
             this.selected = !this.selected
         }
         return isHit
     }
 
+    clone(): Control {
+        return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString());
+    }
+
 
 }
-
 
 export interface ControlBase {
     id: string
@@ -62,4 +65,6 @@ export interface Control extends ControlBase {
     draw(ctx: CanvasRenderingContext2D): void
 
     hitTest(point: Point): boolean;
+
+    clone(): Control;
 }

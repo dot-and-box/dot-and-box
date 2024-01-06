@@ -15,24 +15,32 @@ export class DotsAndBoxesModel {
 
 export class Step {
     actions: ActionBase[];
-    finishedChanges = 0;
+    model: { controls: Control[] }
     public _pause = false;
-    public animationStep = 0.0;
+    public progressStep = 0.0;
+    public progress = 0.0;
+
     public state: StepState = StepState.START
 
-    notifyFinished() {
-        this.finishedChanges++;
-        if (this.finishedChanges == this.actions.length) {
-            this.state = this.animationStep > 0 ? StepState.END : StepState.START
+    updateState() {
+        if (this.progress == 0) {
+            this.state = StepState.START;
+        } else if (this.progress == 1) {
+            this.state = StepState.END;
+        } else {
+            this.state = StepState.IN_PROGRESS;
         }
+    }
+
+    public init(model: { controls: Control[] }) {
+        this.model = model;
+        this.actions.forEach(c => {
+            c.step = this
+        })
     }
 
     public reset() {
         this._pause = false
-        this.actions.forEach(c => {
-            c.finished = false
-        })
-        this.finishedChanges = 0
     }
 
     constructor() {
@@ -40,11 +48,13 @@ export class Step {
     }
 
     forward() {
-        this.animationStep = 0.01
+        this.actions.forEach(a=>a.onBeforeForward());
+        this.progressStep = 0.01
     }
 
     back() {
-        this.animationStep = -0.01
+        this.actions.forEach(a=>a.onBeforeBackward());
+        this.progressStep = -0.01
     }
 
     get pause(): boolean {
@@ -56,7 +66,7 @@ export class Step {
     }
 
     togglePause() {
-        if (this.animationStep != 0 && this.actions.length > 0) {
+        if (this.progressStep != 0 && this.actions.length > 0) {
             this._pause = !this._pause;
         }
     }

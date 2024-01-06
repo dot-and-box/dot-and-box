@@ -60,6 +60,7 @@ dot:
  at: (250, 20)
  size: 55
 steps:
+b1 *-> b2
 b1 <-> '1', '2'-> 50, 45
 '1' <-> b1, '2' -> (67,80)
 `
@@ -80,8 +81,8 @@ b1 <-> '1', '2'-> 50, 45
     expect(dot.position.x).eq(250)
     expect(dot.position.y).eq(20)
 
-    expect(model.steps.length).eq(2)
-    expect(model.steps[0].actions.length).eq(2)
+    expect(model.steps.length).eq(3)
+    expect(model.steps[1].actions.length).eq(2)
 
 
 })

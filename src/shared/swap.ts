@@ -1,27 +1,47 @@
 import {ActionBase} from "./actionBase.ts";
 import {Control} from "../dot/dotControl.ts";
+import {Point} from "./point.ts";
 
 export class Swap extends ActionBase {
     left: Control
     right: Control
-
+    start: Point;
+    end: Point
     constructor(left: Control, right: Control) {
         super()
-        this.start = left.position.clone();
-        this.end = right.position.clone();
+        this.start = Point.zero()
+        this.end = Point.zero()
         this.left = left;
         this.right = right;
     }
 
-    override updateValue(x: number, y: number) {
-        const dx = x - this.left.position.x
-        const dy = y - this.left.position.y
+    override onBeforeForward() {
+        super.onBeforeForward();
+        this.start = this.left.position.clone();
+        this.end = this.right.position.clone();
+    }
 
-        this.left.position.x = x;
-        this.left.position.y = y;
+    override updateValue(progress: number) {
+        if (progress == 0) {
+            this.left.position.x = this.start.x
+            this.left.position.y = this.start.y
+            this.right.position.x = this.end.x
+            this.right.position.y = this.end.y
+        } else if (progress == 1) {
+            this.left.position.x = this.end.x
+            this.left.position.y = this.end.y
+            this.right.position.x = this.start.x
+            this.right.position.y = this.start.y
+        } else {
+            const dx = (this.end.x - this.start.x) * progress
+            const dy = (this.end.y - this.start.y) * progress
 
-        this.right.position.x -= dx
-        this.right.position.y -= dy
+            this.right.position.x = this.end.x - dx;
+            this.right.position.y = this.end.y - dy;
+            this.left.position.x = this.start.x + dx
+            this.left.position.y = this.start.y + dy
+        }
+
     }
 
 }

@@ -3,14 +3,18 @@ import {Control, DotControl} from "./dot/dotControl.ts";
 import {Tool} from "./shared/tool.ts";
 import {DotsAndBoxesModel, Step, StepState} from "./shared/step.ts";
 import {
-    COLORS, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY,
-    SIZES, DEFAULT_FONT, TITLE_FONT_SIZE
+    COLORS,
+    DEFAULT_FONT,
+    MAX_ZOOM,
+    MIN_ZOOM,
+    SCROLL_SENSITIVITY,
+    SIZES,
+    TITLE_FONT_SIZE
 } from "./shared/constants.ts";
 import {DotsTool} from "./dot/dotsTool.ts";
 import {EmptyTool} from "./shared/emptyTool.ts";
 import {PanZoomTool} from "./panzoom/panZoomTool.ts";
 import {BoxTool} from "./box/boxTool.ts";
-import {Move} from "./shared/move.ts";
 import {ActionBase} from "./shared/actionBase.ts";
 
 export class DotsAndBoxes {
@@ -47,6 +51,7 @@ export class DotsAndBoxes {
 
     private steps: Step[] = []
     private currentStepIndex = 0;
+    private currentStepProgress = 0;
     private currentStep = new Step()
 
     public apply(model: DotsAndBoxesModel) {
@@ -56,10 +61,9 @@ export class DotsAndBoxes {
             this.showTitle = true
             this.title = model.title
         }
-        for (const control of model.controls) {
-            this.controls.push(control as Control);
-        }
+        model.controls.forEach(c => this.controls.push(c))
         model.steps.forEach(s => {
+            s.init(this)
             this.steps.push(s);
         })
         this.currentStepIndex = 0;
@@ -68,13 +72,7 @@ export class DotsAndBoxes {
 
     //TODO: move to tool or tool operating on model ?
     public addDotControl(point: Point) {
-        this.controls.push(new DotControl(
-            `${this.controls.length + 1}`,
-            point,
-            COLORS[this.controls.length % COLORS.length],
-            SIZES[this.controls.length % SIZES.length],
-            this.controls.length.toString(),
-        ))
+        this.controls.push(new DotControl(`${this.controls.length + 1}`, point, SIZES[this.controls.length % SIZES.length], COLORS[this.controls.length % COLORS.length], this.controls.length.toString()))
     }
 
     constructor(canvas: HTMLCanvasElement) {
@@ -100,7 +98,6 @@ export class DotsAndBoxes {
         this.addCanvasEvent('touchmove', (e: any) => this.handleTouch(e, this.onPointerMove))
         this.addCanvasEvent('wheel', (e: any) => this.adjustZoom(e.deltaY * SCROLL_SENSITIVITY, 1))
         this.addDocumentEvent('keydown', (e: any) => this.handleKeyDown(e))
-
     }
 
     private handleKeyDown(k: KeyboardEvent) {
@@ -154,7 +151,7 @@ export class DotsAndBoxes {
         const time = performance.now()
         this.fps = 1 / ((performance.now() - this.last_time) / 1000);
         this.last_time = time
-        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex}`, 20, this.marginTop + 20, 12, DEFAULT_FONT)
+        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this.currentStepProgress * 100) / 100 }`, 20, this.marginTop + 20, 12, DEFAULT_FONT)
     }
 
     public draw() {
@@ -181,35 +178,25 @@ export class DotsAndBoxes {
 
 
     private updateActions() {
-        for (const action of this.currentStep.actions) {
-            if (action.finished)
-                continue
-            this.handleAction(action as Move)
+        this.currentStep.progress += this.currentStep.progressStep
+        if (this.currentStep.progress <= 0 || this.currentStep.progress >= 1) {
+            this.currentStep.progress = this.currentStep.progress <= 0 ? 0 : 1
         }
+        this.currentStepProgress = this.currentStep.progress
+
+        if (this.currentStep.state == StepState.IN_PROGRESS) {
+            for (const action of this.currentStep.actions) {
+                this.handleAction(action)
+            }
+        }
+        this.currentStep.updateState()
     }
 
     private handleAction(action: ActionBase) {
-        if (this.currentStep.animationStep == 0)
+        if (this.currentStep.progressStep == 0)
             return
-        let newProgress = action.progress + this.currentStep.animationStep
-        if (newProgress <= 0 || newProgress >= 1) {
-            newProgress = newProgress <= 0 ? 0 : 1
-        }
-        action.progress = newProgress
-        const dx = action.end.x - action.start.x
-        const dy = action.end.y - action.start.y
 
-        if (action.progress == 0) {
-            action.updateValue(action.start.x, action.start.y)
-        } else if (action.progress == 1) {
-            action.updateValue(action.start.x + dx, action.start.y + dy)
-        } else {
-            action.updateValue(action.start.x + dx * action.progress, action.start.y + dy * action.progress)
-        }
-        if (newProgress <= 0 || newProgress >= 1) {
-            action.finished = true
-            this.currentStep.notifyFinished()
-        }
+        action.updateValue(this.currentStep.progress)
     }
 
     private getEventLocation(e: any): Point | null {
@@ -290,7 +277,7 @@ export class DotsAndBoxes {
     }
 
     togglePause() {
-        if(this.currentStep){
+        if (this.currentStep) {
             this.currentStep.togglePause()
         }
     }

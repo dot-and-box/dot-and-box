@@ -10,11 +10,11 @@ export class BoxControl implements Control {
     public id: string
     static counter = 1
 
-    constructor(id: string, position: Point, color: string, size: Point, text: string) {
+    constructor(id: string, position: Point, size: Point, color: string, text: string) {
         this.id = id
         this.position = position
-        this.color = color
         this.size = size
+        this.color = color
         this.text = text
         this.selected = false
     }
@@ -50,6 +50,10 @@ export class BoxControl implements Control {
             this.selected = !this.selected
         }
         return isHit
+    }
+
+    clone(): Control {
+        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this.color.toString(), this.text.toString());
     }
 
 }

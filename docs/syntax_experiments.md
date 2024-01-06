@@ -60,4 +60,19 @@ orders: new-order (id: 768, title: socks, price: 100)
 step: 2
 ```
 
-
+Idea 3
+```text
+title: bubble sort
+box:
+name: router
+ at: 120, 160
+ size: 100, 150
+dots:
+ at: 50, 160
+ size: 35.6
+ data: '3','6','8','9','4','7','1','2'
+actions:
+ '4' <-> '7'
+ '1' <-> '2'
+ '3' *-> '12
+```text
