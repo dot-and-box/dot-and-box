@@ -9,7 +9,7 @@ export abstract class ActionBase {
 
     onBeforeForward(): void {}
 
-    onBeforeBackward(): void{}
+    onPreviousStep(): void{}
 
     abstract updateValue(progress: number): void
 

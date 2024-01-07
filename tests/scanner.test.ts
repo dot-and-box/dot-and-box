@@ -8,7 +8,7 @@ test('scanner not null', () => {
 
 test('scanner simple', () => {
     let eg1 = `
-    title: bubble sort
+    title: this is title
     box: 
      name: router
      at: 120, 160

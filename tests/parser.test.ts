@@ -11,28 +11,42 @@ test('parser not null', () => {
 
 test('parser simple', () => {
     let eg1 = ` 
-title: 'bubble sort'
-box: 
- text: b1 
- at: -120, -10
- size: 60, 50
-box: 
- at: 120, -160
- size: 250, 50
+title: bubble sort
+box:
+ text: 'bubble sort'
+ id: b1
+ color: rgba(137,33,133,0.88)
+ at: -180, -120
+ size: 260, 80
 dot:
- text: dt1
- color: orange
- at: -50, 100
+ text: '1'
+ color: red
+ at: -100, 0
  size: 20
 dot:
  text: '2'
- color: red
- at: 50, 100
+ color: purple
+ at: -150, 0
+ size: 20
+dot:
+ text: '5'
+ color: orange
+ at: 0, 0
+ size: 20
+dot:
+ text: '4'
+ color: green
+ at: -50, 0
+ size: 20
+dot:
+ text: '3'
+ color: blue
+ at: 50, 0
  size: 20
 steps:
-dt1 <-> b1
-b1 <-> dt1
-b1 -> 34,56
+'2' <-> '1'
+'5' <-> '3'
+'3' <-> '4'
                     `
     let p = new Parser()
     const model = p.parse(eg1)

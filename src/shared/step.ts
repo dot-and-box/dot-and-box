@@ -49,7 +49,6 @@ export class Step {
     }
 
     back() {
-        this.actions.forEach(a=>a.onBeforeBackward());
         this.progressStep = -0.01
     }
 
