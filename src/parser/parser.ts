@@ -3,12 +3,12 @@ import {DotsAndBoxesModel, Step} from "../shared/step.ts";
 import {TokenType} from "./tokenType.ts";
 import {Token} from "./token.ts";
 import {Point} from "../shared/point.ts";
-import {BoxControl} from "../box/boxControl.ts";
-import {Control, DotControl} from "../dot/dotControl.ts";
+import {BoxControl} from "../controls/box/boxControl.ts";
+import {DotControl} from "../controls/dot/dotControl.ts";
 import {ActionBase} from "../shared/actionBase.ts";
-import {Move} from "../shared/move.ts";
-import {Swap} from "../shared/swap.ts";
-import {Clone} from "../shared/clone.ts";
+import {Move} from "../actions/move.ts";
+import {Swap} from "../actions/swap.ts";
+import {Clone} from "../actions/clone.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -177,21 +177,21 @@ export class Parser {
     steps() {
         let step = new Step()
 
-        let action = this.action();
+        let action = this.action(step);
         while (action != null) {
             step.actions.push(action)
             if (!this.match(TokenType.COMMA)) {
                 this.model.steps.push(step)
                 step = new Step()
             }
-            action = this.action()
+            action = this.action(step)
         }
         if (step.actions.length > 0) {
             this.model.steps.push(step)
         }
     }
 
-    action(): ActionBase | null {
+    action(step: Step): ActionBase | null {
         if (this.eof())
             return null;
 
@@ -204,19 +204,19 @@ export class Parser {
                 case TokenType.MOVE_TO:
                     this.advance();
                     const point = this.point();
-                    return new Move(leftControlId, point);
+                    return new Move(step, leftControlId, point);
                 case TokenType.SWAP:
                     this.advance()
                     token = this.peek()
                     const rightControlId = token.value
                     this.advance()
-                    return new Swap(leftControlId, rightControlId);
+                    return new Swap(step, leftControlId, rightControlId);
                 case TokenType.CLONE:
                     this.advance()
                     token = this.peek()
                     if (token.type == TokenType.IDENTIFIER) {
                         this.advance()
-                        return new Clone(leftControlId, token.value);
+                        return new Clone(step, leftControlId, token.value);
                     }
                     break;
 
@@ -225,10 +225,6 @@ export class Parser {
             this.error('Expected identifier while handling step')
         }
         return null;
-    }
-
-    findControl(identifier: string): Control | undefined {
-        return this.model.controls.find(c => c.id == identifier)
     }
 
     point() {

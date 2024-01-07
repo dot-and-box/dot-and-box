@@ -1,19 +1,19 @@
-import {ActionBase} from "./actionBase.ts";
-import {Control} from "../dot/dotControl.ts";
-import {Point} from "./point.ts";
-import {StepState} from "./step.ts";
+import {ActionBase} from "../shared/actionBase.ts";
+import {Point} from "../shared/point.ts";
+import {Step, StepState} from "../shared/step.ts";
+import {Control} from "../controls/control.ts";
+import {DummyControl} from "../controls/dummy/dummyControl.ts";
 
 export class Swap extends ActionBase {
-    left: Control
-    right: Control
+    left: Control = new DummyControl()
+    right: Control = new DummyControl()
     start: Point;
     end: Point
     leftControlId: string
     rightControlId: string
 
-
-    constructor(left: string, right: string) {
-        super()
+    constructor(step: Step, left: string, right: string) {
+        super(step)
         this.start = Point.zero()
         this.end = Point.zero()
         this.leftControlId = left;
@@ -23,9 +23,14 @@ export class Swap extends ActionBase {
     override onBeforeForward() {
         super.onBeforeForward();
         if (this.step.state == StepState.START) {
-            this.left = this.step.model.controls.find(c => c.id == this.leftControlId)
-            this.right = this.step.model.controls.find(c => c.id == this.rightControlId)
-
+            const foundLeft = this.step.model.controls.find(c => c.id == this.leftControlId)
+            if (foundLeft) {
+                this.left = foundLeft
+            }
+            const foundRight = this.step.model.controls.find(c => c.id == this.rightControlId)
+            if (foundRight) {
+                this.right = foundRight
+            }
             this.start = this.left.position.clone();
             this.end = this.right.position.clone();
         }

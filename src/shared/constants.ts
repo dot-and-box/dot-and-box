@@ -20,3 +20,5 @@ export const SIZES: number [] = [
     22, 14, 16, 17, 12, 32
 ]
 
+export const DEFAULT_DOT_SIZE = SIZES[0]
+

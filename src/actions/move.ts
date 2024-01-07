@@ -1,16 +1,17 @@
-import {ActionBase} from "./actionBase.ts";
-import {Point} from "./point.ts";
-import {Control} from "../dot/dotControl.ts";
-import {StepState} from "./step.ts";
+import {ActionBase} from "../shared/actionBase.ts";
+import {Point} from "../shared/point.ts";
+import {Step, StepState} from "../shared/step.ts";
+import {Control} from "../controls/control.ts";
+import {DummyControl} from "../controls/dummy/dummyControl.ts";
 
 export class Move extends ActionBase {
     start: Point;
     end: Point
-    control: Control | undefined
+    control: Control = new DummyControl()
     leftId: string
 
-    constructor(leftId: string, end: Point) {
-        super()
+    constructor(step: Step, leftId: string, end: Point) {
+        super(step)
         this.start = Point.zero()
         this.end = end.clone();
         this.leftId = leftId;
@@ -19,8 +20,9 @@ export class Move extends ActionBase {
     override onBeforeForward() {
         super.onBeforeForward();
         if (this.step.state == StepState.START) {
-            this.control = this.step.model.controls.find(c => c.id == this.leftId)
-            if (this.control) {
+            const foundControl = this.step.model.controls.find(c => c.id == this.leftId)
+            if (foundControl) {
+                this.control = foundControl
                 this.start = this.control.position.clone();
             }
         }

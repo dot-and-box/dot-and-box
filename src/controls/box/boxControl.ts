@@ -1,6 +1,6 @@
-import {Point} from "../shared/point.ts";
-import {Control} from "../dot/dotControl.ts";
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT, DEFAULT_FONT_SIZE} from "../shared/constants.ts";
+import {Point} from "../../shared/point.ts";
+import {SELECTION_STROKE_STYLE, DEFAULT_FONT, DEFAULT_FONT_SIZE} from "../../shared/constants.ts";
+import {Control} from "../control.ts";
 
 export class BoxControl implements Control {
     public position: Point

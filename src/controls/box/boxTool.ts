@@ -1,8 +1,8 @@
-import {Tool} from "../shared/tool.ts";
-import {Point} from "../shared/point.ts";
+import {Tool} from "../../shared/tool.ts";
+import {Point} from "../../shared/point.ts";
 import {BoxControl} from "./boxControl.ts";
-import {DotsAndBoxes} from "../dotsAndBoxes.ts";
-import {DEFAULT_BOX_COLOR} from "../shared/constants.ts";
+import {DotsAndBoxes} from "../../dotsAndBoxes.ts";
+import {DEFAULT_BOX_COLOR} from "../../shared/constants.ts";
 
 export class BoxTool extends Tool {
 

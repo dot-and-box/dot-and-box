@@ -1,21 +1,13 @@
 import {Point} from "./shared/point.ts";
-import {Control, DotControl} from "./dot/dotControl.ts";
 import {Tool} from "./shared/tool.ts";
 import {DotsAndBoxesModel, Step, StepState} from "./shared/step.ts";
-import {
-    COLORS,
-    DEFAULT_FONT,
-    MAX_ZOOM,
-    MIN_ZOOM,
-    SCROLL_SENSITIVITY,
-    SIZES,
-    TITLE_FONT_SIZE
-} from "./shared/constants.ts";
-import {DotTool} from "./dot/dotTool.ts";
+import {DEFAULT_FONT, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, TITLE_FONT_SIZE} from "./shared/constants.ts";
+import {DotTool} from "./controls/dot/dotTool.ts";
 import {EmptyTool} from "./shared/emptyTool.ts";
 import {PanZoomTool} from "./panzoom/panZoomTool.ts";
-import {BoxTool} from "./box/boxTool.ts";
+import {BoxTool} from "./controls/box/boxTool.ts";
 import {ActionBase} from "./shared/actionBase.ts";
+import {Control} from "./controls/control.ts";
 
 export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
@@ -146,7 +138,7 @@ export class DotsAndBoxes {
         const time = performance.now()
         this.fps = 1 / ((performance.now() - this.last_time) / 1000);
         this.last_time = time
-        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this.currentStepProgress * 100) / 100 }`, 20, this.marginTop + 20, 12, DEFAULT_FONT)
+        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this.currentStepProgress * 100) / 100}`, 20, this.marginTop + 20, 12, DEFAULT_FONT)
     }
 
     public draw() {

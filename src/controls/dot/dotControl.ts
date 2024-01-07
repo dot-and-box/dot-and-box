@@ -1,5 +1,6 @@
-import {Point} from "../shared/point.ts";
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT} from "../shared/constants.ts";
+import {Point} from "../../shared/point.ts";
+import {SELECTION_STROKE_STYLE, DEFAULT_FONT} from "../../shared/constants.ts";
+import {Control} from "../control.ts";
 
 export class DotControl implements Control {
     public position: Point
@@ -51,20 +52,4 @@ export class DotControl implements Control {
     }
 
 
-}
-
-export interface ControlBase {
-    id: string
-    position: Point
-}
-
-export interface Control extends ControlBase {
-
-    selected: boolean
-
-    draw(ctx: CanvasRenderingContext2D): void
-
-    hitTest(point: Point): boolean;
-
-    clone(): Control;
 }

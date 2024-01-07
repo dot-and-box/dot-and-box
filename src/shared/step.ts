@@ -1,5 +1,5 @@
-import {Control} from "../dot/dotControl.ts";
 import {ActionBase} from "./actionBase.ts";
+import {Control} from "../controls/control.ts";
 
 export class DotsAndBoxesModel {
     title: string
@@ -15,11 +15,10 @@ export class DotsAndBoxesModel {
 
 export class Step {
     actions: ActionBase[];
-    model: { controls: Control[] }
+    model!: { controls: Control[] }
     public _pause = false;
     public progressStep = 0.0;
     public progress = 0.0;
-
     public state: StepState = StepState.START
 
     updateState() {
@@ -34,9 +33,6 @@ export class Step {
 
     public init(model: { controls: Control[] }) {
         this.model = model;
-        this.actions.forEach(c => {
-            c.step = this
-        })
     }
 
     public reset() {
