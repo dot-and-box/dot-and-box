@@ -139,7 +139,7 @@ export class Parser {
                     result += ','
                     result += this.number().toString()
                 }
-                if(this.match(TokenType.RIGHT_BRACKET)){
+                if (this.match(TokenType.RIGHT_BRACKET)) {
                     result += ')'
                 } else {
                     throw new Error(`Expected closing bracket at ${this.peek().position} got token ${this.peek().value} instead`)
@@ -198,32 +198,25 @@ export class Parser {
         let token = this.advance()
         if (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING) {
             const leftControlId = token.value;
-            const control = this.findControl(leftControlId)
 
             token = this.peek()
             switch (token.type) {
                 case TokenType.MOVE_TO:
                     this.advance();
                     const point = this.point();
-                    if (control) {
-                        return new Move(point, control);
-                    }
-                    break;
+                    return new Move(leftControlId, point);
                 case TokenType.SWAP:
                     this.advance()
                     token = this.peek()
-                    const rightControl = this.findControl(token.value)
-                    if (control && rightControl) {
-                        this.advance()
-                        return new Swap(control, rightControl);
-                    }
-                    break;
+                    const rightControlId = token.value
+                    this.advance()
+                    return new Swap(leftControlId, rightControlId);
                 case TokenType.CLONE:
                     this.advance()
                     token = this.peek()
-                    if (control && token.type == TokenType.IDENTIFIER) {
+                    if (token.type == TokenType.IDENTIFIER) {
                         this.advance()
-                        return new Clone(control,  token.value);
+                        return new Clone(leftControlId, token.value);
                     }
                     break;
 
