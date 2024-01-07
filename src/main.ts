@@ -16,7 +16,7 @@ window.addEventListener('load', function () {
     applyButton!.onclick = _ => dotsAndBoxes.apply(new Parser().parse(codeTextControl.value))
     document.getElementById("pan-zoom")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.PAN_ZOOM_TOOL);
     document.getElementById("zoom-reset")!.onclick = _ => dotsAndBoxes.zoom = 1;
-    document.getElementById("dot")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.DOTS_TOOL)
+    document.getElementById("dot")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.DOT_TOOL)
     document.getElementById("box")!.onclick = _ => dotsAndBoxes.selectTool(dotsAndBoxes.BOX_TOOL)
     document.getElementById("back")!.onclick = _ => dotsAndBoxes.back()
     document.getElementById("pause")!.onclick = _ => dotsAndBoxes.togglePause()

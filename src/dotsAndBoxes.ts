@@ -11,7 +11,7 @@ import {
     SIZES,
     TITLE_FONT_SIZE
 } from "./shared/constants.ts";
-import {DotsTool} from "./dot/dotsTool.ts";
+import {DotTool} from "./dot/dotTool.ts";
 import {EmptyTool} from "./shared/emptyTool.ts";
 import {PanZoomTool} from "./panzoom/panZoomTool.ts";
 import {BoxTool} from "./box/boxTool.ts";
@@ -36,14 +36,14 @@ export class DotsAndBoxes {
     public marginTop = 0;
 
     public readonly EMPTY_TOOL: string = "empty-tool"
-    public readonly DOTS_TOOL: string = "dots-tool"
+    public readonly DOT_TOOL: string = "dot-tool"
     public readonly BOX_TOOL: string = "box-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private tool: Tool = new PanZoomTool(this)
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
-        [this.DOTS_TOOL, new DotsTool(this)],
+        [this.DOT_TOOL, new DotTool(this)],
         [this.BOX_TOOL, new BoxTool(this)],
         [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
     ])
@@ -68,11 +68,6 @@ export class DotsAndBoxes {
         })
         this.currentStepIndex = 0;
         this.currentStep = this.steps[this.currentStepIndex]
-    }
-
-    //TODO: move to tool or tool operating on model ?
-    public addDotControl(point: Point) {
-        this.controls.push(new DotControl(`${this.controls.length + 1}`, point, SIZES[this.controls.length % SIZES.length], COLORS[this.controls.length % COLORS.length], this.controls.length.toString()))
     }
 
     constructor(canvas: HTMLCanvasElement) {
