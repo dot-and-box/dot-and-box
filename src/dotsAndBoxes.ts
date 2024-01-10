@@ -12,6 +12,8 @@ import {Control} from "./controls/control.ts";
 export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
     private readonly ctx: CanvasRenderingContext2D
+    private _width = 100;
+    private _height = 100;
     public zoom: number = 1
     public isDragging = false
     private initialPinchDistance: number = 0
@@ -19,8 +21,8 @@ export class DotsAndBoxes {
     private fps = 1
     private last_time: number = 0
     public controls: Control[] = []
-    public origin: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
-    public offset: Point = new Point(window.innerWidth / 2, window.innerHeight / 2)
+    public origin: Point = Point.zero()
+    public offset: Point = Point.zero()
     public showDebug = true
     public showTitle = false;
     public title = '';
@@ -39,12 +41,11 @@ export class DotsAndBoxes {
         [this.BOX_TOOL, new BoxTool(this)],
         [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
     ])
-
-
     private steps: Step[] = []
     private currentStepIndex = 0;
     private currentStepProgress = 0;
     private currentStep = new Step()
+
 
     public apply(model: DotsAndBoxesModel) {
         this.steps = []
@@ -64,16 +65,19 @@ export class DotsAndBoxes {
 
     constructor(canvas: HTMLCanvasElement) {
         this.ctx = canvas.getContext('2d')! as CanvasRenderingContext2D
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
         this.canvas = canvas;
         this.attachCanvasEventHandlers()
     }
 
-    public updateCanvasPosition() {
+    public updateCanvasPositionAndSize(offset: Point, color: string) {
+        this.canvas.style.background = color;
         const style = getComputedStyle(this.canvas);
-        this.marginLeft = parseInt(style.marginLeft, 10)
-        this.marginTop = parseInt(style.marginTop, 10)
+        this._width = parseInt(style.width, 10)
+        this._height = parseInt(style.height, 10)
+        this.marginLeft = parseInt(style.marginLeft, 10) + offset.x;
+        this.marginTop = parseInt(style.marginTop, 10) + offset.y;
+        this.origin = new Point(this._width / 2, this._height / 2)
+        this.offset = new Point(this._width / 2, this._height / 2)
     }
 
     private attachCanvasEventHandlers() {
@@ -125,7 +129,7 @@ export class DotsAndBoxes {
         this.currentStep.reset()
 
         if (this.currentStep.state == StepState.START) {
-            this.currentStep.actions.forEach(a=>a.onPreviousStep())
+            this.currentStep.actions.forEach(a => a.onPreviousStep())
             if (this.currentStepIndex > 0) {
                 this.currentStepIndex--
                 this.currentStep = this.steps[this.currentStepIndex]
@@ -138,12 +142,12 @@ export class DotsAndBoxes {
         const time = performance.now()
         this.fps = 1 / ((performance.now() - this.last_time) / 1000);
         this.last_time = time
-        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this.currentStepProgress * 100) / 100}`, 20, this.marginTop + 20, 12, DEFAULT_FONT)
+        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this.currentStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
     }
 
     public draw() {
-        this.canvas.width = window.innerWidth
-        this.canvas.height = window.innerHeight
+        this.canvas.width = this._width
+        this.canvas.height = this._height
         if (this.showDebug) {
             this.drawDebug()
         }
