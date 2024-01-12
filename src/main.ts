@@ -4,46 +4,58 @@ import {Point} from "./shared/point.ts";
 
 
 class DotsAndBoxesElement extends HTMLElement {
-    static observedAttributes = ["color", "code", "width", "height", 'debug'];
+    static observedAttributes = ["color", "border", "code", "width", "height", 'debug'];
     dotsAndBoxes!: DotsAndBoxes
     code: string = ''
+    color: string = 'whitesmoke'
     debug: boolean = false
+    border: string =  '1px solid #ccc;'
+    defaultWidth: number =  100
+    defaultHeight: number =  100
 
     constructor() {
         super();
     }
 
     reset() {
-        if (this.code) {
+        if (this.code && this.dotsAndBoxes) {
             const model = new Parser().parse(this.code)
             this.dotsAndBoxes.apply(model);
             this.dotsAndBoxes.showDebug = this.debug
-            this.dotsAndBoxes.updateCanvasPositionAndSize(new Point(this.offsetLeft, this.offsetTop),  this.attributes.getNamedItem('color')!.value)
+            const offset = new Point(this.offsetLeft, this.offsetTop)
+            this.dotsAndBoxes.updateCanvasPositionAndSize(offset, this.color)
             this.dotsAndBoxes.draw()
         }
     }
 
     connectedCallback() {
         const shadow = this.attachShadow({mode: "open"});
-        const wrapper = document.createElement("div");
-        const canvas = document.createElement("canvas");
-        canvas.width = this.attributes['width'].value
-        canvas.height = this.attributes['height'].value
-        canvas.style.background = 'whitesmoke'
+        this.shadowRoot.innerHTML = `
+      <style>
+        :host { display: block; padding: 0;border: ${this.border}; }
+      </style>
+      <div>
+        <canvas id="can"></canvas>
+        <div id="menu"></div>
+      </div>
+    `;
+        const canvas = this.shadowRoot.getElementById('can') as HTMLCanvasElement
+        console.log(this.offsetWidth)
+        canvas.width =  this.offsetWidth ? this.offsetWidth -2 : this.defaultWidth
+        canvas.height = this.offsetHeight ? this.offsetHeight -2 : this.defaultHeight
+        canvas.style.background = this.color
         canvas.style.padding = '0'
         canvas.style.margin = '0'
         canvas.style.overflow = 'hidden'
         canvas.style.userSelect = 'none'
-        wrapper.append(canvas)
-        wrapper.append(this.buildMenu())
-        shadow.append(wrapper)
+
+
+        this.buildMenu(this.shadowRoot.getElementById('menu'))
         this.dotsAndBoxes = new DotsAndBoxes(canvas);
         this.reset()
-
     }
 
-    buildMenu(): HTMLElement {
-        const menu = document.createElement("div");
+    buildMenu(menu: HTMLElement) {
         const backward = document.createElement("button");
         backward.onclick = (_) => this.dotsAndBoxes.back()
         backward.textContent = '◀'
@@ -74,7 +86,6 @@ class DotsAndBoxesElement extends HTMLElement {
         boxTool.append('◻')
         menu.append(boxTool)
 
-        return menu
     }
 
     disconnectedCallback() {
@@ -86,16 +97,20 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        // console.log(`Attribute ${name} has changed.`);
-
         if (name == 'code') {
             this.code = newValue
-            this.reset()
+        }
+
+        if (name == 'color') {
+            this.color = newValue
+        }
+
+        if (name == 'border') {
+            this.border = newValue
         }
 
         if (name == 'debug') {
             this.debug = newValue.toLowerCase() == 'true' || newValue == '1'
-            this.reset()
         }
     }
 }
