@@ -46,10 +46,17 @@ export class DotsAndBoxes {
     private currentStepProgress = 0;
     private currentStep = new Step()
 
-
-    public apply(model: DotsAndBoxesModel) {
+    public resetModel() {
         this.steps = []
         this.controls = []
+        this.showTitle = false
+        this.title = ''
+        this.currentStepIndex = 0;
+        this.currentStep = new Step()
+    }
+
+    public apply(model: DotsAndBoxesModel) {
+        this.resetModel()
         if (model.title) {
             this.showTitle = true
             this.title = model.title
@@ -59,7 +66,6 @@ export class DotsAndBoxes {
             s.init(this)
             this.steps.push(s);
         })
-        this.currentStepIndex = 0;
         this.currentStep = this.steps[this.currentStepIndex]
     }
 

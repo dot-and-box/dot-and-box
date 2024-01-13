@@ -9,6 +9,7 @@ import {ActionBase} from "../shared/actionBase.ts";
 import {Move} from "../actions/move.ts";
 import {Swap} from "../actions/swap.ts";
 import {Clone} from "../actions/clone.ts";
+import {Sign} from "../shared/sign.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -201,16 +202,10 @@ export class Parser {
 
             token = this.peek()
             switch (token.type) {
-                case TokenType.MOVE_TO:
-                    this.advance();
-                    const point = this.point();
-                    return new Move(step, leftControlId, point);
+                case TokenType.MOVE:
+                    return this.move(step, leftControlId)
                 case TokenType.SWAP:
-                    this.advance()
-                    token = this.peek()
-                    const rightControlId = token.value
-                    this.advance()
-                    return new Swap(step, leftControlId, rightControlId);
+                    return this.swap(step, leftControlId)
                 case TokenType.CLONE:
                     this.advance()
                     token = this.peek()
@@ -227,9 +222,46 @@ export class Parser {
         return null;
     }
 
+    move(step: Step, leftControlId: string): Move {
+        this.advance();
+        const point = this.point();
+        return new Move(step, leftControlId, point);
+    }
+
+    swap(step: Step, leftControlId: string): Swap {
+        this.advance()
+        let token = this.peek()
+        const rightControlId = token.value
+        this.advance()
+        return new Swap(step, leftControlId, rightControlId);
+    }
+
+    plus(): boolean {
+        return this.match(TokenType.PLUS);
+    }
+
+    minus(): boolean {
+        return this.match(TokenType.MINUS);
+    }
+
+    sign(): Sign {
+        let sign: Sign = Sign.NONE
+        if (this.plus()) {
+            sign = Sign.PLUS
+        }
+        if (this.minus()) {
+            sign = Sign.MINUS
+        }
+        return sign
+    }
+
     point() {
+        let sign = this.sign()
         const hasLeftBracket = this.match(TokenType.LEFT_BRACKET);
         let x = this.number()
+        if (sign == Sign.MINUS && !hasLeftBracket) {
+            x = -x;
+        }
         let token = this.advance()
         if (token.type != TokenType.COMMA) {
             throw new Error(`Expected comma at position: ${token.position} got token ${token} instead`)
@@ -238,7 +270,7 @@ export class Parser {
         if (hasLeftBracket && !this.match(TokenType.RIGHT_BRACKET)) {
             throw new Error(`Expected right bracket at position: ${token.position} got token ${token} instead`)
         }
-        return new Point(x, y)
+        return new Point(x, y, sign)
     }
 
     match(tokenType: TokenType) {

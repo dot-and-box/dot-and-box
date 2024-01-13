@@ -41,9 +41,12 @@ export class Scanner {
                     if (!this.matchClone())
                         this.addToken(TokenType.ASTERIX)
                     break;
+                case '+':
+                    this.addToken(TokenType.PLUS)
+                    break;
                 case '-':
                     if (this.match('>'))
-                        this.addToken(TokenType.MOVE_TO)
+                        this.addToken(TokenType.MOVE)
                     else
                         this.addToken(TokenType.MINUS)
                     break;
@@ -125,6 +128,7 @@ export class Scanner {
     private isDigit(c: string): boolean {
         return c >= '0' && c <= '9';
     }
+
     private isDigitOrDot(c: string): boolean {
         return this.isDigit(c) || c == '.'
     }
@@ -149,7 +153,7 @@ export class Scanner {
     string() {
         while (this.peek() != "'" && !this.isAtEnd()) {
             if (this.peek() == '\n') this.line++;
-                this.advance();
+            this.advance();
         }
 
         if (this.isAtEnd()) {
@@ -158,8 +162,8 @@ export class Scanner {
 
         this.advance();
 
-        let val = this.source.substring(this.start+1, this.position-1)
-        this.addTokenValue(TokenType.STRING,val)
+        let val = this.source.substring(this.start + 1, this.position - 1)
+        this.addTokenValue(TokenType.STRING, val)
     }
 
     identifier() {

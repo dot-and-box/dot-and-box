@@ -3,6 +3,8 @@ import {Scanner} from "../src/parser/scanner";
 import {Parser} from "../src/parser/parser";
 import {BoxControl} from "../src/controls/box/boxControl";
 import {DotControl} from "../src/controls/dot/dotControl";
+import {Move} from "../src/actions/move";
+import {Sign} from "../src/shared/sign";
 
 test('parser not null', () => {
     let p = new Scanner()
@@ -77,6 +79,7 @@ steps:
 b1 *-> b2
 b1 <-> '1', '2'-> 50, 45
 '1' <-> b1, '2' -> (67,80)
+'1' -> +(89,90)
 `
     let p = new Parser()
     const model = p.parse(eg1)
@@ -95,9 +98,11 @@ b1 <-> '1', '2'-> 50, 45
     expect(dot.position.x).eq(250)
     expect(dot.position.y).eq(20)
 
-    expect(model.steps.length).eq(3)
+    expect(model.steps.length).eq(4)
     expect(model.steps[1].actions.length).eq(2)
 
-
+    const moveAction = model.steps[3].actions[0] as Move
+    expect(moveAction).not.eq(null)
+    expect(moveAction.end.sign).not.eq(Sign.PLUS)
 })
 

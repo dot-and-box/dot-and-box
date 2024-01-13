@@ -3,17 +3,20 @@ import {Point} from "../shared/point.ts";
 import {Step, StepState} from "../shared/step.ts";
 import {Control} from "../controls/control.ts";
 import {DummyControl} from "../controls/dummy/dummyControl.ts";
+import {Sign} from "../shared/sign.ts";
 
 export class Move extends ActionBase {
     start: Point;
+    to: Point
     end: Point
     control: Control = new DummyControl()
     leftId: string
 
-    constructor(step: Step, leftId: string, end: Point) {
+    constructor(step: Step, leftId: string, to: Point) {
         super(step)
         this.start = Point.zero()
-        this.end = end.clone();
+        this.to = to;
+        this.end = to;
         this.leftId = leftId;
     }
 
@@ -24,7 +27,18 @@ export class Move extends ActionBase {
             if (foundControl) {
                 this.control = foundControl
                 this.start = this.control.position.clone();
+                this.end = this.calculateEnd(this.start, this.to)
             }
+        }
+    }
+
+    calculateEnd(position: Point, change: Point) {
+        if (change.sign == Sign.NONE) {
+            return new Point(change.x, change.y)
+        } else if (change.sign == Sign.PLUS) {
+            return new Point(position.x + change.x, position.y + change.y)
+        } else {
+            return new Point(position.x - change.x, position.y - change.y)
         }
     }
 

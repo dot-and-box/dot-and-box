@@ -22,6 +22,7 @@ test('scanner simple', () => {
      '4' <-> '7'
      '1' <-> '2'
      '3' *-> '12'
+     '12' -> +(50,-90)
      `
     let p = new Scanner()
     p.scan(eg1)

@@ -1,5 +1,6 @@
 export enum TokenType {
     MINUS = "-",
+    PLUS = "+",
     COMMA = ",",
     COLON = ":",
     EQUALS = "=",
@@ -10,7 +11,7 @@ export enum TokenType {
     GREATER_THAN = ">",
     CLONE = "*->",
     SWAP = "<->",
-    MOVE_TO = "->",
+    MOVE = "->",
     // literals
     IDENTIFIER = "IDENTIFIER",
     NUMBER = "NUMBER",
