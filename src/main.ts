@@ -78,12 +78,12 @@ class DotsAndBoxesElement extends HTMLElement {
 
         const panZoomTool = document.createElement("button");
         panZoomTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.PAN_ZOOM_TOOL)
-        panZoomTool.append('↹')
+        panZoomTool.append('☩')
         menu.append(panZoomTool)
 
         const dotTool = document.createElement("button");
         dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
-        dotTool.append('o')
+        dotTool.append('❍')
         menu.append(dotTool)
 
 
