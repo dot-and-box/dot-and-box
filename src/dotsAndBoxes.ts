@@ -24,7 +24,6 @@ export class DotsAndBoxes {
     public origin: Point = Point.zero()
     public offset: Point = Point.zero()
     public showDebug = true
-    public showTitle = false;
     public title = '';
     public marginLeft = 0;
     public marginTop = 0;
@@ -49,7 +48,6 @@ export class DotsAndBoxes {
     public resetModel() {
         this.steps = []
         this.controls = []
-        this.showTitle = false
         this.title = ''
         this.currentStepIndex = 0;
         this.currentStep = new Step()
@@ -58,7 +56,6 @@ export class DotsAndBoxes {
     public apply(model: DotsAndBoxesModel) {
         this.resetModel()
         if (model.title) {
-            this.showTitle = true
             this.title = model.title
         }
         model.controls.forEach(c => this.controls.push(c))
@@ -157,7 +154,7 @@ export class DotsAndBoxes {
         if (this.showDebug) {
             this.drawDebug()
         }
-        if (this.showTitle) {
+        if (this.title) {
             this.drawText(this.title, 20, 30, TITLE_FONT_SIZE, DEFAULT_FONT)
         }
         this.ctx.translate(this.origin.x, this.origin.y)
