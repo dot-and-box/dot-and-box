@@ -20,12 +20,16 @@ class DotsAndBoxesElement extends HTMLElement {
 
     reset() {
         if (this.code && this.dotsAndBoxes) {
-            const model = new Parser().parse(this.code)
-            this.dotsAndBoxes.apply(model);
+            this.applyCode()
             this.dotsAndBoxes.showDebug = this.debug
             this.dotsAndBoxes.updateCanvasPositionAndSize(new Point(this.offsetLeft, this.offsetTop), this.color)
             this.dotsAndBoxes.draw()
         }
+    }
+
+    applyCode() {
+        const model = new Parser().parse(this.code)
+        this.dotsAndBoxes.apply(model);
     }
 
     connectedCallback() {
@@ -33,7 +37,7 @@ class DotsAndBoxesElement extends HTMLElement {
         shadow.innerHTML = `
       <style>
         :host { display: block; padding: 0;border: ${this.border};}
-        #menu {
+        #controls-menu {
           position: relative;   
           height: 30px;
           left: 2px;       
@@ -42,11 +46,17 @@ class DotsAndBoxesElement extends HTMLElement {
         }
       </style>
       <div>
-        <canvas id="can"></canvas>
-        <div id="menu"></div>
+        <canvas id="canvas"></canvas>
+        <div id="controls-menu"></div>
       </div>
     `;
-        const canvas = shadow.getElementById('can') as HTMLCanvasElement
+        this.buildControls(shadow.getElementById('controls-menu') as HTMLElement)
+        this.dotsAndBoxes = new DotsAndBoxes(this.buildCanvas(shadow));
+        this.reset()
+    }
+
+    buildCanvas(shadow: ShadowRoot): HTMLCanvasElement{
+        const canvas = shadow.getElementById('canvas') as HTMLCanvasElement
         canvas.width = this.offsetWidth ? this.offsetWidth - 2 : this.defaultWidth
         canvas.height = this.offsetHeight ? this.offsetHeight - 2 : this.defaultHeight
         canvas.style.background = this.color
@@ -54,14 +64,16 @@ class DotsAndBoxesElement extends HTMLElement {
         canvas.style.margin = '0'
         canvas.style.overflow = 'hidden'
         canvas.style.userSelect = 'none'
-
-
-        this.buildMenu(shadow.getElementById('menu') as HTMLElement)
-        this.dotsAndBoxes = new DotsAndBoxes(canvas);
-        this.reset()
+        return canvas
     }
 
-    buildMenu(menu: HTMLElement) {
+    updateControls(){
+        const controlsMenu =this.shadowRoot!.getElementById('controls-menu') as HTMLElement;
+        controlsMenu.style.display = this.showControls ? 'block' : 'none'
+    }
+
+
+    buildControls(menu: HTMLElement) {
         const backward = document.createElement("button");
         backward.onclick = (_) => this.dotsAndBoxes.back()
         backward.textContent = '◀'
@@ -106,6 +118,9 @@ class DotsAndBoxesElement extends HTMLElement {
         switch (name) {
             case 'code':
                 this.code = newValue
+                if (this.dotsAndBoxes) {
+                    this.applyCode()
+                }
                 break;
             case 'color':
                 this.color = newValue
@@ -115,10 +130,15 @@ class DotsAndBoxesElement extends HTMLElement {
                 break;
             case 'controls':
                 this.showControls = newValue != null
+                if (this.dotsAndBoxes) {
+                    this.updateControls()
+                }
                 break;
             case 'debug':
                 this.debug = newValue != null
-                this.dotsAndBoxes.showDebug = this.debug
+                if (this.dotsAndBoxes) {
+                    this.dotsAndBoxes.showDebug = this.debug
+                }
                 break;
             default:
                 console.log(name, oldValue, newValue)
