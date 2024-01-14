@@ -27,6 +27,7 @@ export class DotsAndBoxes {
     public title = '';
     public marginLeft = 0;
     public marginTop = 0;
+    public autoplay: boolean = false
 
     public readonly EMPTY_TOOL: string = "empty-tool"
     public readonly DOT_TOOL: string = "dot-tool"
@@ -118,11 +119,9 @@ export class DotsAndBoxes {
 
     forward() {
         this.currentStep.reset()
-        if (this.currentStep.state == StepState.END) {
-            if (this.currentStepIndex < this.steps.length - 1) {
-                this.currentStepIndex++
-                this.currentStep = this.steps[this.currentStepIndex]
-            }
+        if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
+            this.currentStepIndex++
+            this.currentStep = this.steps[this.currentStepIndex]
         }
         this.currentStep.forward()
     }
@@ -184,6 +183,9 @@ export class DotsAndBoxes {
             }
         }
         this.currentStep.updateState()
+        if (this.autoplay && this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
+            this.forward()
+        }
     }
 
     private handleAction(action: ActionBase) {
@@ -195,7 +197,7 @@ export class DotsAndBoxes {
 
     private getEventLocation(e: any): Point | null {
         if (e.touches && e.touches.length == 1) {
-            return new Point(e.touches[0].clientX, e.touches[0].clientY)
+            return new Point(e.touches[0].clientX - this.marginLeft, e.touches[0].clientY - this.marginTop)
         } else if (e.clientX && e.clientY) {
             return new Point(e.clientX - this.marginLeft, e.clientY - this.marginTop)
         }
@@ -213,11 +215,10 @@ export class DotsAndBoxes {
         if (clientPoint == null)
             return
 
-        const point = new Point(
+        this.tool.click(new Point(
             clientPoint.x / this.zoom - this.offset.x + this.origin.x - this.origin.x / this.zoom,
             clientPoint.y / this.zoom - this.offset.y + this.origin.y - this.origin.y / this.zoom
-        )
-        this.tool.click(point)
+        ))
     }
 
     private onPointerUp() {
@@ -229,17 +230,16 @@ export class DotsAndBoxes {
     private onPointerMove(e: any) {
         if (this.isDragging) {
             let clientPoint = this.getEventLocation(e)!
-            let movePoint = new Point(
+            this.tool.move(new Point(
                 clientPoint.x / this.zoom + this.origin.x - this.origin.x / this.zoom,
                 clientPoint.y / this.zoom + this.origin.y - this.origin.y / this.zoom
-            )
-            this.tool.move(movePoint)
+            ))
         }
     }
 
     private handleTouch(e: any, singleTouchHandler: any) {
         if (e.touches.length == 1) {
-            singleTouchHandler(e)
+            singleTouchHandler.call(this, e)
         } else if (e.type == "touchmove" && e.touches.length == 2) {
             this.isDragging = false
             this.handlePinch(e)

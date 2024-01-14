@@ -4,7 +4,7 @@ import {Point} from "./shared/point.ts";
 
 
 class DotsAndBoxesElement extends HTMLElement {
-    static observedAttributes = ["color", "border", "code", "width", "height", 'debug', 'controls'];
+    static observedAttributes = ["color", "border", "code", "width", "height", 'debug', 'controls', 'autoplay'];
     dotsAndBoxes!: DotsAndBoxes
     code: string = ''
     color: string = 'whitesmoke'
@@ -13,6 +13,7 @@ class DotsAndBoxesElement extends HTMLElement {
     defaultWidth: number = 100
     defaultHeight: number = 100
     showControls = false;
+    autoplay = false;
 
     constructor() {
         super();
@@ -132,6 +133,12 @@ class DotsAndBoxesElement extends HTMLElement {
                 this.showControls = newValue != null
                 if (this.dotsAndBoxes) {
                     this.updateControls()
+                }
+                break;
+            case 'autoplay':
+                this.autoplay = newValue != null
+                if (this.dotsAndBoxes) {
+                    this.dotsAndBoxes.autoplay = this.autoplay
                 }
                 break;
             case 'debug':
