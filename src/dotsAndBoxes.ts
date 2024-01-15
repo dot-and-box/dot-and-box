@@ -91,7 +91,7 @@ export class DotsAndBoxes {
         this.addCanvasEvent('touchend', (e: any) => this.handleTouch(e, this.onPointerUp))
         this.addCanvasEvent('mousemove', (e: any) => this.onPointerMove(e))
         this.addCanvasEvent('touchmove', (e: any) => this.handleTouch(e, this.onPointerMove))
-        this.addCanvasEvent('wheel', (e: any) => this.adjustZoom(e.deltaY * SCROLL_SENSITIVITY, 1))
+        this.addCanvasEvent('wheel', (e: any) => this.handleScroll(e))
         this.addDocumentEvent('keydown', (e: any) => this.handleKeyDown(e))
     }
 
@@ -256,6 +256,11 @@ export class DotsAndBoxes {
         } else {
             this.adjustZoom(null, currentDistance / this.initialPinchDistance)
         }
+    }
+
+    private handleScroll(evt: any){
+        evt.preventDefault()
+        this.adjustZoom(evt.deltaY * SCROLL_SENSITIVITY, 1)
     }
 
     private adjustZoom(zoomAmount: any, zoomFactor: any) {
