@@ -10,6 +10,7 @@ import {Move} from "../actions/move.ts";
 import {Swap} from "../actions/swap.ts";
 import {Clone} from "../actions/clone.ts";
 import {Sign} from "../shared/sign.ts";
+import {COLORS} from "../shared/constants.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -89,7 +90,7 @@ export class Parser {
         let at = new Point(0, 0)
         let text = 'dot' + this.model.controls.length
         let id = null
-        let color = 'red'
+        let color = COLORS[this.model.controls.length % COLORS.length]
         while (dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {

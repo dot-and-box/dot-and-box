@@ -14,37 +14,12 @@ test('parser not null', () => {
 test('parser simple', () => {
     let eg1 = ` 
 title: bubble sort
-box:
- text: 'bubble sort'
- id: b1
- color: rgba(137,33,133,0.88)
- at: -180, -120
- size: 260, 80
-dot:
- text: '1'
- color: red
- at: -100, 0
- size: 20
-dot:
- text: '2'
- color: purple
- at: -150, 0
- size: 20
-dot:
- text: '5'
- color: orange
- at: 0, 0
- size: 20
-dot:
- text: '4'
- color: green
- at: -50, 0
- size: 20
-dot:
- text: '3'
- color: blue
- at: 50, 0
- size: 20
+box text: 'bubble sort' id: b1 color: rgba(137,33,133,0.88) at: -180, -120 size: 260, 80
+dot text: '1' color: red at: -100, 0 size: 20
+dot text: '2' color: purple at: -150, 0 size: 20
+dot text: '5' color: orange at: 0, 0 size: 20
+dot text: '4' color: green at: -50, 0 size: 20
+dot text: '3' color: blue at: 50, 0 size: 20
 steps:
 '2' <-> '1'
 '5' <-> '3'
@@ -59,22 +34,9 @@ steps:
 test('parse controls and actions', () => {
     let eg1 = ` 
 title: 'This is string'
-box:
- id: b1
- text: 'box'
- color: rgba(223,123,8,0.68)
- at: -150, 30
- size: (100, 50)
-dot:
- text: '1'
- color: purple
- at: (250, 20)
- size: 55
-dot:
- text: '2'
- color: red
- at: (250, 20)
- size: 55
+box id: b1 text: 'box' color: rgba(223,123,8,0.68) at: -150, 30 size: (100, 50)
+dot text: '1' color: purple at: (250, 20) size: 55
+dot text: '2' color: red at: (250, 20) size: 55
 steps:
 b1 *-> b2
 b1 <-> '1', '2'-> 50, 45

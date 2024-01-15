@@ -8,12 +8,24 @@ export const DEFAULT_FONT_SIZE = 14
 export const TITLE_FONT_SIZE = 22
 export const DEFAULT_BOX_COLOR = "rgba(37,33,133,0.68)"
 export const COLORS: string [] = [
-    "#c20f2f",
-    "#5aaf3a",
-    "#0734a4",
-    "#cb691c",
-    "#3d3633",
-    "#d11ed7"
+    "#F44336",
+    "#E91E63",
+    "#673AB7",
+    "#FFC107",
+    "#3F51B5",
+    "#03A9F4",
+    "#00BCD4",
+    "#009688",
+    "#4CAF50",
+    "#8BC34A",
+    "#CDDC39",
+    "#FF9800",
+    "#FF5722",
+    "#673AB7",
+    "#795548",
+    "#2196F3",
+    "#9E9E9E",
+    "#607D8B",
 ]
 
 export const SIZES: number [] = [
