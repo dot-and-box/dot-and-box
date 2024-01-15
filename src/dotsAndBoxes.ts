@@ -197,9 +197,9 @@ export class DotsAndBoxes {
 
     private getEventLocation(e: any): Point | null {
         if (e.touches && e.touches.length == 1) {
-            return new Point(e.touches[0].clientX - this.marginLeft, e.touches[0].clientY - this.marginTop)
+            return new Point(e.touches[0].clientX + window.scrollX - this.marginLeft, e.touches[0].clientY  + window.scrollY  - this.marginTop)
         } else if (e.clientX && e.clientY) {
-            return new Point(e.clientX - this.marginLeft, e.clientY - this.marginTop)
+            return new Point(e.clientX +  window.scrollX - this.marginLeft, e.clientY + window.scrollY - this.marginTop)
         }
         return null
     }
