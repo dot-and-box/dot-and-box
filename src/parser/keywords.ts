@@ -13,7 +13,10 @@ export class Keywords {
         [TokenType.COLOR.toString(), TokenType.COLOR],
         [TokenType.DATA.toString(), TokenType.DATA],
         [TokenType.STEPS.toString(), TokenType.STEPS],
-    ]);
+        [TokenType.SELECTED.toString(), TokenType.SELECTED],
+    ])
+
+    public static ASSIGN_PROPERTIES = [TokenType.SELECTED,TokenType.TEXT,TokenType.SIZE,TokenType.COLOR]
 
     public static isKeyword(tokenName: string): boolean {
         return this.KEYWORDS_MAP.has(tokenName)

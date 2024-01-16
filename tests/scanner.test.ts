@@ -9,12 +9,13 @@ test('scanner not null', () => {
 test('scanner simple', () => {
     let eg1 = `
     title: this is title
-    box text: router  at: 120, 160  size: 100, 150
+    box text: router at: 120, 160  size: 100, 150
     dot text: '2' color: red at: (250, 20) size: 55
     steps:
     '4' <-> '7'
     '1' <-> '2'
     '3' *-> '12'
+    router <- selected
     '12' -> +(50,-90)
      `
     let p = new Scanner()

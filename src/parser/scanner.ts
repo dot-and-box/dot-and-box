@@ -80,11 +80,16 @@ export class Scanner {
     }
 
     matchSwap(): boolean {
-        if (this.match("-"))
+        if (this.match("-")) {
             if (this.match(">")) {
                 this.addToken(TokenType.SWAP)
                 return true
+            } else {
+                this.addToken(TokenType.ASSIGN)
+                return true
             }
+        }
+
         return false;
     }
 

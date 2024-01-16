@@ -24,7 +24,7 @@ steps:
 '2' <-> '1'
 '5' <-> '3'
 '3' <-> '4'
-                    `
+`
     let p = new Parser()
     const model = p.parse(eg1)
     expect(model).not.eq(null)
@@ -38,8 +38,9 @@ box id: b1 text: 'box' color: rgba(223,123,8,0.68) at: -150, 30 size: (100, 50)
 dot text: '1' color: purple at: (250, 20) size: 55
 dot text: '2' color: red at: (250, 20) size: 55
 steps:
+b1 <- selected: true text: 'zumba'
 b1 *-> b2
-b1 <-> '1', '2'-> 50, 45
+b1 <-> '1', '2'-> -(50, -45)
 '1' <-> b1, '2' -> (67,80)
 '1' -> +(89,90)
 `
@@ -60,11 +61,11 @@ b1 <-> '1', '2'-> 50, 45
     expect(dot.position.x).eq(250)
     expect(dot.position.y).eq(20)
 
-    expect(model.steps.length).eq(4)
-    expect(model.steps[1].actions.length).eq(2)
+    expect(model.steps.length).eq(5)
+    expect(model.steps[2].actions.length).eq(2)
 
-    const moveAction = model.steps[3].actions[0] as Move
+    const moveAction = model.steps[4].actions[0] as Move
     expect(moveAction).not.eq(null)
-    expect(moveAction.end.sign).not.eq(Sign.PLUS)
+    expect(moveAction.end.sign).eq(Sign.PLUS)
 })
 

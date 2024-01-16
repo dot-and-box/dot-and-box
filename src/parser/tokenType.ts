@@ -9,6 +9,8 @@ export enum TokenType {
     LESS_THAN = "<",
     ASTERIX = "*",
     GREATER_THAN = ">",
+    // actions
+    ASSIGN = "<-",
     CLONE = "*->",
     SWAP = "<->",
     MOVE = "->",
@@ -27,5 +29,6 @@ export enum TokenType {
     COLOR = "color",
     DATA = "data",
     BOX = "box",
-    STEPS = "steps"
+    STEPS = "steps",
+    SELECTED  = "selected"
 }

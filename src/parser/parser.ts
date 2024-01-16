@@ -11,6 +11,8 @@ import {Swap} from "../actions/swap.ts";
 import {Clone} from "../actions/clone.ts";
 import {Sign} from "../shared/sign.ts";
 import {COLORS} from "../shared/constants.ts";
+import {Assign} from "../actions/assign.ts";
+import {Keywords} from "./keywords.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -115,11 +117,9 @@ export class Parser {
     }
 
     text(): string {
-
         if (this.peek().type == TokenType.STRING) {
             return this.advance().value;
         }
-
         let result = ''
         while (this.peek().type == TokenType.IDENTIFIER) {
             const token = this.advance();
@@ -163,7 +163,6 @@ export class Parser {
             this.advance()
         }
         token = this.advance()
-
         if (token.type == TokenType.NUMBER) {
             let result = token.value.includes('.') ? parseFloat(token.value) : parseInt(token.value, 10)
             return minus ? -result : result;
@@ -178,7 +177,6 @@ export class Parser {
 
     steps() {
         let step = new Step()
-
         let action = this.action(step);
         while (action != null) {
             step.actions.push(action)
@@ -196,37 +194,65 @@ export class Parser {
     action(step: Step): ActionBase | null {
         if (this.eof())
             return null;
-
-        let token = this.advance()
-        if (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING) {
-            const leftControlId = token.value;
-
-            token = this.peek()
-            switch (token.type) {
-                case TokenType.MOVE:
-                    return this.move(step, leftControlId)
-                case TokenType.SWAP:
-                    return this.swap(step, leftControlId)
-                case TokenType.CLONE:
-                    this.advance()
-                    token = this.peek()
-                    if (token.type == TokenType.IDENTIFIER) {
-                        this.advance()
-                        return new Clone(step, leftControlId, token.value);
-                    }
-                    break;
-
-            }
-        } else {
-            this.error('Expected identifier while handling step')
+        let controlIds = this.controlIds()
+        if (controlIds.length == 0) {
+            this.error('Expected non empty identifier list while handling step')
         }
+        let token = this.peek()
+        switch (token.type) {
+            case TokenType.ASSIGN:
+                return this.assign(step, controlIds)
+            case TokenType.MOVE:
+                return this.move(step, controlIds[0])
+            case TokenType.SWAP:
+                return this.swap(step, controlIds[0])
+            case TokenType.CLONE:
+                this.advance()
+                token = this.peek()
+                if (token.type == TokenType.IDENTIFIER) {
+                    this.advance()
+                    return new Clone(step, controlIds[0], token.value);
+                }
+                break;
+        }
+
         return null;
+    }
+
+    controlIds(): string [] {
+        let controlIds = []
+        let token = this.advance()
+        while (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING) {
+            controlIds.push(token.value)
+            token = this.peek()
+            if (this.match(TokenType.COMMA)) {
+                token = this.peek()
+            } else {
+                break;
+            }
+        }
+        return controlIds;
     }
 
     move(step: Step, leftControlId: string): Move {
         this.advance();
         const point = this.point();
         return new Move(step, leftControlId, point);
+    }
+
+    assign(step: Step, controlIds: string[]): Assign {
+        this.advance()
+        let token = this.peek()
+        let properties: Map<string,any> = new Map()
+
+        while (Keywords.ASSIGN_PROPERTIES.includes(token.type)) {
+            this.advance()
+            properties.set(token.type.toString(), this.peek().value);
+            this.advance()
+            token = this.peek()
+        }
+
+        return new Assign(step, controlIds, properties);
     }
 
     swap(step: Step, leftControlId: string): Swap {

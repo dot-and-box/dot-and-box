@@ -15,13 +15,14 @@
 <body>
 <dots-and-boxes style="margin:20px;height: 400px; width: 800px"  controls code="
     title: bubble sort
-    box text: 'sort numbers with bubble sort' id: b1 color: rgba(137,33,133,0.78) at: -180, -120 size: 260, 80
+    box id: b1  text: 'sort numbers with bubble sort' color: rgba(137,33,133,0.78) at: -180, -120 size: 260, 80
     dot text: '1' at: -100, 0 size: 35
     dot text: '2' at: -150, 0 size: 20
     dot text: '3' at: 0, 0 size: 20
     dot text: '4' at: -50, 0 size: 20
     dot id: p  text: '55' at: 50, 50 size: 20
     steps:
+    b1 <- text: 'Panie Janie'
     p -> (170,150)
     p *-> z1, z1 -> -(400,-100)
     '2' <-> '1'
