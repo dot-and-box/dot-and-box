@@ -225,7 +225,7 @@ export class Parser {
         while (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING) {
             controlIds.push(token.value)
             token = this.peek()
-            if (this.match(TokenType.COMMA)) {
+            if (this.match(TokenType.SEMICOLON)) {
                 token = this.peek()
             } else {
                 break;
@@ -247,7 +247,16 @@ export class Parser {
 
         while (Keywords.ASSIGN_PROPERTIES.includes(token.type)) {
             this.advance()
-            properties.set(token.type.toString(), this.peek().value);
+
+            //TODO - fix this later on scanner level like by adding TRUE terminal ?
+
+            let value = this.peek().value === 'true' ? true : this.peek().value
+            if(value == 'false'){
+                value = false
+            }
+            // end
+
+            properties.set(token.type.toString(), value);
             this.advance()
             token = this.peek()
         }

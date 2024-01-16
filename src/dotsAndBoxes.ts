@@ -129,9 +129,7 @@ export class DotsAndBoxes {
 
     back() {
         this.currentStep.reset()
-
         if (this.currentStep.state == StepState.START) {
-            this.currentStep.actions.forEach(a => a.onPreviousStep())
             if (this.currentStepIndex > 0) {
                 this.currentStepIndex--
                 this.currentStep = this.steps[this.currentStepIndex]

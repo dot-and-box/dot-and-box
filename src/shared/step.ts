@@ -24,6 +24,10 @@ export class Step {
     updateState() {
         if (this.progress == 0) {
             this.state = StepState.START;
+            if (this.progressStep < 0) {
+                this.progressStep = 0
+                this.actions.forEach(a => a.onAfterBackward())
+            }
         } else if (this.progress == 1) {
             this.state = StepState.END;
         } else {
@@ -44,7 +48,7 @@ export class Step {
     }
 
     forward() {
-        this.actions.forEach(a=>a.onBeforeForward());
+        this.actions.forEach(a => a.onBeforeForward());
         this.progressStep = 0.01
     }
 

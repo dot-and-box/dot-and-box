@@ -30,8 +30,8 @@ export class Clone extends ActionBase {
         }
     }
 
-    override onPreviousStep() {
-        super.onPreviousStep();
+    override onAfterBackward() {
+        super.onAfterBackward();
         const index = this.step.model.controls.indexOf(this.right!);
         if (index > -1) {
             this.step.model.controls.splice(index, 1);

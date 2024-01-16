@@ -16,13 +16,13 @@ export class Keywords {
         [TokenType.SELECTED.toString(), TokenType.SELECTED],
     ])
 
-    public static ASSIGN_PROPERTIES = [TokenType.SELECTED,TokenType.TEXT,TokenType.SIZE,TokenType.COLOR]
+    public static ASSIGN_PROPERTIES = [TokenType.SELECTED, TokenType.TEXT]
 
     public static isKeyword(tokenName: string): boolean {
         return this.KEYWORDS_MAP.has(tokenName)
     }
 
-    public static getKeywordByName(tokenName: string): TokenType | undefined{
+    public static getKeywordByName(tokenName: string): TokenType | undefined {
         return this.KEYWORDS_MAP.get(tokenName)
     }
 

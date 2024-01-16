@@ -3,6 +3,7 @@ export enum TokenType {
     PLUS = "+",
     COMMA = ",",
     COLON = ":",
+    SEMICOLON = ";",
     EQUALS = "=",
     LEFT_BRACKET = "(",
     RIGHT_BRACKET = ")",

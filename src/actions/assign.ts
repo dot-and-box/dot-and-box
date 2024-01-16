@@ -7,10 +7,10 @@ export class Assign extends ActionBase {
 
     controls: Control[] = []
     controlIds: string []
-    properties:  Map<string,any>;
+    properties: Map<string, any>;
     changes: Change[] = []
 
-    constructor(step: Step, controlIds: string[], properties: Map<string,any>) {
+    constructor(step: Step, controlIds: string[], properties: Map<string, any>) {
         super(step)
         this.controlIds = controlIds;
         this.properties = properties
@@ -26,19 +26,21 @@ export class Assign extends ActionBase {
                 this.controls.push(foundControl)
             }
         }
+        this.applyChanges()
     }
 
+    // @ts-ignore
     override updateValue(progress: number) {
-        if (progress == 0) {
-            this.revertChanges()
-        } else if (progress == 1) {
-            this.applyChanges()
-        }
     }
 
-    applyChanges(): void{
-        this.controls.forEach((c:any ) => {
-            for (const p of this.properties.keys()){
+    override onAfterBackward() {
+        super.onAfterBackward();
+        this.revertChanges()
+    }
+
+    applyChanges(): void {
+        this.controls.forEach((c: any) => {
+            for (const p of this.properties.keys()) {
                 const oldValue = c[p]
                 const newValue = this.properties.get(p)
                 c[p] = newValue
@@ -50,8 +52,8 @@ export class Assign extends ActionBase {
 
     }
 
-    revertChanges(): void{
-        for (const change of this.changes){
+    revertChanges(): void {
+        for (const change of this.changes) {
             this.controls.forEach((c: any) => c[change.property] = change.oldValue)
         }
         this.changes = []
