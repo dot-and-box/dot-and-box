@@ -10,6 +10,8 @@ export interface Control extends ControlBase {
 
     selected: boolean
 
+    visible: boolean
+
     draw(ctx: CanvasRenderingContext2D): void
 
     hitTest(point: Point): boolean;

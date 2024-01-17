@@ -47,9 +47,6 @@ export class Assign extends ActionBase {
                 this.changes.push(new Change(this.controlIds, p, newValue, oldValue))
             }
         })
-
-        console.log(this.changes)
-
     }
 
     revertChanges(): void {

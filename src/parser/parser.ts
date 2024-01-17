@@ -247,15 +247,18 @@ export class Parser {
 
         while (Keywords.ASSIGN_PROPERTIES.includes(token.type)) {
             this.advance()
-
-            //TODO - fix this later on scanner level like by adding TRUE terminal ?
-
-            let value = this.peek().value === 'true' ? true : this.peek().value
-            if(value == 'false'){
-                value = false
+            const valueToken = this.peek();
+            let value
+            switch(valueToken.type){
+                case TokenType.TRUE:
+                    value = true;
+                    break;
+                case TokenType.FALSE:
+                    value = false;
+                    break;
+                default:
+                    value = valueToken.value
             }
-            // end
-
             properties.set(token.type.toString(), value);
             this.advance()
             token = this.peek()

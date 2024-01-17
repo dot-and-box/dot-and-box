@@ -3,6 +3,8 @@ import {TokenType} from "./tokenType.ts";
 export class Keywords {
     private static KEYWORDS_MAP = new Map<string, TokenType>([
         [TokenType.ID.toString(), TokenType.ID],
+        [TokenType.TRUE.toString(), TokenType.TRUE],
+        [TokenType.FALSE.toString(), TokenType.FALSE],
         [TokenType.DOT.toString(), TokenType.DOT],
         [TokenType.DOTS.toString(), TokenType.DOTS],
         [TokenType.TITLE.toString(), TokenType.TITLE],
@@ -14,6 +16,7 @@ export class Keywords {
         [TokenType.DATA.toString(), TokenType.DATA],
         [TokenType.STEPS.toString(), TokenType.STEPS],
         [TokenType.SELECTED.toString(), TokenType.SELECTED],
+        [TokenType.VISIBLE.toString(), TokenType.VISIBLE]
     ])
 
     public static ASSIGN_PROPERTIES = [TokenType.SELECTED, TokenType.TEXT]

@@ -9,6 +9,8 @@ export class BoxControl implements Control {
     public text: string
     public id: string
     static counter = 1
+    public selected: boolean;
+    public visible: boolean;
 
     constructor(id: string, position: Point, size: Point, color: string, text: string) {
         this.id = id
@@ -17,6 +19,7 @@ export class BoxControl implements Control {
         this.color = color
         this.text = text
         this.selected = false
+        this.visible = true;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -38,8 +41,6 @@ export class BoxControl implements Control {
         ctx.fillStyle = this.color != "white" ? "white" : 'black'
         ctx.fillText(this.text, this.position.x + textOffset, this.position.y + this.size.y / 2)
     }
-
-    selected: boolean;
 
     hitTest(point: Point): boolean {
         const x = point.x;

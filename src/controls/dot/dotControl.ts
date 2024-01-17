@@ -7,9 +7,9 @@ export class DotControl implements Control {
     public color: string
     public size: number
     public text: string
-    public selected: boolean;
     public id: string;
-
+    public selected: boolean;
+    public visible: boolean;
 
     constructor(id: string, position: Point, size: number, color: string, text: string) {
         this.id = id;
@@ -18,6 +18,7 @@ export class DotControl implements Control {
         this.size = size
         this.text = text
         this.selected = false
+        this.visible = true
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

@@ -20,6 +20,8 @@ export enum TokenType {
     NUMBER = "NUMBER",
     STRING = "STRING",
     // keywords
+    TRUE = "true",
+    FALSE = "false",
     ID = "id",
     TITLE = "title",
     TEXT = "text",
@@ -31,5 +33,6 @@ export enum TokenType {
     DATA = "data",
     BOX = "box",
     STEPS = "steps",
-    SELECTED  = "selected"
+    SELECTED  = "selected",
+    VISIBLE  = "visible"
 }

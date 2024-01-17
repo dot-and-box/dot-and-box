@@ -162,7 +162,9 @@ export class DotsAndBoxes {
             this.updateActions();
         }
         for (const control of this.controls) {
-            control.draw(this.ctx)
+            if (control.visible) {
+                control.draw(this.ctx)
+            }
         }
         requestAnimationFrame(() => this.draw())
     }
@@ -195,9 +197,9 @@ export class DotsAndBoxes {
 
     private getEventLocation(e: any): Point | null {
         if (e.touches && e.touches.length == 1) {
-            return new Point(e.touches[0].clientX + window.scrollX - this.marginLeft, e.touches[0].clientY  + window.scrollY  - this.marginTop)
+            return new Point(e.touches[0].clientX + window.scrollX - this.marginLeft, e.touches[0].clientY + window.scrollY - this.marginTop)
         } else if (e.clientX && e.clientY) {
-            return new Point(e.clientX +  window.scrollX - this.marginLeft, e.clientY + window.scrollY - this.marginTop)
+            return new Point(e.clientX + window.scrollX - this.marginLeft, e.clientY + window.scrollY - this.marginTop)
         }
         return null
     }
@@ -256,7 +258,7 @@ export class DotsAndBoxes {
         }
     }
 
-    private handleScroll(evt: any){
+    private handleScroll(evt: any) {
         evt.preventDefault()
         this.adjustZoom(evt.deltaY * SCROLL_SENSITIVITY, 1)
     }
