@@ -85,7 +85,10 @@ export class DotsAndBoxes {
     }
 
     private attachCanvasEventHandlers() {
-        this.addCanvasEvent('mousedown', (e: any) => this.onPointerDown(e))
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (!isMobile) {
+            this.addCanvasEvent('mousedown', (e: any) => this.onPointerDown(e))
+        }
         this.addCanvasEvent('touchstart', (e: any) => this.handleTouch(e, this.onPointerDown))
         this.addCanvasEvent('mouseup', (_: any) => this.onPointerUp())
         this.addCanvasEvent('touchend', (e: any) => this.handleTouch(e, this.onPointerUp))
@@ -210,6 +213,8 @@ export class DotsAndBoxes {
     }
 
     private onPointerDown(e: MouseEvent) {
+        e.preventDefault()
+
         this.isDragging = true
         let clientPoint = this.getEventLocation(e)
         if (clientPoint == null)
@@ -228,6 +233,8 @@ export class DotsAndBoxes {
     }
 
     private onPointerMove(e: any) {
+        e.preventDefault()
+
         if (this.isDragging) {
             let clientPoint = this.getEventLocation(e)!
             this.tool.move(new Point(
@@ -238,16 +245,16 @@ export class DotsAndBoxes {
     }
 
     private handleTouch(e: any, singleTouchHandler: any) {
+        e.preventDefault()
         if (e.touches.length == 1) {
             singleTouchHandler.call(this, e)
-        } else if (e.type == "touchmove" && e.touches.length == 2) {
+        } else if (e.type == "touchmove" && e.touches.length > 1) {
             this.isDragging = false
             this.handlePinch(e)
         }
     }
 
     private handlePinch(e: any) {
-        e.preventDefault()
         const t1 = {
             x: e.touches[0].clientX + window.scrollX - this.marginLeft as number,
             y: e.touches[0].clientY + window.scrollY - this.marginTop as number
@@ -256,8 +263,9 @@ export class DotsAndBoxes {
             x: e.touches[1].clientX + window.scrollX - this.marginLeft as number,
             y: e.touches[1].clientY + window.scrollY - this.marginTop as number
         }
+
         const currentDistance = (t1.x - t2.x) ** 2 + (t1.y - t2.y) ** 2
-        if (this.initialPinchDistance == null) {
+        if (this.initialPinchDistance == 0) {
             this.initialPinchDistance = currentDistance
         } else {
             this.adjustZoom(null, currentDistance / this.initialPinchDistance)
