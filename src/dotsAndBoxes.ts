@@ -248,9 +248,15 @@ export class DotsAndBoxes {
 
     private handlePinch(e: any) {
         e.preventDefault()
-        let touch1 = {x: e.touches[0].clientX as number, y: e.touches[0].clientY as number}
-        let touch2 = {x: e.touches[1].clientX as number, y: e.touches[1].clientY as number}
-        let currentDistance = (touch1.x - touch2.x) ** 2 + (touch1.y - touch2.y) ** 2
+        const t1 = {
+            x: e.touches[0].clientX + window.scrollX - this.marginLeft as number,
+            y: e.touches[0].clientY + window.scrollY - this.marginTop as number
+        }
+        const t2 = {
+            x: e.touches[1].clientX + window.scrollX - this.marginLeft as number,
+            y: e.touches[1].clientY + window.scrollY - this.marginTop as number
+        }
+        const currentDistance = (t1.x - t2.x) ** 2 + (t1.y - t2.y) ** 2
         if (this.initialPinchDistance == null) {
             this.initialPinchDistance = currentDistance
         } else {
