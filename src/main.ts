@@ -44,10 +44,20 @@ class DotsAndBoxesElement extends HTMLElement {
         #controls-menu {
           position: relative;   
           height: 30px;
-          left: 2px;       
-          top: -28px;
+          left: 0px;       
+          top: -34px;
+          background-color: rgba(243,243,243,0.7);
           display: ${this.showControls ? 'block' : 'none'};
-        }
+        }        
+        #controls-menu button {
+         color:  rgba(43,43,43,0.8);
+         background-color: transparent;
+         height: 28px;
+         margin-left: 2px;
+         margin-right: 2px;
+         border: none;
+           border: solid 1px transparent;
+        }      
       </style>
       <div>
         <canvas id="canvas"></canvas>
