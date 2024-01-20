@@ -15,7 +15,7 @@ class DotsAndBoxesElement extends HTMLElement {
     defaultHeight: number = 100
     showControls = false;
     autoplay = false;
-    canvas: HTMLCanvasElement
+    canvas!: HTMLCanvasElement
 
     constructor() {
         super();
@@ -26,7 +26,7 @@ class DotsAndBoxesElement extends HTMLElement {
             this.updateCanvasStyle(this.canvas)
             this.applyCode()
             this.dotsAndBoxes.showDebug = this.debug
-            this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop), this.color)
+            this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop))
             this.dotsAndBoxes.draw()
         }
     }
@@ -123,7 +123,7 @@ class DotsAndBoxesElement extends HTMLElement {
     resize() {
         if (this.canvas) {
             this.updateCanvasStyle(this.canvas)
-            this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop), this.color)
+            this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop))
         }
     }
 

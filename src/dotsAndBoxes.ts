@@ -73,7 +73,7 @@ export class DotsAndBoxes {
         this.attachCanvasEventHandlers()
     }
 
-    public updatePositionAndSize(offset: Point, color: string) {
+    public updatePositionAndSize(offset: Point) {
         const style = getComputedStyle(this.canvas);
         this._width = parseInt(style.width, 10)
         this._height = parseInt(style.height, 10)
