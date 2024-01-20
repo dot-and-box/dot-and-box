@@ -43,16 +43,17 @@ class DotsAndBoxesElement extends HTMLElement {
         :host { display: block; padding: 0;border: ${this.border};}
         #controls-menu {
           position: relative;   
-          height: 30px;
+          height: 40px;
           left: 0px;       
-          top: -34px;
+          top: -44px;
           background-color: rgba(243,243,243,0.7);
           display: ${this.showControls ? 'block' : 'none'};
         }        
         #controls-menu button {
          color:  rgba(43,43,43,0.8);
          background-color: transparent;
-         height: 28px;
+         height: 38px;
+         width: 30px;
          margin-left: 2px;
          margin-right: 2px;
          border: none;
