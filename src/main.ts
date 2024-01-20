@@ -4,6 +4,7 @@ import {Point} from "./shared/point.ts";
 
 
 class DotsAndBoxesElement extends HTMLElement {
+    public static readonly ELEM_NAME: string = "dots-and-boxes";
     static observedAttributes = ["style", "color", "border", "code", "width", "height", 'debug', 'controls', 'autoplay'];
     dotsAndBoxes!: DotsAndBoxes
     code: string = ''
@@ -25,7 +26,7 @@ class DotsAndBoxesElement extends HTMLElement {
             this.updateCanvasStyle(this.canvas)
             this.applyCode()
             this.dotsAndBoxes.showDebug = this.debug
-            this.dotsAndBoxes.updateCanvasPositionAndSize(new Point(this.offsetLeft, this.offsetTop), this.color)
+            this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop), this.color)
             this.dotsAndBoxes.draw()
         }
     }
@@ -92,7 +93,6 @@ class DotsAndBoxesElement extends HTMLElement {
         forward.append('▶')
         menu.append(forward)
 
-
         const panZoomTool = document.createElement("button");
         panZoomTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.PAN_ZOOM_TOOL)
         panZoomTool.append('☩')
@@ -110,8 +110,10 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     resize() {
-        this.updateCanvasStyle(this.canvas)
-        this.dotsAndBoxes.updateCanvasPositionAndSize(new Point(this.offsetLeft, this.offsetTop), this.color)
+        if (this.canvas) {
+            this.updateCanvasStyle(this.canvas)
+            this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop), this.color)
+        }
     }
 
     disconnectedCallback() {
@@ -164,4 +166,4 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 }
 
-customElements.define("dots-and-boxes", DotsAndBoxesElement);
+customElements.define(DotsAndBoxesElement.ELEM_NAME, DotsAndBoxesElement);

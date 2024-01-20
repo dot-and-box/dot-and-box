@@ -73,8 +73,7 @@ export class DotsAndBoxes {
         this.attachCanvasEventHandlers()
     }
 
-    public updateCanvasPositionAndSize(offset: Point, color: string) {
-        this.canvas.style.background = color;
+    public updatePositionAndSize(offset: Point, color: string) {
         const style = getComputedStyle(this.canvas);
         this._width = parseInt(style.width, 10)
         this._height = parseInt(style.height, 10)
@@ -129,7 +128,6 @@ export class DotsAndBoxes {
         this.currentStep.forward()
     }
 
-
     back() {
         this.currentStep.reset()
         if (this.currentStep.state == StepState.START) {
@@ -160,7 +158,6 @@ export class DotsAndBoxes {
         this.ctx.translate(this.origin.x, this.origin.y)
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
-
         if (this.currentStep && !this.currentStep.pause) {
             this.updateActions();
         }
@@ -172,14 +169,12 @@ export class DotsAndBoxes {
         requestAnimationFrame(() => this.draw())
     }
 
-
     private updateActions() {
         this.currentStep.progress += this.currentStep.progressStep
         if (this.currentStep.progress <= 0 || this.currentStep.progress >= 1) {
             this.currentStep.progress = this.currentStep.progress <= 0 ? 0 : 1
         }
         this.currentStepProgress = this.currentStep.progress
-
         if (this.currentStep.state == StepState.IN_PROGRESS) {
             for (const action of this.currentStep.actions) {
                 this.handleAction(action)
@@ -263,7 +258,6 @@ export class DotsAndBoxes {
             x: e.touches[1].clientX + window.scrollX - this.marginLeft as number,
             y: e.touches[1].clientY + window.scrollY - this.marginTop as number
         }
-
         const currentDistance = (t1.x - t2.x) ** 2 + (t1.y - t2.y) ** 2
         if (this.initialPinchDistance == 0) {
             this.initialPinchDistance = currentDistance
