@@ -4,7 +4,7 @@ import {Point} from "./shared/point.ts";
 
 
 class DotsAndBoxesElement extends HTMLElement {
-    static observedAttributes = ["color", "border", "code", "width", "height", 'debug', 'controls', 'autoplay'];
+    static observedAttributes = ["style", "color", "border", "code", "width", "height", 'debug', 'controls', 'autoplay'];
     dotsAndBoxes!: DotsAndBoxes
     code: string = ''
     color: string = 'rgb(246, 246, 246)'
@@ -14,6 +14,7 @@ class DotsAndBoxesElement extends HTMLElement {
     defaultHeight: number = 100
     showControls = false;
     autoplay = false;
+    canvas: HTMLCanvasElement
 
     constructor() {
         super();
@@ -21,6 +22,7 @@ class DotsAndBoxesElement extends HTMLElement {
 
     reset() {
         if (this.code && this.dotsAndBoxes) {
+            this.updateCanvasStyle(this.canvas)
             this.applyCode()
             this.dotsAndBoxes.showDebug = this.debug
             this.dotsAndBoxes.updateCanvasPositionAndSize(new Point(this.offsetLeft, this.offsetTop), this.color)
@@ -52,12 +54,16 @@ class DotsAndBoxesElement extends HTMLElement {
       </div>
     `;
         this.buildControls(shadow.getElementById('controls-menu') as HTMLElement)
-        this.dotsAndBoxes = new DotsAndBoxes(this.buildCanvas(shadow));
+        this.canvas = this.getCanvas(shadow);
+        this.dotsAndBoxes = new DotsAndBoxes(this.canvas);
         this.reset()
     }
 
-    buildCanvas(shadow: ShadowRoot): HTMLCanvasElement{
-        const canvas = shadow.getElementById('canvas') as HTMLCanvasElement
+    getCanvas(shadow: ShadowRoot): HTMLCanvasElement {
+        return shadow.getElementById('canvas') as HTMLCanvasElement
+    }
+
+    updateCanvasStyle(canvas: HTMLCanvasElement): void {
         canvas.width = this.offsetWidth ? this.offsetWidth - 2 : this.defaultWidth
         canvas.height = this.offsetHeight ? this.offsetHeight - 2 : this.defaultHeight
         canvas.style.background = this.color
@@ -65,14 +71,12 @@ class DotsAndBoxesElement extends HTMLElement {
         canvas.style.margin = '0'
         canvas.style.overflow = 'hidden'
         canvas.style.userSelect = 'none'
-        return canvas
     }
 
-    updateControls(){
-        const controlsMenu =this.shadowRoot!.getElementById('controls-menu') as HTMLElement;
+    updateControls() {
+        const controlsMenu = this.shadowRoot!.getElementById('controls-menu') as HTMLElement;
         controlsMenu.style.display = this.showControls ? 'block' : 'none'
     }
-
 
     buildControls(menu: HTMLElement) {
         const backward = document.createElement("button");
@@ -99,12 +103,15 @@ class DotsAndBoxesElement extends HTMLElement {
         dotTool.append('❍')
         menu.append(dotTool)
 
-
         const boxTool = document.createElement("button");
         boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
         boxTool.append('◻')
         menu.append(boxTool)
+    }
 
+    resize() {
+        this.updateCanvasStyle(this.canvas)
+        this.dotsAndBoxes.updateCanvasPositionAndSize(new Point(this.offsetLeft, this.offsetTop), this.color)
     }
 
     disconnectedCallback() {
@@ -117,6 +124,9 @@ class DotsAndBoxesElement extends HTMLElement {
 
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
         switch (name) {
+            case 'style':
+                this.resize()
+                break;
             case 'code':
                 this.code = newValue
                 if (this.dotsAndBoxes) {
