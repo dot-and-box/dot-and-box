@@ -92,7 +92,7 @@ class DotsAndBoxesElement extends HTMLElement {
 
     buildControls(menu: HTMLElement) {
         const backward = document.createElement("button");
-        backward.onclick = (_) => this.dotsAndBoxes.back()
+        backward.onclick = (_) => this.dotsAndBoxes.backward()
         backward.textContent = '◀'
         menu.append(backward)
         const pause = document.createElement("button");

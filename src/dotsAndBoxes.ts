@@ -21,7 +21,8 @@ export class DotsAndBoxes {
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
     private fps = 1
-    private last_time: any = 0
+    private lastTime: any = 0
+    private stepStartTime: number = 0;
     public controls: Control[] = []
     public origin: Point = Point.zero()
     public offset: Point = Point.zero()
@@ -36,7 +37,7 @@ export class DotsAndBoxes {
     public readonly BOX_TOOL: string = "box-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private tool: Tool = new PanZoomTool(this)
-    private easingFunc: (step: number, duration: number) => number = this.easeLinear;
+    private easingFunc: (step: number, duration: number) => number = this.easeInQuad;
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
@@ -102,7 +103,7 @@ export class DotsAndBoxes {
 
     private handleKeyDown(k: KeyboardEvent) {
         if (k.key === "ArrowLeft") {
-            this.back()
+            this.backward()
         } else if (k.key === "ArrowRight") {
             this.forward()
         }
@@ -123,6 +124,7 @@ export class DotsAndBoxes {
     }
 
     forward() {
+        this.stepStartTime = this.lastTime
         this.currentStep.reset()
         if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
             this.currentStepIndex++
@@ -131,7 +133,8 @@ export class DotsAndBoxes {
         this.currentStep.forward()
     }
 
-    back() {
+    backward() {
+        this.stepStartTime = this.lastTime
         this.currentStep.reset()
         if (this.currentStep.state == StepState.START) {
             if (this.currentStepIndex > 0) {
@@ -143,12 +146,16 @@ export class DotsAndBoxes {
     }
 
     drawDebug(time: number) {
-        this.fps = 1 / ((time - this.last_time) / 1000);
+        this.fps = 1 / ((time - this.lastTime) / 1000);
         this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this.currentStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
     }
 
     easeLinear(step: number, duration: number): number {
         return step / duration;
+    }
+
+    easeInQuad(step: number, duration: number) {
+        return (step /= duration) * step;
     }
 
     public draw(time: number) {
@@ -171,12 +178,16 @@ export class DotsAndBoxes {
                 control.draw(this.ctx)
             }
         }
-        this.last_time = time
+        this.lastTime = time
         requestAnimationFrame((evt) => this.draw(evt))
     }
 
     private updateActions() {
-        this.currentStep.progress += this.currentStep.direction
+        if (this.currentStep.direction == StepDirection.FORWARD) {
+            this.currentStep.progress = this.easingFunc(this.lastTime - this.stepStartTime, this.currentStep.duration)
+        } else if (this.currentStep.direction == StepDirection.BACKWARD) {
+            this.currentStep.progress = 1 - this.easingFunc(this.lastTime - this.stepStartTime, this.currentStep.duration)
+        }
         if (this.currentStep.progress <= 0 || this.currentStep.progress >= 1) {
             this.currentStep.progress = this.currentStep.progress <= 0 ? 0 : 1
         }
