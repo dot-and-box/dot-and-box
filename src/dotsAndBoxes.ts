@@ -1,6 +1,6 @@
 import {Point} from "./shared/point.ts";
 import {Tool} from "./shared/tool.ts";
-import {DotsAndBoxesModel, Step, StepState} from "./shared/step.ts";
+import {DotsAndBoxesModel, Step} from "./shared/step.ts";
 import {DEFAULT_FONT, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, TITLE_FONT_SIZE} from "./shared/constants.ts";
 import {DotTool} from "./controls/dot/dotTool.ts";
 import {EmptyTool} from "./shared/emptyTool.ts";
@@ -8,6 +8,8 @@ import {PanZoomTool} from "./panzoom/panZoomTool.ts";
 import {BoxTool} from "./controls/box/boxTool.ts";
 import {ActionBase} from "./shared/actionBase.ts";
 import {Control} from "./controls/control.ts";
+import {StepState} from "./shared/stepState.ts";
+import {StepDirection} from "./shared/stepDirection.ts";
 
 export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
@@ -19,7 +21,7 @@ export class DotsAndBoxes {
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
     private fps = 1
-    private last_time: number = 0
+    private last_time: any = 0
     public controls: Control[] = []
     public origin: Point = Point.zero()
     public offset: Point = Point.zero()
@@ -34,6 +36,7 @@ export class DotsAndBoxes {
     public readonly BOX_TOOL: string = "box-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private tool: Tool = new PanZoomTool(this)
+    private easingFunc: (step: number, duration: number) => number = this.easeLinear;
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
@@ -139,18 +142,20 @@ export class DotsAndBoxes {
         this.currentStep.back()
     }
 
-    drawDebug() {
-        const time = performance.now()
-        this.fps = 1 / ((performance.now() - this.last_time) / 1000);
-        this.last_time = time
+    drawDebug(time: number) {
+        this.fps = 1 / ((time - this.last_time) / 1000);
         this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this.currentStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
     }
 
-    public draw() {
+    easeLinear(step: number, duration: number): number {
+        return step / duration;
+    }
+
+    public draw(time: number) {
         this.canvas.width = this._width
         this.canvas.height = this._height
         if (this.showDebug) {
-            this.drawDebug()
+            this.drawDebug(time)
         }
         if (this.title) {
             this.drawText(this.title, 20, 30, TITLE_FONT_SIZE, DEFAULT_FONT)
@@ -166,11 +171,12 @@ export class DotsAndBoxes {
                 control.draw(this.ctx)
             }
         }
-        requestAnimationFrame(() => this.draw())
+        this.last_time = time
+        requestAnimationFrame((evt) => this.draw(evt))
     }
 
     private updateActions() {
-        this.currentStep.progress += this.currentStep.progressStep
+        this.currentStep.progress += this.currentStep.direction
         if (this.currentStep.progress <= 0 || this.currentStep.progress >= 1) {
             this.currentStep.progress = this.currentStep.progress <= 0 ? 0 : 1
         }
@@ -187,7 +193,7 @@ export class DotsAndBoxes {
     }
 
     private handleAction(action: ActionBase) {
-        if (this.currentStep.progressStep == 0)
+        if (this.currentStep.direction == StepDirection.NONE)
             return
 
         action.updateValue(this.currentStep.progress)

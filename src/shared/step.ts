@@ -1,5 +1,7 @@
 import {ActionBase} from "./actionBase.ts";
 import {Control} from "../controls/control.ts";
+import {StepState} from "./stepState.ts";
+import {StepDirection} from "./stepDirection.ts";
 
 export class DotsAndBoxesModel {
     title: string
@@ -17,15 +19,15 @@ export class Step {
     actions: ActionBase[];
     model!: { controls: Control[] }
     public _pause = false;
-    public progressStep = 0.0;
+    public direction = StepDirection.NONE;
     public progress = 0.0;
     public state: StepState = StepState.START
 
     updateState() {
         if (this.progress == 0) {
             this.state = StepState.START;
-            if (this.progressStep < 0) {
-                this.progressStep = 0
+            if (this.direction == StepDirection.BACKWARD) {
+                this.direction = StepDirection.NONE
                 this.actions.forEach(a => a.onAfterBackward())
             }
         } else if (this.progress == 1) {
@@ -49,11 +51,11 @@ export class Step {
 
     forward() {
         this.actions.forEach(a => a.onBeforeForward());
-        this.progressStep = 0.01
+        this.direction = StepDirection.FORWARD
     }
 
     back() {
-        this.progressStep = -0.01
+        this.direction = StepDirection.BACKWARD
     }
 
     get pause(): boolean {
@@ -65,16 +67,11 @@ export class Step {
     }
 
     togglePause() {
-        if (this.progressStep != 0 && this.actions.length > 0) {
+        if (this.direction != StepDirection.NONE && this.actions.length > 0) {
             this._pause = !this._pause;
         }
     }
 }
 
-export enum StepState {
-    START,
-    IN_PROGRESS,
-    END
-}
 
 

@@ -1,7 +1,8 @@
 import {ActionBase} from "../shared/actionBase.ts";
-import {Step, StepState} from "../shared/step.ts";
+import {Step} from "../shared/step.ts";
 import {Control} from "../controls/control.ts";
 import {Change} from "../shared/change.ts";
+import {StepState} from "../shared/stepState.ts";
 
 export class Assign extends ActionBase {
 

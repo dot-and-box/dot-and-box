@@ -27,7 +27,7 @@ class DotsAndBoxesElement extends HTMLElement {
             this.applyCode()
             this.dotsAndBoxes.showDebug = this.debug
             this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop))
-            this.dotsAndBoxes.draw()
+            this.dotsAndBoxes.draw(0)
         }
     }
 

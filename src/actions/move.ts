@@ -1,9 +1,10 @@
 import {ActionBase} from "../shared/actionBase.ts";
 import {Point} from "../shared/point.ts";
-import {Step, StepState} from "../shared/step.ts";
+import {Step} from "../shared/step.ts";
 import {Control} from "../controls/control.ts";
 import {DummyControl} from "../controls/dummy/dummyControl.ts";
 import {Sign} from "../shared/sign.ts";
+import {StepState} from "../shared/stepState.ts";
 
 export class Move extends ActionBase {
     start: Point;

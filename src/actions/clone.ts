@@ -1,7 +1,8 @@
 import {ActionBase} from "../shared/actionBase.ts";
-import {Step, StepState} from "../shared/step.ts";
+import {Step} from "../shared/step.ts";
 import {Control} from "../controls/control.ts";
 import {DummyControl} from "../controls/dummy/dummyControl.ts";
+import {StepState} from "../shared/stepState.ts";
 
 export class Clone extends ActionBase {
     left: Control = new DummyControl()
