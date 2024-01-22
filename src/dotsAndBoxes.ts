@@ -125,7 +125,7 @@ export class DotsAndBoxes {
 
     forward() {
         this.stepStartTime = this.lastTime
-        this.currentStep.reset()
+        this.currentStep.unpause()
         if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
             this.currentStepIndex++
             this.currentStep = this.steps[this.currentStepIndex]
@@ -135,7 +135,7 @@ export class DotsAndBoxes {
 
     backward() {
         this.stepStartTime = this.lastTime
-        this.currentStep.reset()
+        this.currentStep.unpause()
         if (this.currentStep.state == StepState.START) {
             if (this.currentStepIndex > 0) {
                 this.currentStepIndex--
@@ -170,7 +170,7 @@ export class DotsAndBoxes {
         this.ctx.translate(this.origin.x, this.origin.y)
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
-        if (this.currentStep && !this.currentStep.pause) {
+        if (this.currentStep && this.currentStep.state != StepState.STOPPED) {
             this.updateActions();
         }
         for (const control of this.controls) {
