@@ -21,7 +21,7 @@ export class Step {
     public direction = StepDirection.NONE;
     public progress = 0.0;
     public state: StepState = StepState.START
-    public duration: number = 600;
+    public duration: number = 3600;
 
 
     updateState() {

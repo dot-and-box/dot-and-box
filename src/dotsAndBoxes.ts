@@ -23,6 +23,7 @@ export class DotsAndBoxes {
     private fps = 1
     private lastTime: any = 0
     private stepStartTime: number = 0;
+    private stepStopTime: number = 0;
     public controls: Control[] = []
     public origin: Point = Point.zero()
     public offset: Point = Point.zero()
@@ -37,7 +38,7 @@ export class DotsAndBoxes {
     public readonly BOX_TOOL: string = "box-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private tool: Tool = new PanZoomTool(this)
-    private easingFunc: (step: number, duration: number) => number = this.easeInQuad;
+    private easingFunc: (step: number, duration: number) => number = this.my;
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
@@ -124,7 +125,7 @@ export class DotsAndBoxes {
     }
 
     forward() {
-        this.stepStartTime = this.lastTime
+        this.updateStartTime()
         this.currentStep.unpause()
         if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
             this.currentStepIndex++
@@ -133,8 +134,17 @@ export class DotsAndBoxes {
         this.currentStep.forward()
     }
 
+    updateStartTime(){
+        if (this.stepStopTime > 0) {
+            this.stepStartTime = this.lastTime - (this.stepStopTime - this.stepStartTime)
+            this.stepStopTime = 0
+        } else {
+            this.stepStartTime = this.lastTime
+        }
+    }
+
     backward() {
-        this.stepStartTime = this.lastTime
+        this.updateStartTime()
         this.currentStep.unpause()
         if (this.currentStep.state == StepState.START) {
             if (this.currentStepIndex > 0) {
@@ -156,6 +166,13 @@ export class DotsAndBoxes {
 
     easeInQuad(step: number, duration: number) {
         return (step /= duration) * step;
+    }
+
+
+    my(step: number, duration: number) {
+        return step < duration * 0.5
+            ? step / duration
+            : (step /= duration * 0.70) * step;
     }
 
     public draw(time: number) {
@@ -301,8 +318,9 @@ export class DotsAndBoxes {
     }
 
     togglePause() {
-        if (this.currentStep) {
-            this.currentStep.togglePause()
+        this.currentStep.togglePause()
+        if (this.currentStep.state == StepState.STOPPED) {
+            this.stepStopTime = this.lastTime
         }
     }
 }
