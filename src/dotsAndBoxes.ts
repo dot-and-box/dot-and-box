@@ -206,7 +206,7 @@ export class DotsAndBoxes {
         if (this.currentStep && this.currentStep.direction != StepDirection.NONE && this.currentStep.state != StepState.STOPPED) {
             this.updateProgress()
         }
-        this.updateActions();
+        this.handleStepChange();
         for (const control of this.controls) {
             if (control.visible) {
                 control.draw(this.ctx)
@@ -218,16 +218,16 @@ export class DotsAndBoxes {
 
     updateProgress() {
         if (this.currentStep.direction == StepDirection.FORWARD) {
-            this._requestedStepProgress = this.easingFunc(this.lastTime - this.stepStartTime, this.currentStep.duration)
+            this._requestedStepProgress =  this.easingFunc(this.lastTime - this.stepStartTime, this.currentStep.duration)
         } else if (this.currentStep.direction == StepDirection.BACKWARD) {
             this._requestedStepProgress = this.easingFunc(this.currentStep.duration - (this.lastTime - this.stepStartTime), this.currentStep.duration)
         }
-        if (this._requestedStepProgress < 0 || this._requestedStepProgress > 1) {
-            this._requestedStepProgress = this._requestedStepProgress <= 0 ? 0 : 1
+        if (this._requestedStepProgress <= 0.001 || this._requestedStepProgress > 1) {
+            this._requestedStepProgress = this._requestedStepProgress <= 0.001 ? 0 : 1
         }
     }
 
-    private updateActions() {
+    private handleStepChange() {
         if (this.currentStep.progress != this._requestedStepProgress) {
             this.currentStep.progress = this._requestedStepProgress
             for (const action of this.currentStep.actions) {
@@ -339,7 +339,6 @@ export class DotsAndBoxes {
         if (this.currentStep.state == StepState.STOPPED) {
             this.stepStopTime = this.lastTime
         }
-        console.log(this.currentStep.state)
     }
 }
 

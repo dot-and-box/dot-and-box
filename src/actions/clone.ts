@@ -28,7 +28,7 @@ export class Clone extends ActionBase {
 
     override onBeforeForward() {
         super.onBeforeForward();
-        if (this.step && !this.isAdded && this.step.state == StepState.START) {
+        if (!this.isAdded && this.step.state == StepState.START) {
             this.right = this.left.clone()
             this.right.id = this.rightControlId
             this.step.controls.push(this.right);

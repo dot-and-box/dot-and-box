@@ -20,6 +20,7 @@ export class Move extends ActionBase {
         this.leftId = leftId;
     }
 
+    //TODO: refactor onInit and onBeforeStep to support moving cloned controls
     override init() {
         super.init();
         const foundControl = this.step.controls.find(c => c.id == this.leftId)

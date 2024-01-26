@@ -8,7 +8,7 @@ class DotsAndBoxesElement extends HTMLElement {
     static observedAttributes = ["style", "color", "border", "code", "width", "height", 'debug', 'controls', 'autoplay'];
     dotsAndBoxes!: DotsAndBoxes
     code: string = ''
-    color: string = 'rgb(246, 246, 246)'
+    color: string = 'white'
     debug: boolean = false
     border: string = '1px solid #ccc;'
     defaultWidth: number = 100
