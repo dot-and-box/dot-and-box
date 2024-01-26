@@ -2,7 +2,6 @@ import {ActionBase} from "../shared/actionBase.ts";
 import {Step} from "../shared/step.ts";
 import {Control} from "../controls/control.ts";
 import {Change} from "../shared/change.ts";
-import {StepState} from "../shared/stepState.ts";
 
 export class Assign extends ActionBase {
 
@@ -17,16 +16,17 @@ export class Assign extends ActionBase {
         this.properties = properties
     }
 
+    override init() {
+        super.init();
+        this.controls = []
+        const foundControl = this.step.controls.find(c => this.controlIds.includes(c.id))
+        if (foundControl) {
+            this.controls.push(foundControl)
+        }
+    }
+
     override onBeforeForward() {
         super.onBeforeForward();
-
-        if (this.step.state == StepState.START) {
-            this.controls = []
-            const foundControl = this.step.model.controls.find(c => this.controlIds.includes(c.id))
-            if (foundControl) {
-                this.controls.push(foundControl)
-            }
-        }
         this.applyChanges()
     }
 

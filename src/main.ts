@@ -91,6 +91,15 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     buildControls(menu: HTMLElement) {
+        const rangeControl = document.createElement("input");
+        rangeControl.type = "range"
+        rangeControl.min = "0"
+        rangeControl.max = "1"
+        rangeControl.step = "0.01"
+        rangeControl.value = "0"
+        rangeControl.oninput = (e: any) => { this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)}
+        menu.append(rangeControl)
+
         const backward = document.createElement("button");
         backward.onclick = (_) => this.dotsAndBoxes.backward()
         backward.textContent = '◀'

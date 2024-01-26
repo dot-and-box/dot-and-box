@@ -38,7 +38,7 @@ export class DotsAndBoxes {
     public readonly BOX_TOOL: string = "box-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private tool: Tool = new PanZoomTool(this)
-    private easingFunc: (step: number, duration: number) => number = this.my;
+    private easingFunc: (step: number, duration: number) => number = this.easeInQuad;
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
@@ -48,15 +48,25 @@ export class DotsAndBoxes {
     ])
     private steps: Step[] = []
     private currentStepIndex = 0;
-    private currentStepProgress = 0;
-    private currentStep = new Step()
+    private _requestedStepProgress = 0;
+
+    // noinspection JSUnusedGlobalSymbols
+    public get requestedStepProgress(): number {
+        return this._requestedStepProgress
+    }
+
+    public set requestedStepProgress(newVal: number) {
+        this._requestedStepProgress = newVal
+    }
+
+    private currentStep = new Step(this.controls)
 
     public resetModel() {
         this.steps = []
         this.controls = []
         this.title = ''
         this.currentStepIndex = 0;
-        this.currentStep = new Step()
+        this.currentStep = new Step(this.controls)
     }
 
     public apply(model: DotsAndBoxesModel) {
@@ -64,12 +74,10 @@ export class DotsAndBoxes {
         if (model.title) {
             this.title = model.title
         }
-        model.controls.forEach(c => this.controls.push(c))
-        model.steps.forEach(s => {
-            s.init(this)
-            this.steps.push(s);
-        })
-        this.currentStep = this.steps[this.currentStepIndex]
+        this.controls = model.controls
+        this.steps = model.steps
+        this.selectStep(0)
+        this.currentStep.init()
     }
 
     constructor(canvas: HTMLCanvasElement) {
@@ -124,17 +132,7 @@ export class DotsAndBoxes {
         }
     }
 
-    forward() {
-        this.updateStartTime()
-        this.currentStep.unpause()
-        if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
-            this.currentStepIndex++
-            this.currentStep = this.steps[this.currentStepIndex]
-        }
-        this.currentStep.forward()
-    }
-
-    updateStartTime(){
+    updateStartTime() {
         if (this.stepStopTime > 0) {
             this.stepStartTime = this.lastTime - (this.stepStopTime - this.stepStartTime)
             this.stepStopTime = 0
@@ -143,21 +141,45 @@ export class DotsAndBoxes {
         }
     }
 
-    backward() {
-        this.updateStartTime()
-        this.currentStep.unpause()
+    selectStep(index: number) {
+        this.currentStepIndex = index
+        this.currentStep = this.steps[this.currentStepIndex]
+    }
+
+    nextStep() {
+        if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
+            this.selectStep(this.currentStepIndex + 1)
+            this.currentStep.init()
+            this._requestedStepProgress = 0;
+        }
+    }
+
+    previousStep() {
         if (this.currentStep.state == StepState.START) {
             if (this.currentStepIndex > 0) {
-                this.currentStepIndex--
-                this.currentStep = this.steps[this.currentStepIndex]
+                this.selectStep(this.currentStepIndex - 1)
+                this._requestedStepProgress = 1;
             }
         }
-        this.currentStep.back()
+    }
+
+    forward() {
+        this.updateStartTime()
+        this.nextStep()
+        this.currentStep.forward()
+        this.currentStep.unpause()
+    }
+
+    backward() {
+        this.updateStartTime()
+        this.previousStep()
+        this.currentStep.backward()
+        this.currentStep.unpause()
     }
 
     drawDebug(time: number) {
         this.fps = 1 / ((time - this.lastTime) / 1000);
-        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this.currentStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
+        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this._requestedStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
     }
 
     easeLinear(step: number, duration: number): number {
@@ -168,12 +190,6 @@ export class DotsAndBoxes {
         return (step /= duration) * step;
     }
 
-
-    my(step: number, duration: number) {
-        return step < duration * 0.5
-            ? step / duration
-            : (step /= duration * 0.70) * step;
-    }
 
     public draw(time: number) {
         this.canvas.width = this._width
@@ -187,9 +203,10 @@ export class DotsAndBoxes {
         this.ctx.translate(this.origin.x, this.origin.y)
         this.ctx.scale(this.zoom, this.zoom)
         this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
-        if (this.currentStep && this.currentStep.state != StepState.STOPPED) {
-            this.updateActions();
+        if (this.currentStep && this.currentStep.direction != StepDirection.NONE && this.currentStep.state != StepState.STOPPED) {
+            this.updateProgress()
         }
+        this.updateActions();
         for (const control of this.controls) {
             if (control.visible) {
                 control.draw(this.ctx)
@@ -199,31 +216,31 @@ export class DotsAndBoxes {
         requestAnimationFrame((evt) => this.draw(evt))
     }
 
-    private updateActions() {
+    updateProgress() {
         if (this.currentStep.direction == StepDirection.FORWARD) {
-            this.currentStep.progress = this.easingFunc(this.lastTime - this.stepStartTime, this.currentStep.duration)
+            this._requestedStepProgress = this.easingFunc(this.lastTime - this.stepStartTime, this.currentStep.duration)
         } else if (this.currentStep.direction == StepDirection.BACKWARD) {
-            this.currentStep.progress = 1 - this.easingFunc(this.lastTime - this.stepStartTime, this.currentStep.duration)
+            this._requestedStepProgress = this.easingFunc(this.currentStep.duration - (this.lastTime - this.stepStartTime), this.currentStep.duration)
         }
-        if (this.currentStep.progress <= 0 || this.currentStep.progress >= 1) {
-            this.currentStep.progress = this.currentStep.progress <= 0 ? 0 : 1
+        if (this._requestedStepProgress < 0 || this._requestedStepProgress > 1) {
+            this._requestedStepProgress = this._requestedStepProgress <= 0 ? 0 : 1
         }
-        this.currentStepProgress = this.currentStep.progress
-        if (this.currentStep.state == StepState.IN_PROGRESS) {
+    }
+
+    private updateActions() {
+        if (this.currentStep.progress != this._requestedStepProgress) {
+            this.currentStep.progress = this._requestedStepProgress
             for (const action of this.currentStep.actions) {
                 this.handleAction(action)
             }
-        }
-        this.currentStep.updateState()
-        if (this.autoplay && this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
-            this.forward()
+            this.currentStep.updateState()
+            if (this.autoplay && this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
+                this.forward()
+            }
         }
     }
 
     private handleAction(action: ActionBase) {
-        if (this.currentStep.direction == StepDirection.NONE)
-            return
-
         action.updateValue(this.currentStep.progress)
     }
 
@@ -322,6 +339,7 @@ export class DotsAndBoxes {
         if (this.currentStep.state == StepState.STOPPED) {
             this.stepStopTime = this.lastTime
         }
+        console.log(this.currentStep.state)
     }
 }
 

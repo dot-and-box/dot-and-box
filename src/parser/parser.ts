@@ -16,9 +16,13 @@ import {Keywords} from "./keywords.ts";
 
 export class Parser {
     scanner = new Scanner()
-    model = new DotsAndBoxesModel('', [], [])
+    model = Parser.newModel()
     position = 0;
     tokens: Token[] = []
+
+    static newModel(): DotsAndBoxesModel {
+        return new DotsAndBoxesModel('', [], [])
+    }
 
     public eof(): boolean {
         return this.tokens.length <= this.position;
@@ -33,8 +37,8 @@ export class Parser {
     }
 
     public parse(source: string): DotsAndBoxesModel {
+        this.model = Parser.newModel()
         this.tokens = this.scanner.scan(source)
-        this.model.title = ''
         while (this.position < this.tokens.length) {
             const token = this.advance()
             switch (token.type) {
@@ -176,13 +180,13 @@ export class Parser {
     }
 
     steps() {
-        let step = new Step()
+        let step = new Step(this.model.controls)
         let action = this.action(step);
         while (action != null) {
             step.actions.push(action)
             if (!this.match(TokenType.COMMA)) {
                 this.model.steps.push(step)
-                step = new Step()
+                step = new Step(this.model.controls)
             }
             action = this.action(step)
         }

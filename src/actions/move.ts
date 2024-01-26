@@ -4,7 +4,6 @@ import {Step} from "../shared/step.ts";
 import {Control} from "../controls/control.ts";
 import {DummyControl} from "../controls/dummy/dummyControl.ts";
 import {Sign} from "../shared/sign.ts";
-import {StepState} from "../shared/stepState.ts";
 
 export class Move extends ActionBase {
     start: Point;
@@ -21,15 +20,13 @@ export class Move extends ActionBase {
         this.leftId = leftId;
     }
 
-    override onBeforeForward() {
-        super.onBeforeForward();
-        if (this.step.state == StepState.START) {
-            const foundControl = this.step.model.controls.find(c => c.id == this.leftId)
-            if (foundControl) {
-                this.control = foundControl
-                this.start = this.control.position.clone();
-                this.end = this.calculateEnd(this.start, this.to)
-            }
+    override init() {
+        super.init();
+        const foundControl = this.step.controls.find(c => c.id == this.leftId)
+        if (foundControl) {
+            this.control = foundControl
+            this.start = this.control.position.clone();
+            this.end = this.calculateEnd(this.start, this.to)
         }
     }
 

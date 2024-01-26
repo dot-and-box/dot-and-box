@@ -17,12 +17,15 @@ export class DotsAndBoxesModel {
 
 export class Step {
     actions: ActionBase[];
-    model!: { controls: Control[] }
+    controls: Control[];
     public direction = StepDirection.NONE;
     public progress = 0.0;
     public state: StepState = StepState.START
     public duration: number = 3600;
 
+    init() {
+        this.actions.forEach(a => a.init())
+    }
 
     updateState() {
         if (this.progress == 0) {
@@ -41,17 +44,14 @@ export class Step {
         }
     }
 
-    public init(model: { controls: Control[] }) {
-        this.model = model;
-    }
-
     public unpause() {
         if (this.direction != StepDirection.NONE) {
             this.state = StepState.IN_PROGRESS
         }
     }
 
-    constructor() {
+    constructor(controls: Control[]) {
+        this.controls = controls
         this.actions = [];
     }
 
@@ -63,7 +63,7 @@ export class Step {
         }
     }
 
-    back() {
+    backward() {
         if (this.state != StepState.START) {
             this.direction = StepDirection.BACKWARD
             this.state = StepState.IN_PROGRESS

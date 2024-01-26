@@ -21,20 +21,18 @@ export class Swap extends ActionBase {
         this.rightControlId = right;
     }
 
-    override onBeforeForward() {
-        super.onBeforeForward();
-        if (this.step.state == StepState.START) {
-            const foundLeft = this.step.model.controls.find(c => c.id == this.leftControlId)
-            if (foundLeft) {
-                this.left = foundLeft
-            }
-            const foundRight = this.step.model.controls.find(c => c.id == this.rightControlId)
-            if (foundRight) {
-                this.right = foundRight
-            }
-            this.start = this.left.position.clone();
-            this.end = this.right.position.clone();
+    override init() {
+        super.init();
+        const foundLeft = this.step.controls.find(c => c.id == this.leftControlId)
+        if (foundLeft) {
+            this.left = foundLeft
         }
+        const foundRight = this.step.controls.find(c => c.id == this.rightControlId)
+        if (foundRight) {
+            this.right = foundRight
+        }
+        this.start = this.left.position.clone();
+        this.end = this.right.position.clone();
     }
 
     override updateValue(progress: number) {

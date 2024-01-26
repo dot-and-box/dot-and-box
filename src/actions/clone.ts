@@ -18,24 +18,29 @@ export class Clone extends ActionBase {
         this.rightControlId = rightControlId;
     }
 
-    override onBeforeForward() {
-        const foundLeft = this.step.model.controls.find(c => c.id == this.leftControlId)
+    override init() {
+        super.init()
+        const foundLeft = this.step.controls.find(c => c.id == this.leftControlId)
         if (foundLeft) {
             this.left = foundLeft
         }
+    }
+
+    override onBeforeForward() {
+        super.onBeforeForward();
         if (this.step && !this.isAdded && this.step.state == StepState.START) {
             this.right = this.left.clone()
             this.right.id = this.rightControlId
-            this.step.model.controls.push(this.right);
+            this.step.controls.push(this.right);
             this.isAdded = true
         }
     }
 
     override onAfterBackward() {
         super.onAfterBackward();
-        const index = this.step.model.controls.indexOf(this.right!);
+        const index = this.step.controls.indexOf(this.right!);
         if (index > -1) {
-            this.step.model.controls.splice(index, 1);
+            this.step.controls.splice(index, 1);
             this.isAdded = false
         }
     }

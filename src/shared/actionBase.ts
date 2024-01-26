@@ -7,6 +7,8 @@ export abstract class ActionBase {
         this.step = step
     }
 
+    init(): void {}
+
     onBeforeForward(): void {}
 
     onAfterBackward(): void{}
