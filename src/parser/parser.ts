@@ -87,6 +87,9 @@ export class Parser {
                     break
             }
         }
+        if (id == null && text == null) {
+            id = 'b' + this.model.controls.length
+        }
         this.model.controls.push(new BoxControl(id != null ? id : text, at, size, color, text))
     }
 
@@ -94,7 +97,7 @@ export class Parser {
         const dot_tokens = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
         let size = 20
         let at = new Point(0, 0)
-        let text = 'dot' + this.model.controls.length
+        let text = null
         let id = null
         let color = COLORS[this.model.controls.length % COLORS.length]
         while (dot_tokens.includes(this.peek().type)) {
@@ -117,7 +120,10 @@ export class Parser {
                     break
             }
         }
-        this.model.controls.push(new DotControl(id != null ? id : text, at, size, color, text))
+        if (id == null && text == null) {
+            id = 'd' + this.model.controls.length
+        }
+        this.model.controls.push(new DotControl(id != null ? id : text, at, size, color, text != null ? text : id))
     }
 
     text(): string {
@@ -226,7 +232,7 @@ export class Parser {
     controlIds(): string [] {
         let controlIds = []
         let token = this.advance()
-        while (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING) {
+        while (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING || token.type == TokenType.NUMBER) {
             controlIds.push(token.value)
             token = this.peek()
             if (this.match(TokenType.SEMICOLON)) {
@@ -247,13 +253,13 @@ export class Parser {
     assign(step: Step, controlIds: string[]): Assign {
         this.advance()
         let token = this.peek()
-        let properties: Map<string,any> = new Map()
+        let properties: Map<string, any> = new Map()
 
         while (Keywords.ASSIGN_PROPERTIES.includes(token.type)) {
             this.advance()
             const valueToken = this.peek()
             let value
-            switch(valueToken.type){
+            switch (valueToken.type) {
                 case TokenType.TRUE:
                     value = true
                     break
