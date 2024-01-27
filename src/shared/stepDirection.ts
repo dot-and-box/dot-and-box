@@ -1,6 +1,5 @@
-
 export enum StepDirection {
     BACKWARD,
-    NONE,
-    FORWARD
+    FORWARD,
+    NONE
 }

@@ -10,6 +10,7 @@ import {ActionBase} from "./shared/actionBase.ts";
 import {Control} from "./controls/control.ts";
 import {StepState} from "./shared/stepState.ts";
 import {StepDirection} from "./shared/stepDirection.ts";
+import {Easing, EasingType} from "./shared/easingFunctions.ts";
 
 export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
@@ -23,7 +24,6 @@ export class DotsAndBoxes {
     private fps = 1
     private lastTime: any = 0
     private stepStartTime: number = 0;
-    private stepStopTime: number = 0;
     public controls: Control[] = []
     public origin: Point = Point.zero()
     public offset: Point = Point.zero()
@@ -38,7 +38,8 @@ export class DotsAndBoxes {
     public readonly BOX_TOOL: string = "box-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private tool: Tool = new PanZoomTool(this)
-    private easingFunc: (step: number, duration: number) => number = this.easeInQuad;
+    private easingFunc: (x: number) => number = Easing.getEasingByType(EasingType.IN_QUAD);
+    private inverseEasingFunc: (x: number) => number = Easing.getInverseEasingByType(EasingType.IN_QUAD);
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
@@ -133,11 +134,10 @@ export class DotsAndBoxes {
     }
 
     updateStartTime() {
-        if (this.stepStopTime > 0) {
-            this.stepStartTime = this.lastTime - (this.stepStopTime - this.stepStartTime)
-            this.stepStopTime = 0
-        } else {
-            this.stepStartTime = this.lastTime
+        if (this.currentStep.direction == StepDirection.FORWARD) {
+            this.stepStartTime = this.lastTime - (this.inverseEasingFunc(this.requestedStepProgress) * this.currentStep.duration);
+        } else if (this.currentStep.direction == StepDirection.BACKWARD) {
+            this.stepStartTime = this.lastTime - ((1 - this.inverseEasingFunc(this.requestedStepProgress)) * this.currentStep.duration);
         }
     }
 
@@ -164,30 +164,22 @@ export class DotsAndBoxes {
     }
 
     forward() {
-        this.updateStartTime()
         this.nextStep()
         this.currentStep.forward()
+        this.updateStartTime()
         this.currentStep.unpause()
     }
 
     backward() {
-        this.updateStartTime()
         this.previousStep()
         this.currentStep.backward()
+        this.updateStartTime()
         this.currentStep.unpause()
     }
 
     drawDebug(time: number) {
         this.fps = 1 / ((time - this.lastTime) / 1000);
         this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this._requestedStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
-    }
-
-    easeLinear(step: number, duration: number): number {
-        return step / duration;
-    }
-
-    easeInQuad(step: number, duration: number) {
-        return (step /= duration) * step;
     }
 
 
@@ -218,9 +210,9 @@ export class DotsAndBoxes {
 
     updateProgress() {
         if (this.currentStep.direction == StepDirection.FORWARD) {
-            this._requestedStepProgress =  this.easingFunc(this.lastTime - this.stepStartTime, this.currentStep.duration)
+            this._requestedStepProgress = this.easingFunc((this.lastTime - this.stepStartTime) / this.currentStep.duration)
         } else if (this.currentStep.direction == StepDirection.BACKWARD) {
-            this._requestedStepProgress = this.easingFunc(this.currentStep.duration - (this.lastTime - this.stepStartTime), this.currentStep.duration)
+            this._requestedStepProgress = this.easingFunc((this.currentStep.duration - (this.lastTime - this.stepStartTime)) / this.currentStep.duration)
         }
         if (this._requestedStepProgress <= 0.001 || this._requestedStepProgress > 1) {
             this._requestedStepProgress = this._requestedStepProgress <= 0.001 ? 0 : 1
@@ -335,10 +327,8 @@ export class DotsAndBoxes {
     }
 
     togglePause() {
+        this.updateStartTime()
         this.currentStep.togglePause()
-        if (this.currentStep.state == StepState.STOPPED) {
-            this.stepStopTime = this.lastTime
-        }
     }
 }
 
