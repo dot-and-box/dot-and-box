@@ -320,6 +320,9 @@ export class DotsAndBoxes {
     togglePause() {
         this.updateStartTime()
         this.currentStep.togglePause()
+        // this.tool.move(new Point( this.origin.x, this.origin.y))
+        console.log(this.origin)
+        this.tool.move(this.origin.minus(new Point(50,0)))
     }
 }
 

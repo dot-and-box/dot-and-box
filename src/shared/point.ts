@@ -15,5 +15,13 @@ export class Point {
         return new Point(this.x, this.y, this.sign)
     }
 
+    plus(point: Point): Point {
+        return new Point(this.x + point.x, this.y + point.y, Sign.NONE)
+    }
+
+    minus(point: Point): Point {
+        return new Point(this.x - point.x, this.y - point.y, Sign.NONE)
+    }
+
     static zero = (): Point => new Point(0, 0)
 }
