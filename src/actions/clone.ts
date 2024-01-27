@@ -27,8 +27,8 @@ export class Clone extends ActionBase {
         }
     }
 
-    cloneAndAddControl(){
-        if (!this.isAdded && this.step.state == StepState.START) {
+    cloneAndAddControl() {
+        if (!this.isAdded ) {
             this.right = this.left.clone()
             this.right.id = this.rightControlId
             this.step.controls.push(this.right)
@@ -43,15 +43,21 @@ export class Clone extends ActionBase {
 
     override onAfterBackward() {
         super.onAfterBackward()
-        const index = this.step.controls.indexOf(this.right!)
-        if (index > -1) {
-            this.step.controls.splice(index, 1)
-            this.isAdded = false
+        this.destroyControls()
+    }
+
+    destroyControls() {
+        if (this.isAdded) {
+            const index = this.step.controls.indexOf(this.right!)
+            if (index > -1) {
+                this.step.controls.splice(index, 1)
+                this.isAdded = false
+            }
         }
     }
 
     // @ts-ignore
-    updateValue(progress: number): void {
+    override updateValue(progress: number) {
     }
 
 }

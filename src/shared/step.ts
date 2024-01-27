@@ -18,8 +18,8 @@ export class DotsAndBoxesModel {
 export class Step {
     actions: ActionBase[]
     controls: Control[]
+    private _progress = 0.0
     public direction = StepDirection.NONE
-    public progress = 0.0
     public state: StepState = StepState.START
     public duration: number = 1000
 
@@ -27,14 +27,33 @@ export class Step {
         this.actions.forEach(a => a.init())
     }
 
+    public get progress() {
+        return this._progress
+    }
+
+    public set progress(newProgress: number) {
+        if (newProgress == this._progress)
+            return
+        if (newProgress > 0 && this._progress == 0) {
+            this.actions.forEach(a => a.onBeforeForward())
+        } else if(newProgress == 0 && this._progress > 0) {
+            this.actions.forEach(a => a.onAfterBackward())
+        }
+        this._progress = newProgress
+        for (const action of this.actions) {
+            action.updateValue(this._progress)
+        }
+        this.updateState()
+    }
+
     updateState() {
-        if (this.progress == 0) {
+        if (this._progress == 0) {
             this.state = StepState.START
             if (this.direction == StepDirection.BACKWARD) {
                 this.direction = StepDirection.NONE
-                this.actions.forEach(a => a.onAfterBackward())
+                // this.actions.forEach(a => a.onAfterBackward())
             }
-        } else if (this.progress == 1) {
+        } else if (this._progress == 1) {
             this.state = StepState.END
             if (this.direction == StepDirection.FORWARD) {
                 this.direction = StepDirection.NONE
@@ -57,7 +76,6 @@ export class Step {
 
     forward() {
         if (this.state != StepState.END) {
-            this.actions.forEach(a => a.onBeforeForward())
             this.direction = StepDirection.FORWARD
             this.state = StepState.IN_PROGRESS
         }

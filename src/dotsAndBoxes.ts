@@ -222,18 +222,10 @@ export class DotsAndBoxes {
     private handleStepChange() {
         if (this.currentStep.progress != this._requestedStepProgress) {
             this.currentStep.progress = this._requestedStepProgress
-            for (const action of this.currentStep.actions) {
-                this.handleAction(action)
-            }
-            this.currentStep.updateState()
             if (this.autoplay && this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
                 this.forward()
             }
         }
-    }
-
-    private handleAction(action: ActionBase) {
-        action.updateValue(this.currentStep.progress)
     }
 
     private getEventLocation(e: any): Point | null {

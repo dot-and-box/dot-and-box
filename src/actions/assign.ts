@@ -9,6 +9,7 @@ export class Assign extends ActionBase {
     controlIds: string []
     properties: Map<string, any>
     changes: Change[] = []
+    applied = false
 
     constructor(step: Step, controlIds: string[], properties: Map<string, any>) {
         super(step)
@@ -18,6 +19,10 @@ export class Assign extends ActionBase {
 
     override init() {
         super.init()
+        this.selectControls()
+    }
+
+    selectControls() {
         this.controls = []
         const foundControl = this.step.controls.find(c => this.controlIds.includes(c.id))
         if (foundControl) {
@@ -27,34 +32,41 @@ export class Assign extends ActionBase {
 
     override onBeforeForward() {
         super.onBeforeForward()
+        this.selectControls()
         this.applyChanges()
     }
 
-    // @ts-ignore
-    override updateValue(progress: number) {
-    }
-
-    override onAfterBackward() {
-        super.onAfterBackward()
+    override  onAfterBackward() {
+        super.onAfterBackward();
         this.revertChanges()
     }
 
     applyChanges(): void {
-        this.controls.forEach((c: any) => {
-            for (const p of this.properties.keys()) {
-                const oldValue = c[p]
-                const newValue = this.properties.get(p)
-                c[p] = newValue
-                this.changes.push(new Change(this.controlIds, p, newValue, oldValue))
-            }
-        })
+        if(!this.applied) {
+            this.applied = true
+            this.controls.forEach((c: any) => {
+                for (const p of this.properties.keys()) {
+                    const oldValue = c[p]
+                    const newValue = this.properties.get(p)
+                    c[p] = newValue
+                    this.changes.push(new Change(this.controlIds, p, newValue, oldValue))
+                }
+            })
+        }
     }
 
     revertChanges(): void {
-        for (const change of this.changes) {
-            this.controls.forEach((c: any) => c[change.property] = change.oldValue)
+        if (this.applied) {
+            this.applied = false
+            for (const change of this.changes) {
+                this.controls.forEach((c: any) => c[change.property] = change.oldValue)
+            }
+            this.changes = []
         }
-        this.changes = []
+    }
+
+    // @ts-ignore
+    override updateValue(progress: number) {
     }
 
 }
