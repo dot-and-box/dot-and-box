@@ -23,17 +23,17 @@ export class Clone extends ActionBase {
         const foundLeft = this.step.controls.find(c => c.id == this.leftControlId)
         if (foundLeft) {
             this.left = foundLeft
+            if (!this.isAdded && this.step.state == StepState.START) {
+                this.right = this.left.clone()
+                this.right.id = this.rightControlId
+                this.step.controls.push(this.right)
+                this.isAdded = true
+            }
         }
     }
 
     override onBeforeForward() {
         super.onBeforeForward()
-        if (!this.isAdded && this.step.state == StepState.START) {
-            this.right = this.left.clone()
-            this.right.id = this.rightControlId
-            this.step.controls.push(this.right)
-            this.isAdded = true
-        }
     }
 
     override onAfterBackward() {
