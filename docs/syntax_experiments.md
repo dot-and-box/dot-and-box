@@ -1,6 +1,6 @@
 ## Animations expressed as Mermaid like easy to read/understand language
 
-Here I am gathering use cases and proposed syntax
+> DISCLAIMER! Following is just syntax experiments - never went into production
 
 Idea 1 - Visualise sorting algorithm
 

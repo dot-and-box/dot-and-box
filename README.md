@@ -57,18 +57,12 @@ It draws the control a dot
 e.g.
 
 ```dabl
-dot 
- color: fred
- text: 'd1'
- size: 20
+dot color: fred text: 'd1' size: 20
 ```
 ### define a box
 
 ```dabl
-box 
- color: fred
- text: 'a text in a box'
- size: 20,200
+box color: fred text: 'a text in a box' size: (20,200), visible: true
 ```
 ### declare step actions
 
@@ -84,7 +78,11 @@ e.g. moving control a1 to point at position (x,y) 56, 160 would be:
 ```text
 a1 -> (56,150)
 ```
-
+"+" and "-" makes move relative e.g.
+```text
+a1 -> +(50,-10)
+```
+ 
 #### swap controls
 
 > c1 <-> c2
@@ -97,6 +95,11 @@ swaps c1 and c2 position
 
 Clone control c1 and creates a new one named new_c1
 
+#### assign value
+
+> c1 <- text: 'new text' visible: true
+
+Assign one or more property to control
 
 ## credits
 
