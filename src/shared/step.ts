@@ -51,7 +51,6 @@ export class Step {
             this.state = StepState.START
             if (this.direction == StepDirection.BACKWARD) {
                 this.direction = StepDirection.NONE
-                // this.actions.forEach(a => a.onAfterBackward())
             }
         } else if (this._progress == 1) {
             this.state = StepState.END
