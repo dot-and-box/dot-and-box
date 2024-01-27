@@ -13,13 +13,7 @@
 
 </head>
 <body>
-<h1>Easing functions</h1>
-<dots-and-boxes style="margin:10px;height: 600px; width: 730px"  debug controls code="
-    title: easing func
-    dot text: '1' at: -320, 0 size: 35
-    steps:
-    '1' ->  +(600,20) ">
-</dots-and-boxes>
+<h1>Just dots and boxes...</h1>
 
 <dots-and-boxes style="margin:10px;height: 400px; width: 330px"  debug controls code="
     title: bubble sort
@@ -42,23 +36,30 @@
 <div style="display: flex">
     <div>bim bam bom - check mate</div>
 
-<!--<dots-and-boxes  style="margin-top: 50px; height: 254px; width: 300px" controls   debug-->
-<!--                 color="pink"   code="-->
-<!--    title: Ale heca-->
-<!--    dot text: '1' color: rgba(100,200,50,0.6) at: -100, 0  size: 55-->
-<!--    dot text: '2' color: purple at: -150, 0 size: 20-->
-<!--    dot text: '3' color: orange at: 0, 0 size: 20-->
-<!--    dot text: '4' color: gray  at: -50, 0 size: 20-->
-<!--    dot text: '5' color: rgba(190,0,65,1) at: 50, 0  size: 20-->
-<!--    steps:-->
-<!--    '5' -> +(50,-50)-->
-<!--    '5' *-> z1, z1 -> (400,-100)-->
-<!--    '2' <-> '1'-->
-<!--    '3' <-> '4'-->
-<!--    '4' <-> '5'-->
-<!--    "></dots-and-boxes>-->
+<dots-and-boxes  style="margin-top: 50px; height: 254px; width: 300px" controls   debug
+                 color="pink"   code="
+    title: Ale heca
+    dot text: '1' color: rgba(100,200,50,0.6) at: -100, 0  size: 55
+    dot text: '2' color: purple at: -150, 0 size: 20
+    dot text: '3' color: orange at: 0, 0 size: 20
+    dot text: '4' color: gray  at: -50, 0 size: 20
+    dot text: '5' color: rgba(190,0,65,1) at: 50, 0  size: 20
+    steps:
+    '5' -> +(50,-50)
+    '5' *-> z1, z1 -> (400,-100)
+    '2' <-> '1'
+    '3' <-> '4'
+    '4' <-> '5'
+    "></dots-and-boxes>
 
 </div>
+
+<dots-and-boxes style="margin:10px;height: 600px; width: 730px"   controls code="
+    title: easing function
+    dot text: '1' at: -320, 0 size: 35
+    steps:
+    '1' ->  +(600,20) ">
+</dots-and-boxes>
 
 <script type="module" src="/src/main.ts"></script>
 

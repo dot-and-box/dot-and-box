@@ -1,8 +1,8 @@
-import {ActionBase} from "../shared/actionBase.ts";
-import {Step} from "../shared/step.ts";
-import {Control} from "../controls/control.ts";
-import {DummyControl} from "../controls/dummy/dummyControl.ts";
-import {StepState} from "../shared/stepState.ts";
+import {ActionBase} from "../shared/actionBase.ts"
+import {Step} from "../shared/step.ts"
+import {Control} from "../controls/control.ts"
+import {DummyControl} from "../controls/dummy/dummyControl.ts"
+import {StepState} from "../shared/stepState.ts"
 
 export class Clone extends ActionBase {
     left: Control = new DummyControl()
@@ -13,9 +13,9 @@ export class Clone extends ActionBase {
 
     constructor(step: Step, leftControlId: string, rightControlId: string) {
         super(step)
-        this.isAdded = false;
-        this.leftControlId = leftControlId;
-        this.rightControlId = rightControlId;
+        this.isAdded = false
+        this.leftControlId = leftControlId
+        this.rightControlId = rightControlId
     }
 
     override init() {
@@ -27,20 +27,20 @@ export class Clone extends ActionBase {
     }
 
     override onBeforeForward() {
-        super.onBeforeForward();
+        super.onBeforeForward()
         if (!this.isAdded && this.step.state == StepState.START) {
             this.right = this.left.clone()
             this.right.id = this.rightControlId
-            this.step.controls.push(this.right);
+            this.step.controls.push(this.right)
             this.isAdded = true
         }
     }
 
     override onAfterBackward() {
-        super.onAfterBackward();
-        const index = this.step.controls.indexOf(this.right!);
+        super.onAfterBackward()
+        const index = this.step.controls.indexOf(this.right!)
         if (index > -1) {
-            this.step.controls.splice(index, 1);
+            this.step.controls.splice(index, 1)
             this.isAdded = false
         }
     }

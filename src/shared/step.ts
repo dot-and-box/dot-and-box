@@ -1,7 +1,7 @@
-import {ActionBase} from "./actionBase.ts";
-import {Control} from "../controls/control.ts";
-import {StepState} from "./stepState.ts";
-import {StepDirection} from "./stepDirection.ts";
+import {ActionBase} from "./actionBase.ts"
+import {Control} from "../controls/control.ts"
+import {StepState} from "./stepState.ts"
+import {StepDirection} from "./stepDirection.ts"
 
 export class DotsAndBoxesModel {
     title: string
@@ -9,19 +9,19 @@ export class DotsAndBoxesModel {
     steps: Step[]
 
     constructor(title: string, controls: Control[], steps: Step[]) {
-        this.title = title;
-        this.controls = controls;
-        this.steps = steps;
+        this.title = title
+        this.controls = controls
+        this.steps = steps
     }
 }
 
 export class Step {
-    actions: ActionBase[];
-    controls: Control[];
-    public direction = StepDirection.NONE;
-    public progress = 0.0;
+    actions: ActionBase[]
+    controls: Control[]
+    public direction = StepDirection.NONE
+    public progress = 0.0
     public state: StepState = StepState.START
-    public duration: number = 1000;
+    public duration: number = 1000
 
     init() {
         this.actions.forEach(a => a.init())
@@ -29,18 +29,18 @@ export class Step {
 
     updateState() {
         if (this.progress == 0) {
-            this.state = StepState.START;
+            this.state = StepState.START
             if (this.direction == StepDirection.BACKWARD) {
                 this.direction = StepDirection.NONE
                 this.actions.forEach(a => a.onAfterBackward())
             }
         } else if (this.progress == 1) {
-            this.state = StepState.END;
+            this.state = StepState.END
             if (this.direction == StepDirection.FORWARD) {
                 this.direction = StepDirection.NONE
             }
         } else {
-            this.state = StepState.IN_PROGRESS;
+            this.state = StepState.IN_PROGRESS
         }
     }
 
@@ -52,12 +52,12 @@ export class Step {
 
     constructor(controls: Control[]) {
         this.controls = controls
-        this.actions = [];
+        this.actions = []
     }
 
     forward() {
         if (this.state != StepState.END) {
-            this.actions.forEach(a => a.onBeforeForward());
+            this.actions.forEach(a => a.onBeforeForward())
             this.direction = StepDirection.FORWARD
             this.state = StepState.IN_PROGRESS
         }

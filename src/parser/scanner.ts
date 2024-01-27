@@ -1,12 +1,12 @@
-import {TokenType} from "./tokenType.ts";
-import {Token} from "./token.ts";
+import {TokenType} from "./tokenType.ts"
+import {Token} from "./token.ts"
 import {Keywords} from "./keywords.ts"
 
 export class Scanner {
-    start: number = 0;
-    position = 0;
-    line = 1;
-    tokens: Token[] = [];
+    start: number = 0
+    position = 0
+    line = 1
+    tokens: Token[] = []
     source = ''
 
     public scan(source: string): Token[] {
@@ -16,67 +16,67 @@ export class Scanner {
             switch (c) {
                 case ' ':
                 case '\r':
-                    break;
+                    break
                 case '\n':
-                    this.line++;
-                    break;
+                    this.line++
+                    break
                 case '\t':
-                    break;
+                    break
                 case '(':
                     this.addToken(TokenType.LEFT_BRACKET)
-                    break;
+                    break
                 case ')':
                     this.addToken(TokenType.RIGHT_BRACKET)
-                    break;
+                    break
                 case ':':
-                    break;
+                    break
                 case ',':
                     this.addToken(TokenType.COMMA)
-                    break;
+                    break
                 case '<':
                     if (!this.matchSwap())
                         this.addToken(TokenType.LESS_THAN)
-                    break;
+                    break
                 case '*':
                     if (!this.matchClone())
                         this.addToken(TokenType.ASTERIX)
-                    break;
+                    break
                 case '+':
                     this.addToken(TokenType.PLUS)
-                    break;
+                    break
                 case '-':
                     if (this.match('>'))
                         this.addToken(TokenType.MOVE)
                     else
                         this.addToken(TokenType.MINUS)
-                    break;
+                    break
                 case '=':
                     this.addToken(TokenType.EQUALS)
-                    break;
+                    break
                 case '>':
                     this.addToken(TokenType.GREATER_THAN)
-                    break;
+                    break
                 case '/':
                     if (this.match('/')) {
                         while (this.peek() != '\n' && !this.isAtEnd())
-                            this.advance();
+                            this.advance()
                     }
-                    break;
+                    break
                 case "'":
-                    this.string();
-                    break;
+                    this.string()
+                    break
                 default:
                     if (this.isDigit(c)) {
                         this.number()
                     } else if (this.isAlpha(c)) {
-                        this.identifier();
+                        this.identifier()
                     } else {
                         throw new Error(`line: ${this.line} Unexpected character ${c} charcode: ${c.charCodeAt(0)}`)
                     }
             }
             this.start = this.position
         }
-        return this.tokens;
+        return this.tokens
     }
 
     matchSwap(): boolean {
@@ -90,7 +90,7 @@ export class Scanner {
             }
         }
 
-        return false;
+        return false
     }
 
     matchClone(): boolean {
@@ -99,7 +99,7 @@ export class Scanner {
                 this.addToken(TokenType.CLONE)
                 return true
             }
-        return false;
+        return false
     }
 
     addToken(tokenType: TokenType) {
@@ -115,7 +115,7 @@ export class Scanner {
     }
 
     isAtEnd() {
-        return this.position >= this.source.length;
+        return this.position >= this.source.length
     }
 
     peek(): string {
@@ -123,15 +123,15 @@ export class Scanner {
     }
 
     match(expected: string) {
-        if (this.isAtEnd()) return false;
-        if (this.source.charAt(this.position) != expected) return false;
+        if (this.isAtEnd()) return false
+        if (this.source.charAt(this.position) != expected) return false
 
-        this.position++;
-        return true;
+        this.position++
+        return true
     }
 
     private isDigit(c: string): boolean {
-        return c >= '0' && c <= '9';
+        return c >= '0' && c <= '9'
     }
 
     private isDigitOrDot(c: string): boolean {
@@ -148,7 +148,7 @@ export class Scanner {
 
     isAlpha(c: string): boolean {
         const alphaRegExp = /[\p{Letter}\p{Mark}]+/gu
-        return alphaRegExp.test(c) || c == '_';
+        return alphaRegExp.test(c) || c == '_'
     }
 
     isAlphanumeric(c: string): boolean {
@@ -157,15 +157,15 @@ export class Scanner {
 
     string() {
         while (this.peek() != "'" && !this.isAtEnd()) {
-            if (this.peek() == '\n') this.line++;
-            this.advance();
+            if (this.peek() == '\n') this.line++
+            this.advance()
         }
 
         if (this.isAtEnd()) {
             throw new Error(`line: ${this.line} Unterminated String`)
         }
 
-        this.advance();
+        this.advance()
 
         let val = this.source.substring(this.start + 1, this.position - 1)
         this.addTokenValue(TokenType.STRING, val)
@@ -173,7 +173,7 @@ export class Scanner {
 
     identifier() {
         while (this.isAlphanumeric(this.peek()))
-            this.advance();
+            this.advance()
         let val = this.source.substring(this.start, this.position)
         const tokenType = Keywords.isKeyword(val)
             ? Keywords.getKeywordByName(val)

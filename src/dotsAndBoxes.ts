@@ -1,45 +1,45 @@
-import {Point} from "./shared/point.ts";
-import {Tool} from "./shared/tool.ts";
-import {DotsAndBoxesModel, Step} from "./shared/step.ts";
-import {DEFAULT_FONT, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, TITLE_FONT_SIZE} from "./shared/constants.ts";
-import {DotTool} from "./controls/dot/dotTool.ts";
-import {EmptyTool} from "./shared/emptyTool.ts";
-import {PanZoomTool} from "./panzoom/panZoomTool.ts";
-import {BoxTool} from "./controls/box/boxTool.ts";
-import {ActionBase} from "./shared/actionBase.ts";
-import {Control} from "./controls/control.ts";
-import {StepState} from "./shared/stepState.ts";
-import {StepDirection} from "./shared/stepDirection.ts";
-import {Easing, EasingType} from "./shared/easingFunctions.ts";
+import {Point} from "./shared/point.ts"
+import {Tool} from "./shared/tool.ts"
+import {DotsAndBoxesModel, Step} from "./shared/step.ts"
+import {DEFAULT_FONT, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, TITLE_FONT_SIZE} from "./shared/constants.ts"
+import {DotTool} from "./controls/dot/dotTool.ts"
+import {EmptyTool} from "./shared/emptyTool.ts"
+import {PanZoomTool} from "./panzoom/panZoomTool.ts"
+import {BoxTool} from "./controls/box/boxTool.ts"
+import {ActionBase} from "./shared/actionBase.ts"
+import {Control} from "./controls/control.ts"
+import {StepState} from "./shared/stepState.ts"
+import {StepDirection} from "./shared/stepDirection.ts"
+import {Easing, EasingType} from "./shared/easingFunctions.ts"
 
 export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
     private readonly ctx: CanvasRenderingContext2D
-    private _width = 100;
-    private _height = 100;
+    private _width = 100
+    private _height = 100
     public zoom: number = 1
     public isDragging = false
     private initialPinchDistance: number = 0
     private lastZoom = this.zoom
     private fps = 1
     private lastTime: any = 0
-    private stepStartTime: number = 0;
+    private stepStartTime: number = 0
+    private tool: Tool = new PanZoomTool(this)
+    private easingFunc: (x: number) => number = Easing.getEasingByType(EasingType.IN_QUAD)
+    private inverseEasingFunc: (x: number) => number = Easing.getInverseEasingByType(EasingType.IN_QUAD)
+
     public controls: Control[] = []
     public origin: Point = Point.zero()
     public offset: Point = Point.zero()
     public showDebug = true
-    public title = '';
-    public marginLeft = 0;
-    public marginTop = 0;
+    public title = ''
+    public marginLeft = 0
+    public marginTop = 0
     public autoplay: boolean = false
-
     public readonly EMPTY_TOOL: string = "empty-tool"
     public readonly DOT_TOOL: string = "dot-tool"
     public readonly BOX_TOOL: string = "box-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
-    private tool: Tool = new PanZoomTool(this)
-    private easingFunc: (x: number) => number = Easing.getEasingByType(EasingType.IN_QUAD);
-    private inverseEasingFunc: (x: number) => number = Easing.getInverseEasingByType(EasingType.IN_QUAD);
 
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
@@ -48,8 +48,8 @@ export class DotsAndBoxes {
         [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
     ])
     private steps: Step[] = []
-    private currentStepIndex = 0;
-    private _requestedStepProgress = 0;
+    private currentStepIndex = 0
+    private _requestedStepProgress = 0
 
     // noinspection JSUnusedGlobalSymbols
     public get requestedStepProgress(): number {
@@ -66,7 +66,7 @@ export class DotsAndBoxes {
         this.steps = []
         this.controls = []
         this.title = ''
-        this.currentStepIndex = 0;
+        this.currentStepIndex = 0
         this.currentStep = new Step(this.controls)
     }
 
@@ -83,22 +83,22 @@ export class DotsAndBoxes {
 
     constructor(canvas: HTMLCanvasElement) {
         this.ctx = canvas.getContext('2d')! as CanvasRenderingContext2D
-        this.canvas = canvas;
+        this.canvas = canvas
         this.attachCanvasEventHandlers()
     }
 
     public updatePositionAndSize(offset: Point) {
-        const style = getComputedStyle(this.canvas);
+        const style = getComputedStyle(this.canvas)
         this._width = parseInt(style.width, 10)
         this._height = parseInt(style.height, 10)
-        this.marginLeft = parseInt(style.marginLeft, 10) + offset.x;
-        this.marginTop = parseInt(style.marginTop, 10) + offset.y;
+        this.marginLeft = parseInt(style.marginLeft, 10) + offset.x
+        this.marginTop = parseInt(style.marginTop, 10) + offset.y
         this.origin = new Point(this._width / 2, this._height / 2)
         this.offset = new Point(this._width / 2, this._height / 2)
     }
 
     private attachCanvasEventHandlers() {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
         if (!isMobile) {
             this.addCanvasEvent('mousedown', (e: any) => this.onPointerDown(e))
         }
@@ -135,9 +135,9 @@ export class DotsAndBoxes {
 
     updateStartTime() {
         if (this.currentStep.direction == StepDirection.FORWARD) {
-            this.stepStartTime = this.lastTime - (this.inverseEasingFunc(this.requestedStepProgress) * this.currentStep.duration);
+            this.stepStartTime = this.lastTime - (this.inverseEasingFunc(this.requestedStepProgress) * this.currentStep.duration)
         } else if (this.currentStep.direction == StepDirection.BACKWARD) {
-            this.stepStartTime = this.lastTime - ((1 - this.inverseEasingFunc(this.requestedStepProgress)) * this.currentStep.duration);
+            this.stepStartTime = this.lastTime - ((1 - this.inverseEasingFunc(this.requestedStepProgress)) * this.currentStep.duration)
         }
     }
 
@@ -150,7 +150,7 @@ export class DotsAndBoxes {
         if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
             this.selectStep(this.currentStepIndex + 1)
             this.currentStep.init()
-            this._requestedStepProgress = 0;
+            this._requestedStepProgress = 0
         }
     }
 
@@ -158,7 +158,7 @@ export class DotsAndBoxes {
         if (this.currentStep.state == StepState.START) {
             if (this.currentStepIndex > 0) {
                 this.selectStep(this.currentStepIndex - 1)
-                this._requestedStepProgress = 1;
+                this._requestedStepProgress = 1
             }
         }
     }
@@ -178,7 +178,7 @@ export class DotsAndBoxes {
     }
 
     drawDebug(time: number) {
-        this.fps = 1 / ((time - this.lastTime) / 1000);
+        this.fps = 1 / ((time - this.lastTime) / 1000)
         this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this._requestedStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
     }
 
@@ -198,7 +198,7 @@ export class DotsAndBoxes {
         if (this.currentStep && this.currentStep.direction != StepDirection.NONE && this.currentStep.state != StepState.STOPPED) {
             this.updateProgress()
         }
-        this.handleStepChange();
+        this.handleStepChange()
         for (const control of this.controls) {
             if (control.visible) {
                 control.draw(this.ctx)

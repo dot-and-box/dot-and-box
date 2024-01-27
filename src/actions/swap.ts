@@ -1,13 +1,13 @@
-import {ActionBase} from "../shared/actionBase.ts";
-import {Point} from "../shared/point.ts";
-import {Step} from "../shared/step.ts";
-import {Control} from "../controls/control.ts";
-import {DummyControl} from "../controls/dummy/dummyControl.ts";
+import {ActionBase} from "../shared/actionBase.ts"
+import {Point} from "../shared/point.ts"
+import {Step} from "../shared/step.ts"
+import {Control} from "../controls/control.ts"
+import {DummyControl} from "../controls/dummy/dummyControl.ts"
 
 export class Swap extends ActionBase {
     left: Control = new DummyControl()
     right: Control = new DummyControl()
-    start: Point;
+    start: Point
     end: Point
     leftControlId: string
     rightControlId: string
@@ -16,12 +16,12 @@ export class Swap extends ActionBase {
         super(step)
         this.start = Point.zero()
         this.end = Point.zero()
-        this.leftControlId = left;
-        this.rightControlId = right;
+        this.leftControlId = left
+        this.rightControlId = right
     }
 
     override init() {
-        super.init();
+        super.init()
         const foundLeft = this.step.controls.find(c => c.id == this.leftControlId)
         if (foundLeft) {
             this.left = foundLeft
@@ -30,8 +30,8 @@ export class Swap extends ActionBase {
         if (foundRight) {
             this.right = foundRight
         }
-        this.start = this.left.position.clone();
-        this.end = this.right.position.clone();
+        this.start = this.left.position.clone()
+        this.end = this.right.position.clone()
     }
 
     override updateValue(progress: number) {
@@ -48,8 +48,8 @@ export class Swap extends ActionBase {
         } else {
             const dx = (this.end.x - this.start.x) * progress
             const dy = (this.end.y - this.start.y) * progress
-            this.right.position.x = this.end.x - dx;
-            this.right.position.y = this.end.y - dy;
+            this.right.position.x = this.end.x - dx
+            this.right.position.y = this.end.y - dy
             this.left.position.x = this.start.x + dx
             this.left.position.y = this.start.y + dy
         }

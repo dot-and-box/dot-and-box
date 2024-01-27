@@ -1,6 +1,6 @@
-import {Point} from "../../shared/point.ts";
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT, DEFAULT_FONT_SIZE} from "../../shared/constants.ts";
-import {Control} from "../control.ts";
+import {Point} from "../../shared/point.ts"
+import {SELECTION_STROKE_STYLE, DEFAULT_FONT, DEFAULT_FONT_SIZE} from "../../shared/constants.ts"
+import {Control} from "../control.ts"
 
 export class BoxControl implements Control {
     public position: Point
@@ -9,8 +9,8 @@ export class BoxControl implements Control {
     public text: string
     public id: string
     static counter = 1
-    public selected: boolean;
-    public visible: boolean;
+    public selected: boolean
+    public visible: boolean
 
     constructor(id: string, position: Point, size: Point, color: string, text: string) {
         this.id = id
@@ -19,7 +19,7 @@ export class BoxControl implements Control {
         this.color = color
         this.text = text
         this.selected = false
-        this.visible = true;
+        this.visible = true
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -43,10 +43,10 @@ export class BoxControl implements Control {
     }
 
     hitTest(point: Point): boolean {
-        const x = point.x;
+        const x = point.x
         const y = point.y
         const isHit = x >= this.position.x && x <= this.position.x + this.size.x &&
-            y >= this.position.y && y <= this.position.y + this.size.y;
+            y >= this.position.y && y <= this.position.y + this.size.y
         if (isHit) {
             this.selected = !this.selected
         }
@@ -54,7 +54,7 @@ export class BoxControl implements Control {
     }
 
     clone(): Control {
-        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this.color.toString(), this.text.toString());
+        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this.color.toString(), this.text.toString())
     }
 
 }

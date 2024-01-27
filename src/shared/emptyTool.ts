@@ -1,5 +1,5 @@
-import {Tool} from "./tool.ts";
-import {Point} from "./point.ts";
+import {Tool} from "./tool.ts"
+import {Point} from "./point.ts"
 
 export class EmptyTool extends Tool {
 

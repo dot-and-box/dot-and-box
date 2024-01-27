@@ -1,4 +1,4 @@
-import {Point} from "../shared/point.ts";
+import {Point} from "../shared/point.ts"
 
 export interface ControlBase {
     id: string
@@ -14,7 +14,7 @@ export interface Control extends ControlBase {
 
     draw(ctx: CanvasRenderingContext2D): void
 
-    hitTest(point: Point): boolean;
+    hitTest(point: Point): boolean
 
-    clone(): Control;
+    clone(): Control
 }

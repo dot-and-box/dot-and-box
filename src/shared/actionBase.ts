@@ -1,4 +1,4 @@
-import {Step} from "./step.ts";
+import {Step} from "./step.ts"
 
 export abstract class ActionBase {
     step: Step

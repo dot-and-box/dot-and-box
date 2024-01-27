@@ -1,4 +1,4 @@
-import {TokenType} from "./tokenType.ts";
+import {TokenType} from "./tokenType.ts"
 
 export class Token {
     position: number
@@ -6,9 +6,9 @@ export class Token {
     value: string
 
     constructor(position: number, tokenType: TokenType, value?: string) {
-        this.position = position;
-        this.type = tokenType;
-        this.value = value ? value : "";
+        this.position = position
+        this.type = tokenType
+        this.value = value ? value : ""
     }
 
 }

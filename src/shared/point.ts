@@ -1,4 +1,4 @@
-import {Sign} from "./sign.ts";
+import {Sign} from "./sign.ts"
 
 export class Point {
     public x: number
@@ -6,9 +6,9 @@ export class Point {
     public sign: Sign
 
     constructor(x: number, y: number, sign: Sign = Sign.NONE) {
-        this.x = x;
-        this.y = y;
-        this.sign = sign;
+        this.x = x
+        this.y = y
+        this.sign = sign
     }
 
     clone(): Point {

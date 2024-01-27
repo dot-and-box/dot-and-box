@@ -1,23 +1,23 @@
-import {Scanner} from "./scanner.ts";
-import {DotsAndBoxesModel, Step} from "../shared/step.ts";
-import {TokenType} from "./tokenType.ts";
-import {Token} from "./token.ts";
-import {Point} from "../shared/point.ts";
-import {BoxControl} from "../controls/box/boxControl.ts";
-import {DotControl} from "../controls/dot/dotControl.ts";
-import {ActionBase} from "../shared/actionBase.ts";
-import {Move} from "../actions/move.ts";
-import {Swap} from "../actions/swap.ts";
-import {Clone} from "../actions/clone.ts";
-import {Sign} from "../shared/sign.ts";
-import {COLORS} from "../shared/constants.ts";
-import {Assign} from "../actions/assign.ts";
-import {Keywords} from "./keywords.ts";
+import {Scanner} from "./scanner.ts"
+import {DotsAndBoxesModel, Step} from "../shared/step.ts"
+import {TokenType} from "./tokenType.ts"
+import {Token} from "./token.ts"
+import {Point} from "../shared/point.ts"
+import {BoxControl} from "../controls/box/boxControl.ts"
+import {DotControl} from "../controls/dot/dotControl.ts"
+import {ActionBase} from "../shared/actionBase.ts"
+import {Move} from "../actions/move.ts"
+import {Swap} from "../actions/swap.ts"
+import {Clone} from "../actions/clone.ts"
+import {Sign} from "../shared/sign.ts"
+import {COLORS} from "../shared/constants.ts"
+import {Assign} from "../actions/assign.ts"
+import {Keywords} from "./keywords.ts"
 
 export class Parser {
     scanner = new Scanner()
     model = Parser.newModel()
-    position = 0;
+    position = 0
     tokens: Token[] = []
 
     static newModel(): DotsAndBoxesModel {
@@ -25,15 +25,15 @@ export class Parser {
     }
 
     public eof(): boolean {
-        return this.tokens.length <= this.position;
+        return this.tokens.length <= this.position
     }
 
     public advance(): Token {
-        return this.tokens[this.position++];
+        return this.tokens[this.position++]
     }
 
     public peek(): Token {
-        return this.tokens[this.position];
+        return this.tokens[this.position]
     }
 
     public parse(source: string): DotsAndBoxesModel {
@@ -44,20 +44,20 @@ export class Parser {
             switch (token.type) {
                 case TokenType.TITLE:
                     this.title()
-                    break;
+                    break
                 case TokenType.BOX:
                     this.box()
-                    break;
+                    break
                 case TokenType.DOT:
                     this.dot()
-                    break;
+                    break
                 case TokenType.STEPS:
                     this.steps()
-                    break;
+                    break
             }
         }
 
-        return this.model;
+        return this.model
     }
 
     box() {
@@ -72,19 +72,19 @@ export class Parser {
             switch (token.type) {
                 case TokenType.ID:
                     id = this.text()
-                    break;
+                    break
                 case TokenType.TEXT:
                     text = this.text()
-                    break;
+                    break
                 case TokenType.AT:
                     at = this.at()
-                    break;
+                    break
                 case TokenType.SIZE:
                     size = this.point()
-                    break;
+                    break
                 case TokenType.COLOR:
                     color = this.color()
-                    break;
+                    break
             }
         }
         this.model.controls.push(new BoxControl(id != null ? id : text, at, size, color, text))
@@ -102,19 +102,19 @@ export class Parser {
             switch (token.type) {
                 case TokenType.ID:
                     id = this.text()
-                    break;
+                    break
                 case TokenType.TEXT:
                     text = this.text()
-                    break;
+                    break
                 case TokenType.COLOR:
                     color = this.color()
-                    break;
+                    break
                 case TokenType.AT:
                     at = this.at()
-                    break;
+                    break
                 case TokenType.SIZE:
                     size = this.number()
-                    break;
+                    break
             }
         }
         this.model.controls.push(new DotControl(id != null ? id : text, at, size, color, text))
@@ -122,12 +122,12 @@ export class Parser {
 
     text(): string {
         if (this.peek().type == TokenType.STRING) {
-            return this.advance().value;
+            return this.advance().value
         }
         let result = ''
         while (this.peek().type == TokenType.IDENTIFIER) {
-            const token = this.advance();
-            result += ' ' + token.value.toString();
+            const token = this.advance()
+            result += ' ' + token.value.toString()
         }
         return result.trim()
     }
@@ -136,8 +136,8 @@ export class Parser {
         let result = ''
 
         if (this.peek().type == TokenType.IDENTIFIER) {
-            let token = this.advance();
-            result += token.value;
+            let token = this.advance()
+            result += token.value
             if (this.match(TokenType.LEFT_BRACKET)) {
                 result += '('
                 result += this.number().toString()
@@ -152,7 +152,7 @@ export class Parser {
                 }
             }
         }
-        return result;
+        return result
     }
 
     at() {
@@ -162,14 +162,14 @@ export class Parser {
     number() {
         let minus
         let token = this.peek()
-        minus = token.type == TokenType.MINUS;
+        minus = token.type == TokenType.MINUS
         if (minus) {
             this.advance()
         }
         token = this.advance()
         if (token.type == TokenType.NUMBER) {
             let result = token.value.includes('.') ? parseFloat(token.value) : parseInt(token.value, 10)
-            return minus ? -result : result;
+            return minus ? -result : result
         } else {
             throw new Error(`Expected number at position: ${token.position} got token ${token.value} instead`)
         }
@@ -181,7 +181,7 @@ export class Parser {
 
     steps() {
         let step = new Step(this.model.controls)
-        let action = this.action(step);
+        let action = this.action(step)
         while (action != null) {
             step.actions.push(action)
             if (!this.match(TokenType.COMMA)) {
@@ -197,7 +197,7 @@ export class Parser {
 
     action(step: Step): ActionBase | null {
         if (this.eof())
-            return null;
+            return null
         let controlIds = this.controlIds()
         if (controlIds.length == 0) {
             this.error('Expected non empty identifier list while handling step')
@@ -215,12 +215,12 @@ export class Parser {
                 token = this.peek()
                 if (token.type == TokenType.IDENTIFIER) {
                     this.advance()
-                    return new Clone(step, controlIds[0], token.value);
+                    return new Clone(step, controlIds[0], token.value)
                 }
-                break;
+                break
         }
 
-        return null;
+        return null
     }
 
     controlIds(): string [] {
@@ -232,16 +232,16 @@ export class Parser {
             if (this.match(TokenType.SEMICOLON)) {
                 token = this.peek()
             } else {
-                break;
+                break
             }
         }
-        return controlIds;
+        return controlIds
     }
 
     move(step: Step, leftControlId: string): Move {
-        this.advance();
-        const point = this.point();
-        return new Move(step, leftControlId, point);
+        this.advance()
+        const point = this.point()
+        return new Move(step, leftControlId, point)
     }
 
     assign(step: Step, controlIds: string[]): Assign {
@@ -251,24 +251,24 @@ export class Parser {
 
         while (Keywords.ASSIGN_PROPERTIES.includes(token.type)) {
             this.advance()
-            const valueToken = this.peek();
+            const valueToken = this.peek()
             let value
             switch(valueToken.type){
                 case TokenType.TRUE:
-                    value = true;
-                    break;
+                    value = true
+                    break
                 case TokenType.FALSE:
-                    value = false;
-                    break;
+                    value = false
+                    break
                 default:
                     value = valueToken.value
             }
-            properties.set(token.type.toString(), value);
+            properties.set(token.type.toString(), value)
             this.advance()
             token = this.peek()
         }
 
-        return new Assign(step, controlIds, properties);
+        return new Assign(step, controlIds, properties)
     }
 
     swap(step: Step, leftControlId: string): Swap {
@@ -276,15 +276,15 @@ export class Parser {
         let token = this.peek()
         const rightControlId = token.value
         this.advance()
-        return new Swap(step, leftControlId, rightControlId);
+        return new Swap(step, leftControlId, rightControlId)
     }
 
     plus(): boolean {
-        return this.match(TokenType.PLUS);
+        return this.match(TokenType.PLUS)
     }
 
     minus(): boolean {
-        return this.match(TokenType.MINUS);
+        return this.match(TokenType.MINUS)
     }
 
     sign(): Sign {
@@ -300,10 +300,10 @@ export class Parser {
 
     point() {
         let sign = this.sign()
-        const hasLeftBracket = this.match(TokenType.LEFT_BRACKET);
+        const hasLeftBracket = this.match(TokenType.LEFT_BRACKET)
         let x = this.number()
         if (sign == Sign.MINUS && !hasLeftBracket) {
-            x = -x;
+            x = -x
         }
         let token = this.advance()
         if (token.type != TokenType.COMMA) {
@@ -317,11 +317,11 @@ export class Parser {
     }
 
     match(tokenType: TokenType) {
-        if (this.eof()) return false;
-        if (this.peek().type != tokenType) return false;
+        if (this.eof()) return false
+        if (this.peek().type != tokenType) return false
 
-        this.position++;
-        return true;
+        this.position++
+        return true
     }
 
     error(message: string) {

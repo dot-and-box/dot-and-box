@@ -1,18 +1,18 @@
-import {Point} from "../../shared/point.ts";
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT} from "../../shared/constants.ts";
-import {Control} from "../control.ts";
+import {Point} from "../../shared/point.ts"
+import {SELECTION_STROKE_STYLE, DEFAULT_FONT} from "../../shared/constants.ts"
+import {Control} from "../control.ts"
 
 export class DotControl implements Control {
     public position: Point
     public color: string
     public size: number
     public text: string
-    public id: string;
-    public selected: boolean;
-    public visible: boolean;
+    public id: string
+    public selected: boolean
+    public visible: boolean
 
     constructor(id: string, position: Point, size: number, color: string, text: string) {
-        this.id = id;
+        this.id = id
         this.position = position
         this.color = color
         this.size = size
@@ -22,10 +22,10 @@ export class DotControl implements Control {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.beginPath();
-        ctx.arc(this.position.x, this.position.y, this.size, 0, 2 * Math.PI, false);
-        ctx.fillStyle = this.color;
-        ctx.fill();
+        ctx.beginPath()
+        ctx.arc(this.position.x, this.position.y, this.size, 0, 2 * Math.PI, false)
+        ctx.fillStyle = this.color
+        ctx.fill()
         if (this.selected) {
             ctx.strokeStyle = SELECTION_STROKE_STYLE
             ctx.stroke()
@@ -39,8 +39,8 @@ export class DotControl implements Control {
     }
 
     hitTest(point: Point): boolean {
-        let tx = this.position.x - point.x;
-        let ty = this.position.y - point.y;
+        let tx = this.position.x - point.x
+        let ty = this.position.y - point.y
         const isHit = tx * tx + ty * ty <= this.size * this.size
         if (isHit) {
             this.selected = !this.selected
@@ -49,7 +49,7 @@ export class DotControl implements Control {
     }
 
     clone(): Control {
-        return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString());
+        return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString())
     }
 
 

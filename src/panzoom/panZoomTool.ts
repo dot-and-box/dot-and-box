@@ -1,6 +1,6 @@
-import {Tool} from "../shared/tool.ts";
-import {Point} from "../shared/point.ts";
-import {DotsAndBoxes} from "../dotsAndBoxes.ts";
+import {Tool} from "../shared/tool.ts"
+import {Point} from "../shared/point.ts"
+import {DotsAndBoxes} from "../dotsAndBoxes.ts"
 
 export class PanZoomTool extends Tool {
 

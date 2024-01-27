@@ -1,4 +1,4 @@
-import {TokenType} from "./tokenType.ts";
+import {TokenType} from "./tokenType.ts"
 
 export class Keywords {
     private static KEYWORDS_MAP = new Map<string, TokenType>([

@@ -1,10 +1,10 @@
-import {Point} from "../../shared/point.ts";
-import {Control} from "../control.ts";
-import * as console from "console";
+import {Point} from "../../shared/point.ts"
+import {Control} from "../control.ts"
+import * as console from "console"
 
 export class DummyControl implements Control {
-    id: string;
-    position: Point;
+    id: string
+    position: Point
     selected: boolean = false
     visible: boolean = true
 
@@ -15,7 +15,7 @@ export class DummyControl implements Control {
     }
 
     clone(): Control {
-        return new DummyControl();
+        return new DummyControl()
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -24,6 +24,6 @@ export class DummyControl implements Control {
 
     // @ts-ignore
     hitTest(point: Point): boolean {
-        return false;
+        return false
     }
 }

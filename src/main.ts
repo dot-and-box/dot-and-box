@@ -1,24 +1,24 @@
-import {DotsAndBoxes} from "./dotsAndBoxes.ts";
-import {Parser} from "./parser/parser.ts";
-import {Point} from "./shared/point.ts";
+import {DotsAndBoxes} from "./dotsAndBoxes.ts"
+import {Parser} from "./parser/parser.ts"
+import {Point} from "./shared/point.ts"
 
 
 class DotsAndBoxesElement extends HTMLElement {
-    public static readonly ELEM_NAME: string = "dots-and-boxes";
-    static observedAttributes = ["style", "color", "border", "code", "width", "height", 'debug', 'controls', 'autoplay'];
+    public static readonly ELEM_NAME: string = "dots-and-boxes"
+    static observedAttributes = ["style", "color", "border", "code", "width", "height", 'debug', 'controls', 'autoplay']
     dotsAndBoxes!: DotsAndBoxes
     code: string = ''
     color: string = 'white'
     debug: boolean = false
-    border: string = '1px solid #ccc;'
+    border: string = '1px solid #ccc'
     defaultWidth: number = 100
     defaultHeight: number = 100
-    showControls = false;
-    autoplay = false;
+    showControls = false
+    autoplay = false
     canvas!: HTMLCanvasElement
 
     constructor() {
-        super();
+        super()
     }
 
     reset() {
@@ -33,18 +33,18 @@ class DotsAndBoxesElement extends HTMLElement {
 
     applyCode() {
         const model = new Parser().parse(this.code)
-        this.dotsAndBoxes.apply(model);
+        this.dotsAndBoxes.apply(model)
     }
 
     connectedCallback() {
-        const shadow = this.attachShadow({mode: "open"});
+        const shadow = this.attachShadow({mode: "open"})
         shadow.innerHTML = `
       <style>
         :host { display: block; padding: 0;border: ${this.border};}
         #controls-menu {
           position: relative;   
           height: 40px;
-          left: 0px;       
+          left: 0;       
           top: -44px;
           background-color: rgba(243,243,243,0.7);
           display: ${this.showControls ? 'block' : 'none'};
@@ -56,18 +56,17 @@ class DotsAndBoxesElement extends HTMLElement {
          width: 30px;
          margin-left: 2px;
          margin-right: 2px;
-         border: none;
-           border: solid 1px transparent;
+         border: solid 1px transparent;
         }      
       </style>
       <div>
         <canvas id="canvas"></canvas>
         <div id="controls-menu"></div>
       </div>
-    `;
+    `
         this.buildControls(shadow.getElementById('controls-menu') as HTMLElement)
-        this.canvas = this.getCanvas(shadow);
-        this.dotsAndBoxes = new DotsAndBoxes(this.canvas);
+        this.canvas = this.getCanvas(shadow)
+        this.dotsAndBoxes = new DotsAndBoxes(this.canvas)
         this.reset()
     }
 
@@ -86,12 +85,12 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     updateControls() {
-        const controlsMenu = this.shadowRoot!.getElementById('controls-menu') as HTMLElement;
+        const controlsMenu = this.shadowRoot!.getElementById('controls-menu') as HTMLElement
         controlsMenu.style.display = this.showControls ? 'block' : 'none'
     }
 
     buildControls(menu: HTMLElement) {
-        const rangeControl = document.createElement("input");
+        const rangeControl = document.createElement("input")
         rangeControl.type = "range"
         rangeControl.min = "0"
         rangeControl.max = "1"
@@ -100,30 +99,30 @@ class DotsAndBoxesElement extends HTMLElement {
         rangeControl.oninput = (e: any) => { this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)}
         menu.append(rangeControl)
 
-        const backward = document.createElement("button");
+        const backward = document.createElement("button")
         backward.onclick = (_) => this.dotsAndBoxes.backward()
         backward.textContent = '◀'
         menu.append(backward)
-        const pause = document.createElement("button");
+        const pause = document.createElement("button")
         pause.onclick = (_) => this.dotsAndBoxes.togglePause()
         pause.textContent = "◼"
         menu.append(pause)
-        const forward = document.createElement("button");
+        const forward = document.createElement("button")
         forward.onclick = (_) => this.dotsAndBoxes.forward()
         forward.append('▶')
         menu.append(forward)
 
-        const panZoomTool = document.createElement("button");
+        const panZoomTool = document.createElement("button")
         panZoomTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.PAN_ZOOM_TOOL)
         panZoomTool.append('☩')
         menu.append(panZoomTool)
 
-        const dotTool = document.createElement("button");
+        const dotTool = document.createElement("button")
         dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
         dotTool.append('❍')
         menu.append(dotTool)
 
-        const boxTool = document.createElement("button");
+        const boxTool = document.createElement("button")
         boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
         boxTool.append('◻')
         menu.append(boxTool)
@@ -137,48 +136,48 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     disconnectedCallback() {
-        console.log("Custom element removed from page.");
+        console.log("Custom element removed from page.")
     }
 
     adoptedCallback() {
-        console.log("Custom element moved to new page.");
+        console.log("Custom element moved to new page.")
     }
 
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
         switch (name) {
             case 'style':
                 this.resize()
-                break;
+                break
             case 'code':
                 this.code = newValue
                 if (this.dotsAndBoxes) {
                     this.applyCode()
                 }
-                break;
+                break
             case 'color':
                 this.color = newValue
-                break;
+                break
             case 'border':
                 this.border = newValue
-                break;
+                break
             case 'controls':
                 this.showControls = newValue != null
                 if (this.dotsAndBoxes) {
                     this.updateControls()
                 }
-                break;
+                break
             case 'autoplay':
                 this.autoplay = newValue != null
                 if (this.dotsAndBoxes) {
                     this.dotsAndBoxes.autoplay = this.autoplay
                 }
-                break;
+                break
             case 'debug':
                 this.debug = newValue != null
                 if (this.dotsAndBoxes) {
                     this.dotsAndBoxes.showDebug = this.debug
                 }
-                break;
+                break
             default:
                 console.log(name, oldValue, newValue)
 
@@ -186,4 +185,4 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 }
 
-customElements.define(DotsAndBoxesElement.ELEM_NAME, DotsAndBoxesElement);
+customElements.define(DotsAndBoxesElement.ELEM_NAME, DotsAndBoxesElement)

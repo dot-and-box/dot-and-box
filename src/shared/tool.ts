@@ -1,4 +1,4 @@
-import {Point} from "./point.ts";
+import {Point} from "./point.ts"
 
 export abstract class Tool {
     abstract click(point: Point): void

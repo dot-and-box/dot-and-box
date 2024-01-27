@@ -1,48 +1,48 @@
 export class Easing {
 
     static easeLinear(x: number): number {
-        return x;
+        return x
     }
 
     static easeInQuad(x: number) {
-        return x  * x;
+        return x * x
     }
 
     static inverseEaseInQuad(x: number) {
-        return Math.sqrt(x);
+        return Math.sqrt(x)
     }
 
     static easeInCubic(x: number) {
-        return  x * x * x;
+        return x * x * x
     }
 
     static inverseEaseInCubic(x: number) {
-        return Math.pow(x, 1/3);
+        return Math.pow(x, 1 / 3)
     }
 
     static getEasingByType(type: EasingType) {
-        switch(type){
+        switch (type) {
             case EasingType.LINEAR:
-                return Easing.easeLinear;
+                return Easing.easeLinear
             case EasingType.IN_QUAD:
-                return Easing.easeInQuad;
+                return Easing.easeInQuad
             case EasingType.IN_CUBIC:
-                return Easing.easeInCubic;
+                return Easing.easeInCubic
             default:
-                return Easing.easeLinear;
+                return Easing.easeLinear
         }
     }
 
     static getInverseEasingByType(type: EasingType) {
-        switch(type){
+        switch (type) {
             case EasingType.LINEAR:
-                return Easing.easeLinear;
+                return Easing.easeLinear
             case EasingType.IN_QUAD:
-                return Easing.inverseEaseInQuad;
+                return Easing.inverseEaseInQuad
             case EasingType.IN_CUBIC:
-                return Easing.inverseEaseInCubic;
+                return Easing.inverseEaseInCubic
             default:
-                return Easing.easeLinear;
+                return Easing.easeLinear
         }
     }
 

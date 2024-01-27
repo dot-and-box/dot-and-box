@@ -1,23 +1,23 @@
-import {ActionBase} from "../shared/actionBase.ts";
-import {Step} from "../shared/step.ts";
-import {Control} from "../controls/control.ts";
-import {Change} from "../shared/change.ts";
+import {ActionBase} from "../shared/actionBase.ts"
+import {Step} from "../shared/step.ts"
+import {Control} from "../controls/control.ts"
+import {Change} from "../shared/change.ts"
 
 export class Assign extends ActionBase {
 
     controls: Control[] = []
     controlIds: string []
-    properties: Map<string, any>;
+    properties: Map<string, any>
     changes: Change[] = []
 
     constructor(step: Step, controlIds: string[], properties: Map<string, any>) {
         super(step)
-        this.controlIds = controlIds;
+        this.controlIds = controlIds
         this.properties = properties
     }
 
     override init() {
-        super.init();
+        super.init()
         this.controls = []
         const foundControl = this.step.controls.find(c => this.controlIds.includes(c.id))
         if (foundControl) {
@@ -26,7 +26,7 @@ export class Assign extends ActionBase {
     }
 
     override onBeforeForward() {
-        super.onBeforeForward();
+        super.onBeforeForward()
         this.applyChanges()
     }
 
@@ -35,7 +35,7 @@ export class Assign extends ActionBase {
     }
 
     override onAfterBackward() {
-        super.onAfterBackward();
+        super.onAfterBackward()
         this.revertChanges()
     }
 

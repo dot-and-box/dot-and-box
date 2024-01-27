@@ -1,12 +1,12 @@
-import {ActionBase} from "../shared/actionBase.ts";
-import {Point} from "../shared/point.ts";
-import {Step} from "../shared/step.ts";
-import {Control} from "../controls/control.ts";
-import {DummyControl} from "../controls/dummy/dummyControl.ts";
-import {Sign} from "../shared/sign.ts";
+import {ActionBase} from "../shared/actionBase.ts"
+import {Point} from "../shared/point.ts"
+import {Step} from "../shared/step.ts"
+import {Control} from "../controls/control.ts"
+import {DummyControl} from "../controls/dummy/dummyControl.ts"
+import {Sign} from "../shared/sign.ts"
 
 export class Move extends ActionBase {
-    start: Point;
+    start: Point
     to: Point
     end: Point
     control: Control = new DummyControl()
@@ -15,18 +15,17 @@ export class Move extends ActionBase {
     constructor(step: Step, leftId: string, to: Point) {
         super(step)
         this.start = Point.zero()
-        this.to = to;
-        this.end = to;
-        this.leftId = leftId;
+        this.to = to
+        this.end = to
+        this.leftId = leftId
     }
 
-    //TODO: refactor onInit and onBeforeStep to support moving cloned controls
     override init() {
-        super.init();
+        super.init()
         const foundControl = this.step.controls.find(c => c.id == this.leftId)
         if (foundControl) {
             this.control = foundControl
-            this.start = this.control.position.clone();
+            this.start = this.control.position.clone()
             this.end = this.calculateEnd(this.start, this.to)
         }
     }
