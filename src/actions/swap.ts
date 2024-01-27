@@ -22,6 +22,15 @@ export class Swap extends ActionBase {
 
     override init() {
         super.init()
+        this.selectControls()
+    }
+
+    override onBeforeForward() {
+        super.onBeforeForward()
+        this.selectControls()
+    }
+
+    selectControls() {
         const foundLeft = this.step.controls.find(c => c.id == this.leftControlId)
         if (foundLeft) {
             this.left = foundLeft

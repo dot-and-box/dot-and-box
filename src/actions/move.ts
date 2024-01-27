@@ -22,12 +22,21 @@ export class Move extends ActionBase {
 
     override init() {
         super.init()
+        this.selectControls()
+    }
+
+    selectControls() {
         const foundControl = this.step.controls.find(c => c.id == this.leftId)
         if (foundControl) {
             this.control = foundControl
             this.start = this.control.position.clone()
             this.end = this.calculateEnd(this.start, this.to)
         }
+    }
+
+    override onBeforeForward() {
+        super.onBeforeForward()
+        this.selectControls()
     }
 
     calculateEnd(position: Point, change: Point) {
