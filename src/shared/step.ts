@@ -21,7 +21,7 @@ export class Step {
     public direction = StepDirection.NONE;
     public progress = 0.0;
     public state: StepState = StepState.START
-    public duration: number = 3600;
+    public duration: number = 1000;
 
     init() {
         this.actions.forEach(a => a.init())
