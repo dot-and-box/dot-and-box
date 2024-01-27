@@ -31,9 +31,10 @@ export class DotControl implements Control {
             ctx.stroke()
         }
         ctx.closePath()
-        ctx.font = `${this.size}px ${DEFAULT_FONT}`
+        const textSize = this.text.length > 1 ? this.size * 0.8 : this.size * 1.2
+        ctx.font = `${textSize}px ${DEFAULT_FONT}`
         ctx.fillStyle = this.color != WHITE ? WHITE : BLACK
-        const textOffset = this.size / 2 - this.size / 4 + 1
+        const textOffset = textSize / 2 - textSize / 4 + 1
         const xOffset = textOffset * this.text.length
         ctx.fillText(this.text, this.position.x - xOffset, this.position.y + textOffset)
     }
