@@ -15,10 +15,9 @@
 <body>
 <h1>Just dots and boxes...</h1>
 
-<dots-and-boxes style="margin:10px;height: 400px; width: 330px"  debug controls code="
-    title: bubble sort
-    box id: subtitle  text: 'sort numbers with bubble sort' at: -150, -120 size: (260, 80)
-    box id: b2  text: '' at: -150, 40 size: (260, 80) visible: false
+<dots-and-boxes style="margin:10px;height: 270px; width: 330px"  controls code="
+    title: sort with bubble sort
+    box id: b2  text: '(1) select first two numbers' at: -150, 40 size: (260, 80) visible: false
     box id: b3  text: '' at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
     dot id: '1' at: -70, 0 size: 20
     dot id: '2' at: -120, 0 size: 20
@@ -26,7 +25,7 @@
     dot id: '5' at: -20, 0 size: 20
     dot id: p  text: '4' at: 80, 0 size: 20
     steps:
-    b2 <- text: '(1) select first two numbers', b2 <- visible: true, b3 <- visible: true, b3 -> +(110,0)
+    b2 <- visible: true, b3 <- visible: true, b3 -> +(110,0)
     b2 <- text: '(2) swap if left bigger than right', 2 <-> 1
     b2 <- text: '(3) select next two numbers', b3 -> +(50,0)
     b2 <- text: 'ignore if left smaller', b3 -> +(50,0)
