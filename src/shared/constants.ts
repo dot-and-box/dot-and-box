@@ -7,6 +7,8 @@ export const DEFAULT_FONT = 'courier'
 export const DEFAULT_FONT_SIZE = 14
 export const TITLE_FONT_SIZE = 22
 export const DEFAULT_BOX_COLOR = "rgba(37,33,133,0.68)"
+export const WHITE = "white"
+export const BLACK = "black"
 export const COLORS: string [] = [
     "#F44336",
     "#E91E63",

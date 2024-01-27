@@ -1,5 +1,5 @@
 import {Point} from "../../shared/point.ts"
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT} from "../../shared/constants.ts"
+import {SELECTION_STROKE_STYLE, DEFAULT_FONT, WHITE, BLACK} from "../../shared/constants.ts"
 import {Control} from "../control.ts"
 
 export class DotControl implements Control {
@@ -32,7 +32,7 @@ export class DotControl implements Control {
         }
         ctx.closePath()
         ctx.font = `${this.size}px ${DEFAULT_FONT}`
-        ctx.fillStyle = "white"
+        ctx.fillStyle = this.color != WHITE ? WHITE : BLACK
         const textOffset = this.size / 2 - this.size / 4 + 1
         const xOffset = textOffset * this.text.length
         ctx.fillText(this.text, this.position.x - xOffset, this.position.y + textOffset)

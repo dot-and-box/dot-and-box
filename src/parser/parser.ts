@@ -97,8 +97,8 @@ export class Parser {
         const dot_tokens = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
         let size = 20
         let at = new Point(0, 0)
-        let text = null
-        let id = null
+        let text = ''
+        let id = ''
         let color = COLORS[this.model.controls.length % COLORS.length]
         while (dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
@@ -120,10 +120,11 @@ export class Parser {
                     break
             }
         }
-        if (id == null && text == null) {
+        if (id == '' && text == '') {
             id = 'd' + this.model.controls.length
         }
-        this.model.controls.push(new DotControl(id != null ? id : text, at, size, color, text != null ? text : id))
+
+        this.model.controls.push(new DotControl(id != '' ? id : text, at, size, color, text != '' ? text : id))
     }
 
     text(): string {

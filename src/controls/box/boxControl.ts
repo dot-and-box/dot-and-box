@@ -1,5 +1,5 @@
 import {Point} from "../../shared/point.ts"
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT, DEFAULT_FONT_SIZE} from "../../shared/constants.ts"
+import {SELECTION_STROKE_STYLE, DEFAULT_FONT, DEFAULT_FONT_SIZE, WHITE, BLACK} from "../../shared/constants.ts"
 import {Control} from "../control.ts"
 
 export class BoxControl implements Control {
@@ -12,6 +12,7 @@ export class BoxControl implements Control {
     public selected: boolean
     public visible: boolean
 
+
     constructor(id: string, position: Point, size: Point, color: string, text: string) {
         this.id = id
         this.position = position
@@ -23,22 +24,24 @@ export class BoxControl implements Control {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.fillStyle = this.color != "white"
-            ? "white"
-            : "black"
-        ctx.strokeStyle = 'black'
+        ctx.fillStyle = this.color != WHITE
+            ? WHITE
+            : BLACK
+        ctx.strokeStyle = BLACK
         ctx.font = `${DEFAULT_FONT_SIZE}px ${DEFAULT_FONT}`
 
-        if (this.color) {
+        if (this.color != WHITE) {
             ctx.fillStyle = this.color
             ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
         }
-        if (this.selected) {
-            ctx.strokeStyle = SELECTION_STROKE_STYLE
+
+        if(this.selected || this.text.length ==0) {
+            ctx.strokeStyle = this.selected ? SELECTION_STROKE_STYLE : BLACK
             ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
         }
+
         const textOffset = this.size.x / 2 - ctx.measureText(this.text).width / 2
-        ctx.fillStyle = this.color != "white" ? "white" : 'black'
+        ctx.fillStyle = this.color != WHITE ? WHITE : BLACK
         ctx.fillText(this.text, this.position.x + textOffset, this.position.y + this.size.y / 2)
     }
 
