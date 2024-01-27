@@ -17,7 +17,7 @@ Just insert source script reference and declare dots and boxes custom tag
 eg.
 
 ```html
-<script src="*insert_url_here*"></script>
+<script src="insert_url_here"></script>
 <dots-and-boxes style="margin:20px;height: 400px; width: 600px" color="white" code="
     title: Visualizing algorithm
     box text: 'sort' id: b1 color: rgba(137,33,133,0.78) at: -180, -120 size: 260, 80
@@ -96,3 +96,8 @@ swaps c1 and c2 position
 > c1 *-> new_c1
 
 Clone control c1 and creates a new one named new_c1
+
+
+## credits
+
+- [Easing functions](https://gizma.com/easing/)
