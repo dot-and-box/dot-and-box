@@ -1,5 +1,5 @@
 import {Point} from "../../shared/point.ts"
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT, DEFAULT_FONT_SIZE, WHITE, BLACK} from "../../shared/constants.ts"
+import {BLACK, DEFAULT_FONT, DEFAULT_FONT_SIZE, SELECTION_STROKE_STYLE, WHITE} from "../../shared/constants.ts"
 import {Control} from "../control.ts"
 
 export class BoxControl implements Control {
@@ -12,15 +12,14 @@ export class BoxControl implements Control {
     public selected: boolean
     public visible: boolean
 
-
-    constructor(id: string, position: Point, size: Point, color: string, text: string) {
+    constructor(id: string, position: Point, size: Point, color: string, text: string, visible: boolean) {
         this.id = id
         this.position = position
         this.size = size
         this.color = color
         this.text = text
         this.selected = false
-        this.visible = true
+        this.visible = visible
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -35,7 +34,7 @@ export class BoxControl implements Control {
             ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
         }
 
-        if(this.selected || this.text.length ==0) {
+        if (this.selected || this.color != WHITE) {
             ctx.strokeStyle = this.selected ? SELECTION_STROKE_STYLE : BLACK
             ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
         }
@@ -57,7 +56,7 @@ export class BoxControl implements Control {
     }
 
     clone(): Control {
-        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this.color.toString(), this.text.toString())
+        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this.color.toString(), this.text.toString(), this.visible)
     }
 
 }

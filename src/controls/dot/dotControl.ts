@@ -11,14 +11,14 @@ export class DotControl implements Control {
     public selected: boolean
     public visible: boolean
 
-    constructor(id: string, position: Point, size: number, color: string, text: string) {
+    constructor(id: string, position: Point, size: number, color: string, text: string, visible: boolean) {
         this.id = id
         this.position = position
         this.color = color
         this.size = size
         this.text = text
         this.selected = false
-        this.visible = true
+        this.visible = visible
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -49,7 +49,7 @@ export class DotControl implements Control {
     }
 
     clone(): Control {
-        return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString())
+        return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString(), this.visible)
     }
 
 

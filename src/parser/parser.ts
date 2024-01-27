@@ -10,7 +10,7 @@ import {Move} from "../actions/move.ts"
 import {Swap} from "../actions/swap.ts"
 import {Clone} from "../actions/clone.ts"
 import {Sign} from "../shared/sign.ts"
-import {COLORS} from "../shared/constants.ts"
+import {COLORS, WHITE} from "../shared/constants.ts"
 import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
 
@@ -61,12 +61,13 @@ export class Parser {
     }
 
     box() {
-        const box_tokens = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
+        const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE]
         let size = new Point(100, 100)
         let at = new Point(0, 0)
         let text = 'box' + this.model.controls.length
         let id = null
-        let color = 'white'
+        let color = WHITE
+        let visible = true
         while (box_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -85,12 +86,15 @@ export class Parser {
                 case TokenType.COLOR:
                     color = this.color()
                     break
+                case TokenType.VISIBLE:
+                    visible = this.visible()
+                    break
             }
         }
         if (id == null && text == null) {
             id = 'b' + this.model.controls.length
         }
-        this.model.controls.push(new BoxControl(id != null ? id : text, at, size, color, text))
+        this.model.controls.push(new BoxControl(id != null ? id : text, at, size, color, text, visible))
     }
 
     dot() {
@@ -100,6 +104,7 @@ export class Parser {
         let text = ''
         let id = ''
         let color = COLORS[this.model.controls.length % COLORS.length]
+        let visible = true
         while (dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -118,13 +123,16 @@ export class Parser {
                 case TokenType.SIZE:
                     size = this.number()
                     break
+                case TokenType.VISIBLE:
+                    visible = this.visible()
+                    break
             }
         }
         if (id == '' && text == '') {
             id = 'd' + this.model.controls.length
         }
 
-        this.model.controls.push(new DotControl(id != '' ? id : text, at, size, color, text != '' ? text : id))
+        this.model.controls.push(new DotControl(id != '' ? id : text, at, size, color, text != '' ? text : id, visible))
     }
 
     text(): string {
@@ -260,15 +268,10 @@ export class Parser {
             this.advance()
             const valueToken = this.peek()
             let value
-            switch (valueToken.type) {
-                case TokenType.TRUE:
-                    value = true
-                    break
-                case TokenType.FALSE:
-                    value = false
-                    break
-                default:
-                    value = valueToken.value
+            if (valueToken.type == TokenType.TRUE || valueToken.type == TokenType.FALSE) {
+                value = this.boolean()
+            } else {
+                value = valueToken.value
             }
             properties.set(token.type.toString(), value)
             this.advance()
@@ -276,6 +279,22 @@ export class Parser {
         }
 
         return new Assign(step, controlIds, properties)
+    }
+
+    visible(): boolean {
+        return this.boolean()
+    }
+
+    boolean(): boolean {
+        const token = this.peek()
+        switch (token.type) {
+            case TokenType.TRUE:
+                return true
+            case TokenType.FALSE:
+                return false
+            default:
+                throw new Error(`Expected boolean value: ${token.position} got token ${token.value} instead`)
+        }
     }
 
     swap(step: Step, leftControlId: string): Swap {

@@ -16,7 +16,7 @@ export class DotTool extends Tool {
     override click(point: Point): void {
         const controls = this.dotsAndBoxes.controls
         const id = `${controls.length + 1}`
-        controls.push(new DotControl(id, point, DEFAULT_DOT_SIZE, COLORS[controls.length % COLORS.length], id))
+        controls.push(new DotControl(id, point, DEFAULT_DOT_SIZE, COLORS[controls.length % COLORS.length], id, true))
     }
 
 }
