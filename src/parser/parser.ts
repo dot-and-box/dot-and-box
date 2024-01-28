@@ -13,6 +13,7 @@ import {Sign} from "../shared/sign.ts"
 import {COLORS, WHITE} from "../shared/constants.ts"
 import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
+import {CameraMove} from "../actions/cameraMove.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -195,22 +196,22 @@ export class Parser {
     }
 
     steps() {
-        let step = new Step(this.model.controls)
-        let action = this.action(step)
+        let step = new Step()
+        let action = this.action()
         while (action != null) {
             step.actions.push(action)
             if (!this.match(TokenType.COMMA)) {
                 this.model.steps.push(step)
-                step = new Step(this.model.controls)
+                step = new Step()
             }
-            action = this.action(step)
+            action = this.action()
         }
         if (step.actions.length > 0) {
             this.model.steps.push(step)
         }
     }
 
-    action(step: Step): ActionBase | null {
+    action(): ActionBase | null {
         if (this.eof())
             return null
         let controlIds = this.controlIds()
@@ -220,21 +221,20 @@ export class Parser {
         let token = this.peek()
         switch (token.type) {
             case TokenType.ASSIGN:
-                return this.assign(step, controlIds)
+                return this.assign(controlIds)
             case TokenType.MOVE:
-                return this.move(step, controlIds[0])
+                return this.move(controlIds[0])
             case TokenType.SWAP:
-                return this.swap(step, controlIds[0])
+                return this.swap(controlIds[0])
             case TokenType.CLONE:
                 this.advance()
                 token = this.peek()
                 if (token.type == TokenType.IDENTIFIER) {
                     this.advance()
-                    return new Clone(step, controlIds[0], token.value)
+                    return new Clone(this.model, controlIds[0], token.value)
                 }
                 break
         }
-
         return null
     }
 
@@ -253,18 +253,24 @@ export class Parser {
         return controlIds
     }
 
-    move(step: Step, leftControlId: string): Move {
+    move(leftControlId: string): ActionBase {
         this.advance()
         const point = this.point()
-        return new Move(step, leftControlId, point)
+        if (leftControlId == 'camera') {
+            if (point.sign == Sign.NONE) {
+                throw new Error(`Only relative move for camera is currently supported`)
+            }
+            return new CameraMove(this.model, point)
+        }
+        return new Move(this.model, leftControlId, point)
     }
 
-    assign(step: Step, controlIds: string[]): Assign {
+    assign(controlIds: string[]): Assign {
         this.advance()
         let token = this.peek()
         let properties: Map<string, any> = new Map()
 
-        while (Keywords.ASSIGN_PROPERTIES.includes(token.type)) {
+        while (!this.eof() && Keywords.ASSIGN_PROPERTIES.includes(token.type)) {
             this.advance()
             const valueToken = this.peek()
             let value
@@ -278,7 +284,7 @@ export class Parser {
             token = this.peek()
         }
 
-        return new Assign(step, controlIds, properties)
+        return new Assign(this.model, controlIds, properties)
     }
 
     visible(): boolean {
@@ -297,12 +303,12 @@ export class Parser {
         }
     }
 
-    swap(step: Step, leftControlId: string): Swap {
+    swap(leftControlId: string): Swap {
         this.advance()
         let token = this.peek()
         const rightControlId = token.value
         this.advance()
-        return new Swap(step, leftControlId, rightControlId)
+        return new Swap(this.model, leftControlId, rightControlId)
     }
 
     plus(): boolean {

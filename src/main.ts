@@ -46,6 +46,7 @@ class DotsAndBoxesElement extends HTMLElement {
           height: 40px;
           left: 0;       
           top: -44px;
+          overflow:hidden;
           background-color: rgba(243,243,243,0.7);
           display: ${this.showControls ? 'block' : 'none'};
         }        
@@ -96,7 +97,9 @@ class DotsAndBoxesElement extends HTMLElement {
         rangeControl.max = "1"
         rangeControl.step = "0.01"
         rangeControl.value = "0"
-        rangeControl.oninput = (e: any) => { this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)}
+        rangeControl.oninput = (e: any) => {
+            this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)
+        }
         menu.append(rangeControl)
 
         const backward = document.createElement("button")
@@ -126,6 +129,11 @@ class DotsAndBoxesElement extends HTMLElement {
         boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
         boxTool.append('◻')
         menu.append(boxTool)
+
+        const printModel = document.createElement("button")
+        printModel.onclick = (_) => console.log(this.dotsAndBoxes.model)
+        printModel.append('m')
+        menu.append(printModel)
     }
 
     resize() {

@@ -1,6 +1,6 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {Point} from "../shared/point.ts"
-import {Step} from "../shared/step.ts"
+import {DotsAndBoxesModel} from "../shared/step.ts"
 import {Control} from "../controls/control.ts"
 import {DummyControl} from "../controls/dummy/dummyControl.ts"
 import {Sign} from "../shared/sign.ts"
@@ -12,8 +12,8 @@ export class Move extends ActionBase {
     control: Control = new DummyControl()
     leftId: string
 
-    constructor(step: Step, leftId: string, to: Point) {
-        super(step)
+    constructor(model: DotsAndBoxesModel, leftId: string, to: Point) {
+        super(model)
         this.start = Point.zero()
         this.to = to
         this.end = to
@@ -26,7 +26,7 @@ export class Move extends ActionBase {
     }
 
     selectControls() {
-        const foundControl = this.step.controls.find(c => c.id == this.leftId)
+        const foundControl = this.model.controls.find(c => c.id == this.leftId)
         if (foundControl) {
             this.control = foundControl
             this.start = this.control.position.clone()

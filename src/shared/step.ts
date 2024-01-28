@@ -2,22 +2,26 @@ import {ActionBase} from "./actionBase.ts"
 import {Control} from "../controls/control.ts"
 import {StepState} from "./stepState.ts"
 import {StepDirection} from "./stepDirection.ts"
+import {Point} from "./point.ts";
 
 export class DotsAndBoxesModel {
     title: string
     controls: Control[]
     steps: Step[]
+    origin: Point = Point.zero()
+    offset: Point = Point.zero()
+    zoom: number = 1
 
     constructor(title: string, controls: Control[], steps: Step[]) {
         this.title = title
         this.controls = controls
         this.steps = steps
+        this.origin = Point.zero()
     }
 }
 
 export class Step {
-    actions: ActionBase[]
-    controls: Control[]
+    actions: ActionBase[] = []
     private _progress = 0.0
     public direction = StepDirection.NONE
     public state: StepState = StepState.START
@@ -66,11 +70,6 @@ export class Step {
         if (this.direction != StepDirection.NONE) {
             this.state = StepState.IN_PROGRESS
         }
-    }
-
-    constructor(controls: Control[]) {
-        this.controls = controls
-        this.actions = []
     }
 
     forward() {

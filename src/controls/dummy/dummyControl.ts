@@ -1,6 +1,5 @@
 import {Point} from "../../shared/point.ts"
 import {Control} from "../control.ts"
-import * as console from "console"
 
 export class DummyControl implements Control {
     id: string

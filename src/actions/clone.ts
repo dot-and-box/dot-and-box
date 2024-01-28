@@ -1,5 +1,5 @@
 import {ActionBase} from "../shared/actionBase.ts"
-import {Step} from "../shared/step.ts"
+import {DotsAndBoxesModel} from "../shared/step.ts"
 import {Control} from "../controls/control.ts"
 import {DummyControl} from "../controls/dummy/dummyControl.ts"
 
@@ -10,8 +10,8 @@ export class Clone extends ActionBase {
     rightControlId: string
     isAdded: boolean
 
-    constructor(step: Step, leftControlId: string, rightControlId: string) {
-        super(step)
+    constructor(model: DotsAndBoxesModel, leftControlId: string, rightControlId: string) {
+        super(model)
         this.isAdded = false
         this.leftControlId = leftControlId
         this.rightControlId = rightControlId
@@ -19,7 +19,7 @@ export class Clone extends ActionBase {
 
     override init() {
         super.init()
-        const foundLeft = this.step.controls.find(c => c.id == this.leftControlId)
+        const foundLeft = this.model.controls.find(c => c.id == this.leftControlId)
         if (foundLeft) {
             this.left = foundLeft
             this.cloneAndAddControl()
@@ -27,10 +27,10 @@ export class Clone extends ActionBase {
     }
 
     cloneAndAddControl() {
-        if (!this.isAdded ) {
+        if (!this.isAdded) {
             this.right = this.left.clone()
             this.right.id = this.rightControlId
-            this.step.controls.push(this.right)
+            this.model.controls.push(this.right)
             this.isAdded = true
         }
     }
@@ -47,9 +47,9 @@ export class Clone extends ActionBase {
 
     destroyControls() {
         if (this.isAdded) {
-            const index = this.step.controls.indexOf(this.right!)
+            const index = this.model.controls.indexOf(this.right!)
             if (index > -1) {
-                this.step.controls.splice(index, 1)
+                this.model.controls.splice(index, 1)
                 this.isAdded = false
             }
         }

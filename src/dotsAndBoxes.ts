@@ -16,10 +16,10 @@ export class DotsAndBoxes {
     private readonly ctx: CanvasRenderingContext2D
     private _width = 100
     private _height = 100
-    public zoom: number = 1
+    public model: DotsAndBoxesModel = new DotsAndBoxesModel('',[],[])
     public isDragging = false
     private initialPinchDistance: number = 0
-    private lastZoom = this.zoom
+    private lastZoom = this.model.zoom
     private fps = 1
     private lastTime: any = 0
     private stepStartTime: number = 0
@@ -28,8 +28,6 @@ export class DotsAndBoxes {
     private inverseEasingFunc: (x: number) => number = Easing.getInverseEasingByType(EasingType.IN_QUAD)
 
     public controls: Control[] = []
-    public origin: Point = Point.zero()
-    public offset: Point = Point.zero()
     public showDebug = true
     public title = ''
     public marginLeft = 0
@@ -59,14 +57,21 @@ export class DotsAndBoxes {
         this._requestedStepProgress = newVal
     }
 
-    private currentStep = new Step(this.controls)
+    public get zoom(): number {
+        return this.model.zoom
+    }
+
+    public set zoom(newZoom: number) {
+        this.model.zoom = newZoom
+    }
+
+    private currentStep = new Step()
 
     public resetModel() {
         this.steps = []
         this.controls = []
         this.title = ''
         this.currentStepIndex = 0
-        this.currentStep = new Step(this.controls)
     }
 
     public apply(model: DotsAndBoxesModel) {
@@ -77,6 +82,7 @@ export class DotsAndBoxes {
         this.controls = model.controls
         this.steps = model.steps
         this.selectStep(0)
+        this.model = model
         this.currentStep.init()
     }
 
@@ -92,8 +98,8 @@ export class DotsAndBoxes {
         this._height = parseInt(style.height, 10)
         this.marginLeft = parseInt(style.marginLeft, 10) + offset.x
         this.marginTop = parseInt(style.marginTop, 10) + offset.y
-        this.origin = new Point(this._width / 2, this._height / 2)
-        this.offset = new Point(this._width / 2, this._height / 2)
+        this.model.origin = new Point(this._width / 2, this._height / 2)
+        this.model.offset = new Point(this._width / 2, this._height / 2)
     }
 
     private attachCanvasEventHandlers() {
@@ -178,7 +184,7 @@ export class DotsAndBoxes {
 
     drawDebug(time: number) {
         this.fps = 1 / ((time - this.lastTime) / 1000)
-        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this._requestedStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
+        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.model.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this._requestedStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
     }
 
 
@@ -191,9 +197,9 @@ export class DotsAndBoxes {
         if (this.title) {
             this.drawText(this.title, 20, 30, TITLE_FONT_SIZE, DEFAULT_FONT)
         }
-        this.ctx.translate(this.origin.x, this.origin.y)
-        this.ctx.scale(this.zoom, this.zoom)
-        this.ctx.translate(-this.origin.x + this.offset.x, -this.origin.y + this.offset.y)
+        this.ctx.translate(this.model.origin.x, this.model.origin.y)
+        this.ctx.scale(this.model.zoom, this.model.zoom)
+        this.ctx.translate(-this.model.origin.x + this.model.offset.x, -this.model.origin.y + this.model.offset.y)
         if (this.currentStep && this.currentStep.direction != StepDirection.NONE && this.currentStep.state != StepState.STOPPED) {
             this.updateProgress()
         }
@@ -250,15 +256,15 @@ export class DotsAndBoxes {
             return
 
         this.tool.click(new Point(
-            clientPoint.x / this.zoom - this.offset.x + this.origin.x - this.origin.x / this.zoom,
-            clientPoint.y / this.zoom - this.offset.y + this.origin.y - this.origin.y / this.zoom
+            clientPoint.x / this.model.zoom - this.model.offset.x + this.model.origin.x - this.model.origin.x / this.model.zoom,
+            clientPoint.y / this.model.zoom - this.model.offset.y + this.model.origin.y - this.model.origin.y / this.model.zoom
         ))
     }
 
     private onPointerUp() {
         this.isDragging = false
         this.initialPinchDistance = 0
-        this.lastZoom = this.zoom
+        this.lastZoom = this.model.zoom
     }
 
     private onPointerMove(e: any) {
@@ -267,8 +273,8 @@ export class DotsAndBoxes {
         if (this.isDragging) {
             let clientPoint = this.getEventLocation(e)!
             this.tool.move(new Point(
-                clientPoint.x / this.zoom + this.origin.x - this.origin.x / this.zoom,
-                clientPoint.y / this.zoom + this.origin.y - this.origin.y / this.zoom
+                clientPoint.x / this.model.zoom + this.model.origin.x - this.model.origin.x / this.model.zoom,
+                clientPoint.y / this.model.zoom + this.model.origin.y - this.model.origin.y / this.model.zoom
             ))
         }
     }
@@ -308,21 +314,18 @@ export class DotsAndBoxes {
     private adjustZoom(zoomAmount: any, zoomFactor: any) {
         if (!this.isDragging) {
             if (zoomAmount) {
-                this.zoom -= zoomAmount
+                this.model.zoom -= zoomAmount
             } else if (zoomFactor) {
-                this.zoom = zoomFactor * this.lastZoom
+                this.model.zoom = zoomFactor * this.lastZoom
             }
-            this.zoom = Math.min(this.zoom, MAX_ZOOM)
-            this.zoom = Math.max(this.zoom, MIN_ZOOM)
+            this.model.zoom = Math.min(this.model.zoom, MAX_ZOOM)
+            this.model.zoom = Math.max(this.model.zoom, MIN_ZOOM)
         }
     }
 
     togglePause() {
         this.updateStartTime()
         this.currentStep.togglePause()
-        // this.tool.move(new Point( this.origin.x, this.origin.y))
-        console.log(this.origin)
-        this.tool.move(this.origin.minus(new Point(50,0)))
     }
 }
 

@@ -1,10 +1,10 @@
-import {Step} from "./step.ts"
+import {DotsAndBoxesModel} from "./step.ts"
 
 export abstract class ActionBase {
-    step: Step
+    model: DotsAndBoxesModel
 
-    protected constructor(step: Step) {
-        this.step = step
+    protected constructor(model: DotsAndBoxesModel) {
+        this.model = model
     }
 
     init(): void {}

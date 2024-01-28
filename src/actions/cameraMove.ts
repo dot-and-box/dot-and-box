@@ -1,29 +1,25 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {Point} from "../shared/point.ts"
-import {Step} from "../shared/step.ts"
-import {Control} from "../controls/control.ts"
-import {DummyControl} from "../controls/dummy/dummyControl.ts"
+import {DotsAndBoxesModel} from "../shared/step.ts"
 
 export class CameraMove extends ActionBase {
-    start: Point
-    to: Point
-    end: Point
-    control: Control = new DummyControl()
-    leftId: string
+    start: Point = Point.zero()
+    to: Point = new Point(100, 100)
+    leftId: string = ''
 
-    constructor(step: Step, to: Point) {
-        super(step)
-        this.start = Point.zero()
+    constructor(model: DotsAndBoxesModel, to: Point) {
+        super(model)
         this.to = to
-        this.end = to
     }
 
-    override init() {
-        super.init()
+    init() {
+        super.init();
+        this.start = this.model.offset.clone()
     }
 
     override updateValue(progress: number) {
-         this.step
+        this.model.offset.x = this.start.x - this.to.x * progress
+        this.model.offset.y = this.start.y - this.to.y * progress
     }
 
 }

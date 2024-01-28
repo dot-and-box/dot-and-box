@@ -59,17 +59,19 @@
 
 </div>
 
-<dots-and-boxes style="margin:10px;height: 350px; width: 600px"   controls code="
+<dots-and-boxes style="margin:10px;height: 350px; width: 600px"  debug controls code="
     title: request response pattern
     box text: 'CLIENT' size: 100,40 at: -295, -120 color: rgb(187,105,13)
     box text: 'SERVER' size: 100,40 at: 180, -120 color: rgba(5,5,254,0.6)
     box text: '' color: orange size: 100,200 at: -295, -80
     box text: '' color: rgba(5,5,254,0.4) size: 100, 200 at: 180, -80
+    box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
     dot text: 'req' at: -250, -30 size: 35
     dot text: 'res' at: 230, 70 size: 35
     steps:
     req ->  +(480,0)
     res ->  -(480,0)
+    camera -> +(0,350), fin <- visible: true
 ">
 </dots-and-boxes>
 

@@ -1,5 +1,5 @@
 import {ActionBase} from "../shared/actionBase.ts"
-import {Step} from "../shared/step.ts"
+import {DotsAndBoxesModel} from "../shared/step.ts"
 import {Control} from "../controls/control.ts"
 import {Change} from "../shared/change.ts"
 
@@ -11,8 +11,8 @@ export class Assign extends ActionBase {
     changes: Change[] = []
     applied = false
 
-    constructor(step: Step, controlIds: string[], properties: Map<string, any>) {
-        super(step)
+    constructor(model: DotsAndBoxesModel, controlIds: string[], properties: Map<string, any>) {
+        super(model)
         this.controlIds = controlIds
         this.properties = properties
     }
@@ -24,7 +24,7 @@ export class Assign extends ActionBase {
 
     selectControls() {
         this.controls = []
-        const foundControl = this.step.controls.find(c => this.controlIds.includes(c.id))
+        const foundControl = this.model.controls.find(c => this.controlIds.includes(c.id))
         if (foundControl) {
             this.controls.push(foundControl)
         }
