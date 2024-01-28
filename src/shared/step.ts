@@ -18,6 +18,10 @@ export class DotsAndBoxesModel {
         this.steps = steps
         this.origin = Point.zero()
     }
+
+    deleteSelected() {
+        this.controls = this.controls.filter(c => !c.selected)
+    }
 }
 
 export class Step {
@@ -40,7 +44,7 @@ export class Step {
             return
         if (newProgress > 0 && this._progress == 0) {
             this.actions.forEach(a => a.onBeforeForward())
-        } else if(newProgress == 0 && this._progress > 0) {
+        } else if (newProgress == 0 && this._progress > 0) {
             this.actions.forEach(a => a.onAfterBackward())
         }
         this._progress = newProgress

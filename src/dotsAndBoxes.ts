@@ -6,7 +6,6 @@ import {DotTool} from "./controls/dot/dotTool.ts"
 import {EmptyTool} from "./shared/emptyTool.ts"
 import {PanZoomTool} from "./panzoom/panZoomTool.ts"
 import {BoxTool} from "./controls/box/boxTool.ts"
-import {Control} from "./controls/control.ts"
 import {StepState} from "./shared/stepState.ts"
 import {StepDirection} from "./shared/stepDirection.ts"
 import {Easing, EasingType} from "./shared/easingFunctions.ts"
@@ -16,18 +15,15 @@ export class DotsAndBoxes {
     private readonly ctx: CanvasRenderingContext2D
     private _width = 100
     private _height = 100
-    public model: DotsAndBoxesModel = new DotsAndBoxesModel('',[],[])
+    public model: DotsAndBoxesModel = new DotsAndBoxesModel('', [], [])
     public isDragging = false
     private initialPinchDistance: number = 0
     private lastZoom = this.model.zoom
     private fps = 1
     private lastTime: any = 0
     private stepStartTime: number = 0
-    private tool: Tool = new PanZoomTool(this)
     private easingFunc: (x: number) => number = Easing.getEasingByType(EasingType.IN_QUAD)
     private inverseEasingFunc: (x: number) => number = Easing.getInverseEasingByType(EasingType.IN_QUAD)
-
-    public controls: Control[] = []
     public showDebug = true
     public title = ''
     public marginLeft = 0
@@ -37,13 +33,15 @@ export class DotsAndBoxes {
     public readonly DOT_TOOL: string = "dot-tool"
     public readonly BOX_TOOL: string = "box-tool"
     public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
-
+    private panZoomTool = new PanZoomTool()
     private tools: Map<string, Tool> = new Map([
         [this.EMPTY_TOOL, new EmptyTool()],
-        [this.DOT_TOOL, new DotTool(this)],
-        [this.BOX_TOOL, new BoxTool(this)],
-        [this.PAN_ZOOM_TOOL, new PanZoomTool(this)]
+        [this.DOT_TOOL, new DotTool()],
+        [this.BOX_TOOL, new BoxTool()],
+        [this.PAN_ZOOM_TOOL, this.panZoomTool]
     ])
+    private tool: Tool = this.panZoomTool
+
     private steps: Step[] = []
     private currentStepIndex = 0
     private _requestedStepProgress = 0
@@ -67,22 +65,23 @@ export class DotsAndBoxes {
 
     private currentStep = new Step()
 
-    public resetModel() {
+    public initModel(model: DotsAndBoxesModel) {
         this.steps = []
-        this.controls = []
         this.title = ''
         this.currentStepIndex = 0
+        this.model = model
+        this.steps = model.steps
+        for (let tool of this.tools.values()) {
+            tool.updateModel(this.model)
+        }
     }
 
     public apply(model: DotsAndBoxesModel) {
-        this.resetModel()
+        this.initModel(model)
         if (model.title) {
             this.title = model.title
         }
-        this.controls = model.controls
-        this.steps = model.steps
         this.selectStep(0)
-        this.model = model
         this.currentStep.init()
     }
 
@@ -121,6 +120,8 @@ export class DotsAndBoxes {
             this.backward()
         } else if (k.key === "ArrowRight") {
             this.forward()
+        } else if (k.key === "Delete") {
+            this.model.deleteSelected()
         }
     }
 
@@ -204,7 +205,7 @@ export class DotsAndBoxes {
             this.updateProgress()
         }
         this.handleStepChange()
-        for (const control of this.controls) {
+        for (const control of this.model.controls) {
             if (control.visible) {
                 control.draw(this.ctx)
             }
