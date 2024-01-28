@@ -40,14 +40,15 @@ test('parser simple', () => {
 test('assign properties', () => {
     let eg1 = ` 
     title: request response pattern
-    box text: 'CLIENT' size: 100,40 at: -295, -120 color: rgb(187,105,13)
+    box text: 'CLIENT' size: 100,40 at: (-295, -120) color: rgb(187,105,13)
     box text: 'SERVER' size: 100,40 at: 180, -120 color: rgba(5,5,254,0.6)
     box text: '' color: orange size: 100,200 at: -295, -80
-    box text: '' color: rgba(5,5,254,0.4) size: 100, 200 at: 180, -80
+    box text: '' color: rgba(5,5,254,0.4) size: (100, 200) at: (180, -80)
     box text: 'FIN' size: 100,40 at: 180, 220 color: rgba(5,5,254,0.6) visible: false
     dot text: 'req' at: -250, -30 size: 35
     dot text: 'res' at: 230, 70 size: 35
     steps:
+    CLIENT <-> SERVER
     req ->  +(480,0)
     res ->  -(480,0)
     camera -> +(0,150), FIN <- visible: true
@@ -67,9 +68,9 @@ dot text: '2' color: red at: (250, 20) size: 55
 steps:
 b1 <- selected: true text: 'zumba'
 b1 *-> b2
-b1 <-> '1', '2'-> -(50, -45)
-'1' <-> b1, '2' -> (67,80)
-'1' -> +(89,90)
+b1 <-> 1, 2 -> -(50, -45)
+1 <-> b1, 2 -> (67,80)
+1 -> +(89,90)
 `
     let p = new Parser()
     const model = p.parse(eg1)

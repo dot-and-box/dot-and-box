@@ -255,14 +255,30 @@ export class Parser {
 
     move(leftControlId: string): ActionBase {
         this.advance()
-        const point = this.point()
+        let point: Point = Point.zero()
+        let rightId = ''
+        let isPoint = this.pointInBracketsAhead()
+        if (isPoint) {
+            point = this.point()
+        } else {
+            let token = this.peek()
+            rightId = token.value
+            this.advance()
+        }
         if (leftControlId == 'camera') {
             if (point.sign == Sign.NONE) {
                 throw new Error(`Only relative move for camera is currently supported`)
             }
             return new CameraMove(this.model, point)
         }
-        return new Move(this.model, leftControlId, point)
+        return new Move(this.model, leftControlId, point, rightId)
+    }
+
+    pointInBracketsAhead(): boolean {
+        const token = this.peek();
+        return token.type == TokenType.PLUS
+            || token.type == TokenType.MINUS
+            || token.type == TokenType.LEFT_BRACKET
     }
 
     assign(controlIds: string[]): Assign {

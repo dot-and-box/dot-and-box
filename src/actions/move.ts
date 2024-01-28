@@ -9,15 +9,18 @@ export class Move extends ActionBase {
     start: Point
     to: Point
     end: Point
-    control: Control = new DummyControl()
+    left: Control = new DummyControl()
+    right: Control = new DummyControl()
     leftId: string
+    rightId: string = ''
 
-    constructor(model: DotsAndBoxesModel, leftId: string, to: Point) {
+    constructor(model: DotsAndBoxesModel, leftId: string, to: Point, rightId = '') {
         super(model)
         this.start = Point.zero()
         this.to = to
         this.end = to
         this.leftId = leftId
+        this.rightId = rightId
     }
 
     override init() {
@@ -28,9 +31,16 @@ export class Move extends ActionBase {
     selectControls() {
         const foundControl = this.model.controls.find(c => c.id == this.leftId)
         if (foundControl) {
-            this.control = foundControl
-            this.start = this.control.position.clone()
+            this.left = foundControl
             this.end = this.calculateEnd(this.start, this.to)
+        }
+        this.start = this.left.position.clone()
+        if(this.rightId !== '') {
+            const foundRight = this.model.controls.find(c => c.id == this.rightId)
+            if (foundRight) {
+                this.right = foundRight
+                this.end = this.right.position.clone()
+            }
         }
     }
 
@@ -51,14 +61,14 @@ export class Move extends ActionBase {
 
     override updateValue(progress: number) {
         if (progress == 0) {
-            this.control!.position.x = this.start.x
-            this.control!.position.y = this.start.y
+            this.left!.position.x = this.start.x
+            this.left!.position.y = this.start.y
         } else if (progress == 1) {
-            this.control!.position.x = this.end.x
-            this.control!.position.y = this.end.y
+            this.left!.position.x = this.end.x
+            this.left!.position.y = this.end.y
         } else {
-            this.control!.position.x = this.start.x + (this.end.x - this.start.x) * progress
-            this.control!.position.y = this.start.y + (this.end.y - this.start.y) * progress
+            this.left!.position.x = this.start.x + (this.end.x - this.start.x) * progress
+            this.left!.position.y = this.start.y + (this.end.y - this.start.y) * progress
         }
     }
 
