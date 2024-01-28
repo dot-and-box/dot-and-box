@@ -82,6 +82,10 @@ a1 -> (56,150)
 ```text
 a1 -> +(50,-10)
 ```
+last option is moving to other control's location
+```text
+a1 -> b1
+```
  
 #### swap controls
 
