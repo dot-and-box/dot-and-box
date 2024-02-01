@@ -1,12 +1,11 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {Point} from "../shared/point.ts"
 import {DotsAndBoxesModel} from "../shared/step.ts"
-import {Control} from "../controls/control.ts"
-import {DummyControl} from "../controls/dummy/dummyControl.ts"
+import {Control, DUMMY_CONTROL} from "../controls/control.ts"
 
 export class Swap extends ActionBase {
-    left: Control = new DummyControl()
-    right: Control = new DummyControl()
+    left: Control = DUMMY_CONTROL
+    right: Control = DUMMY_CONTROL
     start: Point
     end: Point
     leftControlId: string
@@ -31,11 +30,11 @@ export class Swap extends ActionBase {
     }
 
     selectControls() {
-        const foundLeft = this.model.controls.find(c => c.id == this.leftControlId)
+        const foundLeft = this.model.findControl(this.leftControlId)
         if (foundLeft) {
             this.left = foundLeft
         }
-        const foundRight = this.model.controls.find(c => c.id == this.rightControlId)
+        const foundRight = this.model.findControl(this.rightControlId)
         if (foundRight) {
             this.right = foundRight
         }

@@ -1,16 +1,15 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {Point} from "../shared/point.ts"
 import {DotsAndBoxesModel} from "../shared/step.ts"
-import {Control} from "../controls/control.ts"
-import {DummyControl} from "../controls/dummy/dummyControl.ts"
+import {Control, DUMMY_CONTROL} from "../controls/control.ts"
 import {Sign} from "../shared/sign.ts"
 
 export class Move extends ActionBase {
     start: Point
     to: Point
     end: Point
-    left: Control = new DummyControl()
-    right: Control = new DummyControl()
+    left: Control = DUMMY_CONTROL
+    right: Control = DUMMY_CONTROL
     leftId: string
     rightId: string = ''
 
@@ -29,14 +28,17 @@ export class Move extends ActionBase {
     }
 
     selectControls() {
-        const foundControl = this.model.controls.find(c => c.id == this.leftId)
+        const foundControl = this.model.findControl(this.leftId)
         if (foundControl) {
             this.left = foundControl
+            this.start = this.left.position.clone()
             this.end = this.calculateEnd(this.start, this.to)
+        } else {
+            this.left = DUMMY_CONTROL
         }
-        this.start = this.left.position.clone()
-        if(this.rightId !== '') {
-            const foundRight = this.model.controls.find(c => c.id == this.rightId)
+
+        if (this.rightId !== '') {
+            const foundRight = this.model.findControl(this.rightId)
             if (foundRight) {
                 this.right = foundRight
                 this.end = this.right.position.clone()

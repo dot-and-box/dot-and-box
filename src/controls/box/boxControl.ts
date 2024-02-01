@@ -47,12 +47,8 @@ export class BoxControl implements Control {
     hitTest(point: Point): boolean {
         const x = point.x
         const y = point.y
-        const isHit = x >= this.position.x && x <= this.position.x + this.size.x &&
+        return x >= this.position.x && x <= this.position.x + this.size.x &&
             y >= this.position.y && y <= this.position.y + this.size.y
-        if (isHit) {
-            this.selected = !this.selected
-        }
-        return isHit
     }
 
     clone(): Control {

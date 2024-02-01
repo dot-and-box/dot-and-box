@@ -1,19 +1,20 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {DotsAndBoxesModel} from "../shared/step.ts"
-import {Control} from "../controls/control.ts"
+import {Control, DUMMY_CONTROL} from "../controls/control.ts"
 import {Change} from "../shared/change.ts"
+import {PropertyChange} from "../shared/propertyChange.ts";
 
 export class Assign extends ActionBase {
 
-    controls: Control[] = []
-    controlIds: string []
+    control: Control = DUMMY_CONTROL
+    controlId: string
     properties: Map<string, any>
-    changes: Change[] = []
+    change: Change = new Change(this.controlId, [])
     applied = false
 
-    constructor(model: DotsAndBoxesModel, controlIds: string[], properties: Map<string, any>) {
+    constructor(model: DotsAndBoxesModel, controlId: string, properties: Map<string, any>) {
         super(model)
-        this.controlIds = controlIds
+        this.controlId = controlId
         this.properties = properties
     }
 
@@ -23,11 +24,7 @@ export class Assign extends ActionBase {
     }
 
     selectControls() {
-        this.controls = []
-        const foundControl = this.model.controls.find(c => this.controlIds.includes(c.id))
-        if (foundControl) {
-            this.controls.push(foundControl)
-        }
+        this.control = this.model.findControl(this.controlId)
     }
 
     override onBeforeForward() {
@@ -36,32 +33,32 @@ export class Assign extends ActionBase {
         this.applyChanges()
     }
 
-    override  onAfterBackward() {
+    override onAfterBackward() {
         super.onAfterBackward();
         this.revertChanges()
     }
 
     applyChanges(): void {
-        if(!this.applied) {
+        if (!this.applied) {
             this.applied = true
-            this.controls.forEach((c: any) => {
-                for (const p of this.properties.keys()) {
-                    const oldValue = c[p]
-                    const newValue = this.properties.get(p)
-                    c[p] = newValue
-                    this.changes.push(new Change(this.controlIds, p, newValue, oldValue))
-                }
-            })
+            let propertyChanges = []
+            for (const p of this.properties.keys()) {
+                const oldValue = this.control[p]
+                const newValue = this.properties.get(p)
+                this.control[p] = newValue
+                propertyChanges.push(new PropertyChange(p, newValue, oldValue))
+            }
+            this.change = new Change(this.controlId, propertyChanges)
         }
     }
 
     revertChanges(): void {
         if (this.applied) {
             this.applied = false
-            for (const change of this.changes) {
-                this.controls.forEach((c: any) => c[change.property] = change.oldValue)
+            for (const propertyChange of this.change.propertyChanges) {
+                this.control[propertyChange.property] = propertyChange.oldValue
             }
-            this.changes = []
+            this.change = new Change(this.controlId, [])
         }
     }
 

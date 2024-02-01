@@ -7,7 +7,15 @@ export class PanZoomTool extends Tool {
 
     override click(point: Point): void {
         this.dragStart = point
-        this.model.controls.forEach(c => c.hitTest(point))
+        const hitControls = []
+        this.model.controls.forEach(c => {
+            if (c.hitTest(point)) {
+                hitControls.push(c)
+            }
+        })
+        if (hitControls.length > 0) {
+            this.model.changeSelected(hitControls)
+        }
     }
 
     override move(movePoint: Point) {

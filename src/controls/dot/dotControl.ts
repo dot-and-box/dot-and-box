@@ -42,11 +42,7 @@ export class DotControl implements Control {
     hitTest(point: Point): boolean {
         let tx = this.position.x - point.x
         let ty = this.position.y - point.y
-        const isHit = tx * tx + ty * ty <= this.size * this.size
-        if (isHit) {
-            this.selected = !this.selected
-        }
-        return isHit
+        return tx * tx + ty * ty <= this.size * this.size
     }
 
     clone(): Control {

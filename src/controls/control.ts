@@ -1,4 +1,5 @@
 import {Point} from "../shared/point.ts"
+import {DummyControl} from "./dummy/dummyControl.ts";
 
 export interface ControlBase {
     id: string
@@ -18,3 +19,5 @@ export interface Control extends ControlBase {
 
     clone(): Control
 }
+
+export const DUMMY_CONTROL = new DummyControl()

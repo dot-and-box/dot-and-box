@@ -1,13 +1,11 @@
-export class Change {
-    controlIds: string[]
-    property: string
-    newValue: any
-    oldValue: any
+import {PropertyChange} from "./propertyChange.ts";
 
-    constructor(controlIds: string[], property: string, newValue: any, oldValue: any) {
-        this.controlIds = controlIds
-        this.property = property
-        this.newValue = newValue
-        this.oldValue = oldValue
+export class Change {
+    controlId: string
+    propertyChanges: PropertyChange[]
+
+    constructor(controlIds: string, propertyChanges: PropertyChange[]) {
+        this.controlId = controlIds
+        this.propertyChanges = propertyChanges
     }
 }

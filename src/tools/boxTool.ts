@@ -1,7 +1,7 @@
-import {Tool} from "../../shared/tool.ts"
-import {Point} from "../../shared/point.ts"
-import {BoxControl} from "./boxControl.ts"
-import {DEFAULT_BOX_COLOR} from "../../shared/constants.ts"
+import {Tool} from "../shared/tool.ts"
+import {Point} from "../shared/point.ts"
+import {BoxControl} from "../controls/box/boxControl.ts"
+import {DEFAULT_BOX_COLOR} from "../shared/constants.ts"
 
 export class BoxTool extends Tool {
 

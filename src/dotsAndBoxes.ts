@@ -2,10 +2,10 @@ import {Point} from "./shared/point.ts"
 import {Tool} from "./shared/tool.ts"
 import {DotsAndBoxesModel, Step} from "./shared/step.ts"
 import {DEFAULT_FONT, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, TITLE_FONT_SIZE} from "./shared/constants.ts"
-import {DotTool} from "./controls/dot/dotTool.ts"
+import {DotTool} from "./tools/dotTool.ts"
 import {EmptyTool} from "./shared/emptyTool.ts"
-import {PanZoomTool} from "./panzoom/panZoomTool.ts"
-import {BoxTool} from "./controls/box/boxTool.ts"
+import {PanZoomTool} from "./tools/panZoomTool.ts"
+import {BoxTool} from "./tools/boxTool.ts"
 import {StepState} from "./shared/stepState.ts"
 import {StepDirection} from "./shared/stepDirection.ts"
 import {Easing, EasingType} from "./shared/easingFunctions.ts"
@@ -69,6 +69,7 @@ export class DotsAndBoxes {
         this.steps = []
         this.title = ''
         this.currentStepIndex = 0
+        this._requestedStepProgress = 0;
         this.model = model
         this.steps = model.steps
         for (let tool of this.tools.values()) {

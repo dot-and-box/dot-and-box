@@ -5,7 +5,7 @@ import {Point} from "./shared/point.ts"
 
 class DotsAndBoxesElement extends HTMLElement {
     public static readonly ELEM_NAME: string = "dots-and-boxes"
-    static observedAttributes = ["style", "color", "border", "code", "width", "height", 'debug', 'controls', 'autoplay']
+    static observedAttributes = ["style", "color", "border", "code", "width", "height", 'debug', 'experimental', 'controls', 'autoplay']
     dotsAndBoxes!: DotsAndBoxes
     code: string = ''
     color: string = 'white'
@@ -14,6 +14,7 @@ class DotsAndBoxesElement extends HTMLElement {
     defaultWidth: number = 100
     defaultHeight: number = 100
     showControls = false
+    experimental = false
     autoplay = false
     canvas!: HTMLCanvasElement
 
@@ -53,6 +54,7 @@ class DotsAndBoxesElement extends HTMLElement {
         #controls-menu button {
          color:  rgba(43,43,43,0.8);
          background-color: transparent;
+         font-size: 18px;
          height: 38px;
          width: 30px;
          margin-left: 2px;
@@ -91,16 +93,6 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     buildControls(menu: HTMLElement) {
-        const rangeControl = document.createElement("input")
-        rangeControl.type = "range"
-        rangeControl.min = "0"
-        rangeControl.max = "1"
-        rangeControl.step = "0.01"
-        rangeControl.value = "0"
-        rangeControl.oninput = (e: any) => {
-            this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)
-        }
-        menu.append(rangeControl)
 
         const backward = document.createElement("button")
         backward.onclick = (_) => this.dotsAndBoxes.backward()
@@ -115,25 +107,44 @@ class DotsAndBoxesElement extends HTMLElement {
         forward.append('▶')
         menu.append(forward)
 
-        const panZoomTool = document.createElement("button")
-        panZoomTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.PAN_ZOOM_TOOL)
-        panZoomTool.append('☩')
-        menu.append(panZoomTool)
+        const restart = document.createElement("button")
+        restart.onclick = (_) => this.reset()
+        restart.append('↺')
+        menu.append(restart)
 
-        const dotTool = document.createElement("button")
-        dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
-        dotTool.append('❍')
-        menu.append(dotTool)
 
-        const boxTool = document.createElement("button")
-        boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
-        boxTool.append('◻')
-        menu.append(boxTool)
+        if (this.experimental) {
+            const panZoomTool = document.createElement("button")
+            panZoomTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.PAN_ZOOM_TOOL)
+            panZoomTool.append('☩')
+            menu.append(panZoomTool)
 
-        const printModel = document.createElement("button")
-        printModel.onclick = (_) => console.log(this.dotsAndBoxes.model)
-        printModel.append('m')
-        menu.append(printModel)
+            const rangeControl = document.createElement("input")
+            rangeControl.type = "range"
+            rangeControl.min = "0"
+            rangeControl.max = "1"
+            rangeControl.step = "0.01"
+            rangeControl.value = "0"
+            rangeControl.oninput = (e: any) => {
+                this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)
+            }
+            menu.append(rangeControl)
+
+            const dotTool = document.createElement("button")
+            dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
+            dotTool.append('❍')
+            menu.append(dotTool)
+
+            const boxTool = document.createElement("button")
+            boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
+            boxTool.append('◻')
+            menu.append(boxTool)
+
+            const printModel = document.createElement("button")
+            printModel.onclick = (_) => console.log(this.dotsAndBoxes.model)
+            printModel.append('m')
+            menu.append(printModel)
+        }
     }
 
     resize() {
@@ -170,6 +181,12 @@ class DotsAndBoxesElement extends HTMLElement {
                 break
             case 'controls':
                 this.showControls = newValue != null
+                if (this.dotsAndBoxes) {
+                    this.updateControls()
+                }
+                break
+            case 'experimental':
+                this.experimental = newValue != null
                 if (this.dotsAndBoxes) {
                     this.updateControls()
                 }

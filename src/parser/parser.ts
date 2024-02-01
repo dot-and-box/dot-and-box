@@ -214,43 +214,35 @@ export class Parser {
     action(): ActionBase | null {
         if (this.eof())
             return null
-        let controlIds = this.controlIds()
-        if (controlIds.length == 0) {
-            this.error('Expected non empty identifier list while handling step')
-        }
+        let controlId = this.controlId()
+
         let token = this.peek()
         switch (token.type) {
             case TokenType.ASSIGN:
-                return this.assign(controlIds)
+                return this.assign(controlId)
             case TokenType.MOVE:
-                return this.move(controlIds[0])
+                return this.move(controlId)
             case TokenType.SWAP:
-                return this.swap(controlIds[0])
+                return this.swap(controlId)
             case TokenType.CLONE:
                 this.advance()
                 token = this.peek()
                 if (token.type == TokenType.IDENTIFIER) {
                     this.advance()
-                    return new Clone(this.model, controlIds[0], token.value)
+                    return new Clone(this.model, controlId, token.value)
                 }
                 break
         }
         return null
     }
 
-    controlIds(): string [] {
-        let controlIds = []
+    controlId(): string {
         let token = this.advance()
-        while (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING || token.type == TokenType.NUMBER) {
-            controlIds.push(token.value)
-            token = this.peek()
-            if (this.match(TokenType.SEMICOLON)) {
-                token = this.peek()
-            } else {
-                break
-            }
+        if (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING || token.type == TokenType.NUMBER) {
+            return token.value
+        } else {
+            throw new Error(`Expected control identifier at ${token.position} got ${token.value} instead`)
         }
-        return controlIds
     }
 
     move(leftControlId: string): ActionBase {
@@ -281,7 +273,7 @@ export class Parser {
             || token.type == TokenType.LEFT_BRACKET
     }
 
-    assign(controlIds: string[]): Assign {
+    assign(controlId: string): Assign {
         this.advance()
         let token = this.peek()
         let properties: Map<string, any> = new Map()
@@ -300,7 +292,7 @@ export class Parser {
             token = this.peek()
         }
 
-        return new Assign(this.model, controlIds, properties)
+        return new Assign(this.model, controlId, properties)
     }
 
     visible(): boolean {

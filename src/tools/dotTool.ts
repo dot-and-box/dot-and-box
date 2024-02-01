@@ -1,7 +1,7 @@
-import {Tool} from "../../shared/tool.ts"
-import {Point} from "../../shared/point.ts"
-import {DotControl} from "./dotControl.ts"
-import {COLORS, DEFAULT_DOT_SIZE} from "../../shared/constants.ts"
+import {Tool} from "../shared/tool.ts"
+import {Point} from "../shared/point.ts"
+import {DotControl} from "../controls/dot/dotControl.ts"
+import {COLORS, DEFAULT_DOT_SIZE} from "../shared/constants.ts"
 
 export class DotTool extends Tool {
 
