@@ -22,6 +22,8 @@ export class Clone extends ActionBase {
         if (foundLeft) {
             this.left = foundLeft
             this.cloneAndAddControl()
+        } else {
+            this.left = DUMMY_CONTROL
         }
     }
 

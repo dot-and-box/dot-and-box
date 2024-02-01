@@ -31,13 +31,15 @@ export class Swap extends ActionBase {
 
     selectControls() {
         const foundLeft = this.model.findControl(this.leftControlId)
-        if (foundLeft) {
-            this.left = foundLeft
-        }
+        this.left = foundLeft
+            ? foundLeft
+            : DUMMY_CONTROL
+
         const foundRight = this.model.findControl(this.rightControlId)
-        if (foundRight) {
-            this.right = foundRight
-        }
+        this.right = foundRight
+            ? foundRight
+            : DUMMY_CONTROL
+
         this.start = this.left.position.clone()
         this.end = this.right.position.clone()
     }
