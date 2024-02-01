@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "description": "dots and boxes is markdown for animations experiment",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
