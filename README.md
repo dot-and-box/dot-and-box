@@ -19,9 +19,23 @@ eg.
 ```html
 <script src="insert_url_here"></script>
 <dots-and-boxes style="margin:20px;height: 400px; width: 600px" color="white" code="
-    title: Visualizing algorithm
-    box text: 'sort' id: b1 color: rgba(137,33,133,0.78) at: -180, -120 size: 260, 80
-    dot text: '1' color: black at: -100, 0 size: 35">
+    title: sort with bubble sort
+    box id: txt at: -150, -90 size: (260, 80) visible: false
+    box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
+    dot id: 1 at: -70, 0 size: 20
+    dot id: 2 at: -120, 0 size: 20
+    dot id: 3 at: 30, 0 size: 20
+    dot id: 5 at: -20, 0 size: 20
+    dot id: p  text: '4' at: 80, 0 size: 20
+    steps:
+    win <- visible: true, win -> +(110,0), txt <- '(1) select first two numbers'  visible: true
+    txt <- '(2) swap if left bigger than right', 2 <-> 1 // swap dot 2 with 1
+    txt <- '(3) select next two numbers', win -> +(50,0) // move window by 50px right
+    txt <- 'ignore if left is smaller', win -> +(50,0)
+    txt <- 'again swap if left bigger', 5 <-> 3
+    txt <- visible: false, win -> +(50,0)
+    5 <-> p
+    txt <- 'repeat from start' visible: true, win -> -(150,0)">
 </dots-and-boxes>
 ```
 
@@ -45,14 +59,14 @@ npm run build
 npm run test
 ```
 
-## DABL - (D)ots (A)nd (B)oxes (L)anguage 
+## DAB - (D)ots (A)nd (B)oxes language
 
 *DABL* language allows to declare controls like dots and boxes
 and action steps like move or swap action.
 
 ### define a dot
 
-Dot is the simplest thing you can show with DABL. 
+Dot is the simplest thing you can show with Dots and Boxes language. 
 It draws the control a dot
 e.g.
 
@@ -94,10 +108,10 @@ a1 -> b1
 swaps c1 and c2 position 
 
 #### clone control
-
+e.g.
 > c1 *-> new_c1
 
-Clone control c1 and creates a new one named new_c1
+clones control c1 and creates a new one with id new_c1
 
 #### assign value
 

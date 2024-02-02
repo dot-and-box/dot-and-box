@@ -65,7 +65,7 @@ export class Parser {
         const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE]
         let size = new Point(100, 100)
         let at = new Point(0, 0)
-        let text = 'box' + this.model.controls.length
+        let text = ''
         let id = null
         let color = WHITE
         let visible = true
@@ -73,7 +73,7 @@ export class Parser {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
-                    id = this.text()
+                    id = this.controlId()
                     break
                 case TokenType.TEXT:
                     text = this.text()
@@ -92,7 +92,7 @@ export class Parser {
                     break
             }
         }
-        if (id == null && text == null) {
+        if (id == null && text == '') {
             id = 'b' + this.model.controls.length
         }
         this.model.controls.push(new BoxControl(id != null ? id : text, at, size, color, text, visible))
@@ -110,7 +110,7 @@ export class Parser {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
-                    id = this.text()
+                    id = this.controlId()
                     break
                 case TokenType.TEXT:
                     text = this.text()
@@ -279,7 +279,13 @@ export class Parser {
         let properties: Map<string, any> = new Map()
 
         while (!this.eof() && Keywords.ASSIGN_PROPERTIES.includes(token.type)) {
-            this.advance()
+            let propertyName = ''
+            if (token.type == TokenType.STRING) {
+                propertyName = 'text'
+            } else {
+                this.advance()
+                propertyName = token.type.toString()
+            }
             const valueToken = this.peek()
             let value
             if (valueToken.type == TokenType.TRUE || valueToken.type == TokenType.FALSE) {
@@ -287,7 +293,7 @@ export class Parser {
             } else {
                 value = valueToken.value
             }
-            properties.set(token.type.toString(), value)
+            properties.set(propertyName, value)
             this.advance()
             token = this.peek()
         }

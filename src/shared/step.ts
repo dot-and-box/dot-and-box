@@ -12,7 +12,7 @@ export class DotsAndBoxesModel {
     offset: Point = Point.zero()
     zoom: number = 1
     static readonly SELECTED_PREFIX = "selected"
-    selectedControls = []
+    selectedControls: Control[] = []
 
     constructor(title: string, controls: Control[], steps: Step[]) {
         this.title = title

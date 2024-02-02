@@ -6,15 +6,16 @@ import {PropertyChange} from "../shared/propertyChange.ts";
 
 export class Assign extends ActionBase {
 
-    control: Control = DUMMY_CONTROL
+    control: Control | undefined = DUMMY_CONTROL
     controlId: string
     properties: Map<string, any>
-    change: Change = new Change(this.controlId, [])
+    change: Change
     applied = false
 
     constructor(model: DotsAndBoxesModel, controlId: string, properties: Map<string, any>) {
         super(model)
         this.controlId = controlId
+        this.change = new Change(this.controlId, [])
         this.properties = properties
     }
 
@@ -39,13 +40,14 @@ export class Assign extends ActionBase {
     }
 
     applyChanges(): void {
-        if (!this.applied) {
+        if (!this.applied && this.control) {
             this.applied = true
+            let control = this.control as any
             let propertyChanges = []
             for (const p of this.properties.keys()) {
-                const oldValue = this.control[p]
+                const oldValue = control[p]
                 const newValue = this.properties.get(p)
-                this.control[p] = newValue
+                control[p] = newValue
                 propertyChanges.push(new PropertyChange(p, newValue, oldValue))
             }
             this.change = new Change(this.controlId, propertyChanges)
@@ -53,10 +55,11 @@ export class Assign extends ActionBase {
     }
 
     revertChanges(): void {
-        if (this.applied) {
+        if (this.applied && this.control) {
             this.applied = false
+            let control = this.control as any
             for (const propertyChange of this.change.propertyChanges) {
-                this.control[propertyChange.property] = propertyChange.oldValue
+                control[propertyChange.property] = propertyChange.oldValue
             }
             this.change = new Change(this.controlId, [])
         }
