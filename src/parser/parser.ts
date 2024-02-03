@@ -62,13 +62,14 @@ export class Parser {
     }
 
     box() {
-        const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE]
+        const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED]
         let size = new Point(100, 100)
         let at = new Point(0, 0)
         let text = ''
         let id = null
         let color = WHITE
         let visible = true
+        let selected = false
         while (box_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -90,22 +91,31 @@ export class Parser {
                 case TokenType.VISIBLE:
                     visible = this.visible()
                     break
+                case TokenType.SELECTED:
+                    selected = this.selected()
+                    break
             }
         }
         if (id == null && text == '') {
             id = 'b' + this.model.controls.length
         }
-        this.model.controls.push(new BoxControl(id != null ? id : text, at, size, color, text, visible))
+        const box = new BoxControl(id != null ? id : text, at, size, color, text, visible, selected)
+        this.model.controls.push(box)
+        if (box.selected) {
+            this.model.selectedControls.push(box)
+        }
+
     }
 
     dot() {
-        const dot_tokens = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR]
+        const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED]
         let size = 20
         let at = new Point(0, 0)
         let text = ''
         let id = ''
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
+        let selected = false
         while (dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -125,15 +135,22 @@ export class Parser {
                     size = this.number()
                     break
                 case TokenType.VISIBLE:
+                    console.log("vis")
                     visible = this.visible()
+                    break
+                case TokenType.SELECTED:
+                    selected = this.selected()
                     break
             }
         }
         if (id == '' && text == '') {
             id = 'd' + this.model.controls.length
         }
-
-        this.model.controls.push(new DotControl(id != '' ? id : text, at, size, color, text != '' ? text : id, visible))
+        const dot = new DotControl(id != '' ? id : text, at, size, color, text != '' ? text : id, visible, selected)
+        this.model.controls.push(dot)
+        if (dot.selected) {
+            this.model.selectedControls.push(dot)
+        }
     }
 
     text(): string {
@@ -302,6 +319,10 @@ export class Parser {
     }
 
     visible(): boolean {
+        return this.boolean()
+    }
+
+    selected(): boolean {
         return this.boolean()
     }
 

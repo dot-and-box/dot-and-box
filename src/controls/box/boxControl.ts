@@ -12,13 +12,13 @@ export class BoxControl implements Control {
     public selected: boolean
     public visible: boolean
 
-    constructor(id: string, position: Point, size: Point, color: string, text: string, visible: boolean) {
+    constructor(id: string, position: Point, size: Point, color: string, text: string, visible: boolean, selected: boolean) {
         this.id = id
         this.position = position
         this.size = size
         this.color = color
         this.text = text
-        this.selected = false
+        this.selected = selected
         this.visible = visible
     }
 
@@ -52,7 +52,7 @@ export class BoxControl implements Control {
     }
 
     clone(): Control {
-        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this.color.toString(), this.text.toString(), this.visible)
+        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this.color.toString(), this.text.toString(), this.visible, this.selected)
     }
 
 }

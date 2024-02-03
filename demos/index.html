@@ -2,20 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
+    <title>dots and boxes demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dots and boxes</title>
+    <title>Dots and boxes demos</title>
     <style>
         body {
             margin: 20px;
             overflow-x: hidden
         }
-    </style>
+        .example {
+            display: flex;
+            flex-wrap: wrap;
+        }
 
+    </style>
+  <script type="module" crossorigin src="./lib/dab-editor.js"></script>
+  <script type="module" crossorigin src="./lib/dotsAndBoxes.js"></script>
 </head>
 <body>
-<h1>Just dots and boxes...</h1>
-
-<dots-and-boxes style="margin:10px;height: 250px; width: 330px" controls code="
+<h2>dots and boxes demo</h2>
+<h3>Bubble Sort</h3>
+<div class="example">
+<dots-and-boxes style="margin-right: 10px;height: 250px; width: 330px" controls code="
     title: sort with bubble sort
     box id: txt at: -150, -90 size: (260, 80) visible: false
     box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
@@ -35,22 +43,39 @@
     txt <- 'repeat from start' visible: true, win -> -(150,0)
 ">
 </dots-and-boxes>
-<div>A było to tak. Bociana drapał szpak. Później była zmiana i to szpak drapał bociana. Później były jeszcze trzy takie
-    zmiany. Ile razy szpak był drapany ?
+
+    <dab-editor style="min-width: 300px" edit code="title: sort with bubble sort
+box id: txt at: -150, -90 size: (260, 80) visible: false
+box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
+dot id: 1 at: -70, 0 size: 20
+dot id: 2 at: -120, 0 size: 20
+dot id: 3 at: 30, 0 size: 20
+dot id: 5 at: -20, 0 size: 20
+dot id: p  text: '4' at: 80, 0 size: 20
+steps:
+win <- visible: true, win -> +(110,0), txt <- '(1) select first two numbers'  visible: true
+txt <- '(2) swap if left bigger than right', 2 <-> 1 // swap dot 2 with 1
+txt <- '(3) select next two numbers', win -> +(50,0) // move window by 50px right
+txt <- 'ignore if left is smaller', win -> +(50,0)
+txt <- 'again swap if left bigger', 5 <-> 3
+txt <- visible: false, win -> +(50,0)
+5 <-> p
+txt <- 'repeat from start' visible: true, win -> -(150,0)
+"></dab-editor>
 </div>
-<hr>
 
-<div style="display: flex">
-    <div>bim bam bom - check mate</div>
 
-    <dots-and-boxes style="margin-top: 50px; height: 254px; width: 450px" controls debug experimental
-                    color="lightgray" code="
+<h3>Selected Control Move</h3>
+
+ <div class="example">
+     <dots-and-boxes style="height: 254px; width: 450px" controls debug experimental
+                     color="rgba(233,233,233,0.3)" code="
     title: Ale heca
-    box id: b2  at: -140, -100 size: (260, 80)
-    dot id: 1 color: rgba(100,200,50,0.6) at: -100, 0  size: 45
+    box id: b2  text: 'select two controls to swap' at: -140, -100 size: (260, 80)
+    dot id: 1 color: rgba(100,200,50,0.6) at: -100, 0  size: 35 selected: true
     dot id: 2 color: purple at: -150, 0 size: 20
-    dot id: 3 color: orange at: 0, 0 size: 20 selected: true
-    dot id: 4 color: gray  at: -50, 0 size: 20 selected: true
+    dot id: 3 color: orange at: 0, 0 size: 20 visible: false // fix visible does not work
+    dot id: 4 color: gray  at: -50, 0 size: 20 selected: true // fix selected does not work
     dot id: 5 color: rgba(190,0,65,1) at: 50, 0  size: 20
     steps:
     b2 <- text: 'go back and select different controls or forward', selected0 <-> selected1
@@ -62,9 +87,13 @@
     4 <-> 5
     "></dots-and-boxes>
 
-</div>
 
-<dots-and-boxes style="margin:10px;height: 350px; width: 600px" debug controls code="
+ </div>
+
+
+<h3>Request Response</h3>
+<div class="example">
+<dots-and-boxes style="height: 350px; width: 600px" debug controls code="
     title: request response pattern
     box text: 'CLIENT' size: 100,40 at: -295, -120 color: rgb(187,105,13)
     box text: 'SERVER' size: 100,40 at: 180, -120 color: rgba(5,5,254,0.6)
@@ -79,8 +108,7 @@
     camera -> +(0,350), fin <- visible: true
 ">
 </dots-and-boxes>
-
-<script type="module" src="/src/main.ts"></script>
+</div>
 
 </body>
 </html>

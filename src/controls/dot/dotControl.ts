@@ -11,13 +11,13 @@ export class DotControl implements Control {
     public selected: boolean
     public visible: boolean
 
-    constructor(id: string, position: Point, size: number, color: string, text: string, visible: boolean) {
+    constructor(id: string, position: Point, size: number, color: string, text: string, visible: boolean, selected: boolean) {
         this.id = id
         this.position = position
         this.color = color
         this.size = size
         this.text = text
-        this.selected = false
+        this.selected = selected
         this.visible = visible
     }
 
@@ -46,7 +46,7 @@ export class DotControl implements Control {
     }
 
     clone(): Control {
-        return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString(), this.visible)
+        return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString(), this.visible, this.selected)
     }
 
 
