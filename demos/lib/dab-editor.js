@@ -1,3 +1,6 @@
+// import * as Prism from './prism.js'
+import * as Prism from './prism.js'
+
 class DabEditor extends HTMLElement {
     static observedAttributes = ["code", "edit", "width", "height", 'controls']
 
@@ -5,6 +8,8 @@ class DabEditor extends HTMLElement {
     connectedCallback() {
         const shadow = this.attachShadow({mode: "open"})
         shadow.innerHTML = `
+      <link href="./lib/prism.css" rel="stylesheet" type="text/css">  
+
       <style>
         :host { display: block;  padding: 0; border: 1px solid #ccc ;}
         .main-wrapper {
@@ -56,19 +61,29 @@ class DabEditor extends HTMLElement {
             font-weight: bold;
         }
       </style>
+      <script src="./prism.js"></script>
       <div class="main-menu">             
           <button title="run code">▶</button>
           <span class="separator"></span>
           <div class="right-menu"><button title="copy to clipboard" id="copy-clipboard">📋</button></div> 
         </div>
-      <div class="main-wrapper">
-        
-        <pre class="editor" spellcheck=false  contenteditable=""></pre>         
+      <div class="main-wrapper">      
+        <pre class="editor" spellcheck=false  contenteditable></pre>
       </div>
-    `
+     `
         const clipBoardButton = this.shadowRoot.querySelector('#copy-clipboard')
         clipBoardButton.onclick = (_) => this.copyToClipBoard(this.code)
+        this.extendDABLang()
         this.updateCode()
+     }
+
+    extendDABLang(){
+        window.Prism.languages['dabl'] = window.Prism.languages.extend('clike', {
+
+            'keyword': /\b(?:steps|title|selected|box|dot)\b/,
+
+
+        });
     }
 
     copyToClipBoard(txt) {
@@ -79,7 +94,8 @@ class DabEditor extends HTMLElement {
     updateCode() {
         if (this.shadowRoot) {
             const editor = this.shadowRoot.querySelector('.editor')
-            editor.innerHTML = this.code
+            editor.innerHTML =  window.Prism.highlight(this.code, window.Prism.languages.dabl, 'dabl')
+
         }
     }
 

@@ -17,7 +17,7 @@
 
     </style>
   <script type="module" crossorigin src="./lib/dab-editor.js"></script>
-  <script type="module" crossorigin src="./lib/dotsAndBoxes.js"></script>
+  <script type="module" crossorigin src="./lib/dots-and-boxes.js"></script>
 </head>
 <body>
 <h2>dots and boxes demo</h2>
@@ -54,7 +54,7 @@ dot id: 5 at: -20, 0 size: 20
 dot id: p  text: '4' at: 80, 0 size: 20
 steps:
 win <- visible: true, win -> +(110,0), txt <- '(1) select first two numbers'  visible: true
-txt <- '(2) swap if left bigger than right', 2 <-> 1 // swap dot 2 with 1
+txt <- '(2) swap if left bigger than right', 2 <-> 1  // swap dot 2 with 1
 txt <- '(3) select next two numbers', win -> +(50,0) // move window by 50px right
 txt <- 'ignore if left is smaller', win -> +(50,0)
 txt <- 'again swap if left bigger', 5 <-> 3

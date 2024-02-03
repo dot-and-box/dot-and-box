@@ -229,8 +229,12 @@ export class DotsAndBoxes {
     private handleStepChange() {
         if (this.currentStep.progress != this._requestedStepProgress) {
             this.currentStep.progress = this._requestedStepProgress
-            if (this.autoplay && this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
-                this.forward()
+            if (this.autoplay ) {
+                if(this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
+                    this.forward()
+                } else if (this.currentStep.state == StepState.START && this.currentStepIndex > 0) {
+                    this.backward()
+                }
             }
         }
     }
@@ -328,6 +332,9 @@ export class DotsAndBoxes {
     togglePause() {
         this.updateStartTime()
         this.currentStep.togglePause()
+        if (this.currentStep.state == StepState.STOPPED) {
+            this.autoplay = false
+        }
     }
 }
 

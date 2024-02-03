@@ -42,25 +42,30 @@ class DotsAndBoxesElement extends HTMLElement {
         shadow.innerHTML = `
       <style>
         :host { display: block; padding: 0;border: ${this.border};}
-        #controls-menu {
+        #controls-menu {    
           position: relative;   
-          height: 30px;
+          height: 24px;
           left: 0;       
-          top: -34px;
+          top: -26px;
           overflow:hidden;
-          background-color: rgba(243,243,243,0.7);
-          display: ${this.showControls ? 'block' : 'none'};
+          background-color: white;
+          background-color:  rgba(243,243,243,0.7);
+          display: ${this.showControls ? 'flex' : 'none'};
+          align-items: center;
         }        
         #controls-menu button {
-         color: rgba(43,43,43,0.8);
+         color:  rgba(23,23,23,0.7);
          background-color: transparent;
-         font-size: 18px;
-         height: 28px;
-         width: 30px;
-         margin-left: 2px;
-         margin-right: 2px;
+         font-size: 18px;        
+         height: 22px;
+         width: 24px;
+         margin: 0;
+         padding: 0;
          border: solid 1px transparent;
         }      
+         #controls-menu button:hover {
+            color:  black;
+         }
       </style>
       <div>
         <canvas id="canvas"></canvas>
@@ -94,18 +99,35 @@ class DotsAndBoxesElement extends HTMLElement {
 
     buildControls(menu: HTMLElement) {
 
+        const fastBackward = document.createElement("button")
+        fastBackward.onclick = (_) => {
+            this.dotsAndBoxes.autoplay = true
+            this.dotsAndBoxes.backward()
+        }
+        fastBackward.textContent = '\u{23F4}\u{23F4}'
+        menu.append(fastBackward)
+
         const backward = document.createElement("button")
         backward.onclick = (_) => this.dotsAndBoxes.backward()
-        backward.textContent = '◀'
+        backward.textContent = '\u{23F4}'
         menu.append(backward)
         const pause = document.createElement("button")
         pause.onclick = (_) => this.dotsAndBoxes.togglePause()
-        pause.textContent = "◼"
+        pause.textContent = "\u{25A0}"
         menu.append(pause)
+
         const forward = document.createElement("button")
         forward.onclick = (_) => this.dotsAndBoxes.forward()
-        forward.append('▶')
+        forward.append('\u{23F5}')
         menu.append(forward)
+
+        const fastForward = document.createElement("button")
+        fastForward.onclick = (_) => {
+            this.dotsAndBoxes.autoplay = true
+            this.dotsAndBoxes.forward()
+        }
+        fastForward.append('\u{23F5}\u{23F5}')
+        menu.append(fastForward)
 
         const restart = document.createElement("button")
         restart.onclick = (_) => this.reset()

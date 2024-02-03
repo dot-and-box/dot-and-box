@@ -135,7 +135,6 @@ export class Parser {
                     size = this.number()
                     break
                 case TokenType.VISIBLE:
-                    console.log("vis")
                     visible = this.visible()
                     break
                 case TokenType.SELECTED:
