@@ -170,6 +170,26 @@ export class DotsAndBoxes {
         }
     }
 
+    fastForward() {
+        this.autoplay = true
+        this.forward()
+    }
+
+    fastBackward() {
+        this.autoplay = true
+        this.backward()
+    }
+
+    singleForward(){
+        this.autoplay = false
+        this.forward()
+    }
+
+    singleBackward(){
+        this.autoplay = false
+        this.backward()
+    }
+
     forward() {
         this.nextStep()
         this.currentStep.forward()
