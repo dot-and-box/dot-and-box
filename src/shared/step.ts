@@ -96,33 +96,47 @@ export class Step {
         }
     }
 
+    public pause() {
+        if (this.state == StepState.IN_PROGRESS) {
+            this.state = StepState.STOPPED
+        }
+    }
+
     public unpause() {
+        if (this.state == StepState.STOPPED) {
+            this.state = StepState.IN_PROGRESS
+        }
+    }
+
+    togglePause() {
+        if (this.state == StepState.IN_PROGRESS) {
+            this.pause()
+        } else {
+            this.unpause()
+        }
+    }
+
+    public run() {
         if (this.direction != StepDirection.NONE) {
             this.state = StepState.IN_PROGRESS
         }
     }
 
-    forward() {
+    public forward() {
         if (this.state != StepState.END) {
             this.direction = StepDirection.FORWARD
             this.state = StepState.IN_PROGRESS
         }
     }
 
-    backward() {
+    public backward() {
         if (this.state != StepState.START) {
             this.direction = StepDirection.BACKWARD
             this.state = StepState.IN_PROGRESS
         }
     }
 
-    togglePause() {
-        if (this.direction != StepDirection.NONE) {
-            this.state = this.state == StepState.STOPPED
-                ? StepState.IN_PROGRESS
-                : StepState.STOPPED
-        }
-    }
+
 }
 
 

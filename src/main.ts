@@ -1,11 +1,15 @@
 import {DotsAndBoxes} from "./dotsAndBoxes.ts"
 import {Parser} from "./parser/parser.ts"
 import {Point} from "./shared/point.ts"
+import {
+    AUTOPLAY, BORDER, CODE, COLOR, CONTROLS,
+    DEBUG, EXPERIMENTAL, HEIGHT, KEYBOARD, STYLE, WIDTH
+} from "./shared/attributes.ts";
 
 
 class DotsAndBoxesElement extends HTMLElement {
     public static readonly ELEM_NAME: string = "dots-and-boxes"
-    static observedAttributes = ["style", "color", "border", "code", "width", "height", 'debug', 'experimental', 'controls', 'autoplay']
+    static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, CONTROLS, AUTOPLAY, KEYBOARD]
     dotsAndBoxes!: DotsAndBoxes
     code: string = ''
     color: string = 'white'
@@ -17,10 +21,7 @@ class DotsAndBoxesElement extends HTMLElement {
     experimental = false
     autoplay = false
     canvas!: HTMLCanvasElement
-
-    constructor() {
-        super()
-    }
+    keyboard: boolean = false
 
     reset() {
         if (this.code && this.dotsAndBoxes) {
@@ -76,6 +77,9 @@ class DotsAndBoxesElement extends HTMLElement {
         this.canvas = this.getCanvas(shadow)
         this.dotsAndBoxes = new DotsAndBoxes(this.canvas)
         this.reset()
+        if (this.autoplay) {
+            this.fastForward()
+        }
     }
 
     getCanvas(shadow: ShadowRoot): HTMLCanvasElement {
@@ -98,14 +102,13 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     buildControls(menu: HTMLElement) {
-
         const fastBackward = document.createElement("button")
         fastBackward.onclick = (_) => this.dotsAndBoxes.fastBackward()
         fastBackward.textContent = '\u{23F4}\u{23F4}'
         menu.append(fastBackward)
 
         const backward = document.createElement("button")
-        backward.onclick = (_) => this.dotsAndBoxes.singleBackward()
+        backward.onclick = (_) => this.dotsAndBoxes.backward()
         backward.textContent = '\u{23F4}'
         menu.append(backward)
 
@@ -115,7 +118,7 @@ class DotsAndBoxesElement extends HTMLElement {
         menu.append(pause)
 
         const forward = document.createElement("button")
-        forward.onclick = (_) => this.dotsAndBoxes.singleForward()
+        forward.onclick = (_) => this.forward()
         forward.append('\u{23F5}')
         menu.append(forward)
 
@@ -128,7 +131,6 @@ class DotsAndBoxesElement extends HTMLElement {
         restart.onclick = (_) => this.reset()
         restart.append('↺')
         menu.append(restart)
-
 
         if (this.experimental) {
             const panZoomTool = document.createElement("button")
@@ -164,6 +166,42 @@ class DotsAndBoxesElement extends HTMLElement {
         }
     }
 
+    private updateKeyboardHandler() {
+        if (this.keyboard) {
+            document.addEventListener('keydown', this.keyboardHandlerLambda)
+        } else {
+            document.removeEventListener('keydown', this.keyboardHandlerLambda)
+        }
+    }
+
+    keyboardHandlerLambda = (e: any) => this.handleKeyDown(e)
+
+    private handleKeyDown(k: KeyboardEvent) {
+        if (k.key === "ArrowLeft") {
+            this.dotsAndBoxes.backward()
+        } else if (k.key === "ArrowRight") {
+            this.dotsAndBoxes.forward()
+        } else if (k.key === "Delete") {
+            this.dotsAndBoxes.deleteSelected()
+        }
+    }
+
+    public forward() {
+        this.dotsAndBoxes.forward()
+    }
+
+    public fastForward() {
+        this.dotsAndBoxes.fastForward()
+    }
+
+    public backward() {
+        this.dotsAndBoxes.backward()
+    }
+
+    public fastBackward() {
+        this.dotsAndBoxes.fastBackward()
+    }
+
     resize() {
         if (this.canvas) {
             this.updateCanvasStyle(this.canvas)
@@ -181,40 +219,44 @@ class DotsAndBoxesElement extends HTMLElement {
 
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
         switch (name) {
-            case 'style':
+            case STYLE:
                 this.resize()
                 break
-            case 'code':
+            case CODE:
                 this.code = newValue
                 if (this.dotsAndBoxes) {
                     this.applyCode()
                 }
                 break
-            case 'color':
+            case COLOR:
                 this.color = newValue
                 break
-            case 'border':
+            case BORDER:
                 this.border = newValue
                 break
-            case 'controls':
+            case CONTROLS:
                 this.showControls = newValue != null
                 if (this.dotsAndBoxes) {
                     this.updateControls()
                 }
                 break
-            case 'experimental':
+            case EXPERIMENTAL:
                 this.experimental = newValue != null
                 if (this.dotsAndBoxes) {
                     this.updateControls()
                 }
                 break
-            case 'autoplay':
+            case KEYBOARD:
+                this.keyboard = newValue != null
+                this.updateKeyboardHandler()
+                break
+            case AUTOPLAY:
                 this.autoplay = newValue != null
                 if (this.dotsAndBoxes) {
-                    this.dotsAndBoxes.autoplay = this.autoplay
+                    this.fastForward()
                 }
                 break
-            case 'debug':
+            case DEBUG:
                 this.debug = newValue != null
                 if (this.dotsAndBoxes) {
                     this.dotsAndBoxes.showDebug = this.debug

@@ -119,6 +119,16 @@ clones control c1 and creates a new one with id new_c1
 
 Assign one or more property to control
 
+### <dots-and-boxes> tag attributes
+
+#### Supported attributes
+
+**controls**  - show controls menu
+
+**autoplay** - starts fast-forward on load
+
+**keyboard** - left and right arrow does backward and forward respectively
+
 ## credits
 
 - [Easing functions](https://gizma.com/easing/)

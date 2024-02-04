@@ -28,7 +28,7 @@ export class DotsAndBoxes {
     public title = ''
     public marginLeft = 0
     public marginTop = 0
-    public autoplay: boolean = false
+    public autoPlay: boolean = false
     public readonly EMPTY_TOOL: string = "empty-tool"
     public readonly DOT_TOOL: string = "dot-tool"
     public readonly BOX_TOOL: string = "box-tool"
@@ -113,25 +113,10 @@ export class DotsAndBoxes {
         this.addCanvasEvent('mousemove', (e: any) => this.onPointerMove(e))
         this.addCanvasEvent('touchmove', (e: any) => this.handleTouch(e, this.onPointerMove))
         this.addCanvasEvent('wheel', (e: any) => this.handleScroll(e))
-        this.addDocumentEvent('keydown', (e: any) => this.handleKeyDown(e))
-    }
-
-    private handleKeyDown(k: KeyboardEvent) {
-        if (k.key === "ArrowLeft") {
-            this.backward()
-        } else if (k.key === "ArrowRight") {
-            this.forward()
-        } else if (k.key === "Delete") {
-            this.model.deleteSelected()
-        }
     }
 
     private addCanvasEvent(eventName: string, lambda: any) {
         this.canvas.addEventListener(eventName, lambda)
-    }
-
-    private addDocumentEvent(eventName: string, lambda: any) {
-        document.addEventListener(eventName, lambda)
     }
 
     selectTool(toolName: string) {
@@ -140,7 +125,7 @@ export class DotsAndBoxes {
         }
     }
 
-    updateStartTime() {
+    private updateStartTime() {
         if (this.currentStep.direction == StepDirection.FORWARD) {
             this.stepStartTime = this.lastTime - (this.inverseEasingFunc(this.requestedStepProgress) * this.currentStep.duration)
         } else if (this.currentStep.direction == StepDirection.BACKWARD) {
@@ -148,12 +133,12 @@ export class DotsAndBoxes {
         }
     }
 
-    selectStep(index: number) {
+    private selectStep(index: number) {
         this.currentStepIndex = index
         this.currentStep = this.steps[this.currentStepIndex]
     }
 
-    nextStep() {
+    private nextStep() {
         if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
             this.selectStep(this.currentStepIndex + 1)
             this.currentStep.init()
@@ -161,7 +146,7 @@ export class DotsAndBoxes {
         }
     }
 
-    previousStep() {
+    private previousStep() {
         if (this.currentStep.state == StepState.START) {
             if (this.currentStepIndex > 0) {
                 this.selectStep(this.currentStepIndex - 1)
@@ -170,47 +155,59 @@ export class DotsAndBoxes {
         }
     }
 
-    fastForward() {
-        this.autoplay = true
-        this.forward()
+    public fastForward() {
+        this.autoPlay = true
+        this.singleForward()
     }
 
-    fastBackward() {
-        this.autoplay = true
-        this.backward()
+    public fastBackward() {
+        this.autoPlay = true
+        this.singleBackward()
     }
 
-    singleForward(){
-        this.autoplay = false
-        this.forward()
-    }
-
-    singleBackward(){
-        this.autoplay = false
-        this.backward()
-    }
-
-    forward() {
+    private singleForward() {
         this.nextStep()
         this.currentStep.forward()
         this.updateStartTime()
-        this.currentStep.unpause()
+        this.currentStep.run()
     }
 
-    backward() {
+    private singleBackward() {
         this.previousStep()
         this.currentStep.backward()
         this.updateStartTime()
-        this.currentStep.unpause()
+        this.currentStep.run()
     }
 
-    drawDebug(time: number) {
+    public forward() {
+        this.autoPlay = false
+        this.singleForward()
+    }
+
+    public backward() {
+        this.autoPlay = false
+        this.singleBackward()
+    }
+
+    public deleteSelected() {
+        this.togglePause()
+        this.model.deleteSelected()
+    }
+
+    public togglePause() {
+        this.updateStartTime()
+        this.currentStep.togglePause()
+        if (this.currentStep.state == StepState.STOPPED) {
+            this.autoPlay = false
+        }
+    }
+
+    private drawDebug(time: number) {
         this.fps = 1 / ((time - this.lastTime) / 1000)
         this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.model.zoom * 100) / 100} step: ${this.currentStepIndex} prog: ${Math.round(this._requestedStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
     }
 
-
-    public draw(time: number) {
+    draw(time: number) {
         this.canvas.width = this._width
         this.canvas.height = this._height
         if (this.showDebug) {
@@ -249,11 +246,11 @@ export class DotsAndBoxes {
     private handleStepChange() {
         if (this.currentStep.progress != this._requestedStepProgress) {
             this.currentStep.progress = this._requestedStepProgress
-            if (this.autoplay ) {
-                if(this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
-                    this.forward()
+            if (this.autoPlay) {
+                if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
+                    this.singleForward()
                 } else if (this.currentStep.state == StepState.START && this.currentStepIndex > 0) {
-                    this.backward()
+                    this.singleBackward()
                 }
             }
         }
@@ -349,13 +346,7 @@ export class DotsAndBoxes {
         }
     }
 
-    togglePause() {
-        this.updateStartTime()
-        this.currentStep.togglePause()
-        if (this.currentStep.state == StepState.STOPPED) {
-            this.autoplay = false
-        }
-    }
+
 }
 
 
