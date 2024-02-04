@@ -3,13 +3,13 @@ import {Parser} from "./parser/parser.ts"
 import {Point} from "./shared/point.ts"
 import {
     AUTOPLAY, BORDER, CODE, COLOR, CONTROLS,
-    DEBUG, EXPERIMENTAL, HEIGHT, KEYBOARD, STYLE, WIDTH
-} from "./shared/attributes.ts";
+    DEBUG, EXPERIMENTAL, HEIGHT, INITIALIZED, KEYBOARD, STYLE, WIDTH
+} from "./shared/elemConstants.ts";
 
 
 class DotsAndBoxesElement extends HTMLElement {
     public static readonly ELEM_NAME: string = "dots-and-boxes"
-    static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, CONTROLS, AUTOPLAY, KEYBOARD]
+    static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, CONTROLS, AUTOPLAY, KEYBOARD, INITIALIZED]
     dotsAndBoxes!: DotsAndBoxes
     private _code: string = ''
     color: string = 'white'
@@ -22,9 +22,19 @@ class DotsAndBoxesElement extends HTMLElement {
     autoplay = false
     canvas!: HTMLCanvasElement
     keyboard: boolean = false
+    _initialized: boolean = false
+
+    public get initialized() {
+        return this._initialized
+    }
 
     public get code() {
         return this._code
+    }
+
+    public set code(newCode: string) {
+        this._code = newCode
+        this.reset()
     }
 
     reset() {
@@ -81,8 +91,9 @@ class DotsAndBoxesElement extends HTMLElement {
         this.canvas = this.getCanvas(shadow)
         this.dotsAndBoxes = new DotsAndBoxes(this.canvas)
         this.reset()
-        this.dispatchEvent(new CustomEvent("initialized", { //todo refactor
-        bubbles: true,
+        this._initialized = true
+        this.dispatchEvent(new CustomEvent(INITIALIZED, {
+            bubbles: true,
             cancelable: false,
             composed: true
         }))

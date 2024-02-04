@@ -59,10 +59,10 @@ npm run build
 npm run test
 ```
 
-## DAB - (D)ots (A)nd (B)oxes language
+## DABL - (D)ots (A)nd (B)oxes (L)anguage
 
-*DABL* language allows to declare controls like dots and boxes
-and action steps like move or swap action.
+**DABL** allows to declare controls like dots and boxes
+and action steps like move or swap action to make simple step animations
 
 ### define a dot
 

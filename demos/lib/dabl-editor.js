@@ -1,4 +1,3 @@
-// import * as Prism from './prism.js'
 import * as Prism from './prism.js'
 
 class DABLEditor extends HTMLElement {
@@ -6,6 +5,7 @@ class DABLEditor extends HTMLElement {
 
     // noinspection JSUnusedGlobalSymbols
     connectedCallback() {
+        this.code = ''
         const shadow = this.attachShadow({mode: "open"})
         shadow.innerHTML = `
       <link href="./lib/prism.css" rel="stylesheet" type="text/css">  
@@ -63,9 +63,9 @@ class DABLEditor extends HTMLElement {
       </style>
       <script src="./prism.js"></script>
       <div class="main-menu">             
-          <button title="run code">▶</button>
+          <button id="run-code" title="run code">▶</button>
           <span class="separator"></span>
-          <div class="right-menu"><button title="copy to clipboard" id="copy-clipboard">📋</button></div> 
+          <div class="right-menu"><button id="copy-clipboard" title="copy to clipboard" >📋</button></div> 
         </div>
       <div class="main-wrapper">      
         <pre class="editor" spellcheck=false contenteditable></pre>
@@ -73,27 +73,41 @@ class DABLEditor extends HTMLElement {
      `
         const clipBoardButton = this.shadowRoot.querySelector('#copy-clipboard')
         clipBoardButton.onclick = (_) => this.copyToClipBoard(this.code)
+
+        const runCodeButton = this.shadowRoot.querySelector('#run-code')
+        runCodeButton.onclick = (_) => this.dotsAndBoxes.code = this.updateCodeFromEditor()
+
         this.extendDABLang()
         this.updateAttachedControl()
         this.updateCode()
         this.updateReadonly()
-     }
+    }
 
-    extendDABLang(){
+    extendDABLang() {
         window.Prism.languages['dabl'] = window.Prism.languages.extend('clike', {
             'keyword': /\b(?:steps|title|selected|box|dot)\b/,
         });
     }
 
     copyToClipBoard(txt) {
+        this.updateCodeFromEditor()
         navigator.clipboard.writeText(txt);
     }
 
+    updateCodeFromEditor() {
+        const editor = this.getEditor()
+        this.code = editor.innerText
+        return this.code
+    }
+
+    getEditor(){
+        return this.shadowRoot.querySelector('.editor')
+    }
 
     updateCode() {
         if (this.shadowRoot) {
-            const editor = this.shadowRoot.querySelector('.editor')
-            editor.innerHTML =  window.Prism.highlight(this.code, window.Prism.languages.dabl, 'dabl')
+            const editor = this.getEditor()
+            editor.innerHTML = window.Prism.highlight(this.code, window.Prism.languages.dabl, 'dabl')
         }
     }
 
@@ -104,15 +118,33 @@ class DABLEditor extends HTMLElement {
         }
     }
 
-
     updateAttachedControl() {
         if (this.shadowRoot && this.attachSelector) {
             const dab = document.querySelector(this.attachSelector)
-            console.log(dab._code)
-           // TODO - attach to initialized event
+            if (dab) {
+                this.dotsAndBoxes = dab
+                this.reattachHandler()
+            }
+            if (this.dotsAndBoxes && this.dotsAndBoxes.initialized) {
+                this.code = this.dotsAndBoxes.code
+                this.updateCode()
+            }
         }
     }
 
+    reattachHandler(){
+        document.removeEventListener("initialized", this.initializeHandler)
+        document.addEventListener("initialized", this.initializeHandler)
+    }
+
+    initializeHandler = (evt) => this.onAttachedControlInitialize(evt)
+
+    onAttachedControlInitialize(evt) {
+        if (evt.target === this.dotsAndBoxes) {
+            this.code = this.dotsAndBoxes.code
+            this.updateCode()
+        }
+    }
 
     // noinspection JSUnusedGlobalSymbols
     attributeChangedCallback(name, oldValue, newValue) {

@@ -14,6 +14,10 @@
             display: flex;
             flex-wrap: wrap;
         }
+        .example dots-and-boxes {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
 
     </style>
   <script type="module" crossorigin src="lib/dabl-editor.js"></script>
@@ -23,7 +27,7 @@
 <h2>dots and boxes demo</h2>
 <h3>Bubble Sort</h3>
 <div class="example">
-<dots-and-boxes id="example1" style="margin-right: 10px;height: 250px; width: 330px" controls keyboard code="
+<dots-and-boxes id="dab0" style="height: 250px; width: 330px" controls keyboard code="
     title: sort with bubble sort
     box id: txt at: -150, -90 size: (260, 80) visible: false
     box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
@@ -43,21 +47,21 @@
     txt <- 'repeat from start' visible: true, win -> -(150,0)
 ">
 </dots-and-boxes>
-    <dabl-editor style="min-width: 300px" attach-selector="#example1" ></dabl-editor>
+    <dabl-editor style="min-width: 300px" attach-selector="#dab0"></dabl-editor>
 </div>
 
 
 <h3>Selected Control Move</h3>
 
  <div class="example">
-     <dots-and-boxes style="height: 254px; width: 450px" controls debug experimental
+     <dots-and-boxes id="dab1" style="height: 254px; width: 450px" controls debug experimental
                      color="rgba(233,233,233,0.3)" code="
     title: Ale heca
     box id: b2  text: 'select two controls to swap' at: -140, -100 size: (260, 80)
     dot id: 1 color: rgba(100,200,50,0.6) at: -100, 0  size: 35 selected: true
     dot id: 2 color: purple at: -150, 0 size: 20
-    dot id: 3 color: orange at: 0, 0 size: 20 visible: false // fix visible does not work
-    dot id: 4 color: gray  at: -50, 0 size: 20 selected: true // fix selected does not work
+    dot id: 3 color: orange at: 0, 0 size: 20
+    dot id: 4 color: gray  at: -50, 0 size: 20 selected: true
     dot id: 5 color: rgba(190,0,65,1) at: 50, 0  size: 20
     steps:
     b2 <- text: 'go back and select different controls or forward', selected0 <-> selected1
@@ -68,14 +72,13 @@
     3 <-> 4
     4 <-> 5
     "></dots-and-boxes>
-
-
+     <dabl-editor style="min-width: 300px" attach-selector="#dab1"></dabl-editor>
  </div>
 
 
 <h3>Request Response</h3>
 <div class="example">
-<dots-and-boxes style="height: 350px; width: 600px" debug controls code="
+<dots-and-boxes id="dab2" style="height: 350px; width: 600px" debug controls code="
     title: request response pattern
     box text: 'CLIENT' size: 100,40 at: -295, -120 color: rgb(187,105,13)
     box text: 'SERVER' size: 100,40 at: 180, -120 color: rgba(5,5,254,0.6)
@@ -90,6 +93,7 @@
     camera -> +(0,350), fin <- visible: true
 ">
 </dots-and-boxes>
+    <dabl-editor style="min-width: 300px" attach-selector="#dab2"></dabl-editor>
 </div>
 
 </body>
