@@ -119,6 +119,9 @@ class DotsAndBoxesElement extends HTMLElement {
     updateControls() {
         const controlsMenu = this.shadowRoot!.getElementById('controls-menu') as HTMLElement
         controlsMenu.style.display = this.showControls ? 'block' : 'none'
+
+        const experimentalMenu = this.shadowRoot!.getElementById(EXPERIMENTAL) as HTMLElement
+        experimentalMenu.style.display = this.experimental ? 'inline' : 'none'
     }
 
     buildControls(menu: HTMLElement) {
@@ -152,38 +155,41 @@ class DotsAndBoxesElement extends HTMLElement {
         restart.append('↺')
         menu.append(restart)
 
-        if (this.experimental) {
-            const panZoomTool = document.createElement("button")
-            panZoomTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.PAN_ZOOM_TOOL)
-            panZoomTool.append('☩')
-            menu.append(panZoomTool)
+        const experimentalMenu = document.createElement("div")
+        experimentalMenu.id = EXPERIMENTAL
+        experimentalMenu.style.display = this.experimental ? 'inline' : 'none'
 
-            const rangeControl = document.createElement("input")
-            rangeControl.type = "range"
-            rangeControl.min = "0"
-            rangeControl.max = "1"
-            rangeControl.step = "0.01"
-            rangeControl.value = "0"
-            rangeControl.oninput = (e: any) => {
-                this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)
-            }
-            menu.append(rangeControl)
+        const panZoomTool = document.createElement("button")
+        panZoomTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.PAN_ZOOM_TOOL)
+        panZoomTool.append('☩')
+        menu.append(panZoomTool)
 
-            const dotTool = document.createElement("button")
-            dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
-            dotTool.append('❍')
-            menu.append(dotTool)
-
-            const boxTool = document.createElement("button")
-            boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
-            boxTool.append('◻')
-            menu.append(boxTool)
-
-            const printModel = document.createElement("button")
-            printModel.onclick = (_) => console.log(this.dotsAndBoxes.model)
-            printModel.append('m')
-            menu.append(printModel)
+        const rangeControl = document.createElement("input")
+        rangeControl.type = "range"
+        rangeControl.min = "0"
+        rangeControl.max = "1"
+        rangeControl.step = "0.01"
+        rangeControl.value = "0"
+        rangeControl.oninput = (e: any) => {
+            this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)
         }
+        experimentalMenu.append(rangeControl)
+
+        const dotTool = document.createElement("button")
+        dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
+        dotTool.append('❍')
+        experimentalMenu.append(dotTool)
+
+        const boxTool = document.createElement("button")
+        boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
+        boxTool.append('◻')
+        experimentalMenu.append(boxTool)
+
+        const printModel = document.createElement("button")
+        printModel.onclick = (_) => console.log(this.dotsAndBoxes.model)
+        printModel.append('m')
+        experimentalMenu.append(printModel)
+        menu.append(experimentalMenu)
     }
 
     private updateKeyboardHandler() {

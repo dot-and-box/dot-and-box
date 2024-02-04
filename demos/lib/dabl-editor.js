@@ -24,17 +24,14 @@ class DABLEditor extends HTMLElement {
             padding-left: 10px;
             text-align:justify;
             font-family: monospace;
-            /*resize: both;*/
             overflow: auto;
             width: max-content
-        }
-        
-       [contenteditable]:focus { 
+        }        
+        [contenteditable]:focus { 
             outline: 0 solid transparent; 
-        } 
-        
+        }         
         .main-menu {
-           height: 30px;
+           height: 20px;
            margin-top: 0;
            margin-left: 0;
            width: max-content
@@ -50,11 +47,11 @@ class DABLEditor extends HTMLElement {
             display: flex;          
             width: max-content            
         }
-        .main-menu  button {
+        .main-menu button {
           border: 1px solid transparent;
           background-color: transparent;
         }
-        .main-menu  button:hover {
+        .main-menu button:hover {
           border: 1px solid lightgray ;
         }
         .editor .token {
@@ -64,18 +61,39 @@ class DABLEditor extends HTMLElement {
       <script src="./prism.js"></script>
       <div class="main-menu">             
           <button id="run-code" title="run code">▶</button>
+          <div><input type="checkbox" id="autoplay" title="show controls" checked>autoplay</div>
           <span class="separator"></span>
+          <div><input type="checkbox" id="show-controls" title="show controls" checked>controls</div>
+          <div><input type="checkbox" id="show-experimental" title="show controls">experimental</div>
           <div class="right-menu"><button id="copy-clipboard" title="copy to clipboard" >📋</button></div> 
         </div>
       <div class="main-wrapper">      
         <pre class="editor" spellcheck=false contenteditable></pre>
       </div>
      `
-        const clipBoardButton = this.shadowRoot.querySelector('#copy-clipboard')
+        const clipBoardButton = this.getControl('#copy-clipboard')
         clipBoardButton.onclick = (_) => this.copyToClipBoard(this.code)
 
-        const runCodeButton = this.shadowRoot.querySelector('#run-code')
-        runCodeButton.onclick = (_) => this.dotsAndBoxes.code = this.updateCodeFromEditor()
+        const runCodeButton = this.getControl('#run-code')
+        runCodeButton.onclick = (_) => this.runCode()
+
+        const showControlsCheckBox = this.getControl('#show-controls')
+        showControlsCheckBox.oninput = (v) => {
+            if (v.target.checked) {
+                this.dotsAndBoxes.setAttribute('controls', true)
+            } else {
+                this.dotsAndBoxes.removeAttribute('controls')
+            }
+        }
+
+        const experimentalCheckBox = this.getControl('#show-experimental')
+        experimentalCheckBox.oninput = (v) => {
+            if (v.target.checked) {
+                this.dotsAndBoxes.setAttribute('experimental', true)
+            } else {
+                this.dotsAndBoxes.removeAttribute('experimental')
+            }
+        }
 
         this.extendDABLang()
         this.updateAttachedControl()
@@ -89,6 +107,16 @@ class DABLEditor extends HTMLElement {
         });
     }
 
+    runCode() {
+        const newCode = this.updateCodeFromEditor()
+        this.updateCode()
+        this.dotsAndBoxes.code = newCode
+        const autoplayCheckBox = this.getControl('#autoplay')
+        if (autoplayCheckBox.checked) {
+            this.dotsAndBoxes.fastForward()
+        }
+    }
+
     copyToClipBoard(txt) {
         this.updateCodeFromEditor()
         navigator.clipboard.writeText(txt);
@@ -100,8 +128,12 @@ class DABLEditor extends HTMLElement {
         return this.code
     }
 
-    getEditor(){
-        return this.shadowRoot.querySelector('.editor')
+    getEditor() {
+        return this.getControl('.editor')
+    }
+
+    getControl(querySelector) {
+        return this.shadowRoot.querySelector(querySelector)
     }
 
     updateCode() {
@@ -132,7 +164,7 @@ class DABLEditor extends HTMLElement {
         }
     }
 
-    reattachHandler(){
+    reattachHandler() {
         document.removeEventListener("initialized", this.initializeHandler)
         document.addEventListener("initialized", this.initializeHandler)
     }

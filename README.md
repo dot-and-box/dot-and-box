@@ -18,7 +18,7 @@ eg.
 
 ```html
 <script src="insert_url_here"></script>
-<dots-and-boxes style="margin:20px;height: 400px; width: 600px" color="white" code="
+<dots-and-boxes style="margin:20px;height: 400px; width: 600px;" color="white" code="
     title: sort with bubble sort
     box id: txt at: -150, -90 size: (260, 80) visible: false
     box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
@@ -132,3 +132,4 @@ Assign one or more property to control
 ## credits
 
 - [Easing functions](https://gizma.com/easing/)
+- [Prism.js - code highlighting](https://prismjs.com/)

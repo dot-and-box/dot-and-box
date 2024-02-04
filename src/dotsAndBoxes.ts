@@ -221,8 +221,8 @@ export class DotsAndBoxes {
         this.ctx.translate(-this.model.origin.x + this.model.offset.x, -this.model.origin.y + this.model.offset.y)
         if (this.currentStep && this.currentStep.direction != StepDirection.NONE && this.currentStep.state != StepState.STOPPED) {
             this.updateProgress()
-            this.handleProgressChange()
         }
+        this.handleProgressChange()
         for (const control of this.model.controls) {
             if (control.visible) {
                 control.draw(this.ctx)
