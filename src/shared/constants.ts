@@ -1,3 +1,5 @@
+import {DummyControl} from "../controls/dummy/dummyControl.ts";
+
 export const MAX_ZOOM = 6
 export const MIN_ZOOM = 0.1
 export const SCROLL_SENSITIVITY = 0.0020
@@ -5,6 +7,7 @@ export const SCROLL_SENSITIVITY = 0.0020
 export const SELECTION_STROKE_STYLE = 'yellow'
 export const DEFAULT_FONT = 'courier'
 export const DEFAULT_FONT_SIZE = 14
+export const DEFAULT_LINE_WIDTH = 2
 export const TITLE_FONT_SIZE = 22
 export const DEFAULT_BOX_COLOR = "rgba(37,33,133,0.68)"
 export const WHITE = "white"
@@ -36,3 +39,4 @@ export const SIZES: number [] = [
 
 export const DEFAULT_DOT_SIZE = SIZES[0]
 
+export const DUMMY_CONTROL = DummyControl.getInstance()

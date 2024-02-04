@@ -10,10 +10,11 @@ import {Move} from "../actions/move.ts"
 import {Swap} from "../actions/swap.ts"
 import {Clone} from "../actions/clone.ts"
 import {Sign} from "../shared/sign.ts"
-import {COLORS, WHITE} from "../shared/constants.ts"
+import {BLACK, COLORS, WHITE} from "../shared/constants.ts"
 import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
+import {LineControl} from "../controls/line/lineControl.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -51,6 +52,9 @@ export class Parser {
                     break
                 case TokenType.DOT:
                     this.dot()
+                    break
+                case TokenType.LINE:
+                    this.line()
                     break
                 case TokenType.STEPS:
                     this.steps()
@@ -104,7 +108,51 @@ export class Parser {
         if (box.selected) {
             this.model.selectedControls.push(box)
         }
+    }
 
+    line() {
+        const line_tokens: Array<TokenType> = [TokenType.ID, TokenType.END, TokenType.AT, TokenType.WIDTH, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED]
+        let end = new Point(100, 100)
+        let at = new Point(0, 0)
+        let width = 1
+        let id = null
+        let color = BLACK
+        let visible = true
+        let selected = false
+        while (line_tokens.includes(this.peek().type)) {
+            const token = this.advance()
+            switch (token.type) {
+                case TokenType.ID:
+                    id = this.controlId()
+                    break
+                case TokenType.AT:
+                    at = this.at()
+                    break
+                case TokenType.END:
+                    end = this.point()
+                    break
+                case TokenType.WIDTH:
+                    width = this.number()
+                    break
+                case TokenType.COLOR:
+                    color = this.color()
+                    break
+                case TokenType.VISIBLE:
+                    visible = this.visible()
+                    break
+                case TokenType.SELECTED:
+                    selected = this.selected()
+                    break
+            }
+        }
+        if (id == null) {
+            id = 'l' + this.model.controls.length
+        }
+        const line = new LineControl(id, at, end, width, color, visible, selected)
+        this.model.controls.push(line)
+        if (line.selected) {
+            this.model.selectedControls.push(line)
+        }
     }
 
     dot() {

@@ -21,6 +21,7 @@ test('parser simple', () => {
     dot id: '3' at: 30, 0 size: 20
     dot id: '5' at: -20, 0 size: 20
     dot id: p  text: '4' at: 80, 0 size: 20
+    line at: 30, 0 end: 89,90
     steps:
     b2 <- visible: true, b3 <- visible: true, b3 -> +(110,0)
     b2 <- text: '(2) swap if left bigger than right', 2 <-> 1

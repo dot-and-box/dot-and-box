@@ -1,9 +1,8 @@
 import {Point} from "../../shared/point.ts"
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT, WHITE, BLACK} from "../../shared/constants.ts"
+import {SELECTION_STROKE_STYLE, DEFAULT_FONT, WHITE, BLACK, DEFAULT_LINE_WIDTH} from "../../shared/constants.ts"
 import {Control} from "../control.ts"
 
-export class DotControl implements Control {
-    public position: Point
+export class DotControl extends Control {
     public color: string
     public size: number
     public text: string
@@ -12,6 +11,7 @@ export class DotControl implements Control {
     public visible: boolean
 
     constructor(id: string, position: Point, size: number, color: string, text: string, visible: boolean, selected: boolean) {
+        super()
         this.id = id
         this.position = position
         this.color = color
@@ -27,6 +27,7 @@ export class DotControl implements Control {
         ctx.fillStyle = this.color
         ctx.fill()
         if (this.selected) {
+            ctx.lineWidth = DEFAULT_LINE_WIDTH
             ctx.strokeStyle = SELECTION_STROKE_STYLE
             ctx.stroke()
         }

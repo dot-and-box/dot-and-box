@@ -2,8 +2,7 @@ import {Point} from "../../shared/point.ts"
 import {BLACK, DEFAULT_FONT, DEFAULT_FONT_SIZE, SELECTION_STROKE_STYLE, WHITE} from "../../shared/constants.ts"
 import {Control} from "../control.ts"
 
-export class BoxControl implements Control {
-    public position: Point
+export class BoxControl extends Control {
     public color: string
     public size: Point
     public text: string
@@ -13,6 +12,7 @@ export class BoxControl implements Control {
     public visible: boolean
 
     constructor(id: string, position: Point, size: Point, color: string, text: string, visible: boolean, selected: boolean) {
+        super()
         this.id = id
         this.position = position
         this.size = size

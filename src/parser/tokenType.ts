@@ -29,10 +29,13 @@ export enum TokenType {
     DOTS = "dots",
     AT = "at",
     SIZE = "size",
+    END = "end",
+    WIDTH = "width",
     COLOR = "color",
     DATA = "data",
     BOX = "box",
+    LINE = "line",
     STEPS = "steps",
-    SELECTED  = "selected",
-    VISIBLE  = "visible"
+    SELECTED = "selected",
+    VISIBLE = "visible"
 }

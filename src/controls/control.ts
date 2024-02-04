@@ -1,23 +1,25 @@
 import {Point} from "../shared/point.ts"
-import {DummyControl} from "./dummy/dummyControl.ts";
 
 export interface ControlBase {
     id: string
     position: Point
+
 }
 
+export abstract class Control implements ControlBase {
+    id: string = '';
+    position: Point = Point.zero();
+    selected: boolean = false
+    visible: boolean = true
 
-export interface Control extends ControlBase {
+    abstract draw(ctx: CanvasRenderingContext2D): void
 
-    selected: boolean
+    abstract hitTest(point: Point): boolean
 
-    visible: boolean
+    updatePosition(x: number, y: number) {
+        this.position.x = x
+        this.position.y = y
+    }
 
-    draw(ctx: CanvasRenderingContext2D): void
-
-    hitTest(point: Point): boolean
-
-    clone(): Control
+    abstract clone(): Control
 }
-
-export const DUMMY_CONTROL = new DummyControl()

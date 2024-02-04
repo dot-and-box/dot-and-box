@@ -1,8 +1,9 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {Point} from "../shared/point.ts"
 import {DotsAndBoxesModel} from "../shared/step.ts"
-import {Control, DUMMY_CONTROL} from "../controls/control.ts"
+import {Control} from "../controls/control.ts"
 import {Sign} from "../shared/sign.ts"
+import {DUMMY_CONTROL} from "../shared/constants.ts";
 
 export class Move extends ActionBase {
     start: Point
@@ -63,14 +64,16 @@ export class Move extends ActionBase {
 
     override updateValue(progress: number) {
         if (progress == 0) {
-            this.left!.position.x = this.start.x
-            this.left!.position.y = this.start.y
+            this.left!.updatePosition(this.start.x, this.start.y)
+
         } else if (progress == 1) {
-            this.left!.position.x = this.end.x
-            this.left!.position.y = this.end.y
+            this.left!.updatePosition(this.end.x, this.end.y)
+
         } else {
-            this.left!.position.x = this.start.x + (this.end.x - this.start.x) * progress
-            this.left!.position.y = this.start.y + (this.end.y - this.start.y) * progress
+            this.left!.updatePosition(
+                this.start.x + (this.end.x - this.start.x) * progress,
+                this.start.y + (this.end.y - this.start.y) * progress
+            )
         }
     }
 

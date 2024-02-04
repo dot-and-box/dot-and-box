@@ -1,8 +1,9 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {DotsAndBoxesModel} from "../shared/step.ts"
-import {Control, DUMMY_CONTROL} from "../controls/control.ts"
+import {Control} from "../controls/control.ts"
 import {Change} from "../shared/change.ts"
 import {PropertyChange} from "../shared/propertyChange.ts";
+import {DUMMY_CONTROL} from "../shared/constants.ts";
 
 export class Assign extends ActionBase {
 
