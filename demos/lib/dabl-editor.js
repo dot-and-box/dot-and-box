@@ -110,10 +110,10 @@ class DABLEditor extends HTMLElement {
     runCode() {
         const newCode = this.updateCodeFromEditor()
         this.updateCode()
-        this.dotsAndBoxes.code = newCode
         const autoplayCheckBox = this.getControl('#autoplay')
+        this.dotsAndBoxes.code = newCode
         if (autoplayCheckBox.checked) {
-            this.dotsAndBoxes.fastForward()
+            setTimeout(()=> this.dotsAndBoxes.fastForward(), 10); //workaround - check out why
         }
     }
 
