@@ -62,10 +62,11 @@ class DotsAndBoxesElement extends HTMLElement {
           height: 24px;
           left: 0;       
           top: -26px;
-          overflow:hidden;
+          overflow: hidden;
           background-color: white;
           background-color:  rgba(243,243,243,0.7);
           display: ${this.showControls ? 'flex' : 'none'};
+          flex-wrap: nowrap;
           align-items: center;
         }        
         #controls-menu button {
