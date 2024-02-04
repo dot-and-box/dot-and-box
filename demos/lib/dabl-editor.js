@@ -1,8 +1,8 @@
 // import * as Prism from './prism.js'
 import * as Prism from './prism.js'
 
-class DabEditor extends HTMLElement {
-    static observedAttributes = ["code", "edit", "width", "height", 'controls']
+class DABLEditor extends HTMLElement {
+    static observedAttributes = ["code", "readonly", 'attach-selector']
 
     // noinspection JSUnusedGlobalSymbols
     connectedCallback() {
@@ -68,21 +68,20 @@ class DabEditor extends HTMLElement {
           <div class="right-menu"><button title="copy to clipboard" id="copy-clipboard">📋</button></div> 
         </div>
       <div class="main-wrapper">      
-        <pre class="editor" spellcheck=false  contenteditable></pre>
+        <pre class="editor" spellcheck=false contenteditable></pre>
       </div>
      `
         const clipBoardButton = this.shadowRoot.querySelector('#copy-clipboard')
         clipBoardButton.onclick = (_) => this.copyToClipBoard(this.code)
         this.extendDABLang()
+        this.updateAttachedControl()
         this.updateCode()
+        this.updateReadonly()
      }
 
     extendDABLang(){
         window.Prism.languages['dabl'] = window.Prism.languages.extend('clike', {
-
             'keyword': /\b(?:steps|title|selected|box|dot)\b/,
-
-
         });
     }
 
@@ -95,9 +94,25 @@ class DabEditor extends HTMLElement {
         if (this.shadowRoot) {
             const editor = this.shadowRoot.querySelector('.editor')
             editor.innerHTML =  window.Prism.highlight(this.code, window.Prism.languages.dabl, 'dabl')
-
         }
     }
+
+    updateReadonly() {
+        if (this.shadowRoot && this.readonly) {
+            const editor = this.shadowRoot.querySelector('.editor')
+            editor.removeAttribute("contenteditable")
+        }
+    }
+
+
+    updateAttachedControl() {
+        if (this.shadowRoot && this.attachSelector) {
+            const dab = document.querySelector(this.attachSelector)
+            console.log(dab._code)
+           // TODO - attach to initialized event
+        }
+    }
+
 
     // noinspection JSUnusedGlobalSymbols
     attributeChangedCallback(name, oldValue, newValue) {
@@ -105,9 +120,18 @@ class DabEditor extends HTMLElement {
             this.code = newValue
             this.updateCode()
         }
+        if (name === 'readonly') {
+            this.readonly = newValue != null
+            this.updateReadonly()
+        }
+
+        if (name === 'attach-selector') {
+            this.attachSelector = newValue
+            this.updateReadonly()
+        }
 
     }
 
 }
 
-customElements.define('dab-editor', DabEditor)
+customElements.define('dabl-editor', DABLEditor)

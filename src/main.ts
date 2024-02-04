@@ -11,7 +11,7 @@ class DotsAndBoxesElement extends HTMLElement {
     public static readonly ELEM_NAME: string = "dots-and-boxes"
     static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, CONTROLS, AUTOPLAY, KEYBOARD]
     dotsAndBoxes!: DotsAndBoxes
-    code: string = ''
+    private _code: string = ''
     color: string = 'white'
     debug: boolean = false
     border: string = '1px solid #ccc'
@@ -23,8 +23,12 @@ class DotsAndBoxesElement extends HTMLElement {
     canvas!: HTMLCanvasElement
     keyboard: boolean = false
 
+    public get code() {
+        return this._code
+    }
+
     reset() {
-        if (this.code && this.dotsAndBoxes) {
+        if (this._code && this.dotsAndBoxes) {
             this.updateCanvasStyle(this.canvas)
             this.applyCode()
             this.dotsAndBoxes.showDebug = this.debug
@@ -34,7 +38,7 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     applyCode() {
-        const model = new Parser().parse(this.code)
+        const model = new Parser().parse(this._code)
         this.dotsAndBoxes.apply(model)
     }
 
@@ -77,6 +81,11 @@ class DotsAndBoxesElement extends HTMLElement {
         this.canvas = this.getCanvas(shadow)
         this.dotsAndBoxes = new DotsAndBoxes(this.canvas)
         this.reset()
+        this.dispatchEvent(new CustomEvent("initialized", { //todo refactor
+        bubbles: true,
+            cancelable: false,
+            composed: true
+        }))
         if (this.autoplay) {
             this.fastForward()
         }
@@ -223,7 +232,7 @@ class DotsAndBoxesElement extends HTMLElement {
                 this.resize()
                 break
             case CODE:
-                this.code = newValue
+                this._code = newValue
                 if (this.dotsAndBoxes) {
                     this.applyCode()
                 }
