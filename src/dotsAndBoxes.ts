@@ -221,8 +221,8 @@ export class DotsAndBoxes {
         this.ctx.translate(-this.model.origin.x + this.model.offset.x, -this.model.origin.y + this.model.offset.y)
         if (this.currentStep && this.currentStep.direction != StepDirection.NONE && this.currentStep.state != StepState.STOPPED) {
             this.updateProgress()
+            this.handleProgressChange()
         }
-        this.handleStepChange()
         for (const control of this.model.controls) {
             if (control.visible) {
                 control.draw(this.ctx)
@@ -243,16 +243,20 @@ export class DotsAndBoxes {
         }
     }
 
-    private handleStepChange() {
+    private handleProgressChange() {
         if (this.currentStep.progress != this._requestedStepProgress) {
             this.currentStep.progress = this._requestedStepProgress
             if (this.autoPlay) {
-                if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
-                    this.singleForward()
-                } else if (this.currentStep.state == StepState.START && this.currentStepIndex > 0) {
-                    this.singleBackward()
-                }
+               this.handleAutoPlay()
             }
+        }
+    }
+
+    private handleAutoPlay(){
+        if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
+            this.singleForward()
+        } else if (this.currentStep.state == StepState.START && this.currentStepIndex > 0) {
+            this.singleBackward()
         }
     }
 
