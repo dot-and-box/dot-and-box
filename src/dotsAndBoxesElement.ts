@@ -128,7 +128,7 @@ class DotsAndBoxesElement extends HTMLElement {
     buildControls(menu: HTMLElement) {
         const fastBackward = document.createElement("button")
         fastBackward.onclick = (_) => this.dotsAndBoxes.fastBackward()
-        fastBackward.textContent = '\u{23F4}\u{23F4}'
+        fastBackward.textContent = '|\u{23F4}'
         menu.append(fastBackward)
 
         const backward = document.createElement("button")
@@ -148,7 +148,7 @@ class DotsAndBoxesElement extends HTMLElement {
 
         const fastForward = document.createElement("button")
         fastForward.onclick = (_) => this.dotsAndBoxes.fastForward()
-        fastForward.append('\u{23F5}\u{23F5}')
+        fastForward.append('\u{23F5}|')
         menu.append(fastForward)
 
         const restart = document.createElement("button")
