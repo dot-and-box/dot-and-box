@@ -72,9 +72,8 @@ class DotsAndBoxesElement extends HTMLElement {
         #controls-menu button {
          color:  rgba(23,23,23,0.7);
          background-color: transparent;
-         font-size: 18px;        
-         height: 22px;
-         width: 24px;
+         font-size: 22px;                 
+         width: 22px;
          margin: 0;
          padding: 0;
          border: solid 1px transparent;
@@ -128,12 +127,12 @@ class DotsAndBoxesElement extends HTMLElement {
     buildControls(menu: HTMLElement) {
         const fastBackward = document.createElement("button")
         fastBackward.onclick = (_) => this.dotsAndBoxes.fastBackward()
-        fastBackward.textContent = '\u{021E4}'
+        fastBackward.textContent = '\u{00AB}'
         menu.append(fastBackward)
 
         const backward = document.createElement("button")
         backward.onclick = (_) => this.dotsAndBoxes.backward()
-        backward.textContent = '\u{23F4}'
+        backward.textContent = '\u{025C2}'
         menu.append(backward)
 
         const pause = document.createElement("button")
@@ -143,12 +142,12 @@ class DotsAndBoxesElement extends HTMLElement {
 
         const forward = document.createElement("button")
         forward.onclick = (_) => this.forward()
-        forward.append('\u{23F5}')
+        forward.append('\u{025B8}')
         menu.append(forward)
 
         const fastForward = document.createElement("button")
         fastForward.onclick = (_) => this.dotsAndBoxes.fastForward()
-        fastForward.append('\u{021E5}')
+        fastForward.append('\u{000BB}')
         menu.append(fastForward)
 
         const restart = document.createElement("button")
@@ -162,7 +161,7 @@ class DotsAndBoxesElement extends HTMLElement {
 
         const panZoomTool = document.createElement("button")
         panZoomTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.PAN_ZOOM_TOOL)
-        panZoomTool.append('☩')
+        panZoomTool.append('\u{271C}')
         menu.append(panZoomTool)
 
         const rangeControl = document.createElement("input")
@@ -178,17 +177,17 @@ class DotsAndBoxesElement extends HTMLElement {
 
         const dotTool = document.createElement("button")
         dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
-        dotTool.append('❍')
+        dotTool.append('\u{23FA}')
         experimentalMenu.append(dotTool)
 
         const boxTool = document.createElement("button")
         boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
-        boxTool.append('◻')
+        boxTool.append('\u{25A1}')
         experimentalMenu.append(boxTool)
 
         const printModel = document.createElement("button")
         printModel.onclick = (_) => console.log(this.dotsAndBoxes.model)
-        printModel.append('m')
+        printModel.append('\u{02148}')
         experimentalMenu.append(printModel)
         menu.append(experimentalMenu)
     }
