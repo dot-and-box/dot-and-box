@@ -31,11 +31,7 @@
 title: sort with bubble sort
 box id: txt at: -150, -90 size: (260, 80) visible: false
 box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
-dot id: 1 at: -70, 0 size: 20
-dot id: 2 at: -120, 0 size: 20
-dot id: 3 at: 30, 0 size: 20
-dot id: 5 at: -20, 0 size: 20
-dot id: p  text: '4' at: 80, 0 size: 20
+dots ids: 1 2 3 5 4 at: -120, 0 size: 20
 steps:
 win <- visible: true, win -> +(110,0), txt <- '(1) select first two numbers'  visible: true
 txt <- '(2) swap if left bigger than right', 2 <-> 1 // swap dot 2 with 1
@@ -43,7 +39,7 @@ txt <- '(3) select next two numbers', win -> +(50,0) // move window by 50px righ
 txt <- 'ignore if left is smaller', win -> +(50,0)
 txt <- 'again swap if left bigger', 5 <-> 3
 txt <- visible: false, win -> +(50,0)
-5 <-> p
+5 <-> 4
 txt <- 'repeat from start' visible: true, win -> -(150,0)
 ">
 </dots-and-boxes>

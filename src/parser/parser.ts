@@ -15,6 +15,7 @@ import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
 import {LineControl} from "../controls/line/lineControl.ts";
+import {Layout} from "../shared/layout.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -56,6 +57,9 @@ export class Parser {
                 case TokenType.LINE:
                     this.line()
                     break
+                case TokenType.DOTS:
+                    this.dots()
+                    break
                 case TokenType.STEPS:
                     this.steps()
                     break
@@ -74,7 +78,7 @@ export class Parser {
         let color = WHITE
         let visible = true
         let selected = false
-        while (box_tokens.includes(this.peek().type)) {
+        while (!this.eof() && box_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
@@ -119,7 +123,7 @@ export class Parser {
         let color = BLACK
         let visible = true
         let selected = false
-        while (line_tokens.includes(this.peek().type)) {
+        while (!this.eof() && line_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
@@ -155,6 +159,54 @@ export class Parser {
         }
     }
 
+    dots() {
+        const dots_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS]
+        let size = 20
+        let at = new Point(0, 0)
+        let text = ''
+        let id = ''
+
+
+        let data: string[] = []
+
+        let layout = Layout.COL //todo support more layouts
+        while (!this.eof() && dots_tokens.includes(this.peek().type)) {
+            const token = this.advance()
+            switch (token.type) {
+                case TokenType.ID:
+                    id = this.controlId()
+                    break
+                case TokenType.AT:
+                    at = this.at()
+                    break
+                case TokenType.SIZE:
+                    size = this.number()
+                    break
+                case TokenType.IDS:
+                    data = this.data()
+                    break
+            }
+        }
+        if (data.length == 0) {
+            throw new Error(`data attribute is mandatory for dots at ${this.peek().position}`)
+        }
+        let span = size * 2 + 10 //todo support explicit span
+        let i = 0;
+        for (id of data) {
+            let position = at.clone()
+            if(layout == Layout.COL){
+                position.x += i * span
+            }
+            let color = COLORS[this.model.controls.length % COLORS.length]
+            const dot = new DotControl(id != '' ? id : text, position, size, color, text != '' ? text : id, true, false)
+            this.model.controls.push(dot)
+            if (dot.selected) {
+                this.model.selectedControls.push(dot)
+            }
+            i++
+        }
+    }
+
     dot() {
         const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED]
         let size = 20
@@ -164,7 +216,7 @@ export class Parser {
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
         let selected = false
-        while (dot_tokens.includes(this.peek().type)) {
+        while (!this.eof() &&dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
@@ -302,11 +354,24 @@ export class Parser {
 
     controlId(): string {
         let token = this.advance()
-        if (token.type == TokenType.IDENTIFIER || token.type == TokenType.STRING || token.type == TokenType.NUMBER) {
+        if (this.canBeId(token.type)) {
             return token.value
         } else {
             throw new Error(`Expected control identifier at ${token.position} got ${token.value} instead`)
         }
+    }
+
+    canBeId(tokenType: TokenType) {
+        return tokenType == TokenType.IDENTIFIER || tokenType == TokenType.STRING || tokenType == TokenType.NUMBER
+    }
+
+    private data(): string[] {
+        let values: string[] = []
+        while (!this.eof() && this.canBeId(this.peek().type)) {
+            values.push(this.peek().value)
+            this.advance()
+        }
+        return values
     }
 
     move(leftControlId: string): ActionBase {

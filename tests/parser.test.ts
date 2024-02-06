@@ -38,6 +38,26 @@ test('parser simple', () => {
 })
 
 
+test('parser dots', () => {
+    let code = ` 
+    title: 'dots just dots'
+    box id: txt  text: '(1) select first two numbers' at: -150, 40 size: (260, 80) visible: false
+    dots ids: 1 2 3 5 4 at: -70, 0 size: 20
+    dot id: 6 at: -70, 50 size: 20
+    line at: 30, 0 end: 89,90
+    steps:
+    5 <-> 3
+    txt <- text: 'repeat from start' visible: true, 2 -> -(150,0)
+`
+    let p = new Parser()
+    const model = p.parse(code)
+    expect(model).not.eq(null)
+})
+
+
+
+
+
 test('assign properties', () => {
     let eg1 = ` 
     title: request response pattern

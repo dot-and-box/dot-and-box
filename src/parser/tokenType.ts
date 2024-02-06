@@ -32,7 +32,7 @@ export enum TokenType {
     END = "end",
     WIDTH = "width",
     COLOR = "color",
-    DATA = "data",
+    IDS = "ids",
     BOX = "box",
     LINE = "line",
     STEPS = "steps",
