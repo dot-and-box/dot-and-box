@@ -21,8 +21,8 @@
     box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
     dots ids: 1 2 3 5 4 at: -120, 0 size: 20
     steps:
-    win -> +(110,0), win <- visible: true,  txt <- '(1) select first two numbers' visible: true
-    txt <- '(2) swap if left bigger than right', 2 <-> 1 // swap dot 2 with 1
+    win -> +(110,0), win <- visible: true, txt <- '(1) select first two numbers' visible: true
+    txt <- '(2) swap if left bigger' color: red, 2 <-> 1 // swap dot 2 with 1
     txt <- '(3) select next two numbers', win -> +(50,0) // move window by 50px right
     txt <- 'ignore if left is smaller', win -> +(50,0)
     txt <- 'again swap if left bigger', 5 <-> 3

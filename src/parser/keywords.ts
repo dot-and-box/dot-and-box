@@ -22,7 +22,7 @@ export class Keywords {
         [TokenType.VISIBLE.toString(), TokenType.VISIBLE]
     ])
 
-    public static ASSIGN_PROPERTIES = [TokenType.SELECTED, TokenType.TEXT, TokenType.VISIBLE, TokenType.STRING]
+    public static ASSIGN_PROPERTIES = [TokenType.SELECTED, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.STRING]
 
     public static isKeyword(tokenName: string): boolean {
         return this.KEYWORDS_MAP.has(tokenName)

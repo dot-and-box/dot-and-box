@@ -87,7 +87,7 @@ dot text: 'req' at: -250, -30 size: 35
 dot text: 'res' at: 230, 70 size: 35
 steps:
 req ->  +(480,0)
-res ->  -(480,0)
+req <- color: red, res ->  -(480,0)
 camera -> +(0,350), fin <- visible: true
 ">
 </dots-and-boxes>

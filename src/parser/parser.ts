@@ -194,7 +194,7 @@ export class Parser {
         let i = 0;
         for (id of data) {
             let position = at.clone()
-            if(layout == Layout.COL){
+            if (layout == Layout.COL) {
                 position.x += i * span
             }
             let color = COLORS[this.model.controls.length % COLORS.length]
@@ -216,7 +216,7 @@ export class Parser {
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
         let selected = false
-        while (!this.eof() &&dot_tokens.includes(this.peek().type)) {
+        while (!this.eof() && dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
@@ -409,7 +409,8 @@ export class Parser {
 
         while (!this.eof() && Keywords.ASSIGN_PROPERTIES.includes(token.type)) {
             let propertyName = ''
-            if (token.type == TokenType.STRING) {
+            let propertyTokenType = token.type
+            if (propertyTokenType == TokenType.STRING) {
                 propertyName = 'text'
             } else {
                 this.advance()
@@ -417,13 +418,17 @@ export class Parser {
             }
             const valueToken = this.peek()
             let value
-            if (valueToken.type == TokenType.TRUE || valueToken.type == TokenType.FALSE) {
+            if (propertyTokenType == TokenType.COLOR) {
+                value = this.color()
+            } else if (valueToken.type === TokenType.TRUE || valueToken.type === TokenType.FALSE) {
                 value = this.boolean()
+                this.advance()
             } else {
                 value = valueToken.value
+                this.advance()
             }
             properties.set(propertyName, value)
-            this.advance()
+
             token = this.peek()
         }
 
