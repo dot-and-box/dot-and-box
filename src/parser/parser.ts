@@ -82,7 +82,7 @@ export class Parser {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
-                    id = this.controlId()
+                    id = this.propertyControlId()
                     break
                 case TokenType.TEXT:
                     text = this.text()
@@ -91,7 +91,7 @@ export class Parser {
                     at = this.at()
                     break
                 case TokenType.SIZE:
-                    size = this.point()
+                    size = this.sizePoint()
                     break
                 case TokenType.COLOR:
                     color = this.color()
@@ -127,16 +127,16 @@ export class Parser {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
-                    id = this.controlId()
+                    id = this.propertyControlId()
                     break
                 case TokenType.AT:
                     at = this.at()
                     break
                 case TokenType.END:
-                    end = this.point()
+                    end = this.end()
                     break
                 case TokenType.WIDTH:
-                    width = this.number()
+                    width = this.width()
                     break
                 case TokenType.COLOR:
                     color = this.color()
@@ -165,36 +165,34 @@ export class Parser {
         let at = new Point(0, 0)
         let text = ''
         let id = ''
-
-
-        let data: string[] = []
+        let ids: string[] = []
 
         let layout = Layout.COL //todo support more layouts
         while (!this.eof() && dots_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
-                    id = this.controlId()
+                    id = this.propertyControlId()
                     break
                 case TokenType.AT:
                     at = this.at()
                     break
                 case TokenType.SIZE:
-                    size = this.number()
+                    size = this.size()
                     break
                 case TokenType.IDS:
-                    data = this.data()
+                    ids = this.ids()
                     break
             }
         }
-        if (data.length == 0) {
+        if (ids.length == 0) {
             throw new Error(`data attribute is mandatory for dots at ${this.peek().position}`)
         }
         let span = size * 2 + 10 //todo support explicit span
         let i = 0;
-        for (id of data) {
+        for (id of ids) {
             let position = at.clone()
-            if (layout == Layout.COL) {
+            if (layout === Layout.COL) {
                 position.x += i * span
             }
             let color = COLORS[this.model.controls.length % COLORS.length]
@@ -220,7 +218,7 @@ export class Parser {
             const token = this.advance()
             switch (token.type) {
                 case TokenType.ID:
-                    id = this.controlId()
+                    id = this.propertyControlId()
                     break
                 case TokenType.TEXT:
                     text = this.text()
@@ -232,7 +230,7 @@ export class Parser {
                     at = this.at()
                     break
                 case TokenType.SIZE:
-                    size = this.number()
+                    size = this.size()
                     break
                 case TokenType.VISIBLE:
                     visible = this.visible()
@@ -253,6 +251,7 @@ export class Parser {
     }
 
     text(): string {
+        this.expectColon()
         if (this.peek().type == TokenType.STRING) {
             return this.advance().value
         }
@@ -265,8 +264,8 @@ export class Parser {
     }
 
     color(): string {
+        this.expectColon()
         let result = ''
-
         if (this.peek().type == TokenType.IDENTIFIER) {
             let token = this.advance()
             result += token.value
@@ -288,7 +287,34 @@ export class Parser {
     }
 
     at() {
+        this.expectColon()
         return this.point()
+    }
+
+    end() {
+        this.expectColon()
+        return this.point()
+    }
+
+    size(): number {
+        this.expectColon()
+        return this.number()
+    }
+
+    sizePoint(): Point {
+        this.expectColon()
+        return this.point()
+    }
+
+    width() {
+        this.expectColon()
+        return this.number()
+    }
+
+    expectColon(){
+        if (!this.match(TokenType.COLON)) {
+            throw new Error(`Expected colon at ${this.position} got ${this.peek().value} instead`)
+        }
     }
 
     number() {
@@ -312,6 +338,7 @@ export class Parser {
     }
 
     steps() {
+        this.expectColon()
         let step = new Step()
         let action = this.action()
         while (action != null) {
@@ -352,6 +379,11 @@ export class Parser {
         return null
     }
 
+    propertyControlId(): string {
+        this.expectColon()
+        return this.controlId()
+    }
+
     controlId(): string {
         let token = this.advance()
         if (this.canBeId(token.type)) {
@@ -365,7 +397,8 @@ export class Parser {
         return tokenType == TokenType.IDENTIFIER || tokenType == TokenType.STRING || tokenType == TokenType.NUMBER
     }
 
-    private data(): string[] {
+    ids(): string[] {
+        this.expectColon()
         let values: string[] = []
         while (!this.eof() && this.canBeId(this.peek().type)) {
             values.push(this.peek().value)
@@ -373,6 +406,7 @@ export class Parser {
         }
         return values
     }
+
 
     move(leftControlId: string): ActionBase {
         this.advance()
@@ -416,11 +450,13 @@ export class Parser {
                 this.advance()
                 propertyName = token.type.toString()
             }
+
             const valueToken = this.peek()
             let value
             if (propertyTokenType == TokenType.COLOR) {
                 value = this.color()
-            } else if (valueToken.type === TokenType.TRUE || valueToken.type === TokenType.FALSE) {
+            } else if (propertyTokenType === TokenType.SELECTED || propertyTokenType === TokenType.VISIBLE) {
+                this.expectColon()
                 value = this.boolean()
                 this.advance()
             } else {
@@ -436,10 +472,12 @@ export class Parser {
     }
 
     visible(): boolean {
+        this.expectColon()
         return this.boolean()
     }
 
     selected(): boolean {
+        this.expectColon()
         return this.boolean()
     }
 

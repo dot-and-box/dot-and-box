@@ -13,24 +13,22 @@ test('parser not null', () => {
 
 test('parser simple', () => {
     let eg1 = ` 
-    title: sort with bubble sort
-    box id: b2  text: '(1) select first two numbers' at: -150, 40 size: (260, 80) visible: false
-    box id: b3  text: '' at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
-    dot id: '1' at: -70, 0 size: 20
-    dot id: '2' at: -120, 0 size: 20
-    dot id: '3' at: 30, 0 size: 20
-    dot id: '5' at: -20, 0 size: 20
-    dot id: p  text: '4' at: 80, 0 size: 20
-    line at: 30, 0 end: 89,90
-    steps:
-    b2 <- visible: true, b3 <- visible: true, b3 -> +(110,0)
-    b2 <- text: '(2) swap if left bigger than right', 2 <-> 1
-    b2 <- text: '(3) select next two numbers', b3 -> +(50,0)
-    b2 <- text: 'ignore if left smaller', b3 -> +(50,0)
-    b2 <- text: 'again swap if left bigger', 5 <-> 3
-    b2 <- visible: false, b3 -> +(50,0)
-    5 <-> p
-    b2 <- text: 'repeat from start' visible: true, b3 -> -(150,0)
+title: Ale heca
+box id: b2  at: -140, -100 size: (260, 80)
+line id: l at: -140, 90 end: 100, 90 color: gray width: 3
+dot id: 1 color: rgba(100,200,50,0.6) at: -100, 0 size: 45
+dot id: 2 color: purple at: -150, 0 size: 20
+dot id: 3 color: orange at: 0, 0 size: 20 selected: true
+dot id: 4 color: gray  at: -50, 0 size: 20 selected: true
+dot id: 5 color: rgba(190,0,65,1) at: 50, 0  size: 20
+steps:
+l -> -(0,140), b2 <- text: 'go back and select different controls or forward', selected0 <-> selected1
+b2 <- text: 'first selected control is moved +(20,90)', selected0 -> +(20,90)
+5 -> +(50,-50)
+5 *-> z1, z1 <- text: '5*', z1 -> -(200,-150)
+2 <-> 1
+3 <-> 4
+4 <-> 5
 `
     let p = new Parser()
     const model = p.parse(eg1)
