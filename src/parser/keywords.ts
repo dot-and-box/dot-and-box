@@ -7,6 +7,7 @@ export class Keywords {
         [TokenType.FALSE.toString(), TokenType.FALSE],
         [TokenType.DOT.toString(), TokenType.DOT],
         [TokenType.DOTS.toString(), TokenType.DOTS],
+        [TokenType.BOXES.toString(), TokenType.BOXES],
         [TokenType.TITLE.toString(), TokenType.TITLE],
         [TokenType.TEXT.toString(), TokenType.TEXT],
         [TokenType.BOX.toString(), TokenType.BOX],

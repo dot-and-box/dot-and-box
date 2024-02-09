@@ -27,6 +27,7 @@ export enum TokenType {
     TEXT = "text",
     DOT = "dot",
     DOTS = "dots",
+    BOXES = "boxes",
     AT = "at",
     SIZE = "size",
     END = "end",

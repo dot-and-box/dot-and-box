@@ -60,6 +60,9 @@ export class Parser {
                 case TokenType.DOTS:
                     this.dots()
                     break
+                case TokenType.BOXES:
+                    this.boxes()
+                    break
                 case TokenType.STEPS:
                     this.steps()
                     break
@@ -67,6 +70,67 @@ export class Parser {
         }
 
         return this.model
+    }
+
+    calculateLayoutPosition(layout: Layout, at: Point, index: number, span: number): Point {
+        let position = at.clone()
+        switch (layout) {
+            case Layout.COL:
+                position.x += index * span
+                break
+            case Layout.ROW:
+                position.y += index * span
+                break
+            case Layout.TREE:
+                throw new Error(`Unsupported layout TREE at ${this.peek().position}`)
+        }
+        return position
+    }
+
+    boxes() {
+        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT]
+        let size = new Point(100, 100)
+        let at = new Point(0, 0)
+        let text = ''
+        let id = ''
+        let ids: string[] = []
+
+        let layout = Layout.COL
+        while (!this.eof() && boxes_tokens.includes(this.peek().type)) {
+            const token = this.advance()
+            switch (token.type) {
+                case TokenType.ID:
+                    id = this.propertyControlId()
+                    break
+                case TokenType.AT:
+                    at = this.at()
+                    break
+                case TokenType.SIZE:
+                    size = this.point()
+                    break
+                case TokenType.IDS:
+                    ids = this.ids()
+                    break
+                case TokenType.LAYOUT:
+                    layout = this.layout()
+                    break
+            }
+        }
+        if (ids.length == 0) {
+            throw new Error(`ids attribute is mandatory for boxes at ${this.peek().position}`)
+        }
+        let span = size.x + size.x / 2 //todo support explicit span
+        let i = 0;
+        for (id of ids) {
+            let position = this.calculateLayoutPosition(layout,at,i,span)
+            let color = COLORS[this.model.controls.length % COLORS.length]
+            const box = new BoxControl(id != '' ? id : text, position, size, color, text != '' ? text : id, true, false)
+            this.model.controls.push(box)
+            if (box.selected) {
+                this.model.selectedControls.push(box)
+            }
+            i++
+        }
     }
 
     box() {
@@ -189,20 +253,13 @@ export class Parser {
             }
         }
         if (ids.length == 0) {
-            throw new Error(`data attribute is mandatory for dots at ${this.peek().position}`)
+            throw new Error(`ids attribute is mandatory for dots at ${this.peek().position}`)
         }
         let span = size * 2 + 10 //todo support explicit span
         let i = 0;
+
         for (id of ids) {
-            let position = at.clone()
-            switch (layout) {
-                case Layout.COL:
-                    position.x += i * span
-                    break
-                case Layout.ROW:
-                    position.y += i * span
-                    break
-            }
+            let position = this.calculateLayoutPosition(layout,at,i,span)
             let color = COLORS[this.model.controls.length % COLORS.length]
             const dot = new DotControl(id != '' ? id : text, position, size, color, text != '' ? text : id, true, false)
             this.model.controls.push(dot)
@@ -321,8 +378,8 @@ export class Parser {
                 return Layout.COL
             case Layout.ROW:
                 return Layout.ROW
-            case Layout.BTREE:
-                return Layout.BTREE
+            case Layout.TREE:
+                return Layout.TREE
             default:
                 throw new Error(`Expected proper layout at ${token.position} got ${token.value}  instead`)
         }
@@ -572,10 +629,6 @@ export class Parser {
 
         this.position++
         return true
-    }
-
-    error(message: string) {
-        throw new Error(message)
     }
 
 }
