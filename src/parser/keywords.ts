@@ -19,7 +19,8 @@ export class Keywords {
         [TokenType.IDS.toString(), TokenType.IDS],
         [TokenType.STEPS.toString(), TokenType.STEPS],
         [TokenType.SELECTED.toString(), TokenType.SELECTED],
-        [TokenType.VISIBLE.toString(), TokenType.VISIBLE]
+        [TokenType.VISIBLE.toString(), TokenType.VISIBLE],
+        [TokenType.LAYOUT.toString(), TokenType.LAYOUT]
     ])
 
     public static ASSIGN_PROPERTIES = [TokenType.SELECTED, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.STRING]

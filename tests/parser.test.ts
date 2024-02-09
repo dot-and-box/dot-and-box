@@ -40,7 +40,7 @@ test('parser dots', () => {
     let code = ` 
     title: 'dots just dots'
     box id: txt  text: '(1) select first two numbers' at: -150, 40 size: (260, 80) visible: false
-    dots ids: 1 2 3 5 4 at: -70, 0 size: 20
+    dots ids: 1 2 3 5 4 at: -70, 0 size: 20 layout: row
     dot id: 6 at: -70, 50 size: 20
     line at: 30, 0 end: 89,90
     steps:

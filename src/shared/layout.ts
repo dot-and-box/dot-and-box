@@ -1,5 +1,5 @@
 export enum Layout {
-    COL,
-    ROW,
-    BTREE
+    COL = "COL",
+    ROW = "ROW",
+    BTREE = "BTREE"
 }

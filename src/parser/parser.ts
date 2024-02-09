@@ -160,14 +160,14 @@ export class Parser {
     }
 
     dots() {
-        const dots_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS]
+        const dots_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT]
         let size = 20
         let at = new Point(0, 0)
         let text = ''
         let id = ''
         let ids: string[] = []
 
-        let layout = Layout.COL //todo support more layouts
+        let layout = Layout.COL
         while (!this.eof() && dots_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -183,6 +183,9 @@ export class Parser {
                 case TokenType.IDS:
                     ids = this.ids()
                     break
+                case TokenType.LAYOUT:
+                    layout = this.layout()
+                    break
             }
         }
         if (ids.length == 0) {
@@ -192,8 +195,13 @@ export class Parser {
         let i = 0;
         for (id of ids) {
             let position = at.clone()
-            if (layout === Layout.COL) {
-                position.x += i * span
+            switch (layout) {
+                case Layout.COL:
+                    position.x += i * span
+                    break
+                case Layout.ROW:
+                    position.y += i * span
+                    break
             }
             let color = COLORS[this.model.controls.length % COLORS.length]
             const dot = new DotControl(id != '' ? id : text, position, size, color, text != '' ? text : id, true, false)
@@ -301,6 +309,26 @@ export class Parser {
         return this.number()
     }
 
+    layout(): Layout {
+        this.expectColon()
+        if (this.eof()) {
+            throw new Error(`Expected proper layout got eof`)
+        }
+        let token = this.advance()
+        const key: string = `${token.value.toString().toUpperCase()}`
+        switch (key) {
+            case Layout.COL:
+                return Layout.COL
+            case Layout.ROW:
+                return Layout.ROW
+            case Layout.BTREE:
+                return Layout.BTREE
+            default:
+                throw new Error(`Expected proper layout at ${token.position} got ${token.value}  instead`)
+        }
+
+    }
+
     sizePoint(): Point {
         this.expectColon()
         return this.point()
@@ -311,7 +339,7 @@ export class Parser {
         return this.number()
     }
 
-    expectColon(){
+    expectColon() {
         if (!this.match(TokenType.COLON)) {
             throw new Error(`Expected colon at ${this.position} got ${this.peek().value} instead`)
         }
