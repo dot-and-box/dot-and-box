@@ -7,7 +7,7 @@ export class Sequence {
     public actions: ActionBase[] = []
     public _start: number = 0
     public _end: number = 1
-    private _startEndDiff: number
+    private _startEndDiff: number = 1
 
     public get start() {
         return this._start
@@ -20,7 +20,6 @@ export class Sequence {
     calcDiff() {
         this._startEndDiff = this._end - this._start
     }
-
 
     public constructor(start: number, end: number) {
         this._start = start
@@ -70,6 +69,7 @@ export class Sequence {
 
 export class Step {
     sequences: Sequence[] = []
+    title: string = ''
     private _progress = 0.0
     public direction = StepDirection.NONE
     public state: StepState = StepState.START
@@ -90,14 +90,13 @@ export class Step {
         const sequencesCount = this.sequences.length + 1
         const sequenceSpan = 1 / sequencesCount;
         let currentStart = 0;
-        for (const seq: Sequence of this.sequences) {
+        for (const seq of this.sequences) {
             seq.updateStartEnd(currentStart, currentStart + sequenceSpan)
             currentStart += sequenceSpan
         }
         this.sequences.push(new Sequence(1 - sequenceSpan, 1));
         this.sequences[this.sequences.length - 1].actions.push(action)
     }
-
 
     public get progress() {
         return this._progress

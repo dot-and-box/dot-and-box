@@ -446,6 +446,10 @@ export class Parser {
     step() {
         this.expectColon()
         let step = new Step()
+        if (this.peek().type === TokenType.STRING) {
+            step.title = this.peek().value;
+            this.advance()
+        }
         let action = this.action()
         let lasTokenWasComma = true
         while (action != null) {
@@ -455,7 +459,7 @@ export class Parser {
             } else {
                 step.addSequentialAction(action)
             }
-            if(this.eof() || this.peek().type == TokenType.STEP){
+            if (this.eof() || this.peek().type == TokenType.STEP) {
                 if (step.sequences.length > 0) {
                     this.model.steps.push(step)
                 }

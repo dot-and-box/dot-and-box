@@ -116,17 +116,23 @@ b1 <-> 1, 2 -> -(50, -45)
 
 test('new steps', () => {
     let eg1 = ` 
-    title: sort with bubble sort
-    box id: txt at: -150, -90 size: (260, 80) visible: false
+   title: sort with bubble sort
     box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
     dots ids: 1 2 3 5 4 at: -120, 0 size: 20
-    step:
-    txt <- '(3) select next two numbers', win -> +(50,0) // move window by 50px right
-    txt <- 'ignore if left is smaller', win -> +(50,0)
-    txt <- 'again swap if left bigger', 5 <-> 3
-    txt <- visible: false, win -> +(50,0)
-    step:
-    txt <- 'repeat from start' visible: true, 5 <-> 4
+    step: '(1) select first two numbers'
+    win <- visible: true,  win -> +(110,0),
+    2 <-> 1, 1 -> +(0,100)
+    step: '(2) swap if left bigger'
+    2 <-> 1 // swap dot 2 with 1
+    step: '(3) select next two numbers'
+    win -> +(50,0) // move window by 50px right
+    step: '(4) ignore if left is smaller'
+    win -> +(50,0)
+    step: '(4) again swap if left bigger'
+    5 <-> 3
+    step: '(5) bla bla'
+    win -> +(50,0)
+    step: 'repeat from start'
     win -> -(150,0)
 `
     let p = new Parser()

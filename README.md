@@ -4,11 +4,6 @@ Project goal is to create markdown like simple language and visualizer for graph
 and other simple animations visualizing your raw ideas. Dots and boxes is a *HTML5 custom element* you can add to your page with code 
 attribute defining dots and boxes and action (animation) steps.
 
-# BRANCH TODO
-
-- parsing is correct - check more sophisticated cases 
-- but animation is not proportional to the time of sequence 
-
 #### Use cases
 - visualize bubble sort algorithm
 - event driven architecture communication visualization
