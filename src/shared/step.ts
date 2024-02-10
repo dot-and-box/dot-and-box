@@ -5,13 +5,33 @@ import {StepDirection} from "./stepDirection.ts"
 export class Sequence {
     private _progress = 0.0
     public actions: ActionBase[] = []
-    public start: number = 0
-    public end: number = 1
-    private _startEndDiff: number = this.end - this.start
+    public _start: number = 0
+    public _end: number = 1
+    private _startEndDiff: number
+
+    public get start() {
+        return this._start
+    }
+
+    public get end() {
+        return this._end
+    }
+
+    calcDiff() {
+        this._startEndDiff = this._end - this._start
+    }
+
 
     public constructor(start: number, end: number) {
-        this.start = start
-        this.end = end
+        this._start = start
+        this._end = end
+        this.calcDiff()
+    }
+
+    public updateStartEnd(start: number, end: number) {
+        this._start = start;
+        this._end = end;
+        this.calcDiff()
     }
 
     public set progress(newGlobalProgress: number) {
@@ -71,8 +91,7 @@ export class Step {
         const sequenceSpan = 1 / sequencesCount;
         let currentStart = 0;
         for (const seq: Sequence of this.sequences) {
-            seq.start = currentStart
-            seq.end = currentStart + sequenceSpan
+            seq.updateStartEnd(currentStart, currentStart + sequenceSpan)
             currentStart += sequenceSpan
         }
         this.sequences.push(new Sequence(1 - sequenceSpan, 1));
