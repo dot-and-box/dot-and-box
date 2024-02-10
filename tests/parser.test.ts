@@ -53,9 +53,6 @@ test('parser dots', () => {
 })
 
 
-
-
-
 test('assign properties', () => {
     let eg1 = ` 
     title: request response pattern
@@ -67,8 +64,7 @@ test('assign properties', () => {
     dot text: 'req' at: -250, -30 size: 35
     dot text: 'res' at: 230, 70 size: 35
     steps:
-    CLIENT <-> SERVER
-    req ->  +(480,0)
+    req ->  +(480,0), CLIENT <- 'zupa'
     res ->  -(480,0)
     camera -> +(0,150), FIN <- visible: true
 `
@@ -109,9 +105,9 @@ b1 <-> 1, 2 -> -(50, -45)
     expect(dot.position.y).eq(20)
 
     expect(model.steps.length).eq(5)
-    expect(model.steps[2].actions.length).eq(2)
+    expect(model.steps[2].actionGroups[0].actions.length).eq(2)
 
-    const moveAction = model.steps[4].actions[0] as Move
+    const moveAction = model.steps[4].actionGroups[0].actions[0] as Move
     expect(moveAction).not.eq(null)
     expect(moveAction.end.sign).eq(Sign.PLUS)
 })

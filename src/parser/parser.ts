@@ -1,5 +1,5 @@
 import {Scanner} from "./scanner.ts"
-import {DotsAndBoxesModel, Step} from "../shared/step.ts"
+import {Step} from "../shared/step.ts"
 import {TokenType} from "./tokenType.ts"
 import {Token} from "./token.ts"
 import {Point} from "../shared/point.ts"
@@ -16,6 +16,7 @@ import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
 import {LineControl} from "../controls/line/lineControl.ts";
 import {Layout} from "../shared/layout.ts";
+import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -122,7 +123,7 @@ export class Parser {
         let span = size.x + size.x / 2 //todo support explicit span
         let i = 0;
         for (id of ids) {
-            let position = this.calculateLayoutPosition(layout,at,i,span)
+            let position = this.calculateLayoutPosition(layout, at, i, span)
             let color = COLORS[this.model.controls.length % COLORS.length]
             const box = new BoxControl(id != '' ? id : text, position, size, color, text != '' ? text : id, true, false)
             this.model.controls.push(box)
@@ -259,7 +260,7 @@ export class Parser {
         let i = 0;
 
         for (id of ids) {
-            let position = this.calculateLayoutPosition(layout,at,i,span)
+            let position = this.calculateLayoutPosition(layout, at, i, span)
             let color = COLORS[this.model.controls.length % COLORS.length]
             const dot = new DotControl(id != '' ? id : text, position, size, color, text != '' ? text : id, true, false)
             this.model.controls.push(dot)
@@ -427,14 +428,14 @@ export class Parser {
         let step = new Step()
         let action = this.action()
         while (action != null) {
-            step.actions.push(action)
+            step.addParallelAction(action)
             if (!this.match(TokenType.COMMA)) {
                 this.model.steps.push(step)
                 step = new Step()
             }
             action = this.action()
         }
-        if (step.actions.length > 0) {
+        if (step.actionGroups.length > 0) {
             this.model.steps.push(step)
         }
     }

@@ -1,73 +1,32 @@
 import {ActionBase} from "./actionBase.ts"
-import {Control} from "../controls/control.ts"
 import {StepState} from "./stepState.ts"
 import {StepDirection} from "./stepDirection.ts"
-import {Point} from "./point.ts";
 
-export class DotsAndBoxesModel {
-    title: string
-    controls: Control[]
-    steps: Step[]
-    origin: Point = Point.zero()
-    offset: Point = Point.zero()
-    zoom: number = 1
-    static readonly SELECTED_PREFIX = "selected"
-    selectedControls: Control[] = []
-
-    constructor(title: string, controls: Control[], steps: Step[]) {
-        this.title = title
-        this.controls = controls
-        this.steps = steps
-        this.origin = Point.zero()
-    }
-
-    changeSelected(controls: Control[]) {
-        controls.forEach(control => {
-            control.selected = !control.selected
-            if (control.selected) {
-                this.selectedControls.push(control)
-            } else {
-                const foundIndex = this.selectedControls.indexOf(control)
-                if (foundIndex >= 0) {
-                    this.selectedControls.splice(foundIndex, 1)
-                }
-            }
-        })
-
-    }
-
-    deleteSelected() {
-        this.controls = this.controls.filter(c => !c.selected)
-    }
-
-    findControl(controlId: string) {
-        if (controlId.startsWith(DotsAndBoxesModel.SELECTED_PREFIX)) {
-            const index = parseInt(controlId.substring(DotsAndBoxesModel.SELECTED_PREFIX.length), 10)
-            return index < this.selectedControls.length ? this.selectedControls[index] : undefined
-        } else {
-            return this.controls.find(c => c.id == controlId)
-        }
-    }
-}
-
-export class Step {
-    actions: ActionBase[] = []
+export class ActionGroup {
     private _progress = 0.0
-    public direction = StepDirection.NONE
-    public state: StepState = StepState.START
-    public duration: number = 1000
+    public actions: ActionBase[] = []
+    public start: number = 0
+    public end: number = 1
+    private _startEndDiff: number = this.end - this.start
 
-    init() {
-        this.actions.forEach(a => a.init())
+    public constructor(start: number, end: number) {
+        this.start = start
+        this.end = end
     }
 
-    public get progress() {
-        return this._progress
-    }
-
-    public set progress(newProgress: number) {
-        if (newProgress == this._progress)
+    public set progress(newGlobalProgress: number) {
+        let newProgress
+        if (newGlobalProgress <= this.start) {
+            newProgress = 0
+        } else if (newGlobalProgress >= this.end) {
+            newProgress = 1
+        } else {
+            newProgress = (newGlobalProgress - this.start) / this._startEndDiff;
+        }
+        if (this._progress === newProgress) {
             return
+        }
+
         if (newProgress > 0 && this._progress == 0) {
             this.actions.forEach(a => a.onBeforeForward())
         } else if (newProgress == 0 && this._progress > 0) {
@@ -77,6 +36,46 @@ export class Step {
         for (const action of this.actions) {
             action.updateValue(this._progress)
         }
+    }
+
+    public get progress() {
+        return this._progress
+    }
+
+    init() {
+        this.actions.forEach(a => a.init())
+    }
+
+}
+
+export class Step {
+    actionGroups: ActionGroup[] = []
+    private _progress = 0.0
+    public direction = StepDirection.NONE
+    public state: StepState = StepState.START
+    public duration: number = 1000
+
+    init() {
+        this.actionGroups.forEach(a => a.init())
+    }
+
+    public addParallelAction(action: ActionBase) {
+        if (this.actionGroups.length == 0) {
+            this.actionGroups.push(new ActionGroup(0, 1));
+        }
+        this.actionGroups[this.actionGroups.length - 1].actions.push(action)
+    }
+
+    public get progress() {
+        return this._progress
+    }
+
+    public set progress(newProgress: number) {
+        if (newProgress == this._progress)
+            return
+        this._progress = newProgress
+
+        this.actionGroups.forEach(ag => ag.progress = this._progress)
         this.updateState()
     }
 
@@ -136,8 +135,4 @@ export class Step {
         }
     }
 
-
 }
-
-
-

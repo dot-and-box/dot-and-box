@@ -1,6 +1,7 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {Point} from "../shared/point.ts"
-import {DotsAndBoxesModel} from "../shared/step.ts"
+
+import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
 
 export class CameraMove extends ActionBase {
     start: Point = Point.zero()

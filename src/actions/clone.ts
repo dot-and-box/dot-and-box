@@ -1,7 +1,7 @@
 import {ActionBase} from "../shared/actionBase.ts"
-import {DotsAndBoxesModel} from "../shared/step.ts"
 import {Control} from "../controls/control.ts"
 import {DUMMY_CONTROL} from "../shared/constants.ts";
+import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
 
 export class Clone extends ActionBase {
     left: Control = DUMMY_CONTROL

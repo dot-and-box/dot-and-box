@@ -1,6 +1,6 @@
 import {Point} from "./shared/point.ts"
 import {Tool} from "./shared/tool.ts"
-import {DotsAndBoxesModel, Step} from "./shared/step.ts"
+import {Step} from "./shared/step.ts"
 import {DEFAULT_FONT, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, TITLE_FONT_SIZE} from "./shared/constants.ts"
 import {DotTool} from "./tools/dotTool.ts"
 import {EmptyTool} from "./shared/emptyTool.ts"
@@ -9,6 +9,7 @@ import {BoxTool} from "./tools/boxTool.ts"
 import {StepState} from "./shared/stepState.ts"
 import {StepDirection} from "./shared/stepDirection.ts"
 import {Easing, EasingType} from "./shared/easingFunctions.ts"
+import {DotsAndBoxesModel} from "./shared/dotsAndBoxesModel.ts";
 
 export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
@@ -220,9 +221,9 @@ export class DotsAndBoxes {
         this.ctx.scale(this.model.zoom, this.model.zoom)
         this.ctx.translate(-this.model.origin.x + this.model.offset.x, -this.model.origin.y + this.model.offset.y)
         if (this.currentStep && this.currentStep.direction != StepDirection.NONE && this.currentStep.state != StepState.STOPPED) {
-            this.updateProgress()
+            this.setRequestedProgressByTime()
         }
-        this.handleProgressChange()
+        this.updateProgress()
         for (const control of this.model.controls) {
             if (control.visible) {
                 control.draw(this.ctx)
@@ -232,7 +233,7 @@ export class DotsAndBoxes {
         requestAnimationFrame((evt) => this.draw(evt))
     }
 
-    updateProgress() {
+    setRequestedProgressByTime() {
         if (this.currentStep.direction == StepDirection.FORWARD) {
             this._requestedStepProgress = this.easingFunc((this.lastTime - this.stepStartTime) / this.currentStep.duration)
         } else if (this.currentStep.direction == StepDirection.BACKWARD) {
@@ -243,16 +244,16 @@ export class DotsAndBoxes {
         }
     }
 
-    private handleProgressChange() {
+    private updateProgress() {
         if (this.currentStep.progress != this._requestedStepProgress) {
             this.currentStep.progress = this._requestedStepProgress
             if (this.autoPlay) {
-               this.handleAutoPlay()
+                this.handleAutoPlay()
             }
         }
     }
 
-    private handleAutoPlay(){
+    private handleAutoPlay() {
         if (this.currentStep.state == StepState.END && this.currentStepIndex < this.steps.length - 1) {
             this.singleForward()
         } else if (this.currentStep.state == StepState.START && this.currentStepIndex > 0) {

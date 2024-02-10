@@ -1,9 +1,10 @@
 import {Point} from "./point.ts"
-import {DotsAndBoxesModel} from "./step.ts";
+
+import {DotsAndBoxesModel} from "./dotsAndBoxesModel.ts";
 
 export abstract class Tool {
 
-    model: DotsAndBoxesModel = new DotsAndBoxesModel('',[],[])
+    model: DotsAndBoxesModel = new DotsAndBoxesModel('', [], [])
 
     updateModel(model: DotsAndBoxesModel) {
         this.model = model

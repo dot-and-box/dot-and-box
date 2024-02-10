@@ -1,4 +1,4 @@
-import {DotsAndBoxesModel} from "./step.ts"
+import {DotsAndBoxesModel} from "./dotsAndBoxesModel.ts";
 
 export abstract class ActionBase {
     model: DotsAndBoxesModel
@@ -7,11 +7,14 @@ export abstract class ActionBase {
         this.model = model
     }
 
-    init(): void {}
+    init(): void {
+    }
 
-    onBeforeForward(): void {}
+    onBeforeForward(): void {
+    }
 
-    onAfterBackward(): void{}
+    onAfterBackward(): void {
+    }
 
     abstract updateValue(progress: number): void
 
