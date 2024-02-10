@@ -105,10 +105,32 @@ b1 <-> 1, 2 -> -(50, -45)
     expect(dot.position.y).eq(20)
 
     expect(model.steps.length).eq(5)
-    expect(model.steps[2].actionGroups[0].actions.length).eq(2)
+    expect(model.steps[2].sequences[0].actions.length).eq(2)
 
-    const moveAction = model.steps[4].actionGroups[0].actions[0] as Move
+    const moveAction = model.steps[4].sequences[0].actions[0] as Move
     expect(moveAction).not.eq(null)
     expect(moveAction.end.sign).eq(Sign.PLUS)
+})
+
+
+
+test('new steps', () => {
+    let eg1 = ` 
+    title: sort with bubble sort
+    box id: txt at: -150, -90 size: (260, 80) visible: false
+    box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
+    dots ids: 1 2 3 5 4 at: -120, 0 size: 20
+    step:
+    txt <- '(3) select next two numbers', win -> +(50,0) // move window by 50px right
+    txt <- 'ignore if left is smaller', win -> +(50,0)
+    txt <- 'again swap if left bigger', 5 <-> 3
+    txt <- visible: false, win -> +(50,0)
+    step:
+    txt <- 'repeat from start' visible: true, 5 <-> 4
+    win -> -(150,0)
+`
+    let p = new Parser()
+    const model = p.parse(eg1)
+    expect(model).not.eq(null)
 })
 

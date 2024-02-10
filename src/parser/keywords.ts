@@ -18,6 +18,7 @@ export class Keywords {
         [TokenType.WIDTH.toString(), TokenType.WIDTH],
         [TokenType.COLOR.toString(), TokenType.COLOR],
         [TokenType.IDS.toString(), TokenType.IDS],
+        [TokenType.STEP.toString(), TokenType.STEP],
         [TokenType.STEPS.toString(), TokenType.STEPS],
         [TokenType.SELECTED.toString(), TokenType.SELECTED],
         [TokenType.VISIBLE.toString(), TokenType.VISIBLE],

@@ -2,7 +2,7 @@ import {ActionBase} from "./actionBase.ts"
 import {StepState} from "./stepState.ts"
 import {StepDirection} from "./stepDirection.ts"
 
-export class ActionGroup {
+export class Sequence {
     private _progress = 0.0
     public actions: ActionBase[] = []
     public start: number = 0
@@ -49,22 +49,36 @@ export class ActionGroup {
 }
 
 export class Step {
-    actionGroups: ActionGroup[] = []
+    sequences: Sequence[] = []
     private _progress = 0.0
     public direction = StepDirection.NONE
     public state: StepState = StepState.START
     public duration: number = 1000
 
     init() {
-        this.actionGroups.forEach(a => a.init())
+        this.sequences.forEach(a => a.init())
     }
 
     public addParallelAction(action: ActionBase) {
-        if (this.actionGroups.length == 0) {
-            this.actionGroups.push(new ActionGroup(0, 1));
+        if (this.sequences.length == 0) {
+            this.sequences.push(new Sequence(0, 1));
         }
-        this.actionGroups[this.actionGroups.length - 1].actions.push(action)
+        this.sequences[this.sequences.length - 1].actions.push(action)
     }
+
+    public addSequentialAction(action: ActionBase) {
+        const sequencesCount = this.sequences.length + 1
+        const sequenceSpan = 1 / sequencesCount;
+        let currentStart = 0;
+        for (const seq: Sequence of this.sequences) {
+            seq.start = currentStart
+            seq.end = currentStart + sequenceSpan
+            currentStart += sequenceSpan
+        }
+        this.sequences.push(new Sequence(1 - sequenceSpan, 1));
+        this.sequences[this.sequences.length - 1].actions.push(action)
+    }
+
 
     public get progress() {
         return this._progress
@@ -75,7 +89,7 @@ export class Step {
             return
         this._progress = newProgress
 
-        this.actionGroups.forEach(ag => ag.progress = this._progress)
+        this.sequences.forEach(ag => ag.progress = this._progress)
         this.updateState()
     }
 

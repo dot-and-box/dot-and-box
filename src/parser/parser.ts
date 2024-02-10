@@ -64,6 +64,9 @@ export class Parser {
                 case TokenType.BOXES:
                     this.boxes()
                     break
+                case TokenType.STEP:
+                    this.step()
+                    break
                 case TokenType.STEPS:
                     this.steps()
                     break
@@ -435,9 +438,33 @@ export class Parser {
             }
             action = this.action()
         }
-        if (step.actionGroups.length > 0) {
+        if (step.sequences.length > 0) {
             this.model.steps.push(step)
         }
+    }
+
+    step() {
+        this.expectColon()
+        let step = new Step()
+        let action = this.action()
+        let lasTokenWasComma = true
+        while (action != null) {
+
+            if (lasTokenWasComma) {
+                step.addParallelAction(action)
+            } else {
+                step.addSequentialAction(action)
+            }
+            if(this.eof() || this.peek().type == TokenType.STEP){
+                if (step.sequences.length > 0) {
+                    this.model.steps.push(step)
+                }
+                return
+            }
+            lasTokenWasComma = this.match(TokenType.COMMA)
+            action = this.action()
+        }
+
     }
 
     action(): ActionBase | null {
