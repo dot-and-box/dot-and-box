@@ -31,7 +31,7 @@
 title: sort with bubble sort
 box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
 dots ids: 2 1 5 3 4 at: -120, 0 size: 20
-step: '(1) select first two numbers'
+step: '(1) select first two numbers' duration: 1.2s
 win <- visible: true, win -> +(110,0)
 step: '(2) swap if left bigger than right'
 2 <-> 1 // swap dot 2 with 1
@@ -59,15 +59,15 @@ win -> -(150,0)
 title: 'Dots and boxes tutorial'
 dots ids: 2 1 5 3 4  at: -120, 0 size: 20
 box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
-step: 'Select 4 and 1 with assign <- operator'
+step: 'Select 4 and 1 with assign <- operator' duration: 1400ms
 4 <- selected: true, 1 <- selected: true, 4 -> +(0,15),  1 -> +(0,15)
 4 -> -(0,30), 1 -> -(0,30)
 4 -> +(0,15), 1 -> +(0,15)
-step: 'next we swap selected dots, select different dots by click and move forward'
+step: 'next we swap selected dots, select different dots by click and move forward' duration: 2s
 selected0 <-> selected1
 step: 'if selected different dots - those should be swapped using <-> opertor'
 selected0 <-> selected1
-step: 'now first selected dot is moved by +(20,90)'
+step: 'now first selected dot is moved by +(20,90)' duration: 300ms
 selected0 -> +(20,70)
 step: 'here we clone 5 and move cloned by +(-100,80)'
 5 *-> z1, z1 <- '5*', z1 -> +(-100,80) // *-> clone operator makes a new control

@@ -37,7 +37,7 @@ export enum TokenType {
     BOX = "box",
     LINE = "line",
     STEP = "step",
-    STEPS = "steps",
+    DURATION = "duration",
     SELECTED = "selected",
     VISIBLE = "visible",
     LAYOUT = "layout"

@@ -21,12 +21,16 @@ dot id: 2 color: purple at: -150, 0 size: 20
 dot id: 3 color: orange at: 0, 0 size: 20 selected: true
 dot id: 4 color: gray  at: -50, 0 size: 20 selected: true
 dot id: 5 color: rgba(190,0,65,1) at: 50, 0  size: 20
-steps:
+step:
 l -> -(0,140), b2 <- text: 'go back and select different controls or forward', selected0 <-> selected1
 b2 <- text: 'first selected control is moved +(20,90)', selected0 -> +(20,90)
+step:
 5 -> +(50,-50)
+step:
 5 *-> z1, z1 <- text: '5*', z1 -> -(200,-150)
+step:
 2 <-> 1
+step:
 3 <-> 4
 4 <-> 5
 `
@@ -43,7 +47,7 @@ test('parser dots', () => {
     dots ids: 1 2 3 5 4 at: -70, 0 size: 20 layout: row
     dot id: 6 at: -70, 50 size: 20
     line at: 30, 0 end: 89,90
-    steps:
+    step:
     5 <-> 3
     txt <- text: 'repeat from start' visible: true, 2 -> -(150,0)
 `
@@ -63,9 +67,10 @@ test('assign properties', () => {
     box text: 'FIN' size: 100,40 at: 180, 220 color: rgba(5,5,254,0.6) visible: false
     dot text: 'req' at: -250, -30 size: 35
     dot text: 'res' at: 230, 70 size: 35
-    steps:
+    step: 'oh my' duration: 2s 
     req ->  +(480,0), CLIENT <- 'zupa'
     res ->  -(480,0)
+    step: 'this takes 400ms' duration: 400ms
     camera -> +(0,150), FIN <- visible: true
 `
     let p = new Parser()
@@ -80,11 +85,14 @@ title: 'This is string'
 box id: b1 text: 'box' color: rgba(223,123,8,0.68) at: -150, 30 size: (100, 50)
 dot text: '1' color: purple at: (250, 20) size: 55
 dot text: '2' color: red at: (250, 20) size: 55
-steps:
+step:
 b1 <- selected: true text: 'zumba'
 b1 *-> b2
+step:
 b1 <-> 1, 2 -> -(50, -45)
+step:
 1 <-> b1, 2 -> (67,80)
+step:
 1 -> +(89,90)
 `
     let p = new Parser()
@@ -104,12 +112,12 @@ b1 <-> 1, 2 -> -(50, -45)
     expect(dot.position.x).eq(250)
     expect(dot.position.y).eq(20)
 
-    expect(model.steps.length).eq(5)
+    expect(model.steps.length).eq(4)
     expect(model.steps[2].sequences[0].actions.length).eq(2)
 
-    const moveAction = model.steps[4].sequences[0].actions[0] as Move
+    const moveAction = model.steps[2].sequences[0].actions[0] as Move
     expect(moveAction).not.eq(null)
-    expect(moveAction.end.sign).eq(Sign.PLUS)
+    expect(moveAction.end.sign).eq(Sign.NONE)
 })
 
 

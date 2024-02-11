@@ -67,9 +67,6 @@ export class Parser {
                 case TokenType.STEP:
                     this.step()
                     break
-                case TokenType.STEPS:
-                    this.steps()
-                    break
             }
         }
 
@@ -426,21 +423,17 @@ export class Parser {
         this.model.title = this.text()
     }
 
-    steps() {
+    duration() {
         this.expectColon()
-        let step = new Step()
-        let action = this.action()
-        while (action != null) {
-            step.addParallelAction(action)
-            if (!this.match(TokenType.COMMA)) {
-                this.model.steps.push(step)
-                step = new Step()
-            }
-            action = this.action()
+        let res = this.number()
+        const identifier = this.peek()
+        if (identifier.type == TokenType.IDENTIFIER && identifier.value == 's') {
+            res *= 1000
+            this.advance()
+        } else if (identifier.type == TokenType.IDENTIFIER && identifier.value == 'ms') {
+            this.advance()
         }
-        if (step.sequences.length > 0) {
-            this.model.steps.push(step)
-        }
+        return res
     }
 
     step() {
@@ -449,6 +442,9 @@ export class Parser {
         if (this.peek().type === TokenType.STRING) {
             step.title = this.peek().value;
             this.advance()
+        }
+        if (this.match(TokenType.DURATION)) {
+            step.duration = this.duration()
         }
         let action = this.action()
         let lasTokenWasComma = true

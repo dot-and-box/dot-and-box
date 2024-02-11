@@ -19,10 +19,10 @@
     title: sort with bubble sort
     box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
     dots ids: 1 2 3 5 4 at: -120, 0 size: 20
-    step: '(0)'
+    step: '(0)' duration: 750
     2 -> +(50,250)
     2 -> +(150,-250)
-    step: '(1) select first two numbers'
+    step: '(1) select first two numbers'  duration: 2750
     win <- visible: true,  win -> +(110,0)
     2 <-> 1, 1 -> +(0,100)
     step: '(2) swap if left bigger'
