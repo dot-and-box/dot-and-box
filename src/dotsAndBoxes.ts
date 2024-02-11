@@ -1,6 +1,12 @@
 import {Point} from "./shared/point.ts"
 import {Tool} from "./shared/tool.ts"
-import {DEFAULT_FONT, MAX_ZOOM, MIN_ZOOM, SCROLL_SENSITIVITY, TITLE_FONT_SIZE} from "./shared/constants.ts"
+import {
+    DEFAULT_FONT,
+    MAX_ZOOM,
+    MIN_ZOOM,
+    SCROLL_SENSITIVITY,
+    TITLE_FONT_SIZE
+} from "./shared/constants.ts"
 import {DotTool} from "./tools/dotTool.ts"
 import {EmptyTool} from "./shared/emptyTool.ts"
 import {PanZoomTool} from "./tools/panZoomTool.ts"
@@ -10,8 +16,6 @@ import {DotsAndBoxesModel} from "./shared/dotsAndBoxesModel.ts";
 export class DotsAndBoxes {
     private readonly canvas: HTMLCanvasElement
     private readonly ctx: CanvasRenderingContext2D
-    private _width = 100
-    private _height = 100
     public model: DotsAndBoxesModel = new DotsAndBoxesModel('', [], [])
     public isDragging = false
     private initialPinchDistance: number = 0
@@ -61,8 +65,10 @@ export class DotsAndBoxes {
 
     public apply(model: DotsAndBoxesModel) {
         this.initModel(model)
-        this.model.selectStep(0)
-        this.model.currentStep.init()
+        if (this.model.steps.length > 0) {
+            this.model.selectStep(0)
+            this.model.currentStep.init()
+        }
     }
 
     constructor(canvas: HTMLCanvasElement) {
@@ -73,12 +79,9 @@ export class DotsAndBoxes {
 
     public updatePositionAndSize(offset: Point) {
         const style = getComputedStyle(this.canvas)
-        this._width = parseInt(style.width, 10)
-        this._height = parseInt(style.height, 10)
         this.marginLeft = parseInt(style.marginLeft, 10) + offset.x
         this.marginTop = parseInt(style.marginTop, 10) + offset.y
-        this.model.origin = new Point(this._width / 2, this._height / 2)
-        this.model.offset = new Point(this._width / 2, this._height / 2)
+        this.model.updateWidthAndHeight(parseInt(style.width, 10), parseInt(style.height, 10))
     }
 
     private attachCanvasEventHandlers() {
@@ -139,16 +142,16 @@ export class DotsAndBoxes {
     }
 
     draw(time: number) {
-        this.canvas.width = this._width
-        this.canvas.height = this._height
+        this.canvas.width = this.model.width
+        this.canvas.height = this.model.height
         if (this.showDebug) {
             this.drawDebug(time)
         }
         if (this.model.title) {
             this.drawText(this.model.title, 20, 30, TITLE_FONT_SIZE, DEFAULT_FONT)
         }
-        if (this.model.subtitle) {
-            this.drawText(this.model.subtitle, 20, 60, TITLE_FONT_SIZE, DEFAULT_FONT)
+        if (this.model.subtitle.text) {
+            this.model.subtitle.draw(this.ctx)
         }
         this.ctx.translate(this.model.origin.x, this.model.origin.y)
         this.ctx.scale(this.model.zoom, this.model.zoom)

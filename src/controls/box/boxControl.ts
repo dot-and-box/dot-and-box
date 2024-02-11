@@ -1,15 +1,25 @@
 import {Point} from "../../shared/point.ts"
 import {BLACK, DEFAULT_FONT, DEFAULT_FONT_SIZE, SELECTION_STROKE_STYLE, WHITE} from "../../shared/constants.ts"
 import {Control} from "../control.ts"
+import {WrappedText} from "../text/WrappedText.ts";
 
 export class BoxControl extends Control {
+    get text(): string {
+        return this._text;
+    }
+
+    set text(value: string) {
+        this._text = value;
+    }
+
     public color: string
     public size: Point
-    public text: string
+    private _text: string
     public id: string
     static counter = 1
     public selected: boolean
     public visible: boolean
+    textControl: WrappedText
 
     constructor(id: string, position: Point, size: Point, color: string, text: string, visible: boolean, selected: boolean) {
         super()
@@ -17,9 +27,10 @@ export class BoxControl extends Control {
         this.position = position
         this.size = size
         this.color = color
-        this.text = text
+        this._text = text
         this.selected = selected
         this.visible = visible
+        this.textControl = new WrappedText(text, this.position, DEFAULT_FONT, DEFAULT_FONT_SIZE, BLACK, this.size.x, this.size.y, true)
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -39,9 +50,8 @@ export class BoxControl extends Control {
             ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
         }
 
-        const textOffset = this.size.x / 2 - ctx.measureText(this.text).width / 2
-        ctx.fillStyle = this.color != WHITE ? WHITE : BLACK
-        ctx.fillText(this.text, this.position.x + textOffset, this.position.y + this.size.y / 2)
+        this.textControl.color = this.color != WHITE ? WHITE : BLACK
+        this.textControl.draw(ctx)
     }
 
     hitTest(point: Point): boolean {
@@ -52,7 +62,7 @@ export class BoxControl extends Control {
     }
 
     clone(): Control {
-        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this.color.toString(), this.text.toString(), this.visible, this.selected)
+        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this.color.toString(), this._text.toString(), this.visible, this.selected)
     }
 
 }
