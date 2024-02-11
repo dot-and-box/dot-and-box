@@ -103,7 +103,7 @@ class DABLEditor extends HTMLElement {
 
     extendDABLang() {
         window.Prism.languages['dabl'] = window.Prism.languages.extend('clike', {
-            'keyword': /\b(?:steps|title|box|dot|line|dots|boxes|layout)\b/,
+            'keyword': /\b(?:step|title|box|dot|line|dots|boxes|layout)\b/,
         });
     }
 

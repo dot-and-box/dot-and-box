@@ -70,22 +70,22 @@
 
 </div>
 
-<dots-and-boxes id="example3" style="margin:10px;height: 370px; width: 600px" debug controls code="
+<dots-and-boxes id="example3" style="margin:10px;height: 370px; width: 500px"  controls code="
     title: request response pattern
-    box text: 'CLIENT' size: 100,40 at: -295, -100 color: rgb(187,105,13)
-    box text: 'SERVER' size: 100,40 at: 180, -100 color: rgba(5,5,254,0.6)
-    box color: orange size: 100,200 at: -295, -60
-    box color: rgba(5,5,254,0.4) size: 100, 200 at: 180, -60
-    line id: l1 at: -195, -10 end: 180, -10 width: 0.5
-    line id: l2 at: -195, 90 end: 180, 90 width: 0.5
+    box text: 'CLIENT' size: 100,40 at: -200, -100 color: rgb(187,105,13)
+    box color: orange size: 100,200 at: -200, -60
+    box text: 'SERVER' size: 100,40 at: 100, -100 color: rgba(5,5,254,0.6)
+    box color: rgba(5,5,254,0.4) size: 100, 200 at: 100, -60
+    line id: l1 at: -100, -10 end: 100, -10 width: 0.5
+    line id: l2 at: -100, 90 end: 100, 90 width: 0.5
     box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
-    dot text: 'req' at: -250, -10 size: 35
+    dot text: 'req' at: -150, -10 size: 35
     step: 'client app is making a request'
-    req ->  +(480,0)
+    req ->  +(300,0)
     step: 'server app is creating a response'
-    req *-> res, res <- 'res' color: purple, res -> +(0,100)
+    req *-> res, res <- 'res' color: purple,req <- color: gray, res -> +(0,100)
     step:'the response is sent back to client'
-    res ->  -(480,0)
+    res ->  -(300,0)
     step: 'we can do camera move too'
     camera -> +(0,350), fin <- visible: true
 ">
