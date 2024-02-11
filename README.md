@@ -149,9 +149,14 @@ text property is used by default, so you can omit 'text' property name
 
 **controls**  - show controls menu
 
+
 **autoplay** - starts fast-forward on load
 
 **keyboard** - left and right arrow does backward and forward respectively
+
+**debug**  - show some debug information 
+
+**experimental**  - show some experimental tools. Be aware that those can change without any notice. 
 
 ## credits
 
