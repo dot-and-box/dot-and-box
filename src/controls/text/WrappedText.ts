@@ -140,13 +140,14 @@ export class WrappedText extends Control {
             let words = lines[i].split(' ');
 
             for (let j = 0; j < words.length; j++) {
-                let testLine = line + words[j] + ' ';
+                let testLine = line + words[j]
                 let metrics = ctx.measureText(testLine);
+                testLine += ' '
                 let testWidth = metrics.width;
 
                 if (testWidth > this._maxWidth) {
                     result.push(line);
-                    line = words[j] + ' ';
+                    line = words[j] + ' '
                     y += this._fontSize;
                 } else {
                     if (testWidth > maxLineWidth) {
@@ -159,7 +160,7 @@ export class WrappedText extends Control {
             y += this._fontSize;
         }
         if (this._center) {
-            this._spanX = (this._maxWidth - maxLineWidth) / 2 + this.fontSize / 3
+            this._spanX = (this._maxWidth - maxLineWidth) / 2
             this._spanY = (this._maxHeight - (result.length * this.fontSize)) / 2 + this.fontSize / 2
         }
 

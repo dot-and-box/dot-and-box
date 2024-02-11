@@ -32,7 +32,7 @@ title: sort with bubble sort
 box id: txt at: -150, -90 size: (260, 80) visible: false
 box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
 dots ids: 1 2 3 5 4 at: -120, 0 size: 20
-steps:
+step:
 win <- visible: true, win -> +(110,0), txt <- '(1) select first two numbers'  visible: true
 txt <- '(2) swap if left bigger than right', 2 <-> 1 // swap dot 2 with 1
 txt <- '(3) select next two numbers', win -> +(50,0) // move window by 50px right
@@ -59,7 +59,7 @@ dot id: 3 color: orange at: 0, 0 size: 20
 dot id: 4 color: gray  at: -50, 0 size: 20 selected: true
 dot id: 5 color: rgba(190,0,65,1) at: 50, 0  size: 20
 boxes ids: 90 91 92 layout: col at: -100, 60
-steps:
+step:
 b2 <- text: 'go back and select different controls or forward', selected0 <-> selected1
 b2 <- 'first selected control is moved +(20,90)', selected0 -> +(20,90)
 b2 <- '',5 -> +(50,-50) // assign operator is using text property by default
