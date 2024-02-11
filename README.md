@@ -6,20 +6,24 @@ attribute defining dots and boxes and action (animation) steps.
 
 Project was highly inspired by [mermaid.js](https://mermaid.js.org/) project, although it has very different goals
 
-#### Use cases
-- visualize bubble sort algorithm
-- event driven architecture communication visualization
-- visualize common request response pattern 
+#### Example use cases
+
+- visualize sorting algorithms like bubble sort
+- visualize event driven architecture communication 
+- visualize common patterns like: request response pattern 
 
 ## How to use it
+Dots and boxes is using [HTML web components standard](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components)
+You need to do two things to start using it
 
-Just insert source script below reference and declare dots and boxes custom tag 
-
-eg.
-
+1) Add script reference
+    ```html
+    <script src="insert_url_here"></script>
+    ```
+2) Add *dots-and-boxes* tag to your html page e.g.
 ```html
-<script src="insert_url_here"></script>
-<dots-and-boxes style="margin:20px;height: 400px; width: 600px;" color="white" code="
+
+<dots-and-boxes controls color="white" code="
    title: sort with bubble sort
    box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
    dots ids: 1 2 3 5 4 at: -120, 0 size: 20
@@ -94,14 +98,14 @@ Whenever you want to change any control property you need to take an action. Act
 So the simple step could look like this:
 
 ```text
-step: 'this is my step' 2s
+step: 'this is my step title' duration: 2s
 myBox -> (100,50)
 ```
-Above step has title and takes 2s to run. It consists of one Action moving control *myBox to position 100 50
+Above step has title and takes 2s to run. It consists of one action moving control **myBox** to position 100 50
 
-Below we define possible action types.
+Below we define possible actions.
 
-Action types
+### Action types
 
 #### move control to point 
 
@@ -143,12 +147,13 @@ Assigns one or more property to control
 text property is used by default, so you can omit 'text' property name 
 > c2 <- 'my new text'
 
-### <dots-and-boxes> tag attributes
+### <dots-and-boxes> tag 
+As mentioned above <dots-and-boxes> works just like normal html tag (e.g. you can style it).
+It supports number of attributes and events 
 
-#### Supported attributes
+#### <dots-and-boxes> attributes
 
 **controls**  - show controls menu
-
 
 **autoplay** - starts fast-forward on load
 
@@ -156,7 +161,7 @@ text property is used by default, so you can omit 'text' property name
 
 **debug**  - show some debug information 
 
-**experimental**  - show some experimental tools. Be aware that those can change without any notice. 
+**experimental**  - show some experimental tools. Be aware that those can change or disappear without any notice. 
 
 ## credits
 
