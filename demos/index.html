@@ -52,27 +52,36 @@ win -> -(150,0)
 </div>
 
 
-<h3>Selected Control Move</h3>
+<h3>Dots and boxes tutorial</h3>
 <div class="example">
      <dots-and-boxes id="dab1" style="height: 254px; width: 450px" controls debug
                      color="rgba(233,233,233,0.3)" code="
-title: Ale heca
-box id: b2  text: 'select two controls to swap' at: -140, -100 size: (260, 80)
-dot id: 1 color: rgba(100,200,50,0.6) at: -100, 0  size: 35 selected: true
-dot id: 2 color: purple at: -150, 0 size: 20
-dot id: 3 color: orange at: 0, 0 size: 20
-dot id: 4 color: gray  at: -50, 0 size: 20 selected: true
-dot id: 5 color: rgba(190,0,65,1) at: 50, 0  size: 20
-boxes ids: 90 91 92 layout: col at: -100, 60
-step:
-b2 <- text: 'go back and select different controls or forward', selected0 <-> selected1
-b2 <- 'first selected control is moved +(20,90)', selected0 -> +(20,90)
-b2 <- '',5 -> +(50,-50) // assign operator is using text property by default
-5 *-> z1, z1 <- text: '5*', z1 -> -(200,-150) // *-> clone operator makes new control
+title: 'Dots and boxes tutorial'
+dots ids: 2 1 5 3 4  at: -120, 0 size: 20
+box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
+step: 'Select 4 and 1 with assign <- operator'
+4 <- selected: true, 1 <- selected: true, 4 -> +(0,15),  1 -> +(0,15)
+4 -> -(0,30), 1 -> -(0,30)
+4 -> +(0,15), 1 -> +(0,15)
+step: 'next we swap selected dots, select different dots by click and move forward'
+selected0 <-> selected1
+step: 'if selected different dots - those should be swapped using <-> opertor'
+selected0 <-> selected1
+step: 'now first selected dot is moved by +(20,90)'
+selected0 -> +(20,70)
+step: 'here we clone 5 and move cloned by +(-100,80)'
+5 *-> z1, z1 <- '5*', z1 -> +(-100,80) // *-> clone operator makes a new control
+step: 'actions could be parallel'
+2 <-> 1, 3 <-> 4, 4 <-> 5
+step: 'or sequential'
 2 <-> 1
 3 <-> 4
 4 <-> 5
-
+step: 'or both'
+2 <-> 1, 3 <-> 4
+4 <-> 5
+step: 'we can do camera move too'
+camera -> +(0,350), fin <- visible: true
     "></dots-and-boxes>
      <dabl-editor style="min-width: 300px" attach-selector="#dab1"></dabl-editor>
  </div>
@@ -88,7 +97,6 @@ box text: 'SERVER' size: 100,40 at: 100, -100 color: rgba(5,5,254,0.6)
 box color: rgba(5,5,254,0.4) size: 100, 200 at: 100, -60
 line id: l1 at: -100, -10 end: 100, -10 width: 0.5
 line id: l2 at: -100, 90 end: 100, 90 width: 0.5
-box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
 dot text: 'req' at: -150, -10 size: 35
 step: 'client app is making a request'
 req ->  +(300,0)
@@ -96,8 +104,6 @@ step: 'server app is creating a response'
 req *-> res, res <- 'res' color: purple,req <- color: gray, res -> +(0,100)
 step:'the response is sent back to client'
 res ->  -(300,0)
-step: 'we can do camera move too'
-camera -> +(0,350), fin <- visible: true
 ">
 </dots-and-boxes>
     <dabl-editor style="min-width: 300px" attach-selector="#dab2"></dabl-editor>

@@ -15,7 +15,8 @@ export class PanZoomTool extends Tool {
             }
         })
         if (hitControls.length > 0) {
-            this.model.changeSelected(hitControls)
+            hitControls.forEach(c=> c.selected = !c.selected)
+            this.model.applySelected(hitControls)
         }
     }
 

@@ -19,7 +19,7 @@ export class DotsAndBoxesModel {
     static readonly SELECTED_PREFIX = "selected"
     title: string
     controls: Control[]
-    subtitle = new WrappedText('', new Point(20, 60), DEFAULT_FONT, SUB_TITLE_FONT_SIZE, SUB_TITLE_COLOR, 200,100, false)
+    subtitle = new WrappedText('', new Point(20, 60), DEFAULT_FONT, SUB_TITLE_FONT_SIZE, SUB_TITLE_COLOR, 180,100, false)
     steps: Step[]
     currentStep: Step = new Step()
     origin: Point = Point.zero()
@@ -41,7 +41,7 @@ export class DotsAndBoxesModel {
         this._height = height
         this.origin = new Point(this._width / 2, this._height / 2)
         this.offset = new Point(this._width / 2, this._height / 2)
-        this.subtitle.maxWidth = this._width
+        this.subtitle.maxWidth = this._width - this.subtitle.position.x
     }
 
     public get requestedStepProgress() {
@@ -70,9 +70,8 @@ export class DotsAndBoxesModel {
         this.origin = Point.zero()
     }
 
-    changeSelected(controls: Control[]) {
+    applySelected(controls: Control[]) {
         controls.forEach(control => {
-            control.selected = !control.selected
             if (control.selected) {
                 this.selectedControls.push(control)
             } else {
