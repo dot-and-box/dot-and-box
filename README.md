@@ -147,6 +147,24 @@ Assigns one or more property to control
 text property is used by default, so you can omit 'text' property name 
 > c2 <- 'my new text'
 
+
+### special controls
+
+There are two special controls automatically declared by dots and boxes itself
+
+#### **selected** control
+
+selected is a virtual control pointing to currently selected control by user or code.
+selected0 is first selected control selected1 second and so on.
+e.g. to swap two selected controls you can add action like:
+> selected0 <-> selected1
+
+
+#### **camera** control
+camera is a virtual control used just to move viewport.
+e.g.
+> camera -> +(100,50)
+
 ### <dots-and-boxes> tag 
 As mentioned above <dots-and-boxes> works just like normal html tag (e.g. you can style it).
 It supports number of attributes and events 
