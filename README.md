@@ -84,13 +84,44 @@ It draws the control a dot
 e.g.
 
 ```dabl
-dot color: fred text: 'd1' size: 20
+dot color: blue text: 'd1' size: 20
 ```
+
 ### define a box
 
 ```dabl
-box color: fred text: 'a text in a box' size: (20,200), visible: true
+box color: red text: 'a text in a box' size: (20,200) visible: true
 ```
+
+### define a line
+
+```dabl
+line color: orange at: (20,200) end: (200, 200) visible: true
+```
+### define dots
+
+Define a number of dots
+
+> dots ids: 1 2 3 5 4 at: -120, 0 size: 20
+
+Above declares 5 dots
+
+### define boxes
+
+Define a number of boxes
+
+> boxes ids: one two three at: -120, 0 size: (100, 50)
+
+
+#### supported attributes
+Controls support number of attributes which are mostly self describing like:
+- **id** - unique id of control
+- **at** - control start location
+- **text** - control text 
+- **size** - control size
+- **visible** - is control visible
+- **selected** - is control selected
+
 ### steps and actions
 
 Whenever you want to change any control property you need to take an action. Actions are grouped in steps.
