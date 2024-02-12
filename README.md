@@ -202,6 +202,8 @@ It supports number of attributes and events
 
 #### <dots-and-boxes> attributes
 
+**code** - this is where actual **DABL** code is assigned
+
 **controls**  - show controls menu
 
 **autoplay** - starts fast-forward on load
