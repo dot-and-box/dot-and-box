@@ -141,7 +141,8 @@ export class DotsAndBoxes {
 
     private drawDebug(time: number) {
         this.fps = 1 / ((time - this.model.lastTime) / 1000)
-        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.model.zoom * 100) / 100} step: ${this.model.currentStepIndex} prog: ${Math.round(this.model.requestedStepProgress * 100) / 100}`, 0, 10, 12, DEFAULT_FONT)
+        const x = this.model.width - 210
+        this.drawText(`fps: ${Math.round(this.fps)} zoom: ${Math.round(this.model.zoom * 100) / 100} step: ${this.model.currentStepIndex} prog: ${Math.round(this.model.requestedStepProgress * 100) / 100}`, x, 10, 10, DEFAULT_FONT)
     }
 
     draw(time: number) {

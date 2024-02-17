@@ -73,11 +73,11 @@ class DotsAndBoxesElement extends HTMLElement {
         color: rgba(55,55,55);      
       }
       #title {
-        font-size: 18pt;
+        font-size: 20px;
         font-weight: bold;
       }
       #subtitle {     
-        font-size: 14pt;
+        font-size: 16px;
       }    
       #controls-menu {    
         position: relative;   
