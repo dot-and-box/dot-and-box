@@ -20,6 +20,7 @@ class DotsAndBoxesElement extends HTMLElement {
     defaultWidth: number = 100
     defaultHeight: number = 100
     showControls = false
+    extendedMenu = false
     experimental = false
     autoplay = false
     canvas!: HTMLCanvasElement
@@ -61,38 +62,55 @@ class DotsAndBoxesElement extends HTMLElement {
         const shadow = this.attachShadow({mode: "open"})
         shadow.innerHTML = `
       <style>
-        :host { display: block; padding: 0;border: ${this.border};}
+      :host { display: block; padding: 0;border: ${this.border};}
         #controls-menu {    
           position: relative;   
-          height: 24px;
+          height: 50px;
           left: 0;       
-          top: -26px;
+          top: -54px;
           overflow: hidden;
-          background-color: white;
-          background-color:  rgba(243,243,243,0.7);
+          background-color: transparent;
           display: ${this.showControls ? 'flex' : 'none'};
           flex-wrap: nowrap;
           align-items: center;
-        }        
-        #controls-menu button {
+          justify-content: center;
+        }               
+        #controls-menu-extended {    
+          position: relative;   
+          height: 50px;
+          left: 0;       
+          top: -154px;
+          overflow: hidden;
+          background-color: transparent;          
+          display: none;
+          flex-wrap: nowrap;
+          align-items: center;
+          justify-content: center;
+        }      
+        #controls-menu button, #controls-menu-extended  button {
          color:  rgba(23,23,23,0.7);
          background-color: transparent;
          font-size: 22px;                 
-         width: 22px;
-         margin: 0;
+         width: 36px;
+         height: 36px;
+         margin-left: 3px;
+         margin-right: 3px;
          padding: 0;
-         border: solid 1px transparent;
+         border-radius: 50%;
+         border: solid 1px gray;
         }      
-         #controls-menu button:hover {
-            color:  black;
-         }
+        #controls-menu button:hover {
+           color:  #2d2828;
+           border: solid 1px #2d2828;
+        }
       </style>
       <div id="wrapper">
-        <canvas id="canvas"></canvas>
+        <canvas id="canvas"></canvas>        
         <div id="controls-menu"></div>
+        <div id="controls-menu-extended"></div>
       </div>
     `
-        this.buildControls(shadow.getElementById('controls-menu') as HTMLElement)
+        this.buildControls(shadow)
         this.canvas = this.getCanvas(shadow)
         this.dotsAndBoxes = new DotsAndBoxes(this.canvas)
         this.reset()
@@ -137,6 +155,7 @@ class DotsAndBoxesElement extends HTMLElement {
         });
         this._wrapper.dispatchEvent(stepSelected)
     }
+
     dispatchOnBeforeStepBackward(index: number) {
         const stepSelected = new CustomEvent(DotsAndBoxesElement.ON_BEFORE_STEP_BACKWARD, {
             bubbles: true,
@@ -146,11 +165,9 @@ class DotsAndBoxesElement extends HTMLElement {
         this._wrapper.dispatchEvent(stepSelected)
     }
 
-    buildControls(menu: HTMLElement) {
-        const fastBackward = document.createElement("button")
-        fastBackward.onclick = (_) => this.dotsAndBoxes.fastBackward()
-        fastBackward.textContent = '\u{00AB}'
-        menu.append(fastBackward)
+    buildControls(shadow: ShadowRoot) {
+        const menu: HTMLElement = shadow.getElementById('controls-menu') as HTMLElement
+        const extendedMenu: HTMLElement = shadow.getElementById('controls-menu-extended') as HTMLElement
 
         const backward = document.createElement("button")
         backward.onclick = (_) => this.dotsAndBoxes.backward()
@@ -167,35 +184,33 @@ class DotsAndBoxesElement extends HTMLElement {
         forward.append('\u{025B8}')
         menu.append(forward)
 
-        const fastForward = document.createElement("button")
-        fastForward.onclick = (_) => this.dotsAndBoxes.fastForward()
-        fastForward.append('\u{000BB}')
-        menu.append(fastForward)
-
         const restart = document.createElement("button")
         restart.onclick = (_) => this.reset()
         restart.append('↺')
         menu.append(restart)
 
-        const experimentalMenu = document.createElement("div")
-        experimentalMenu.id = EXPERIMENTAL
-        experimentalMenu.style.display = this.experimental ? 'inline' : 'none'
-
-        const panZoomTool = document.createElement("button")
-        panZoomTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.PAN_ZOOM_TOOL)
-        panZoomTool.append('\u{271C}')
-        menu.append(panZoomTool)
+        const moreMenuButton = document.createElement("button")
+        moreMenuButton.onclick = (_) => this.toggleExtendedMenu()
+        moreMenuButton.append('\u{22EF}')
+        menu.append(moreMenuButton)
 
         const rangeControl = document.createElement("input")
-        rangeControl.type = "range"
-        rangeControl.min = "0"
-        rangeControl.max = "1"
-        rangeControl.step = "0.01"
-        rangeControl.value = "0"
+        rangeControl.id = 'progress-range'
+        rangeControl.type = 'range'
+        rangeControl.min = '0'
+        rangeControl.max = '1'
+        rangeControl.step = '0.01'
+        rangeControl.value = '0'
+        rangeControl.style.height = '100%'
+        rangeControl.style.width = '100%'
         rangeControl.oninput = (e: any) => {
             this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)
         }
-        experimentalMenu.append(rangeControl)
+        extendedMenu.append(rangeControl)
+
+        const experimentalMenu = document.createElement("div")
+        experimentalMenu.id = EXPERIMENTAL
+        experimentalMenu.style.display = this.experimental ? 'flex' : 'none'
 
         const dotTool = document.createElement("button")
         dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
@@ -211,7 +226,33 @@ class DotsAndBoxesElement extends HTMLElement {
         printModel.onclick = (_) => console.log(this.dotsAndBoxes.model)
         printModel.append('\u{02148}')
         experimentalMenu.append(printModel)
-        menu.append(experimentalMenu)
+        extendedMenu.append(experimentalMenu)
+    }
+
+    toggleExtendedMenu() {
+        if (!this.extendedMenu) {
+            this.showExtendedMenu()
+        } else {
+            this.hideExtendedMenu()
+        }
+    }
+
+    hideExtendedMenu() {
+        if (this.extendedMenu) {
+            const extendedMenu: HTMLElement = this.shadowRoot!.getElementById('controls-menu-extended') as HTMLElement
+            this.extendedMenu = false
+            extendedMenu.style.display = 'none'
+        }
+    }
+
+    showExtendedMenu() {
+        if (!this.extendedMenu) {
+            const extendedMenu: HTMLElement = this.shadowRoot!.getElementById('controls-menu-extended') as HTMLElement
+            const progressRange: HTMLInputElement = this.shadowRoot!.getElementById('progress-range') as HTMLInputElement
+            progressRange.value = `${this.dotsAndBoxes.requestedStepProgress}`
+            this.extendedMenu = true
+            extendedMenu.style.display = 'flex'
+        }
     }
 
     private updateKeyboardHandler() {
@@ -235,6 +276,7 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     public forward() {
+        this.hideExtendedMenu()
         this.dotsAndBoxes.forward()
     }
 
@@ -243,6 +285,7 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     public backward() {
+        this.hideExtendedMenu()
         this.dotsAndBoxes.backward()
     }
 

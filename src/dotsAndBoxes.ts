@@ -59,7 +59,7 @@ export class DotsAndBoxes {
         this.model = model
         this.model.currentStepIndex = 0
         for (let tool of this.tools.values()) {
-            tool.updateModel(this.model)
+            tool.updateModel(this)
         }
     }
 
@@ -105,6 +105,10 @@ export class DotsAndBoxes {
         if (this.tools.has(toolName)) {
             this.tool = this.tools.get(toolName)!
         }
+    }
+
+    resetTool() {
+      this.selectTool(this.PAN_ZOOM_TOOL)
     }
 
     public fastForward() {

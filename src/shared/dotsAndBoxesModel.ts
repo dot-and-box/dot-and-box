@@ -151,6 +151,9 @@ export class DotsAndBoxesModel {
     }
 
     singleForward() {
+        if (this.currentStep.direction === StepDirection.FORWARD && this.currentStep.state === StepState.IN_PROGRESS) {
+            this._requestedStepProgress = 1
+        }
         this.nextStep()
         this.currentStep.forward()
         this.updateStartTime()
@@ -158,6 +161,9 @@ export class DotsAndBoxesModel {
     }
 
     singleBackward() {
+        if (this.currentStep.direction === StepDirection.BACKWARD && this.currentStep.state === StepState.IN_PROGRESS) {
+            this._requestedStepProgress = 0
+        }
         this.previousStep()
         this.onBeforeStepBackwardCallback(this._currentStepIndex)
         this.currentStep.backward()
