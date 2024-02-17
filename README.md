@@ -214,6 +214,14 @@ It supports number of attributes and events
 
 **experimental**  - show some experimental tools. Be aware that those can change or disappear without any notice. 
 
+#### <dots-and-boxes> events
+
+**initialized** - happens after control is initialized
+
+**on_before_step_forward** - happens whenever step is going to be running forward
+
+**on_before_step_backward** - happens whenever step is going to be running backward
+
 ## credits
 
 - [Easing functions](https://gizma.com/easing/)

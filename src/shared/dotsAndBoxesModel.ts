@@ -19,7 +19,7 @@ export class DotsAndBoxesModel {
     static readonly SELECTED_PREFIX = "selected"
     title: string
     controls: Control[]
-    subtitle = new WrappedText('', new Point(20, 60), DEFAULT_FONT, SUB_TITLE_FONT_SIZE, SUB_TITLE_COLOR, 180,100, false)
+    subtitle = new WrappedText('', new Point(20, 60), DEFAULT_FONT, SUB_TITLE_FONT_SIZE, SUB_TITLE_COLOR, 180, 100, false)
     steps: Step[]
     currentStep: Step = new Step()
     origin: Point = Point.zero()
@@ -35,6 +35,9 @@ export class DotsAndBoxesModel {
     public autoPlay: boolean = false
     easingFunc: (x: number) => number = Easing.getEasingByType(EasingType.IN_QUAD)
     inverseEasingFunc: (x: number) => number = Easing.getInverseEasingByType(EasingType.IN_QUAD)
+    // noinspection JSUnusedGlobalSymbols
+    public onBeforeStepForwardCallback: (index: number) => void = () => {}
+    public onBeforeStepBackwardCallback: (index: number) => void = () => {}
 
     public updateWidthAndHeight(width: number, height: number) {
         this._width = width
@@ -57,7 +60,7 @@ export class DotsAndBoxesModel {
     }
 
     public set currentStepIndex(newIndex: number) {
-        if(this.steps.length > newIndex) {
+        if (this.steps.length > newIndex) {
             this._currentStepIndex = newIndex
             this.currentStep = this.steps[this._currentStepIndex]
         }
@@ -156,13 +159,16 @@ export class DotsAndBoxesModel {
 
     singleBackward() {
         this.previousStep()
+        this.onBeforeStepBackwardCallback(this._currentStepIndex)
         this.currentStep.backward()
         this.updateStartTime()
         this.currentStep.run()
     }
 
     public selectStep(index: number) {
-        this.currentStepIndex = index
+        if (this.currentStepIndex !== index) {
+            this.currentStepIndex = index
+        }
     }
 
     public previousStep() {
@@ -181,6 +187,7 @@ export class DotsAndBoxesModel {
             this.currentStep.init()
             this._requestedStepProgress = 0
         }
+        this.onBeforeStepForwardCallback(this._currentStepIndex)
         this.currentStep.forward()
         this.updateStartTime()
         this.currentStep.run()

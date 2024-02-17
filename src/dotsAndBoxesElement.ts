@@ -9,6 +9,8 @@ import {
 
 class DotsAndBoxesElement extends HTMLElement {
     public static readonly ELEM_NAME: string = "dots-and-boxes"
+    public static readonly ON_BEFORE_STEP_FORWARD: string = "on_before_step_forward"
+    public static readonly ON_BEFORE_STEP_BACKWARD: string = "on_before_step_backward"
     static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, CONTROLS, AUTOPLAY, KEYBOARD, INITIALIZED]
     dotsAndBoxes!: DotsAndBoxes
     private _code: string = ''
@@ -23,6 +25,7 @@ class DotsAndBoxesElement extends HTMLElement {
     canvas!: HTMLCanvasElement
     keyboard: boolean = false
     _initialized: boolean = false
+    _wrapper: any = null
 
     public get initialized() {
         return this._initialized
@@ -49,6 +52,8 @@ class DotsAndBoxesElement extends HTMLElement {
 
     applyCode() {
         const model = new Parser().parse(this._code)
+        model.onBeforeStepForwardCallback = (index) => this.dispatchOnBeforeStepForward(index)
+        model.onBeforeStepBackwardCallback = (index) => this.dispatchOnBeforeStepForward(index)
         this.dotsAndBoxes.apply(model)
     }
 
@@ -82,7 +87,7 @@ class DotsAndBoxesElement extends HTMLElement {
             color:  black;
          }
       </style>
-      <div>
+      <div id="wrapper">
         <canvas id="canvas"></canvas>
         <div id="controls-menu"></div>
       </div>
@@ -92,7 +97,8 @@ class DotsAndBoxesElement extends HTMLElement {
         this.dotsAndBoxes = new DotsAndBoxes(this.canvas)
         this.reset()
         this._initialized = true
-        this.dispatchEvent(new CustomEvent(INITIALIZED, {
+        this._wrapper = this.shadowRoot!.getElementById('wrapper')
+        this._wrapper.dispatchEvent(new CustomEvent(INITIALIZED, {
             bubbles: true,
             cancelable: false,
             composed: true
@@ -119,9 +125,25 @@ class DotsAndBoxesElement extends HTMLElement {
     updateControls() {
         const controlsMenu = this.shadowRoot!.getElementById('controls-menu') as HTMLElement
         controlsMenu.style.display = this.showControls ? 'block' : 'none'
-
         const experimentalMenu = this.shadowRoot!.getElementById(EXPERIMENTAL) as HTMLElement
         experimentalMenu.style.display = this.experimental ? 'inline' : 'none'
+    }
+
+    dispatchOnBeforeStepForward(index: number) {
+        const stepSelected = new CustomEvent(DotsAndBoxesElement.ON_BEFORE_STEP_FORWARD, {
+            bubbles: true,
+            composed: true,
+            detail: {step: index}
+        });
+        this._wrapper.dispatchEvent(stepSelected)
+    }
+    dispatchOnBeforeStepBackward(index: number) {
+        const stepSelected = new CustomEvent(DotsAndBoxesElement.ON_BEFORE_STEP_BACKWARD, {
+            bubbles: true,
+            composed: true,
+            detail: {step: index}
+        });
+        this._wrapper.dispatchEvent(stepSelected)
     }
 
     buildControls(menu: HTMLElement) {
