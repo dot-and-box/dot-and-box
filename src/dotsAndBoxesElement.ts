@@ -55,6 +55,8 @@ class DotsAndBoxesElement extends HTMLElement {
         const model = new Parser().parse(this._code)
         model.onBeforeStepForwardCallback = (index) => this.dispatchOnBeforeStepForward(index)
         model.onBeforeStepBackwardCallback = (index) => this.dispatchOnBeforeStepBackward(index)
+        model.updateSubtitleCallback = (text) => this.updateSubtitle(text)
+        this.updateTitle(model.title)
         this.dotsAndBoxes.apply(model)
     }
 
@@ -62,52 +64,70 @@ class DotsAndBoxesElement extends HTMLElement {
         const shadow = this.attachShadow({mode: "open"})
         shadow.innerHTML = `
       <style>
-      :host { display: block; padding: 0;border: ${this.border};}
-        #controls-menu {    
-          position: relative;   
-          height: 50px;
-          left: 0;       
-          top: -54px;
-          overflow: hidden;
-          background-color: transparent;
-          display: ${this.showControls ? 'flex' : 'none'};
-          flex-wrap: nowrap;
-          align-items: center;
-          justify-content: center;
-        }               
-        #controls-menu-extended {    
-          position: relative;   
-          height: 50px;
-          left: 0;       
-          top: -154px;
-          overflow: hidden;
-          background-color: transparent;          
-          display: none;
-          flex-wrap: nowrap;
-          align-items: center;
-          justify-content: center;
-        }      
-        #controls-menu button, #controls-menu-extended  button {
-         color:  rgba(23,23,23,0.7);
-         background-color: transparent;
-         font-size: 22px;                 
-         width: 36px;
-         height: 36px;
-         margin-left: 3px;
-         margin-right: 3px;
-         padding: 0;
-         border-radius: 50%;
-         border: solid 1px gray;
-        }      
-        #controls-menu button:hover {
-           color:  #2d2828;
-           border: solid 1px #2d2828;
-        }
+      :host { display: block; padding: 0;border: ${this.border};}      
+      #title-wrapper {
+        margin-top: 5px;
+        margin-left: 5px;
+        margin-right: 5px;
+        position: absolute;  
+        color: rgba(55,55,55);      
+      }
+      #title {
+        font-size: 18pt;
+        font-weight: bold;
+      }
+      #subtitle {     
+        font-size: 14pt;
+      }    
+      #controls-menu {    
+        position: relative;   
+        height: 50px;
+        left: 0;       
+        top: -54px;
+        overflow: hidden;
+        background-color: transparent;
+        display: ${this.showControls ? 'flex' : 'none'};
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+      }               
+      #controls-menu-extended {    
+        position: relative;   
+        height: 50px;
+        left: 0;       
+        top: -154px;
+        overflow: hidden;
+        background-color: transparent;          
+        display: none;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+      }      
+      #controls-menu button, #controls-menu-extended  button {
+        color:  rgba(23,23,23,0.7);
+        background-color: transparent;
+        font-size: 22px;                 
+        width: 36px;
+        height: 36px;
+        margin-left: 3px;
+        margin-right: 3px;
+        padding: 0;
+        border-radius: 50%;
+        border: solid 1px gray;
+      }      
+      #controls-menu button:hover {
+        color:  #2d2828;
+        border: solid 1px #2d2828;
+      }
       </style>
       <div id="wrapper">
-        <canvas id="canvas"></canvas>        
-        <div id="controls-menu"></div>
-        <div id="controls-menu-extended"></div>
+       <div id="title-wrapper">
+         <div id="title"></div>
+         <div id="subtitle"></div>
+       </div>              
+       <canvas id="canvas"></canvas>         
+       <div id="controls-menu"></div>
+       <div id="controls-menu-extended"></div>
       </div>
     `
         this.buildControls(shadow)
@@ -138,6 +158,18 @@ class DotsAndBoxesElement extends HTMLElement {
         canvas.style.margin = '0'
         canvas.style.overflow = 'hidden'
         canvas.style.userSelect = 'none'
+    }
+
+    updateTitle(title: string) {
+        const titleElem = this.shadowRoot!.getElementById('title') as HTMLElement
+        titleElem.style.width = `${this.offsetWidth ? this.offsetWidth - 2 : this.defaultWidth}px`
+        titleElem.innerText = title
+    }
+
+    updateSubtitle(subtitle: string) {
+        const subtitleElem = this.shadowRoot!.getElementById('subtitle') as HTMLElement
+        subtitleElem.style.width = `${this.offsetWidth ? this.offsetWidth - 2 : this.defaultWidth}px`
+        subtitleElem.innerText = subtitle
     }
 
     updateControls() {

@@ -4,8 +4,6 @@ import {Step} from "./step.ts";
 import {StepState} from "./stepState.ts";
 import {StepDirection} from "./stepDirection.ts";
 import {Easing, EasingType} from "./easingFunctions.ts";
-import {WrappedText} from "../controls/text/WrappedText.ts";
-import {DEFAULT_FONT, SUB_TITLE_COLOR, SUB_TITLE_FONT_SIZE} from "./constants.ts";
 
 export class DotsAndBoxesModel {
     get height(): number {
@@ -19,7 +17,6 @@ export class DotsAndBoxesModel {
     static readonly SELECTED_PREFIX = "selected"
     title: string
     controls: Control[]
-    subtitle = new WrappedText('', new Point(20, 60), DEFAULT_FONT, SUB_TITLE_FONT_SIZE, SUB_TITLE_COLOR, 180, 100, false)
     steps: Step[]
     currentStep: Step = new Step()
     origin: Point = Point.zero()
@@ -38,13 +35,13 @@ export class DotsAndBoxesModel {
     // noinspection JSUnusedGlobalSymbols
     public onBeforeStepForwardCallback: (index: number) => void = () => {}
     public onBeforeStepBackwardCallback: (index: number) => void = () => {}
+    public updateSubtitleCallback: (text: string) => void = () => {}
 
     public updateWidthAndHeight(width: number, height: number) {
         this._width = width
         this._height = height
         this.origin = new Point(this._width / 2, this._height / 2)
         this.offset = new Point(this._width / 2, this._height / 2)
-        this.subtitle.maxWidth = this._width - this.subtitle.position.x
     }
 
     public get requestedStepProgress() {
@@ -129,7 +126,7 @@ export class DotsAndBoxesModel {
             }
             // here maybe something smarter...
             if (this.currentStep.state == StepState.START && this._currentStepIndex == 0) {
-                this.subtitle.text = ''
+                this.updateSubtitleCallback('');
             }
         }
     }
@@ -182,7 +179,7 @@ export class DotsAndBoxesModel {
             if (this._currentStepIndex > 0) {
                 this.selectStep(this._currentStepIndex - 1)
                 this._requestedStepProgress = 1
-                this.subtitle.text = this.currentStep.title
+                this.updateSubtitleCallback(this.currentStep.title)
             }
         }
     }
@@ -197,6 +194,6 @@ export class DotsAndBoxesModel {
         this.currentStep.forward()
         this.updateStartTime()
         this.currentStep.run()
-        this.subtitle.text = this.currentStep.title
+        this.updateSubtitleCallback(this.currentStep.title)
     }
 }

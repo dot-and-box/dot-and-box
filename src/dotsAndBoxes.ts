@@ -5,7 +5,6 @@ import {
     MAX_ZOOM,
     MIN_ZOOM,
     SCROLL_SENSITIVITY,
-    TITLE_FONT_SIZE
 } from "./shared/constants.ts"
 import {DotTool} from "./tools/dotTool.ts"
 import {EmptyTool} from "./shared/emptyTool.ts"
@@ -150,12 +149,6 @@ export class DotsAndBoxes {
         this.canvas.height = this.model.height
         if (this.showDebug) {
             this.drawDebug(time)
-        }
-        if (this.model.title) {
-            this.drawText(this.model.title, 20, 30, TITLE_FONT_SIZE, DEFAULT_FONT)
-        }
-        if (this.model.subtitle.text) {
-            this.model.subtitle.draw(this.ctx)
         }
         this.ctx.translate(this.model.origin.x, this.model.origin.y)
         this.ctx.scale(this.model.zoom, this.model.zoom)
