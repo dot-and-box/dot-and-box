@@ -54,7 +54,7 @@ class DotsAndBoxesElement extends HTMLElement {
     applyCode() {
         const model = new Parser().parse(this._code)
         model.onBeforeStepForwardCallback = (index) => this.dispatchOnBeforeStepForward(index)
-        model.onBeforeStepBackwardCallback = (index) => this.dispatchOnBeforeStepForward(index)
+        model.onBeforeStepBackwardCallback = (index) => this.dispatchOnBeforeStepBackward(index)
         this.dotsAndBoxes.apply(model)
     }
 
