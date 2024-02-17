@@ -170,7 +170,7 @@ class DotsAndBoxesElement extends HTMLElement {
         const extendedMenu: HTMLElement = shadow.getElementById('controls-menu-extended') as HTMLElement
 
         const backward = document.createElement("button")
-        backward.onclick = (_) => this.dotsAndBoxes.backward()
+        backward.onclick = (_) => this.backward()
         backward.textContent = '\u{025C2}'
         menu.append(backward)
 
