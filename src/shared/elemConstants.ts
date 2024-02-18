@@ -10,6 +10,7 @@ export const EXPERIMENTAL = 'experimental'
 export const CONTROLS = 'controls'
 export const AUTOPLAY = 'autoplay'
 export const KEYBOARD = 'keyboard'
+export const GRID = 'grid'
 
 // events
 export const INITIALIZED = 'initialized'

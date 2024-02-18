@@ -44,7 +44,6 @@ export class LineControl extends Control {
         ctx.moveTo(this.position.x, this.position.y);
         ctx.lineTo(this._end.x, this._end.y);
         ctx.stroke();
-
     }
 
     // @ts-ignore

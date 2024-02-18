@@ -20,7 +20,8 @@ export class DotsAndBoxes {
     private initialPinchDistance: number = 0
     private lastZoom = this.model.zoom
     private fps = 1
-    public showDebug = true
+    public showDebug = false
+    public showGrid = false
     public marginLeft = 0
     public marginTop = 0
     public readonly EMPTY_TOOL: string = "empty-tool"
@@ -107,7 +108,7 @@ export class DotsAndBoxes {
     }
 
     resetTool() {
-      this.selectTool(this.PAN_ZOOM_TOOL)
+        this.selectTool(this.PAN_ZOOM_TOOL)
     }
 
     public fastForward() {
@@ -151,11 +152,15 @@ export class DotsAndBoxes {
         if (this.showDebug) {
             this.drawDebug(time)
         }
+
         this.ctx.translate(this.model.origin.x, this.model.origin.y)
         this.ctx.scale(this.model.zoom, this.model.zoom)
         this.ctx.translate(-this.model.origin.x + this.model.offset.x, -this.model.origin.y + this.model.offset.y)
         this.model.updateRequestedProgressIfInMove()
         this.model.updateProgress()
+        if (this.showGrid) {
+            this.drawGrid()
+        }
         for (const control of this.model.controls) {
             if (control.visible) {
                 control.draw(this.ctx)
@@ -177,6 +182,32 @@ export class DotsAndBoxes {
     drawText(text: string, x: number, y: number, size: number, font: string) {
         this.ctx.font = `${size}px ${font}`
         this.ctx.fillText(text, x, y)
+    }
+
+    drawGrid() {
+        const halfSize = 5
+        const span = 50
+        const maxSize = halfSize * span
+        const minSize = -maxSize
+        for (let i = minSize; i <= maxSize; i += span) {
+            this.drawLine(i, minSize, i, maxSize);
+            this.drawLine(minSize, i, maxSize, i);
+        }
+        const ctx = this.ctx
+        ctx.beginPath()
+        ctx.arc(0, .0, 5, 0, 2 * Math.PI, false)
+        ctx.fillStyle = 'red'
+        ctx.fill()
+    }
+
+    drawLine(x1: number, y1: number, x2: number, y2: number) {
+        const ctx = this.ctx
+        ctx.strokeStyle = 'black'
+        ctx.beginPath();
+        ctx.lineWidth = 0.4
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
     }
 
     private onPointerDown(e: MouseEvent) {

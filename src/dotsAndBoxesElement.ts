@@ -3,7 +3,7 @@ import {Parser} from "./parser/parser.ts"
 import {Point} from "./shared/point.ts"
 import {
     AUTOPLAY, BORDER, CODE, COLOR, CONTROLS,
-    DEBUG, EXPERIMENTAL, HEIGHT, INITIALIZED, KEYBOARD, STYLE, WIDTH
+    DEBUG, EXPERIMENTAL, GRID, HEIGHT, INITIALIZED, KEYBOARD, STYLE, WIDTH
 } from "./shared/elemConstants.ts";
 
 
@@ -11,11 +11,12 @@ class DotsAndBoxesElement extends HTMLElement {
     public static readonly ELEM_NAME: string = "dots-and-boxes"
     public static readonly ON_BEFORE_STEP_FORWARD: string = "on_before_step_forward"
     public static readonly ON_BEFORE_STEP_BACKWARD: string = "on_before_step_backward"
-    static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, CONTROLS, AUTOPLAY, KEYBOARD, INITIALIZED]
+    static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, CONTROLS, AUTOPLAY, KEYBOARD, GRID]
     dotsAndBoxes!: DotsAndBoxes
     private _code: string = ''
     color: string = 'white'
     debug: boolean = false
+    grid: boolean = false
     border: string = '1px solid #ccc'
     defaultWidth: number = 100
     defaultHeight: number = 100
@@ -46,6 +47,7 @@ class DotsAndBoxesElement extends HTMLElement {
             this.updateCanvasStyle(this.canvas)
             this.applyCode()
             this.dotsAndBoxes.showDebug = this.debug
+            this.dotsAndBoxes.showGrid = this.grid
             this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop))
             this.dotsAndBoxes.draw(0)
         }
@@ -105,7 +107,7 @@ class DotsAndBoxesElement extends HTMLElement {
       }      
       #controls-menu button, #controls-menu-extended  button {
         color:  rgba(23,23,23,0.7);
-        background-color: transparent;
+        background-color: white;
         font-size: 22px;                 
         width: 36px;
         height: 36px;
@@ -383,6 +385,12 @@ class DotsAndBoxesElement extends HTMLElement {
                 this.debug = newValue != null
                 if (this.dotsAndBoxes) {
                     this.dotsAndBoxes.showDebug = this.debug
+                }
+                break
+            case GRID:
+                this.grid = newValue != null
+                if (this.dotsAndBoxes) {
+                    this.dotsAndBoxes.showGrid = this.grid
                 }
                 break
             default:
