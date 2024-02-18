@@ -348,7 +348,7 @@ class DotsAndBoxesElement extends HTMLElement {
                 this.resize()
                 break
             case CODE:
-                this._code = newValue
+                this._code = newValue.trim()
                 if (this.dotsAndBoxes) {
                     this.applyCode()
                 }

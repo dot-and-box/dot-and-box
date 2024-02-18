@@ -5,6 +5,8 @@ import {BoxControl} from "../src/controls/box/boxControl";
 import {DotControl} from "../src/controls/dot/dotControl";
 import {Move} from "../src/actions/move";
 import {Sign} from "../src/shared/sign";
+import {LineControl} from "../src/controls/line/lineControl";
+import {Unit} from "../src/shared/unit";
 
 test('parser not null', () => {
     let p = new Scanner()
@@ -39,6 +41,28 @@ test('parser simple', () => {
     let p = new Parser()
     const model = p.parse(eg1)
     expect(model).not.eq(null)
+})
+
+test('parse points', () => {
+    let eg1 = `     
+    line id: l at: -50, 10 end: 100, 50 
+    dot id: d1 at: -[5, 1] end: [0, 7]
+`
+    let p = new Parser()
+    const model = p.parse(eg1)
+    expect(model).not.eq(null)
+    const line = model.controls[0] as LineControl
+    expect(line.position.x).eq(-50)
+    expect(line.position.y).eq(10)
+    expect(line.end.x).eq(100)
+    expect(line.end.y).eq(50)
+    expect(line.position.sign).eq(Sign.NONE)
+    expect(line.position.unit).eq(Unit.PIXEL)
+
+    const dot = model.controls[1] as DotControl
+    expect(dot.position.x).eq(5)
+    expect(dot.position.y).eq(1)
+    expect(dot.position.unit).eq(Unit.CELL)
 })
 
 

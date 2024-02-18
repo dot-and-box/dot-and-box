@@ -174,10 +174,21 @@ export class Parser {
         if (id == null && text == '') {
             id = 'b' + this.model.controls.length
         }
+        if(at.unit == Unit.CELL){
+            this.normalizePointUnit(at)
+        }
         const box = new BoxControl(id != null ? id : text, at, size, color, text, visible, selected)
         this.model.controls.push(box)
         if (box.selected) {
             this.model.selectedControls.push(box)
+        }
+    }
+
+    normalizePointUnit(point: Point) {
+        if (point.unit == Unit.CELL) {
+            point.x = point.x * this.cellSize
+            point.y = point.y * this.cellSize
+            point.unit = Unit.PIXEL
         }
     }
 
@@ -198,9 +209,11 @@ export class Parser {
                     break
                 case TokenType.AT:
                     at = this.at()
+                    this.normalizePointUnit(at)
                     break
                 case TokenType.END:
                     end = this.end()
+                    this.normalizePointUnit(end)
                     break
                 case TokenType.WIDTH:
                     width = this.width()
@@ -259,9 +272,9 @@ export class Parser {
             throw new Error(`ids attribute is mandatory for dots at ${this.peek().position}`)
         }
         let span = size * 2 + size / 2
+
         if (at.unit == Unit.CELL) {
-            at.x = at.x * this.cellSize + this.cellSize / 2
-            at.y = at.y * this.cellSize + this.cellSize / 2
+            this.normalizeDotPosition(at)
             span = this.cellSize
         }
         let i = 0;
@@ -316,10 +329,21 @@ export class Parser {
         if (id == '' && text == '') {
             id = 'd' + this.model.controls.length
         }
+        if (at.unit == Unit.CELL) {
+            this.normalizeDotPosition(at)
+        }
         const dot = new DotControl(id != '' ? id : text, at, size, color, text != '' ? text : id, visible, selected)
         this.model.controls.push(dot)
         if (dot.selected) {
             this.model.selectedControls.push(dot)
+        }
+    }
+
+    normalizeDotPosition(point: Point) {
+        if (point.unit == Unit.CELL) {
+            point.x = point.x * this.cellSize + this.cellSize / 2
+            point.y = point.y * this.cellSize + this.cellSize / 2
+            point.unit = Unit.PIXEL
         }
     }
 
@@ -361,7 +385,7 @@ export class Parser {
 
     at() {
         this.expectColon()
-        return this.point().normalizeSign()
+        return this.point()//.normalizeSign()
     }
 
     end() {
@@ -396,7 +420,13 @@ export class Parser {
 
     sizePoint(): Point {
         this.expectColon()
-        return this.point()
+        const size = this.point()
+        if (size.unit == Unit.CELL) {
+            size.x = size.x * this.cellSize
+            size.y = size.y * this.cellSize
+            size.unit = Unit.PIXEL
+        }
+        return size
     }
 
     width() {
@@ -456,7 +486,6 @@ export class Parser {
         let action = this.action()
         let lasTokenWasComma = true
         while (action != null) {
-
             if (lasTokenWasComma) {
                 step.addParallelAction(action)
             } else {
@@ -535,6 +564,7 @@ export class Parser {
         let isPoint = this.pointInBracketsAhead()
         if (isPoint) {
             point = this.point()
+            this.normalizePointUnit(point)
         } else {
             let token = this.peek()
             rightId = token.value
@@ -651,8 +681,9 @@ export class Parser {
         }
         const hasBracket = hasLeftBracket || hasLeftSquareBracket
         let x = this.number()
-        if (sign == Sign.MINUS && !hasBracket) {
+        if (!hasBracket && sign !== Sign.NONE) {
             x = -x
+            sign = Sign.NONE
         }
         let token = this.advance()
         if (token.type != TokenType.COMMA) {
