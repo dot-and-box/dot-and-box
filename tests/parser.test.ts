@@ -13,26 +13,28 @@ test('parser not null', () => {
 
 test('parser simple', () => {
     let eg1 = ` 
-title: Ale heca
-box id: b2  at: -140, -100 size: (260, 80)
-line id: l at: -140, 90 end: 100, 90 color: gray width: 3
-dot id: 1 color: rgba(100,200,50,0.6) at: -100, 0 size: 45
-dot id: 2 color: purple at: -150, 0 size: 20
-dot id: 3 color: orange at: 0, 0 size: 20 selected: true
-dot id: 4 color: gray  at: -50, 0 size: 20 selected: true
-dot id: 5 color: rgba(190,0,65,1) at: 50, 0  size: 20
-step:
-l -> -(0,140), b2 <- text: 'go back and select different controls or forward', selected0 <-> selected1
-b2 <- text: 'first selected control is moved +(20,90)', selected0 -> +(20,90)
-step:
-5 -> +(50,-50)
-step:
-5 *-> z1, z1 <- text: '5*', z1 -> -(200,-150)
-step:
-2 <-> 1
-step:
-3 <-> 4
-4 <-> 5
+    title: 'sort with bubble sort'
+    box id: win at: -260, 0 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
+    dots ids: 1 2 3 5 4 6 at: [-3, 0] size: 20
+    step: '(0) This is step zero ' duration: 750
+    2 -> +(50,250)
+    2 -> +(200,-250)
+    step: '(1) select first two numbers'  duration: 2750
+    win <- visible: true,  win -> +(110,0)
+    2 <-> 1, 1 -> +(0,100)
+    step: '(2) swap if left bigger'
+    2 <-> 1 // swap dot 2 with 1
+    2 -> +(50,0)
+    step: '(3) select next two numbers'
+    win -> +(50,0) // move window by 50px right
+    step: '(4) ignore if left is smaller'
+    win -> +(50,0)
+    step: '(4) again swap if left bigger'
+    5 <-> 3
+    step: '(5) bla bla'
+    win -> +(50,0)
+    step: 'repeat from start'
+    win -> -(150,0)
 `
     let p = new Parser()
     const model = p.parse(eg1)

@@ -186,10 +186,10 @@ export class DotsAndBoxes {
 
     drawGrid() {
         const halfSize = 5
-        const span = 50
-        const maxSize = halfSize * span
+        const cellSize = 50
+        const maxSize = halfSize * cellSize
         const minSize = -maxSize
-        for (let i = minSize; i <= maxSize; i += span) {
+        for (let i = minSize; i <= maxSize; i += cellSize) {
             this.drawLine(i, minSize, i, maxSize);
             this.drawLine(minSize, i, maxSize, i);
         }

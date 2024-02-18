@@ -17,12 +17,14 @@ import {CameraMove} from "../actions/cameraMove.ts";
 import {LineControl} from "../controls/line/lineControl.ts";
 import {Layout} from "../shared/layout.ts";
 import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
+import {Unit} from "../shared/unit.ts";
 
 export class Parser {
     scanner = new Scanner()
     model = Parser.newModel()
     position = 0
     tokens: Token[] = []
+    cellSize = 50
 
     static newModel(): DotsAndBoxesModel {
         return new DotsAndBoxesModel('', [], [])
@@ -256,7 +258,12 @@ export class Parser {
         if (ids.length == 0) {
             throw new Error(`ids attribute is mandatory for dots at ${this.peek().position}`)
         }
-        let span = size * 2 + 10 //todo support explicit span
+        let span = size * 2 + size / 2
+        if (at.unit == Unit.CELL) {
+            at.x = at.x * this.cellSize + this.cellSize / 2
+            at.y = at.y * this.cellSize + this.cellSize / 2
+            span = this.cellSize
+        }
         let i = 0;
 
         for (id of ids) {
@@ -354,7 +361,7 @@ export class Parser {
 
     at() {
         this.expectColon()
-        return this.point()
+        return this.point().normalizeSign()
     }
 
     end() {
@@ -635,9 +642,16 @@ export class Parser {
 
     point() {
         let sign = this.sign()
-        const hasLeftBracket = this.match(TokenType.LEFT_BRACKET)
+        let unit = Unit.PIXEL
+        let hasLeftBracket = this.match(TokenType.LEFT_BRACKET)
+        let hasLeftSquareBracket = false
+        if (!hasLeftBracket && this.match(TokenType.LEFT_SQUARE_BRACKET)) {
+            hasLeftSquareBracket = true
+            unit = Unit.CELL
+        }
+        const hasBracket = hasLeftBracket || hasLeftSquareBracket
         let x = this.number()
-        if (sign == Sign.MINUS && !hasLeftBracket) {
+        if (sign == Sign.MINUS && !hasBracket) {
             x = -x
         }
         let token = this.advance()
@@ -647,14 +661,15 @@ export class Parser {
         let y = this.number()
         if (hasLeftBracket && !this.match(TokenType.RIGHT_BRACKET)) {
             throw new Error(`Expected right bracket at position: ${token.position} got token ${token} instead`)
+        } else if (hasLeftSquareBracket && !this.match(TokenType.RIGHT_SQUARE_BRACKET)) {
+            throw new Error(`Expected right square bracket at position: ${token.position} got token ${token} instead`)
         }
-        return new Point(x, y, sign)
+        return new Point(x, y, sign, unit)
     }
 
     match(tokenType: TokenType) {
         if (this.eof()) return false
         if (this.peek().type != tokenType) return false
-
         this.position++
         return true
     }

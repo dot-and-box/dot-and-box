@@ -3,7 +3,6 @@ import {Point} from "../shared/point.ts"
 export interface ControlBase {
     id: string
     position: Point
-
 }
 
 export abstract class Control implements ControlBase {

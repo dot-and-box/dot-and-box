@@ -77,6 +77,19 @@ and actions like move or swap grouped in steps to make simple animations
 In a typical **DABL* program first you define controls like dots and boxes 
 and then number of steps affecting their state e.g. changing their position or color
 
+### Define a control
+To draw a dot or box beyond specifying control type you might have to set it attribute values.
+
+#### common attributes
+Controls support number of attributes which are mostly self describing like:
+- **id** - unique id of control - mandatory
+- **at** - control start location - optional - default: (0,0)
+- **text** - control text - optional - default: empty string
+- **size** - control size - optional - default:depend on control type
+- **visible** - is control visible - optional - default: true
+- **selected** - is control selected - optional - default: false
+- **color** - background color of control - optional - default: value from internal color table selected by: len(controls) modulo len(color_table)
+
 ### define a dot
 
 Dot is the simplest thing you can show with Dots and Boxes language. 
@@ -96,15 +109,21 @@ box color: red text: 'a text in a box' size: (20,200) visible: true
 ### define a line
 
 ```dabl
-line color: orange at: (20,200) end: (200, 200) visible: true
+line color: orange at: (20,200) end: (200, 200) width: 0.5
 ```
+#### special attributes:
+- end - second point defining line - mandatory
+- width - width of line
+
 ### define dots
 
 Define a number of dots
 
 > dots ids: 1 2 3 5 4 at: -120, 0 size: 20
 
-Above declares 5 dots
+#### special attributes:
+- ids - space separated ids of dots, mandatory
+- layout - *col* or *row*, optional - default: col
 
 ### define boxes
 
@@ -112,15 +131,9 @@ Define a number of boxes
 
 > boxes ids: one two three at: -120, 0 size: (100, 50)
 
-
-#### supported attributes
-Controls support number of attributes which are mostly self describing like:
-- **id** - unique id of control
-- **at** - control start location
-- **text** - control text 
-- **size** - control size
-- **visible** - is control visible
-- **selected** - is control selected
+#### special attributes: 
+- ids - space separated ids of boxes, mandatory
+- layout - *col* or *row*, optional - default: col
 
 ### steps and actions
 

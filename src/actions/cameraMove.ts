@@ -6,7 +6,6 @@ import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
 export class CameraMove extends ActionBase {
     start: Point = Point.zero()
     to: Point = new Point(100, 100)
-    leftId: string = ''
 
     constructor(model: DotsAndBoxesModel, to: Point) {
         super(model)
