@@ -1,16 +1,16 @@
 ## Dots and Boxes
 
-Project goal is to create markdown like simple language and visualizer for graph and number algorithms 
-and other simple animations visualizing your raw ideas. Dots and boxes is a *HTML5 custom element* you can add to your page with code 
+Project goal is to create a markdown like simple language and visualizer to explain algorithms and common CS patterns
+or do simple animations visualizing your raw ideas. Technically Dots and Boxes is an *HTML5 custom element* you can add to your page with code 
 attribute defining dots and boxes and action (animation) steps.
 
 Project was highly inspired by [mermaid.js](https://mermaid.js.org/) project, although it has a very different goals
 
 #### Example use cases
 
-- visualize algorithm idea e.g. bubble sort
-- visualize event driven architecture communication 
+- visualize algorithm ideas e.g. bubble sort
 - visualize common CS patterns e.g. request response pattern 
+- visualize event driven architecture communication
 
 ## How to use it
 Dots and boxes is using [HTML web components standard](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components)
@@ -25,27 +25,23 @@ You need to do two things to start using it
 
 <dots-and-boxes controls color="white" code="
    title: sort with bubble sort
-   box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
-   dots ids: 1 2 3 5 4 at: -120, 0 size: 20
-   step: '(0)' duration: 750
-   2 -> +(50,250)
-   2 -> +(150,-250)
-   step: '(1) select first two numbers'  duration: 2750
-   win <- visible: true,  win -> +(110,0)
-   2 <-> 1, 1 -> +(0,100)
-   step: '(2) swap if left bigger'
+   box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
+   dots ids: 2 1 5 3 4 at: [-3,0] size: 20
+   step: '(1) select first two numbers' duration: 0.8s
+   win <- visible: true, win -> +[3,0]
+   step: '(2) swap if left bigger than right'
    2 <-> 1 // swap dot 2 with 1
-   2 -> +(50,0)
    step: '(3) select next two numbers'
-   win -> +(50,0) // move window by 50px right
-   step: '(4) ignore if left is smaller'
-   win -> +(50,0)
-   step: '(4) again swap if left bigger'
+   win -> +[1,0] // move window by 1 cell right
+   step: 'ignore if left is smaller and select next'
+   win -> +[1,0]
+   step: 'again swap if left bigger'
    5 <-> 3
-   step: '(5) bla bla'
-   win -> +(50,0)
+   step: 'and again'
+   win -> +[1,0]
+   5 <-> 4
    step: 'repeat from start'
-   win -> -(150,0)
+   win -> -[3,0]"
 </dots-and-boxes>
 ```
 
