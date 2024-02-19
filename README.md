@@ -4,13 +4,13 @@ Project goal is to create markdown like simple language and visualizer for graph
 and other simple animations visualizing your raw ideas. Dots and boxes is a *HTML5 custom element* you can add to your page with code 
 attribute defining dots and boxes and action (animation) steps.
 
-Project was highly inspired by [mermaid.js](https://mermaid.js.org/) project, although it has very different goals
+Project was highly inspired by [mermaid.js](https://mermaid.js.org/) project, although it has a very different goals
 
 #### Example use cases
 
-- visualize sorting algorithms like bubble sort
+- visualize algorithm idea e.g. bubble sort
 - visualize event driven architecture communication 
-- visualize common patterns like: request response pattern 
+- visualize common CS patterns e.g. request response pattern 
 
 ## How to use it
 Dots and boxes is using [HTML web components standard](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components)
