@@ -63,6 +63,7 @@ class DABLEditor extends HTMLElement {
           <button id="run-code" title="run code">▶</button>
           <div><input type="checkbox" id="autoplay" title="show controls" checked>autoplay</div>
           <span class="separator"></span>
+          <div><input type="checkbox" id="show-grid" title="show grid">grid</div>
           <div><input type="checkbox" id="show-controls" title="show controls" checked>controls</div>
           <div><input type="checkbox" id="show-experimental" title="show controls">experimental</div>
           <div class="right-menu"><button id="copy-clipboard" title="copy to clipboard" >📋</button></div> 
@@ -76,6 +77,15 @@ class DABLEditor extends HTMLElement {
 
         const runCodeButton = this.getControl('#run-code')
         runCodeButton.onclick = (_) => this.runCode()
+
+        const showGridCheckBox = this.getControl('#show-grid')
+        showGridCheckBox.oninput = (v) => {
+            if (v.target.checked) {
+                this.dotsAndBoxes.setAttribute('grid', true)
+            } else {
+                this.dotsAndBoxes.removeAttribute('grid')
+            }
+        }
 
         const showControlsCheckBox = this.getControl('#show-controls')
         showControlsCheckBox.oninput = (v) => {
