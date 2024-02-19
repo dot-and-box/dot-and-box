@@ -5,16 +5,20 @@ import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
 
 export class CameraMove extends ActionBase {
     start: Point = Point.zero()
-    to: Point = new Point(100, 100)
+    to: Point = Point.zero()
 
     constructor(model: DotsAndBoxesModel, to: Point) {
         super(model)
         this.to = to
     }
 
+    onBeforeForward() {
+        super.onBeforeForward();
+        this.start = this.model.offset.clone()
+    }
+
     init() {
         super.init();
-        this.start = this.model.offset.clone()
     }
 
     override updateValue(progress: number) {
