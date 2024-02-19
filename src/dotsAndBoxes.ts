@@ -193,18 +193,13 @@ export class DotsAndBoxes {
             this.drawLine(i, minSize, i, maxSize);
             this.drawLine(minSize, i, maxSize, i);
         }
-        const ctx = this.ctx
-        ctx.beginPath()
-        ctx.arc(0, .0, 5, 0, 2 * Math.PI, false)
-        ctx.fillStyle = 'red'
-        ctx.fill()
     }
 
     drawLine(x1: number, y1: number, x2: number, y2: number) {
         const ctx = this.ctx
         ctx.strokeStyle = 'black'
         ctx.beginPath();
-        ctx.lineWidth = 0.4
+        ctx.lineWidth = x1 == 0 || y1 == 0 ? 1 : 0.4
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();

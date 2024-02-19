@@ -10,21 +10,20 @@
             overflow-x: hidden
         }
     </style>
-
 </head>
 <body>
 <h1>Just dots and boxes...</h1>
 
 <dots-and-boxes id="example1" style="margin:10px;height: 550px; width: 630px" controls grid  keyboard code="
-    title: 'sort with bubble sort'
+    title: 'do movement'
     box id: win at: [-8, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
     dots ids: 1 2 3 5 4 6 at: [-3, 0]
     dot id: z at: [-5, -2] size: 25
-    box id: zx at: [-2, -2] size: [1,1] color: brown text: '[-2,-2]'
-    box id: zx at: [0, 2] size: [1,1] color: brown text: '0,2'
+    box id: zx at: [-2, -2] size: [1,1] color: transparent text: '[-2,-2]' fontSize: 10
+    box id: zx at: [0, 2] size: [1,1] color: brown text: '[0,2]'
     box id: zx at: [2, 2] size: [1,1] color: brown text: '2,2'
     line id: l1 at: [1,1] end: [2,2] color: red
-    line id: l2 at: [1,2] end: [2,1] color: red
+    line id: l2 at: [1,2] end: [2,1] color: redS
     step: '(0) This is step zero ' duration: 750
     2 -> +[2,4]
     2 -> +[3,-4]
@@ -53,7 +52,6 @@
 
 <div style="display: flex">
     <div>bim bam bom - check mate</div>
-
         <dots-and-boxes id="example2" style="margin-top: 50px; height: 254px; width: 450px" grid controls debug experimental
                         color="lightgreen" code="
         title: Ale heca
@@ -73,9 +71,7 @@
         3 <-> 4
         4 <-> 5
         "></dots-and-boxes>
-
 </div>
-
 <dots-and-boxes id="example3" style="margin:10px;height: 370px; width: 500px"  controls code="
     title: request response pattern
     box text: 'CLIENT' size: 100,40 at: -200, -100 color: rgb(187,105,13)
@@ -99,7 +95,7 @@
 
 <dots-and-boxes id="example4" style="margin:10px;height: 370px; width: 600px" debug controls code="
     title: box control test
-    boxes ids: 'customer' 'other' third layout: col at: -200, -60
+    boxes ids: first second third layout: col at: -200, -60
     step:
     customer -> +(50,70)
     customer -> +(50,-70)

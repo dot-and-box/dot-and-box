@@ -1,6 +1,6 @@
 import {Control} from "../control.ts";
 import {Point} from "../../shared/point.ts";
-import {DEFAULT_FONT} from "../../shared/constants.ts";
+import {DEFAULT_FONT, DEFAULT_FONT_SIZE} from "../../shared/constants.ts";
 
 export class WrappedText extends Control {
     get maxHeight(): number {
@@ -10,6 +10,7 @@ export class WrappedText extends Control {
     set maxHeight(value: number) {
         this._maxHeight = value;
     }
+
     get center(): boolean {
         return this._center;
     }
@@ -69,7 +70,7 @@ export class WrappedText extends Control {
 
     private _fontName: string = DEFAULT_FONT
 
-    private _fontSize: number = 12;
+    private _fontSize: number = DEFAULT_FONT_SIZE;
 
     private _maxWidth: number = 100;
 
@@ -131,28 +132,26 @@ export class WrappedText extends Control {
 
     // quite inefficient - needs better implementation
     wrapText(ctx: CanvasRenderingContext2D): void {
-        let y: number =  0
+        let y: number = 0
         let maxLineWidth = 0
         const result: Array<string> = []
         const lines = this._text.split('\n');
         for (let i = 0; i < lines.length; i++) {
             let line = '';
             let words = lines[i].split(' ');
-
             for (let j = 0; j < words.length; j++) {
                 let testLine = line + words[j]
                 let metrics = ctx.measureText(testLine);
-                testLine += ' '
                 let testWidth = metrics.width;
-
+                if (testWidth > maxLineWidth) {
+                    maxLineWidth = testWidth
+                }
+                testLine += ' '
                 if (testWidth > this._maxWidth) {
                     result.push(line);
                     line = words[j] + ' '
                     y += this._fontSize;
                 } else {
-                    if (testWidth > maxLineWidth) {
-                        maxLineWidth = testWidth
-                    }
                     line = testLine;
                 }
             }
@@ -160,7 +159,7 @@ export class WrappedText extends Control {
             y += this._fontSize;
         }
         if (this._center) {
-            this._spanX = (this._maxWidth - maxLineWidth) / 2
+            this._spanX = this._maxWidth < maxLineWidth ? 0 : (this._maxWidth - maxLineWidth) / 2
             this._spanY = (this._maxHeight - (result.length * this.fontSize)) / 2 + this.fontSize / 2
         }
 

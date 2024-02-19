@@ -10,7 +10,7 @@ import {Move} from "../actions/move.ts"
 import {Swap} from "../actions/swap.ts"
 import {Clone} from "../actions/clone.ts"
 import {Sign} from "../shared/sign.ts"
-import {BLACK, COLORS, WHITE} from "../shared/constants.ts"
+import {BLACK, COLORS, DEFAULT_FONT_SIZE, WHITE} from "../shared/constants.ts"
 import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
@@ -127,7 +127,7 @@ export class Parser {
         for (id of ids) {
             let position = this.calculateLayoutPosition(layout, at, i, span)
             let color = COLORS[this.model.controls.length % COLORS.length]
-            const box = new BoxControl(id != '' ? id : text, position, size, color, text != '' ? text : id, true, false)
+            const box = new BoxControl(id != '' ? id : text, position, size, DEFAULT_FONT_SIZE, color, text != '' ? text : id, true, false)
             this.model.controls.push(box)
             if (box.selected) {
                 this.model.selectedControls.push(box)
@@ -137,7 +137,7 @@ export class Parser {
     }
 
     box() {
-        const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED]
+        const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
         let size = new Point(100, 100)
         let at = new Point(0, 0)
         let text = ''
@@ -145,6 +145,7 @@ export class Parser {
         let color = WHITE
         let visible = true
         let selected = false
+        let fontSize = DEFAULT_FONT_SIZE
         while (!this.eof() && box_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -169,15 +170,18 @@ export class Parser {
                 case TokenType.SELECTED:
                     selected = this.selected()
                     break
+                case TokenType.FONT_SIZE:
+                    fontSize = this.fontSize()
+                    break
             }
         }
         if (id == null && text == '') {
             id = 'b' + this.model.controls.length
         }
-        if(at.unit == Unit.CELL){
+        if (at.unit == Unit.CELL) {
             this.normalizePointUnit(at)
         }
-        const box = new BoxControl(id != null ? id : text, at, size, color, text, visible, selected)
+        const box = new BoxControl(id != null ? id : text, at, size, fontSize, color, text, visible, selected)
         this.model.controls.push(box)
         if (box.selected) {
             this.model.selectedControls.push(box)
@@ -358,6 +362,11 @@ export class Parser {
             result += ' ' + token.value.toString()
         }
         return result.trim()
+    }
+
+    fontSize(): number {
+        this.expectColon()
+        return this.number()
     }
 
     color(): string {
