@@ -105,6 +105,8 @@ dot color: blue text: 'd1' size: 20
 ```dabl
 box color: red text: 'a text in a box' size: (20,200) visible: true
 ```
+#### special attributes:
+- fontSize -  text font size - optional - defaults to DEFAULT_FONT_SIZE
 
 ### define a line
 
@@ -229,7 +231,7 @@ It supports number of attributes and events
 
 #### <dots-and-boxes> events
 
-**initialized** - happens after control is initialized
+**initialized** - happens after <dots-and-boxes> html control is initialized
 
 **on_before_step_forward** - happens whenever step is going to be running forward
 
