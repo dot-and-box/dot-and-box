@@ -12,55 +12,61 @@ class DABLEditor extends HTMLElement {
 
       <style>
         :host { display: block;  padding: 0; border: 1px solid #ccc ;}
-        .main-wrapper {
+        .content-wrapper {
           overflow: auto;
         }
         .editor {
-            line-height:1.2em;
-            background-size:2.4em 2.4em;
-            background-origin:content-box;
-            counter-reset: line;
-            margin-top: 5px;
-            padding-left: 10px;
-            text-align:justify;
-            font-family: monospace;
-            overflow: auto;
-            width: max-content
+          line-height:1.2em;
+          background-size:2.4em 2.4em;
+          background-origin:content-box;
+          counter-reset: line;
+          margin-top: 5px;
+          padding-left: 10px;
+          text-align:justify;
+          font-family: monospace;
+          overflow: auto;
+          width: max-content
         }        
         [contenteditable]:focus { 
-            outline: 0 solid transparent; 
-        }         
-        .main-menu {
-           height: 20px;
-           margin-top: 0;
-           margin-left: 0;
-           width: max-content
-           position: absolute;
-           display: flex;           
-           background-color: rgba(243,243,243,0.7);
-        }
+          outline: 0 solid transparent; 
+        }   
+        .menu-wrapper {
+          height: 48px;
+          margin-top: 0;
+          margin-left: 0;
+          position: relative;
+          display: flex;
+          flex-wrap: nowrap;
+          justify-items: center;
+          align-items: center;
+        }     
+       
         .separator {
           flex-grow:1;
         }
         .right-menu {
-            flex-grow: ;
-            display: flex;          
-            width: max-content            
+          flex-grow: ;
+          display: flex;          
+          width: max-content            
         }
-        .main-menu button {
-          border: 1px solid transparent;
+        .menu-wrapper button {
+          width: 35px;
+          height: 35px;
+          margin: 2px;
+          border-radius: 50%;
+          border: 1px solid lightgray;
           background-color: transparent;
         }
-        .main-menu button:hover {
-          border: 1px solid lightgray ;
+        .menu-wrapper button:hover {
+          border: 1px solid gray ;
         }
         .editor .token {
             font-weight: bold;
         }
       </style>
       <script src="./prism.js"></script>
-      <div class="main-menu">             
-          <button id="run-code" title="run code">▶</button>
+      <div class="menu-wrapper"> 
+          <button id="run-code" title="run code">></button>
           <div><input type="checkbox" id="autoplay" title="show controls" checked>autoplay</div>
           <span class="separator"></span>
           <div><input type="checkbox" id="show-grid" title="show grid">grid</div>
@@ -68,7 +74,7 @@ class DABLEditor extends HTMLElement {
           <div><input type="checkbox" id="show-experimental" title="show controls">experimental</div>
           <div class="right-menu"><button id="copy-clipboard" title="copy to clipboard" >📋</button></div> 
         </div>
-      <div class="main-wrapper">      
+      <div class="content-wrapper">      
         <pre class="editor" spellcheck=false contenteditable></pre>
       </div>
      `

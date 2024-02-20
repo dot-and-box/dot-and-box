@@ -10,30 +10,32 @@
             margin: 20px;
             overflow-x: hidden
         }
+
         .example {
             display: flex;
             flex-wrap: wrap;
         }
+
         .example dots-and-boxes {
             margin-right: 10px;
             margin-bottom: 10px;
         }
+
         dots-and-boxes {
             height: 350px;
         }
 
-        @media (min-width:320px)  {
+        @media (min-width: 320px) {
             dots-and-boxes {
                 width: 100%
             }
+
             dabl-editor {
                 width: 100%
             }
         }
-        @media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ }
-        @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ }
-        @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
-        @media (min-width:1025px) {
+
+        @media (min-width: 961px) {
 
             dots-and-boxes {
                 width: 600px
@@ -44,25 +46,27 @@
             }
 
         }
-        @media (min-width:1281px) {
+
+        @media (min-width: 1281px) {
 
             dots-and-boxes {
                 width: 800px
             }
+
             dabl-editor {
                 width: 750px
             }
         }
 
     </style>
-  <script type="module" crossorigin src="./lib/dabl-editor.js"></script>
-  <script type="module" crossorigin src="./lib/dots-and-boxes.js"></script>
+    <script type="module" crossorigin src="./lib/dabl-editor.js"></script>
+    <script type="module" crossorigin src="./lib/dots-and-boxes.js"></script>
 </head>
 <body>
 <h2>dots and boxes demo</h2>
 <h3>Bubble Sort</h3>
 <div class="example">
-<dots-and-boxes id="dab0" controls experimental code="
+    <dots-and-boxes id="dab0" controls experimental code="
 title: sort with bubble sort
 box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
 dots ids: 2 1 5 3 4 at: [-3,0] size: 20
@@ -82,15 +86,15 @@ win -> +[1,0]
 step: 'repeat from start'
 win -> -[3,0]
 ">
-</dots-and-boxes>
+    </dots-and-boxes>
     <dabl-editor style="min-width: 300px" attach-selector="#dab0"></dabl-editor>
 </div>
 
 
 <h3>Dots and boxes tutorial</h3>
 <div class="example">
-     <dots-and-boxes id="dab1"  controls debug
-                     color="rgba(233,233,233,0.3)" code="
+    <dots-and-boxes id="dab1" controls debug
+                    color="rgba(233,233,233,0.3)" code="
 title: 'Dots and boxes tutorial'
 dots ids: 2 1 5 3 4  at: -120, 0 size: 20
 box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
@@ -118,13 +122,13 @@ step: 'or both' duration: 2s
 step: 'we can do camera move too'
 camera -> +(0,350), fin <- visible: true
     "></dots-and-boxes>
-     <dabl-editor style="min-width: 300px" attach-selector="#dab1"></dabl-editor>
- </div>
+    <dabl-editor style="min-width: 300px" attach-selector="#dab1"></dabl-editor>
+</div>
 
 
 <h3>Request Response</h3>
 <div class="example">
-<dots-and-boxes id="dab2"  debug controls code="
+    <dots-and-boxes id="dab2" debug controls code="
 title: request response pattern
 box text: 'CLIENT' size: 100,40 at: -200, -100 color: rgb(187,105,13)
 box color: orange size: 100,200 at: -200, -60
@@ -140,7 +144,7 @@ req *-> res, res <- 'res' color: purple,req <- color: gray, res -> +(0,100)
 step:'the response is sent back to client'
 res ->  -(300,0)
 ">
-</dots-and-boxes>
+    </dots-and-boxes>
     <dabl-editor style="min-width: 300px" attach-selector="#dab2"></dabl-editor>
 </div>
 
