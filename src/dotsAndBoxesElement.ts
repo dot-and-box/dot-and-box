@@ -117,9 +117,15 @@ class DotsAndBoxesElement extends HTMLElement {
         border-radius: 50%;
         border: solid 1px gray;
       }      
-      #controls-menu button:hover {
-        color:  #2d2828;
+      #controls-menu button:hover  {
+        color:  #2d2828;      
         border: solid 1px #2d2828;
+      }
+      .button-icon {
+       fill:  rgba(23,23,23,0.7);       
+      }
+      button:hover .button-icon {
+        fill: black;
       }
       </style>
       <div id="wrapper">
@@ -205,17 +211,29 @@ class DotsAndBoxesElement extends HTMLElement {
 
         const backward = document.createElement("button")
         backward.onclick = (_) => this.backward()
-        backward.textContent = '\u{025C2}'
+        backward.innerHTML = ` 
+          <svg class="button-icon" viewBox="0 0 36 36">
+            <path   d="M 9 17 L 24 10 L 24 24 Z"/>
+           
+        </svg>
+             `
         menu.append(backward)
 
         const pause = document.createElement("button")
         pause.onclick = (_) => this.dotsAndBoxes.togglePause()
-        pause.textContent = "\u{25A0}"
+        pause.innerHTML = ` 
+          <svg class="button-icon" viewBox="0 0 36 36">
+            <path d="M 11 11 H 24 L 24 24 L 11 24 Z"/>           
+        </svg>
+             `
         menu.append(pause)
 
         const forward = document.createElement("button")
         forward.onclick = (_) => this.forward()
-        forward.append('\u{025B8}')
+        forward.innerHTML = ` 
+        <svg class="button-icon" viewBox="0 0 36 36">
+            <path d="M 12 10 L 27 17 L 12 24 Z"/>           
+        </svg>`
         menu.append(forward)
 
         const restart = document.createElement("button")
