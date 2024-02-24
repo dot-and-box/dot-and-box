@@ -1,6 +1,6 @@
 import * as Prism from './prism.js'
 
-class DABLEditor extends HTMLElement {
+class DotsAndBoxesEditor extends HTMLElement {
     static observedAttributes = ["code", "readonly", 'attach-selector']
 
     // noinspection JSUnusedGlobalSymbols
@@ -214,4 +214,4 @@ class DABLEditor extends HTMLElement {
 
 }
 
-customElements.define('dabl-editor', DABLEditor)
+customElements.define('dots-and-boxes-editor', DotsAndBoxesEditor)

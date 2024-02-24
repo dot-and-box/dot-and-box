@@ -97,6 +97,7 @@ export class Parser {
         let text = ''
         let id = ''
         let ids: string[] = []
+        let span = 0
 
         let layout = Layout.COL
         while (!this.eof() && boxes_tokens.includes(this.peek().type)) {
@@ -109,7 +110,7 @@ export class Parser {
                     at = this.at()
                     break
                 case TokenType.SIZE:
-                    size = this.point()
+                    size = this.sizePoint()
                     break
                 case TokenType.IDS:
                     ids = this.ids()
@@ -122,7 +123,13 @@ export class Parser {
         if (ids.length == 0) {
             throw new Error(`ids attribute is mandatory for boxes at ${this.peek().position}`)
         }
-        let span = size.x + size.x / 2 //todo support explicit span
+        span = size.x + size.x / 2
+
+        if (at.unit == Unit.CELL) {
+            this.normalizePointUnit(at)
+            span = size.x + this.cellSize //todo support explicit span
+        }
+
         let i = 0;
         for (id of ids) {
             let position = this.calculateLayoutPosition(layout, at, i, span)
@@ -181,6 +188,7 @@ export class Parser {
         if (at.unit == Unit.CELL) {
             this.normalizePointUnit(at)
         }
+
         const box = new BoxControl(id != null ? id : text, at, size, fontSize, color, text, visible, selected)
         this.model.controls.push(box)
         if (box.selected) {
@@ -394,7 +402,7 @@ export class Parser {
 
     at() {
         this.expectColon()
-        return this.point()//.normalizeSign()
+        return this.point()
     }
 
     end() {

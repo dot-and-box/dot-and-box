@@ -20,6 +20,7 @@ export class DotsAndBoxesModel {
     steps: Step[]
     currentStep: Step = new Step()
     origin: Point = Point.zero()
+    cellSize: number = 50
     offset: Point = Point.zero()
     zoom: number = 1
     selectedControls: Control[] = []

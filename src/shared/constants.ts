@@ -9,7 +9,6 @@ export const SELECTION_LINE_WIDTH = 2
 export const DEFAULT_FONT = 'courier'
 export const DEFAULT_FONT_SIZE = 14
 export const DEFAULT_LINE_WIDTH = 1
-export const DEFAULT_BOX_COLOR = "rgba(37,33,133,0.68)"
 export const WHITE = "white"
 export const BLACK = "black"
 export const COLORS: string [] = [
