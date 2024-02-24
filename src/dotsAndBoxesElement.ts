@@ -67,6 +67,7 @@ class DotsAndBoxesElement extends HTMLElement {
         shadow.innerHTML = `
       <style>
       :host { display: block; padding: 0;border: ${this.border};}      
+      
       #title-wrapper {
         margin-top: 5px;
         margin-left: 5px;
@@ -74,13 +75,18 @@ class DotsAndBoxesElement extends HTMLElement {
         position: absolute;  
         color: rgba(55,55,55);      
       }
+      
       #title {
         font-size: 20px;
         font-weight: bold;
+        font-family: Verdana, Geneva, sans-serif
       }
+      
       #subtitle {     
-        font-size: 16px;
+        font-size: 18px;      
+        font-family: Verdana, Geneva, sans-serif;
       }    
+      
       #controls-menu {    
         position: relative;   
         height: 50px;
@@ -93,10 +99,13 @@ class DotsAndBoxesElement extends HTMLElement {
         align-items: center;
         justify-content: center;
       }               
+      
       #controls-menu-extended {    
         position: relative;   
         height: 50px;
-        left: 0;       
+        left: 0;
+        padding-left: 10px;
+        padding-right: 10px;
         top: -154px;
         overflow: hidden;
         background-color: transparent;          
@@ -104,7 +113,8 @@ class DotsAndBoxesElement extends HTMLElement {
         flex-wrap: nowrap;
         align-items: center;
         justify-content: center;
-      }      
+      }
+            
       #controls-menu button, #controls-menu-extended  button {
         color:  rgba(23,23,23,0.7);
         background-color: white;
@@ -116,17 +126,22 @@ class DotsAndBoxesElement extends HTMLElement {
         padding: 0;
         border-radius: 50%;
         border: solid 1px gray;
-      }      
+      }
+            
       #controls-menu button:hover  {
         color:  #2d2828;      
         border: solid 1px #2d2828;
       }
+      
       .button-icon {
-       fill:  rgba(23,23,23,0.7);       
+        fill: rgba(23,23,23,0.7);       
       }
+      
       button:hover .button-icon {
         fill: black;
+        stroke: black;
       }
+      
       </style>
       <div id="wrapper">
        <div id="title-wrapper">
@@ -213,8 +228,7 @@ class DotsAndBoxesElement extends HTMLElement {
         backward.onclick = (_) => this.backward()
         backward.innerHTML = ` 
           <svg class="button-icon" viewBox="0 0 36 36">
-            <path   d="M 9 17 L 24 10 L 24 24 Z"/>
-           
+            <path d="M 9 17 L 24 10 L 24 24 Z"/>           
         </svg>
              `
         menu.append(backward)
@@ -222,30 +236,38 @@ class DotsAndBoxesElement extends HTMLElement {
         const pause = document.createElement("button")
         pause.onclick = (_) => this.dotsAndBoxes.togglePause()
         pause.innerHTML = ` 
-          <svg class="button-icon" viewBox="0 0 36 36">
-            <path d="M 11 11 H 24 L 24 24 L 11 24 Z"/>           
-        </svg>
-             `
+         <svg class="button-icon" viewBox="0 0 36 36">
+          <rect x="11" y="11" width="14" height="14" />
+         </svg>`
         menu.append(pause)
 
         const forward = document.createElement("button")
         forward.onclick = (_) => this.forward()
         forward.innerHTML = ` 
-        <svg class="button-icon" viewBox="0 0 36 36">
-            <path d="M 12 10 L 27 17 L 12 24 Z"/>           
+        <svg class="button-icon" viewBox="0 0 36 36">       
+           <path d="M 12 10 L 27 17 L 12 24 Z"/>           
         </svg>`
         menu.append(forward)
 
         const restart = document.createElement("button")
         restart.onclick = (_) => this.reset()
-        restart.append('↺')
+        restart.innerHTML = ` 
+        <svg class="button-icon" stroke="rgba(23,23,23,0.7)" viewBox="0 0 36 36">
+           <path d="M 22 11 L 22 17" stroke-width="2" stroke-linecap="round"/>        
+           <path d="M 22 11 L 27 11" stroke-width="2" stroke-linecap="round"/>                   
+           <path d="M 23 12 A 8 8 0 1 1 13 12" stroke-width="2" fill="transparent" />
+        </svg>`
         menu.append(restart)
 
         const moreMenuButton = document.createElement("button")
         moreMenuButton.onclick = (_) => this.toggleExtendedMenu()
-        moreMenuButton.append('\u{22EF}')
+        moreMenuButton.innerHTML = ` 
+        <svg class="button-icon" stroke="rgba(23,23,23,0.7)" viewBox="0 0 36 36">
+           <circle cx="10" cy="18" r="1"  />
+           <circle cx="18" cy="18" r="1"  />
+           <circle cx="26" cy="18" r="1"  />
+        </svg>`
         menu.append(moreMenuButton)
-
         const rangeControl = document.createElement("input")
         rangeControl.id = 'progress-range'
         rangeControl.type = 'range'
@@ -266,12 +288,18 @@ class DotsAndBoxesElement extends HTMLElement {
 
         const dotTool = document.createElement("button")
         dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
-        dotTool.append('\u{23FA}')
+        dotTool.innerHTML = ` 
+        <svg class="button-icon" stroke="rgba(23,23,23,0.7)" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="8" stroke-width="2" fill="transparent"   />
+        </svg>`
         experimentalMenu.append(dotTool)
 
         const boxTool = document.createElement("button")
         boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
-        boxTool.append('\u{25A1}')
+         boxTool.innerHTML = ` 
+        <svg class="button-icon" stroke="rgba(23,23,23,0.7)" viewBox="0 0 36 36">
+            <rect x="11" y="11" width="14" height="14" stroke-width="2" fill="transparent" />
+        </svg>`
         experimentalMenu.append(boxTool)
 
         const printModel = document.createElement("button")

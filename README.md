@@ -234,7 +234,8 @@ It supports number of attributes and events
 **on_before_step_backward** - happens whenever step is going to be running backward
 
 ## credits
-
+- [Crafting interpreters](https://craftinginterpreters.com/)
 - [Easing functions](https://gizma.com/easing/)
 - [Prism.js - code highlighting](https://prismjs.com/)
-- [mermaid.js](https://mermaid.js.org/) 
+- [mermaid.js](https://mermaid.js.org/)
+- [Drawing arc in SVG](http://xahlee.info/js/svg_circle_arc.html)
