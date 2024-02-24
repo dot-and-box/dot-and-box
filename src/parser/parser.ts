@@ -26,6 +26,8 @@ export class Parser {
     tokens: Token[] = []
     cellSize = 50
 
+    identifiesCounter = new Map<string, number>()
+
     static newModel(): DotsAndBoxesModel {
         return new DotsAndBoxesModel('', [], [])
     }
@@ -75,14 +77,14 @@ export class Parser {
         return this.model
     }
 
-    calculateLayoutPosition(layout: Layout, at: Point, index: number, span: number): Point {
+    calculateLayoutPosition(layout: Layout, at: Point, index: number, spanInPixels: number): Point {
         let position = at.clone()
         switch (layout) {
             case Layout.COL:
-                position.x += index * span
+                position.x += index * spanInPixels
                 break
             case Layout.ROW:
-                position.y += index * span
+                position.y += index * spanInPixels
                 break
             case Layout.TREE:
                 throw new Error(`Unsupported layout TREE at ${this.peek().position}`)
@@ -91,8 +93,8 @@ export class Parser {
     }
 
     boxes() {
-        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT]
-        let size = new Point(100, 100)
+        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN]
+        let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
         let text = ''
         let id = ''
@@ -112,6 +114,9 @@ export class Parser {
                 case TokenType.SIZE:
                     size = this.sizePoint()
                     break
+                case TokenType.SPAN:
+                    span = this.size()
+                    break
                 case TokenType.IDS:
                     ids = this.ids()
                     break
@@ -123,18 +128,17 @@ export class Parser {
         if (ids.length == 0) {
             throw new Error(`ids attribute is mandatory for boxes at ${this.peek().position}`)
         }
-        span = size.x + size.x / 2
-
         if (at.unit == Unit.CELL) {
             this.normalizePointUnit(at)
-            span = size.x + this.cellSize //todo support explicit span
         }
 
+        let spanInPixels = size.x + this.cellSize * span
         let i = 0;
         for (id of ids) {
-            let position = this.calculateLayoutPosition(layout, at, i, span)
+            let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = COLORS[this.model.controls.length % COLORS.length]
-            const box = new BoxControl(id != '' ? id : text, position, size, DEFAULT_FONT_SIZE, color, text != '' ? text : id, true, false)
+            const realId = this.getId(id != '' ? id : text)
+            const box = new BoxControl(realId, position, size, DEFAULT_FONT_SIZE, color, text != '' ? text : id, true, false)
             this.model.controls.push(box)
             if (box.selected) {
                 this.model.selectedControls.push(box)
@@ -143,9 +147,20 @@ export class Parser {
         }
     }
 
+    getId(id: string): string {
+        if (this.identifiesCounter.has(id.trim())) {
+            let idCount = this.identifiesCounter.get(id)! + 1
+            this.identifiesCounter.set(id, idCount)
+            return idCount + '_' + id
+        } else {
+            this.identifiesCounter.set(id, 0)
+            return id
+        }
+    }
+
     box() {
         const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
-        let size = new Point(100, 100)
+        let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
         let text = ''
         let id = null
@@ -182,14 +197,14 @@ export class Parser {
                     break
             }
         }
-        if (id == null && text == '') {
+        if (id == null) {
             id = 'b' + this.model.controls.length
         }
         if (at.unit == Unit.CELL) {
             this.normalizePointUnit(at)
         }
-
-        const box = new BoxControl(id != null ? id : text, at, size, fontSize, color, text, visible, selected)
+        const realId = this.getId(id != '' ? id : text)
+        const box = new BoxControl(realId, at, size, fontSize, color, text, visible, selected)
         this.model.controls.push(box)
         if (box.selected) {
             this.model.selectedControls.push(box)
@@ -244,7 +259,8 @@ export class Parser {
         if (id == null) {
             id = 'l' + this.model.controls.length
         }
-        const line = new LineControl(id, at, end, width, color, visible, selected)
+        const realId = this.getId(id)
+        const line = new LineControl(realId, at, end, width, color, visible, selected)
         this.model.controls.push(line)
         if (line.selected) {
             this.model.selectedControls.push(line)
@@ -252,14 +268,15 @@ export class Parser {
     }
 
     dots() {
-        const dots_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT]
+        const dots_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN]
         let size = 20
         let at = new Point(0, 0)
         let text = ''
         let id = ''
         let ids: string[] = []
-
+        let span = 0
         let layout = Layout.COL
+
         while (!this.eof() && dots_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -272,6 +289,9 @@ export class Parser {
                 case TokenType.SIZE:
                     size = this.size()
                     break
+                case TokenType.SPAN:
+                    span = this.size()
+                    break
                 case TokenType.IDS:
                     ids = this.ids()
                     break
@@ -283,18 +303,18 @@ export class Parser {
         if (ids.length == 0) {
             throw new Error(`ids attribute is mandatory for dots at ${this.peek().position}`)
         }
-        let span = size * 2 + size / 2
 
         if (at.unit == Unit.CELL) {
             this.normalizeDotPosition(at)
-            span = this.cellSize
         }
         let i = 0;
+        let spanInPixels = this.cellSize + (span * this.cellSize)
 
         for (id of ids) {
-            let position = this.calculateLayoutPosition(layout, at, i, span)
+            const realId = this.getId(id != '' ? id : text)
+            let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = COLORS[this.model.controls.length % COLORS.length]
-            const dot = new DotControl(id != '' ? id : text, position, size, color, text != '' ? text : id, true, false)
+            const dot = new DotControl(realId, position, size, color, text != '' ? text : id, true, false)
             this.model.controls.push(dot)
             if (dot.selected) {
                 this.model.selectedControls.push(dot)
@@ -344,7 +364,8 @@ export class Parser {
         if (at.unit == Unit.CELL) {
             this.normalizeDotPosition(at)
         }
-        const dot = new DotControl(id != '' ? id : text, at, size, color, text != '' ? text : id, visible, selected)
+        const realId = this.getId(id != '' ? id : text)
+        const dot = new DotControl(realId, at, size, color, text != '' ? text : id, visible, selected)
         this.model.controls.push(dot)
         if (dot.selected) {
             this.model.selectedControls.push(dot)
@@ -553,7 +574,13 @@ export class Parser {
     controlId(): string {
         let token = this.advance()
         if (this.canBeId(token.type)) {
-            return token.value
+            let prefix = ''
+            if(token.type == TokenType.NUMBER && !this.eof() && this.peek().value.startsWith('_')){
+                // quite a dirty hack - maybe we can find something more elegant
+                prefix = token.value
+                token = this.advance()
+            }
+            return prefix + token.value
         } else {
             throw new Error(`Expected control identifier at ${token.position} got ${token.value} instead`)
         }
@@ -567,8 +594,7 @@ export class Parser {
         this.expectColon()
         let values: string[] = []
         while (!this.eof() && this.canBeId(this.peek().type)) {
-            values.push(this.peek().value)
-            this.advance()
+            values.push(this.controlId())
         }
         return values
     }

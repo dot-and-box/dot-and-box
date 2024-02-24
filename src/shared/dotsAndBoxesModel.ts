@@ -94,7 +94,7 @@ export class DotsAndBoxesModel {
             const index = parseInt(controlId.substring(DotsAndBoxesModel.SELECTED_PREFIX.length), 10)
             return index < this.selectedControls.length ? this.selectedControls[index] : undefined
         } else {
-            return this.controls.find(c => c.id == controlId)
+            return this.controls.find(c => c.id === controlId)
         }
     }
 

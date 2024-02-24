@@ -15,6 +15,7 @@ export class Keywords {
         [TokenType.AT.toString(), TokenType.AT],
         [TokenType.END.toString(), TokenType.END],
         [TokenType.SIZE.toString(), TokenType.SIZE],
+        [TokenType.SPAN.toString(), TokenType.SPAN],
         [TokenType.FONT_SIZE.toString(), TokenType.FONT_SIZE],
         [TokenType.WIDTH.toString(), TokenType.WIDTH],
         [TokenType.COLOR.toString(), TokenType.COLOR],

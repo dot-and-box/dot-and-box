@@ -131,8 +131,9 @@ export class Scanner {
 
     match(expected: string) {
         if (this.isAtEnd()) return false
-        if (this.source.charAt(this.position) != expected) return false
-
+        if (this.source.charAt(this.position) != expected) {
+            return false
+        }
         this.position++
         return true
     }
