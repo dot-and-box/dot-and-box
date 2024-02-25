@@ -11,7 +11,7 @@ class DotsAndBoxesEditor extends HTMLElement {
       <link href="./lib/prism.css" rel="stylesheet" type="text/css">  
 
       <style>
-        :host { display: block;  padding: 0; border: 1px solid #ccc ;}
+        :host { display: block;  padding: 0; }
         .content-wrapper {
           overflow: auto;
         }
@@ -20,8 +20,6 @@ class DotsAndBoxesEditor extends HTMLElement {
           background-size:2.4em 2.4em;
           background-origin:content-box;
           counter-reset: line;
-          margin-top: 5px;
-          padding-left: 10px;
           text-align:justify;
           font-family: monospace;
           overflow: auto;
@@ -36,9 +34,13 @@ class DotsAndBoxesEditor extends HTMLElement {
           margin-left: 0;
           position: relative;
           display: flex;
+          gap: 5px;
           flex-wrap: nowrap;
           justify-items: center;
           align-items: center;
+          padding-left: 5px;
+          padding-right: 5px;
+          border-bottom: 1px solid #ccc;
         }     
        
         .separator {
@@ -50,12 +52,16 @@ class DotsAndBoxesEditor extends HTMLElement {
           width: max-content            
         }
         .menu-wrapper button {
-          width: 35px;
-          height: 35px;
-          margin: 2px;
+          width: 36px;
+          height: 36px;
+          padding: 0;
           border-radius: 50%;
           border: 1px solid lightgray;
           background-color: transparent;
+        }
+        
+        .button-icon {
+          fill: rgba(23,23,23,0.7);       
         }
         .menu-wrapper button:hover {
           border: 1px solid gray ;
@@ -66,7 +72,10 @@ class DotsAndBoxesEditor extends HTMLElement {
       </style>
       <script src="./prism.js"></script>
       <div class="menu-wrapper"> 
-          <button id="run-code" title="run code">></button>
+          <button id="run-code" title="run code">  
+        <svg class="button-icon" viewBox="0 0 36 36">       
+           <path d="M 12 10 L 27 17 L 12 24 Z"/>           
+        </svg></button>
           <div><input type="checkbox" id="autoplay" title="show controls" checked>autoplay</div>
           <span class="separator"></span>
           <div><input type="checkbox" id="show-grid" title="show grid">grid</div>
@@ -119,7 +128,7 @@ class DotsAndBoxesEditor extends HTMLElement {
 
     extendDABLang() {
         window.Prism.languages['dabl'] = window.Prism.languages.extend('clike', {
-            'keyword': /\b(?:id|ids|at|text|step|title|box|dot|line|dots|boxes|layout|duration|size|color|selected|camera|visible)\b/,
+            'keyword': /\b(?:id|ids|at|text|step|title|box|dot|line|dots|boxes|layout|duration|size|color|selected|camera|visible|span)\b/,
         });
     }
 
@@ -190,6 +199,7 @@ class DotsAndBoxesEditor extends HTMLElement {
     onAttachedControlInitialize(evt) {
         if (evt.target === this.dotsAndBoxes) {
             this.code = this.dotsAndBoxes.code
+            this.dotsAndBoxes.removeAttribute('experimental')
             this.updateCode()
         }
     }

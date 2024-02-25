@@ -197,9 +197,9 @@ class DotsAndBoxesElement extends HTMLElement {
 
     updateControls() {
         const controlsMenu = this.shadowRoot!.getElementById('controls-menu') as HTMLElement
-        controlsMenu.style.display = this.showControls ? 'block' : 'none'
+        controlsMenu.style.display = this.showControls ? 'flex' : 'none'
         const experimentalMenu = this.shadowRoot!.getElementById(EXPERIMENTAL) as HTMLElement
-        experimentalMenu.style.display = this.experimental ? 'inline' : 'none'
+        experimentalMenu.style.display = this.experimental ? 'flex' : 'none'
     }
 
     dispatchOnBeforeStepForward(index: number) {
