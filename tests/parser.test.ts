@@ -17,7 +17,7 @@ test('parser simple', () => {
     let eg1 = ` 
     title: 'sort with bubble sort'
     box id: win at: -260, 0 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
-    dots ids: 1 2 3 5 4 6 at: [-3, 0] size: 20
+    dots ids: 1 2 3 5 4 6 at: [-3, 0] size: 20 span: 2
     step: '(0) This is step zero ' duration: 750
     2 -> +(50,250)
     2 -> +(200,-250)

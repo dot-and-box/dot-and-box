@@ -36,6 +36,7 @@ export enum TokenType {
     END = 'end',
     WIDTH = 'width',
     COLOR = 'color',
+    COLORS = 'colors',
     IDS = 'ids',
     BOX = 'box',
     LINE = 'line',

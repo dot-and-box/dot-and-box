@@ -93,12 +93,13 @@ export class Parser {
     }
 
     boxes() {
-        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN]
+        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
         let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
         let text = ''
         let id = ''
         let ids: string[] = []
+        let colors: string[] = []
         let span = 0
 
         let layout = Layout.COL
@@ -120,6 +121,9 @@ export class Parser {
                 case TokenType.IDS:
                     ids = this.ids()
                     break
+                case TokenType.COLORS:
+                    colors = this.colors()
+                    break
                 case TokenType.LAYOUT:
                     layout = this.layout()
                     break
@@ -131,12 +135,13 @@ export class Parser {
         if (at.unit == Unit.CELL) {
             this.normalizePointUnit(at)
         }
+        colors = colors.length > 0 ? colors : COLORS
 
         let spanInPixels = size.x + this.cellSize * span
         let i = 0;
         for (id of ids) {
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
-            let color = COLORS[this.model.controls.length % COLORS.length]
+            let color = colors[i % colors.length]
             const realId = this.getId(id != '' ? id : text)
             const box = new BoxControl(realId, position, size, DEFAULT_FONT_SIZE, color, text != '' ? text : id, true, false)
             this.model.controls.push(box)
@@ -268,12 +273,13 @@ export class Parser {
     }
 
     dots() {
-        const dots_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN]
+        const dots_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
         let size = 20
         let at = new Point(0, 0)
         let text = ''
         let id = ''
         let ids: string[] = []
+        let colors: string[] = []
         let span = 0
         let layout = Layout.COL
 
@@ -295,6 +301,9 @@ export class Parser {
                 case TokenType.IDS:
                     ids = this.ids()
                     break
+                case TokenType.COLORS:
+                    colors = this.colors()
+                    break
                 case TokenType.LAYOUT:
                     layout = this.layout()
                     break
@@ -307,13 +316,15 @@ export class Parser {
         if (at.unit == Unit.CELL) {
             this.normalizeDotPosition(at)
         }
+
+        colors = colors.length > 0 ? colors : COLORS
         let i = 0;
         let spanInPixels = this.cellSize + (span * this.cellSize)
 
         for (id of ids) {
             const realId = this.getId(id != '' ? id : text)
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
-            let color = COLORS[this.model.controls.length % COLORS.length]
+            let color = colors[i % colors.length]
             const dot = new DotControl(realId, position, size, color, text != '' ? text : id, true, false)
             this.model.controls.push(dot)
             if (dot.selected) {
@@ -400,6 +411,19 @@ export class Parser {
 
     color(): string {
         this.expectColon()
+        return  this.colorValue()
+    }
+
+    colors(): string[] {
+        this.expectColon()
+        let values: string[] = []
+        while (!this.eof() && this.canBeColor(this.peek().type)) {
+            values.push(this.colorValue())
+        }
+        return values
+    }
+
+    colorValue(): string {
         let result = ''
         if (this.peek().type == TokenType.IDENTIFIER) {
             let token = this.advance()
@@ -588,6 +612,10 @@ export class Parser {
 
     canBeId(tokenType: TokenType) {
         return tokenType == TokenType.IDENTIFIER || tokenType == TokenType.STRING || tokenType == TokenType.NUMBER
+    }
+
+    canBeColor(tokenType: TokenType) {
+        return tokenType == TokenType.IDENTIFIER || tokenType == TokenType.STRING
     }
 
     ids(): string[] {

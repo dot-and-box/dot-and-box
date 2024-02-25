@@ -128,7 +128,7 @@ class DotsAndBoxesEditor extends HTMLElement {
 
     extendDABLang() {
         window.Prism.languages['dabl'] = window.Prism.languages.extend('clike', {
-            'keyword': /\b(?:id|ids|at|text|step|title|box|dot|line|dots|boxes|layout|duration|size|color|selected|camera|visible|span)\b/,
+            'keyword': /\b(?:id|ids|at|text|step|title|box|dot|line|dots|boxes|layout|duration|size|color|selected|camera|visible|span|colors)\b/,
         });
     }
 

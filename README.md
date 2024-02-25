@@ -122,7 +122,8 @@ Define a number of dots
 #### special attributes:
 - ids - space separated ids of dots, mandatory
 - layout - *col* or *row*, optional - default: col
-- span - number of empty cells between boxes
+- span - number of empty cells between dots
+- colors - space separated color list used to fill dots
 
 ### define boxes
 
@@ -134,6 +135,7 @@ Define a number of boxes
 - ids - space separated ids of boxes, mandatory
 - layout - *col* or *row*, optional - default: col
 - span - number of empty cells between boxes
+- colors - space separated color list used to fill boxes
 
 ### steps and actions
 
