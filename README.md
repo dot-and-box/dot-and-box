@@ -1,7 +1,7 @@
 ## Dots and Boxes
 
-Project goal is to create a markdown like simple language and visualizer to explain algorithms and common CS patterns
-or do simple animations visualizing your raw ideas. Technically Dots and Boxes is an *HTML5 custom element* you can add to your page with code 
+Project goal is to create a simple language and visualizer to explain algorithms and common CS patterns
+or do simple step based animations visualizing your raw ideas. Technically Dots and Boxes is an *HTML5 custom element* you can add to your page with code 
 attribute defining dots and boxes and action (animation) steps.
 
 Project was highly inspired by [mermaid.js](https://mermaid.js.org/) project, although it has a very different goals
@@ -236,6 +236,13 @@ It supports number of attributes and events
 **on_before_step_forward** - happens whenever step is going to be running forward
 
 **on_before_step_backward** - happens whenever step is going to be running backward
+
+### build docs
+```shell
+nix-shell --packages zola --run bash
+cd docs
+zola build
+```
 
 ## credits
 - [Crafting interpreters](https://craftinginterpreters.com/)

@@ -70,7 +70,7 @@ class DotsAndBoxesEditor extends HTMLElement {
             font-weight: bold;
         }
       </style>
-      <script src="./prism.js"></script>
+      <script src="prism.js"></script>
       <div class="menu-wrapper"> 
           <button id="run-code" title="run code">  
         <svg class="button-icon" viewBox="0 0 36 36">       

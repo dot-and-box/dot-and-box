@@ -1,3 +1,9 @@
++++
+title = "syntax experiments"
+weight=10
++++
+
+
 ## Animations expressed as Mermaid like easy to read/understand language
 
 > DISCLAIMER! Following is just syntax experiments - never went into production
