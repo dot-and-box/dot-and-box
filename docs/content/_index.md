@@ -1,3 +1,0 @@
-+++
-title = "Dots and Boxes"
-+++

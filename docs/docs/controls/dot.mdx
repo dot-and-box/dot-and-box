@@ -1,0 +1,33 @@
+---
+sidebar_position: 1
+---
+
+Dot control
+
+```html
+    <dots-and-boxes code="
+        title: 'dot color and size'
+        dot id: it at: [-3,0] size: 25 color: red  selected: true
+        dot id: is at: [-1,0] size: 50 color: blue
+        dot id: a at: [1,0] size: 20 color: brown
+        dot id: C at: [4,0] size: 75 text: 'dot' color: orange">
+    </dots-and-boxes>
+```
+
+ <dots-and-boxes style={{height: 250}}  code="
+          title: 'dot color and size'
+          dot id: it at: [-3,0] size: 25 color: red  selected: true
+          dot id: is at: [-1,0] size: 50 color: blue
+          dot id: a at: [1,0] size: 20 color: brown
+          dot id: C at: [4,0] size: 75 text: 'dot' color: orange">
+ </dots-and-boxes>
+
+#### dot attributes
+Dot attributes:
+- **id** - unique id of control - mandatory
+- **at** - control start location - optional - default: (0,0)
+- **text** - control text - optional - default: empty string
+- **size** - control size - optional - default:depend on control type
+- **visible** - is control visible - optional - default: true
+- **selected** - is control selected - optional - default: false
+- **color** - background color of control - optional - default: value from internal color table selected by: len(controls) modulo len(color_table)

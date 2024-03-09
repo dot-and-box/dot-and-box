@@ -1,0 +1,23 @@
+---
+sidebar_position: 5
+---
+
+# built-in
+
+There are two special built-in controls automatically declared by dots and boxes itself
+
+#### **selected** control
+
+selected is a virtual control pointing to currently selected control by user or code.
+selected0 is first selected control selected1 second and so on.
+e.g. to swap two selected controls you can add action like:
+```C
+ selected0 <-> selected1
+```
+
+#### **camera** control
+camera is a virtual control used just to move viewport.
+e.g.
+```C
+ camera -> +(100,50)
+ ```
