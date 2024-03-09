@@ -48,7 +48,7 @@ class DotsAndBoxesElement extends HTMLElement {
             this.applyCode()
             this.dotsAndBoxes.showDebug = this.debug
             this.dotsAndBoxes.showGrid = this.grid
-            this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop))
+            this.dotsAndBoxes.updatePositionAndSize()
             this.dotsAndBoxes.draw(0)
         }
     }
@@ -166,6 +166,16 @@ class DotsAndBoxesElement extends HTMLElement {
         }))
         if (this.autoplay) {
             this.fastForward()
+        }
+        this.onmousedown = (e: any) => {
+            const rect = this.getBoundingClientRect()
+            // e.preventDefault()
+            this.dotsAndBoxes.mousePosition = new Point(e.x - rect.x, e.y - rect.y)
+        }
+        this.onmousemove = (e: any) => {
+            const rect = this.getBoundingClientRect()
+            // e.preventDefault()
+            this.dotsAndBoxes.mousePosition = new Point(e.x - rect.x, e.y - rect.y)
         }
     }
 
@@ -296,7 +306,7 @@ class DotsAndBoxesElement extends HTMLElement {
 
         const boxTool = document.createElement("button")
         boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
-         boxTool.innerHTML = ` 
+        boxTool.innerHTML = ` 
         <svg class="button-icon" stroke="rgba(23,23,23,0.7)" viewBox="0 0 36 36">
             <rect x="11" y="11" width="14" height="14" stroke-width="2" fill="transparent" />
         </svg>`
@@ -376,7 +386,7 @@ class DotsAndBoxesElement extends HTMLElement {
     resize() {
         if (this.canvas) {
             this.updateCanvasStyle(this.canvas)
-            this.dotsAndBoxes.updatePositionAndSize(new Point(this.offsetLeft, this.offsetTop))
+            this.dotsAndBoxes.updatePositionAndSize()
         }
     }
 

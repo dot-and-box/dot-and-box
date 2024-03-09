@@ -36,6 +36,7 @@ export class DotsAndBoxes {
         [this.PAN_ZOOM_TOOL, this.panZoomTool]
     ])
     private tool: Tool = this.panZoomTool
+    public mousePosition: Point = Point.zero()
 
     // noinspection JSUnusedGlobalSymbols
     public get requestedStepProgress(): number {
@@ -77,11 +78,9 @@ export class DotsAndBoxes {
         this.attachCanvasEventHandlers()
     }
 
-    public updatePositionAndSize(offset: Point) {
-        const style = getComputedStyle(this.canvas)
-        this.marginLeft = parseInt(style.marginLeft, 10) + offset.x
-        this.marginTop = parseInt(style.marginTop, 10) + offset.y
-        this.model.updateWidthAndHeight(parseInt(style.width, 10), parseInt(style.height, 10))
+    public updatePositionAndSize() {
+        const boundingRect = this.canvas.getBoundingClientRect()
+        this.model.updateWidthAndHeight(boundingRect.width, boundingRect.height)
     }
 
     private attachCanvasEventHandlers() {
@@ -170,15 +169,6 @@ export class DotsAndBoxes {
         requestAnimationFrame((evt) => this.draw(evt))
     }
 
-    private getEventLocation(e: any): Point | null {
-        if (e.touches && e.touches.length == 1) {
-            return new Point(e.touches[0].clientX + window.scrollX - this.marginLeft, e.touches[0].clientY + window.scrollY - this.marginTop)
-        } else if (e.clientX && e.clientY) {
-            return new Point(e.clientX + window.scrollX - this.marginLeft, e.clientY + window.scrollY - this.marginTop)
-        }
-        return null
-    }
-
     drawText(text: string, x: number, y: number, size: number, font: string) {
         this.ctx.font = `${size}px ${font}`
         this.ctx.fillText(text, x, y)
@@ -205,17 +195,15 @@ export class DotsAndBoxes {
         ctx.stroke();
     }
 
-    private onPointerDown(e: MouseEvent) {
-        e.preventDefault()
+    private onPointerDown(e: any) {
+        e.stopPropagation()
         this.isDragging = true
-        let clientPoint = this.getEventLocation(e)
-        if (clientPoint == null)
-            return
-
-        this.tool.click(new Point(
+        let clientPoint = this.mousePosition
+        const scaledPoint = new Point(
             clientPoint.x / this.model.zoom - this.model.offset.x + this.model.origin.x - this.model.origin.x / this.model.zoom,
             clientPoint.y / this.model.zoom - this.model.offset.y + this.model.origin.y - this.model.origin.y / this.model.zoom
-        ))
+        )
+        this.tool.click(scaledPoint)
     }
 
     private onPointerUp() {
@@ -226,9 +214,8 @@ export class DotsAndBoxes {
 
     private onPointerMove(e: any) {
         e.preventDefault()
-
+        let clientPoint = this.mousePosition
         if (this.isDragging) {
-            let clientPoint = this.getEventLocation(e)!
             this.tool.move(new Point(
                 clientPoint.x / this.model.zoom + this.model.origin.x - this.model.origin.x / this.model.zoom,
                 clientPoint.y / this.model.zoom + this.model.origin.y - this.model.origin.y / this.model.zoom

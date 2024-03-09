@@ -18,7 +18,7 @@ You need to do two things to start using it
 
 1) Add script reference
     ```html
-    <script src="insert_url_here"></script>
+    <script src="dots-and-boxes.js"></script>
     ```
 2) Add *dots-and-boxes* tag to your html page e.g.
 ```html
@@ -239,9 +239,9 @@ It supports number of attributes and events
 
 ### build docs
 ```shell
-nix-shell --packages zola --run bash
+nvm use 20
 cd docs
-zola build
+npm run start
 ```
 
 ## credits
