@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build-demo": "tsc && vite build && cp ./dist/assets/index*.js docs/static/dots-and-boxes.js",
+    "cp-dot-and-boxes": "cp ./dist/assets/index*.js docs/static/dots-and-boxes.js",
+    "build-docs": "npm run cp-dot-and-boxes && cd docs && npm run build",
+    "build-editor": "npm run build && cp ./dist/assets/index*.js editor/lib/dots-and-boxes.js",
     "preview": "vite preview",
     "test": "vitest run"
   },

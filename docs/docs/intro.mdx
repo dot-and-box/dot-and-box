@@ -6,37 +6,38 @@ slug: /
 
 # Dots and Boxes
 
+### what is it for?
  **dots and boxes** allows to draw dots and boxes and do simple step based animations making it easier to
 explain algorithms or visualise your raw ideas e.g. show event flows in a distributed system.
 
 But hey, you can use it for whatever you like!
 
- ### use case: visualize algorithm
+#### visualise algorithms
 
-Let's assume you want to explain how bubble sort works. What you need to do is write dots and boxes code as following:
+Let's assume you want to explain how bubble sort works. Write dots and boxes lang code:
 
-```C
-    title: sort with bubble sort
-    box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
-    dots ids: 2 1 5 3 4 at: [-3,0] size: 20
-    step: '(1) select first two numbers' duration: 0.8s
-    win <- visible: true, win -> +[3,0]
-    step: '(2) swap if left bigger than right'
-    2 <-> 1 // swap dot 2 with 1
-    step: '(3) select next two numbers'
-    win -> +[1,0] // move window by 1 cell right
-    step: 'ignore if left is smaller and select next'
-    win -> +[1,0]
-    step: 'again swap if left bigger'
-    5 <-> 3
-    step: 'and again'
-    win -> +[1,0]
-    5 <-> 4
-    step: 'repeat from start'
-    win -> -[3,0]
+```C showLineNumbers
+title: sort with bubble sort
+box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
+dots ids: 2 1 5 3 4 at: [-3,0] size: 20
+step: '(1) select first two numbers' duration: 0.8s
+win <- visible: true, win -> +[3,0]
+step: '(2) swap if left bigger than right'
+2 <-> 1 // swap dot 2 with 1
+step: '(3) select next two numbers'
+win -> +[1,0] // move window by 1 cell right
+step: 'ignore if left is smaller and select next'
+win -> +[1,0]
+step: 'again swap if left bigger'
+5 <-> 3
+step: 'and again'
+win -> +[1,0]
+5 <-> 4
+step: 'repeat from start'
+win -> -[3,0]
 ```
 
-above will be converted by **dots and boxes** into this visualization:
+here is how it's turned into **dots and boxes** visualization:
 
  <dots-and-boxes controls style={{height: 300}}    code="
        title: sort with bubble sort
@@ -59,8 +60,7 @@ above will be converted by **dots and boxes** into this visualization:
        win -> -[3,0]">
 </dots-and-boxes>
 
-#### Controlling animation
-Now let's press **forward** button, to see what happens.
+Play with control buttons, to see what happens.
 
 ## How it works ?
 
