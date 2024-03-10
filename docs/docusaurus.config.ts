@@ -1,6 +1,7 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import tabBlocks from "docusaurus-remark-plugin-tab-blocks";
 
 const config: Config = {
     title: 'Dots and boxes',
@@ -42,6 +43,19 @@ const config: Config = {
                     // Remove this to remove the "edit this page" links.
                     editUrl:
                         'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+                    remarkPlugins: [
+                        [
+                            tabBlocks,
+                            // optional plugin configuration
+                            {
+                                labels: [
+                                    ["dabl", "DABL"],
+                                    ["html", "HTML"],
+                                    ["view", "VIEW"],
+                                ],
+                            },
+                        ],
+                    ],
                 },
                 blog: false,
                 theme: {

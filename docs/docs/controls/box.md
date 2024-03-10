@@ -5,14 +5,20 @@ sidebar_position: 2
 
 Box control
 
-```dabl    
-    title: 'dot color and size'
-    box id: A at: [-3,0] color: red  selected: true 
+```dabl tab showLineNumbers
+title: 'dot color and size'
+box id: A at: [-3,0] color: red  selected: true 
+```
+```html tab showLineNumbers
+<dots-and-boxes style="height: 250px" code="
+    title: 'red box'
+    box id: b at: [-1,-1] size: [2,2] color: red text: 'box'">
+</dots-and-boxes>
 ```
 
 <dots-and-boxes style={{height: 250}}  code="
-title: 'red box'
-box id: b at: [-1,-1] size: [2,2] color: red text: 'box' ">
+    title: 'red box'
+    box id: b at: [-1,-1] size: [2,2] color: red text: 'box'">
 </dots-and-boxes>
 
 #### dot attributes
