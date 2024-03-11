@@ -6,8 +6,8 @@ sidebar_position: 2
 Box control
 
 ```dabl tab showLineNumbers
-title: 'dot color and size'
-box id: A at: [-3,0] color: red  selected: true 
+title: 'red box'
+box id: b at: [-1,-1] size: [2,2] color: red text: 'box' 
 ```
 ```html tab showLineNumbers
 <dots-and-boxes style="height: 250px" code="

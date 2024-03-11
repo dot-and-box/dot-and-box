@@ -4,4 +4,41 @@ sidebar_position: 1
 
 # Basic concepts
 
-Dots and boxes language allows to define [controls](/category/controls) and
+Here you will learn about basic **dots and boxes** concepts
+
+Dots and boxes language allows to define **[controls](/category/controls)** and **[actions](/category/actions)** grouped in **steps**
+
+Let's start with an example. And try to explain what's happening line by line
+
+```dabl tab showLineNumbers
+title: 'basic concepts' // this will a static title at the top left of dots and boxes surface
+dot id: d1  text: 'dot' at: (-100,-50) size: 35 color: red // define dot
+box id: b1  text: 'box' at: [2,-1] size: [2,2] color: green // define box
+step: 'move d1 to point (0,0)' // define a step with step title
+d1 -> (0,0) // step has a move action '->' moving dot to location (0,0)
+step: 'move box by -(30,10)' // another step step with title
+b1 -> -(30,10) //this time box is moved by -(30,10)
+```
+```html tab showLineNumbers
+<dots-and-boxes controls style="height: 250px" code="
+ title: 'basic concepts'
+ dot id: d1  text: 'dot' at: [-3,-1] size: 35 color: red
+ box id: b1  text: 'box' at: [2,-1] size: [2,2] color: green
+ step: 'move d1 to point (0,0)'
+ d1 -> (0,0)
+ step: 'move box by -(30,10)'
+ b1 -> -(30,10)">
+</dots-and-boxes>
+```
+
+<dots-and-boxes controls style={{height: 250}} code="
+ title: 'basic concepts'
+ dot id: d1  text: 'dot' at: (-100,-50) size: 35 color: red // define dot
+ box id: b1  text: 'box' at: [2,-1] size: [2,2] color: green
+ step: 'move d1 to point (0,0)'
+ d1 -> (0,0)
+ step: 'move box by -(30,10)'
+ b1 -> -(30,10)">
+</dots-and-boxes>
+
+

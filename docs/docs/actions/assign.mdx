@@ -1,0 +1,30 @@
+---
+sidebar_position: 3
+---
+
+# assign
+
+Assign operator allows to change control properties.
+It changes property instantly, which means change is not subject to animation, however step duration rules still apply.
+
+```dabl tab showLineNumbers
+title: 'color change'
+dot id: d1  text: 'dot' at: [-2,-1] size: 45 color: blue
+step: 'move dot by 4 cells right' duration: 200ms
+d1 <- color: red
+```
+```html tab showLineNumbers
+<dots-and-boxes controls style="height: 250px" code="
+  title: 'color change'
+  dot id: d1  text: 'dot' at: [-2,-1] size: 45 color: blue
+  step: 'change blue dot to red' duration: 200ms
+  d1 <- color: red">
+</dots-and-boxes>
+```
+
+<dots-and-boxes controls style={{height: 250}} code="
+    title: 'color change'
+    dot id: d1  text: 'dot' at: [-2,-1] size: 45 color: blue
+    step: 'change blue dot to red' duration: 200ms
+    d1 <- color: red">
+</dots-and-boxes>

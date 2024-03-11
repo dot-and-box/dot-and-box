@@ -4,20 +4,73 @@ sidebar_position: 5
 
 # built-in
 
-There are two special built-in controls automatically declared by dots and boxes itself
+There are two special built-in controls: **selected** and **camera**
 
-#### **selected** control
+### **selected** control
 
 selected is a virtual control pointing to currently selected control by user or code.
 selected0 is first selected control selected1 second and so on.
-e.g. to swap two selected controls you can add action like:
-```C
- selected0 <-> selected1
+
+e.g. we declare two preselected dots and one unselected. Them we use **selected0** and **selected1** to swap their positions.
+
+```dabl tab showLineNumbers
+title: 'selected controls'
+dot id: a at: [-2,-1] color: red selected: true
+dot id: b at: [1,-1] color: blue selected: true
+dot id: e at: [0,-2] color: green
+step: 'swap selected controls'
+selected0 <-> selected1
+```
+```html tab showLineNumbers
+<dots-and-boxes style="height: 250px" controls code="
+    title: 'selected controls'
+    dot id: a at: [-2,-1] color: red selected: true
+    dot id: b at: [1,-1] color: blue selected: true
+    dot id: e at: [0,-2] color: green
+    step: 'swap selected controls'
+    selected0 <-> selected1">
+</dots-and-boxes>
 ```
 
-#### **camera** control
+<dots-and-boxes style={{height: 250}} controls code="
+    title: 'selected controls'
+    dot id: a at: [-2,-1] color: red selected: true
+    dot id: b at: [1,-1] color: blue selected: true
+    dot id: e at: [0,-2] color: green
+    step: 'swap selected controls'
+    selected0 <-> selected1">
+</dots-and-boxes>
+
+Try to unselect one of dots and select green one, restart and make step forward again to see how it works.
+
+### **camera** control
 camera is a virtual control used just to move viewport.
 e.g.
 ```C
  camera -> +(100,50)
  ```
+
+```dabl tab showLineNumbers
+ title: 'camera move'
+ dot id: c at: [-2,-1] color: red selected: true
+ dot id: d at: [1,-1] color: blue selected: true
+ step: 'move camera 4 cells right and one up'
+ camera -> +[4,-1]
+```
+```html tab showLineNumbers
+<dots-and-boxes style="height: 250px" controls code="
+    title: 'camera move'
+    dot id: c at: [-2,-1] color: red selected: true
+    dot id: d at: [1,-1] color: blue selected: true
+    step: 'move camera 4 cells right and one up'
+    camera -> +[4,-1]">
+</dots-and-boxes>
+```
+
+<dots-and-boxes style={{height: 250}} controls code="
+    title: 'camera move'
+    dot id: c at: [-2,-1] color: red selected: true
+    dot id: d at: [1,-1] color: blue selected: true
+    step: 'move camera 4 cells right and one up'
+    camera -> +[4,-1]">
+</dots-and-boxes>
