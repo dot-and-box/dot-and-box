@@ -177,6 +177,12 @@ class DotsAndBoxesElement extends HTMLElement {
             // e.preventDefault()
             this.dotsAndBoxes.mousePosition = new Point(e.x - rect.x, e.y - rect.y)
         }
+
+        this.ontouchstart = (e: any) => {
+            const rect = this.getBoundingClientRect()
+            // e.preventDefault()
+            this.dotsAndBoxes.mousePosition = new Point(e.x - rect.x, e.y - rect.y)
+        }
     }
 
     getCanvas(shadow: ShadowRoot): HTMLCanvasElement {
