@@ -36,7 +36,8 @@ export class DotsAndBoxes {
         [this.PAN_ZOOM_TOOL, this.panZoomTool]
     ])
     private tool: Tool = this.panZoomTool
-    public mousePosition: Point = Point.zero()
+    public pointerPosition: Point = Point.zero()
+    public rect: Point = Point.zero()
 
     // noinspection JSUnusedGlobalSymbols
     public get requestedStepProgress(): number {
@@ -83,15 +84,30 @@ export class DotsAndBoxes {
         this.model.updateWidthAndHeight(boundingRect.width, boundingRect.height)
     }
 
+    private updatePointerPosition(x: any, y: any) {
+        this.pointerPosition.x = x - this.rect.x
+        this.pointerPosition.y = y - this.rect.y
+    }
+
     private attachCanvasEventHandlers() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
         if (!isMobile) {
-            this.addCanvasEvent('mousedown', (e: any) => this.onPointerDown(e))
+            this.addCanvasEvent('mousedown', (e: any) => {
+                e.preventDefault()
+                e.stopPropagation()
+                this.updatePointerPosition(e.x, e.y)
+                this.onPointerDown()
+            })
         }
         this.addCanvasEvent('touchstart', (e: any) => this.handleTouch(e, this.onPointerDown))
         this.addCanvasEvent('mouseup', (_: any) => this.onPointerUp())
         this.addCanvasEvent('touchend', (e: any) => this.handleTouch(e, this.onPointerUp))
-        this.addCanvasEvent('mousemove', (e: any) => this.onPointerMove(e))
+        this.addCanvasEvent('mousemove', (e: any) => {
+            e.preventDefault()
+            e.stopPropagation()
+            this.updatePointerPosition(e.x, e.y)
+            this.onPointerMove()
+        })
         this.addCanvasEvent('touchmove', (e: any) => this.handleTouch(e, this.onPointerMove))
         this.addCanvasEvent('wheel', (e: any) => this.handleScroll(e))
     }
@@ -195,13 +211,11 @@ export class DotsAndBoxes {
         ctx.stroke();
     }
 
-    private onPointerDown(e: any) {
-        e.stopPropagation()
+    private onPointerDown() {
         this.isDragging = true
-        let clientPoint = this.mousePosition
         const scaledPoint = new Point(
-            clientPoint.x / this.model.zoom - this.model.offset.x + this.model.origin.x - this.model.origin.x / this.model.zoom,
-            clientPoint.y / this.model.zoom - this.model.offset.y + this.model.origin.y - this.model.origin.y / this.model.zoom
+            this.pointerPosition.x / this.model.zoom - this.model.offset.x + this.model.origin.x - this.model.origin.x / this.model.zoom,
+            this.pointerPosition.y / this.model.zoom - this.model.offset.y + this.model.origin.y - this.model.origin.y / this.model.zoom
         )
         this.tool.click(scaledPoint)
     }
@@ -212,21 +226,21 @@ export class DotsAndBoxes {
         this.lastZoom = this.model.zoom
     }
 
-    private onPointerMove(e: any) {
-        e.preventDefault()
-        let clientPoint = this.mousePosition
+    private onPointerMove() {
         if (this.isDragging) {
             this.tool.move(new Point(
-                clientPoint.x / this.model.zoom + this.model.origin.x - this.model.origin.x / this.model.zoom,
-                clientPoint.y / this.model.zoom + this.model.origin.y - this.model.origin.y / this.model.zoom
+                this.pointerPosition.x / this.model.zoom + this.model.origin.x - this.model.origin.x / this.model.zoom,
+                this.pointerPosition.y / this.model.zoom + this.model.origin.y - this.model.origin.y / this.model.zoom
             ))
         }
     }
 
     private handleTouch(e: any, singleTouchHandler: any) {
+        e.stopPropagation()
         e.preventDefault()
         if (e.touches.length == 1) {
-            singleTouchHandler.call(this, e)
+            this.updatePointerPosition(e.touches[0].clientX, e.touches[0].clientY)
+            singleTouchHandler.call(this)
         } else if (e.type == "touchmove" && e.touches.length > 1) {
             this.isDragging = false
             this.handlePinch(e)

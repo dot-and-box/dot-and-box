@@ -167,21 +167,10 @@ class DotsAndBoxesElement extends HTMLElement {
         if (this.autoplay) {
             this.fastForward()
         }
-        this.onmousedown = (e: any) => {
+        this.onpointerdown = (e) => {
+            e.preventDefault()
             const rect = this.getBoundingClientRect()
-            // e.preventDefault()
-            this.dotsAndBoxes.mousePosition = new Point(e.x - rect.x, e.y - rect.y)
-        }
-        this.onmousemove = (e: any) => {
-            const rect = this.getBoundingClientRect()
-            // e.preventDefault()
-            this.dotsAndBoxes.mousePosition = new Point(e.x - rect.x, e.y - rect.y)
-        }
-
-        this.ontouchstart = (e: any) => {
-            const rect = this.getBoundingClientRect()
-            // e.preventDefault()
-            this.dotsAndBoxes.mousePosition = new Point(e.x - rect.x, e.y - rect.y)
+            this.dotsAndBoxes.rect = new Point(rect.x, rect.y)
         }
     }
 
