@@ -168,7 +168,7 @@ class DotsAndBoxesElement extends HTMLElement {
             this.fastForward()
         }
         this.onpointerdown = (e) => {
-            e.preventDefault()
+            e.stopPropagation()
             const rect = this.getBoundingClientRect()
             this.dotsAndBoxes.rect = new Point(rect.x, rect.y)
         }
