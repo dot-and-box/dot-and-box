@@ -76,10 +76,3 @@ nvm use 20
 cd docs
 npm run start
 ```
-
-## credits
-- [Crafting interpreters](https://craftinginterpreters.com/)
-- [Easing functions](https://gizma.com/easing/)
-- [Prism.js - code highlighting](https://prismjs.com/)
-- [mermaid.js](https://mermaid.js.org/)
-- [Drawing arc in SVG](http://xahlee.info/js/svg_circle_arc.html)
