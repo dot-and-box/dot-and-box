@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-#  dot and box tag
+#  Dot and Box tag
 
 ### \<dot-and-box\> tag elem
 **\<dot-and-box\>** is a custom html tag and behaves like standard html tag (e.g. you can style it).
