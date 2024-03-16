@@ -74,14 +74,43 @@ const config: Config = {
                 alt: 'Dots and boxes logo',
                 src: 'img/logo.svg',
             },
-            items: [],
+            items: [
+                {
+                    href: 'https://github.com/tomaszkubacki/dots_and_boxes',
+                    label: 'GitHub',
+                    position: 'right',
+                },
+
+            ],
         },
         footer: {
             style: 'dark',
             links: [
                 {
                     title: 'Docs',
-                    items: [],
+                    items: [
+                        {
+                            label: 'Tutorial',
+                            to: 'category/tutorial',
+                        },
+                        {
+                            label: 'Controls',
+                            to: 'category/controls',
+                        },
+                    ],
+                },
+                {
+                    title: 'More',
+                    items: [
+                        {
+                            label: 'Github',
+                            to: 'https://github.com/tomaszkubacki/dots_and_boxes',
+                        },
+                        {
+                            label: 'My Twitter',
+                            to: 'https://twitter.com/tomaszkubacki',
+                        },
+                    ],
                 }
             ],
             copyright: `Copyright © ${new Date().getFullYear()} Dots and Boxes, Built with Docusaurus.`,
