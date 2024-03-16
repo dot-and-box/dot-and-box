@@ -9,27 +9,31 @@ move operator allows to move controls
 ### a **-\>** (x, y)
 
 ```dabl tab showLineNumbers
-title: 'dot color and size'
-dot id: d1  text: 'dot' at: [-3,-1] size: 35
+title: 'move control'
+dot id: d1  text: 'dot' at: [-3,-2] size: 35
 step: 'move dot by 4 cells right'
-d1 -> +[4,0]
+d1 -> +[4,0] // relative move
+d1 ->  -[0,-1] // relative move
+d1 ->  [0,0] // absolute position move
 ```
 ```html tab showLineNumbers
 <dot-and-box controls style="height: 250px" code="
-  title: 'dot color and size'
-  dot id: d1  text: 'dot' at: [-3,-1] size: 35
-  step: 'move dot by 4 cells right'
-  d1 -> +[4,0]
-  d1 ->  [0,0]
+title: 'move control'
+dot id: d1  text: 'dot' at: [-3,-2] size: 35
+step: 'move dot by 4 cells right'
+d1 -> +[4,0]
+d1 ->  -[0,-1]
+d1 ->  [0,0]
   ">
  </dot-and-box>
 ```
 
 <dot-and-box experimental controls style={{height: 250}} code="
-title: 'dot color and size'
-dot id: d1  text: 'dot' at: [-3,-1] size: 35
+title: 'move control'
+dot id: d1  text: 'dot' at: [-3,-2] size: 35
 step: 'move dot by 4 cells right'
 d1 -> +[4,0]
+d1 ->  -[0,-1]
 d1 ->  [0,0]
 ">
  </dot-and-box>
