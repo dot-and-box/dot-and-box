@@ -25,11 +25,16 @@ attribute defining dot and box and action (animation) steps.
 dot and box is using [HTML web components standard](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components)
 You need to do two things to start using it
 
-1) Add script reference
+1) install script by npm 
+   ```shell
+   npm i dot-and-box
+   ```
+
+2) Add script reference
     ```html
     <script src="dot-and-box.js"></script>
     ```
-2) Add *dot-and-box* tag to your html page e.g.
+3) Add *dot-and-box* tag to your html page e.g.
 ```html
 
 <dot-and-box controls color="white" code="
