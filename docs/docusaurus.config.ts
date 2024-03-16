@@ -12,17 +12,17 @@ const config: Config = {
     url: 'https://dot-and-box.org',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
-    baseUrl: '/dots',
+    baseUrl: '/',
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
     organizationName: 'dot_and_box',
-    projectName: 'dot-and-box',
+    projectName: 'dot_and_box',
 
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     scripts: [
-        './dot-and-box.js'
+        '/dot-and-box.js'
     ],
     // Even if you don't use internationalization, you can use this field to set
     // useful metadata like html lang. For example, if your site is Chinese, you
