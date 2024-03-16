@@ -2,7 +2,7 @@ import {ActionBase} from "../shared/actionBase.ts"
 import {Point} from "../shared/point.ts"
 import {Control} from "../controls/control.ts"
 import {DUMMY_CONTROL} from "../shared/constants.ts";
-import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
+import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 
 export class Swap extends ActionBase {
     left: Control = DUMMY_CONTROL
@@ -12,7 +12,7 @@ export class Swap extends ActionBase {
     leftControlId: string
     rightControlId: string
 
-    constructor(model: DotsAndBoxesModel, left: string, right: string) {
+    constructor(model: DotAndBoxModel, left: string, right: string) {
         super(model)
         this.start = Point.zero()
         this.end = Point.zero()

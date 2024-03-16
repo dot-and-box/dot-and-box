@@ -16,7 +16,7 @@ import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
 import {LineControl} from "../controls/line/lineControl.ts";
 import {Layout} from "../shared/layout.ts";
-import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
+import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 import {Unit} from "../shared/unit.ts";
 
 export class Parser {
@@ -28,8 +28,8 @@ export class Parser {
 
     identifiesCounter = new Map<string, number>()
 
-    static newModel(): DotsAndBoxesModel {
-        return new DotsAndBoxesModel('', [], [])
+    static newModel(): DotAndBoxModel {
+        return new DotAndBoxModel('', [], [])
     }
 
     public eof(): boolean {
@@ -44,7 +44,7 @@ export class Parser {
         return this.tokens[this.position]
     }
 
-    public parse(source: string): DotsAndBoxesModel {
+    public parse(source: string): DotAndBoxModel {
         this.model = Parser.newModel()
         this.tokens = this.scanner.scan(source)
         while (this.position < this.tokens.length) {

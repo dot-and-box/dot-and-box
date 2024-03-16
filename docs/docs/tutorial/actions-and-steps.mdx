@@ -19,11 +19,11 @@ step: 'this is my step title' duration: 2s
 myBox -> (100,50)
 ```
 ```html tab showLineNumbers
-<dots-and-boxes controls style="height: 250px"  code="
+<dot-and-box controls style="height: 250px"  code="
 box id: myBox size: [2,2]
 step: 'this is my step title' duration: 2s
 myBox -> (100,50)">
- </dots-and-boxes>
+ </dot-and-box>
 ```
 
 Above step has title and takes 2s to run. It consists of one action moving control **myBox** to position (100, 50)
@@ -47,22 +47,22 @@ absolute move **to** point **(x,y)** and relative move **by** point **+(x,y)**  
 ```
 
 ```html tab showLineNumbers
-<dots-and-boxes controls style="height: 250px"  code="
+<dot-and-box controls style="height: 250px"  code="
  box id: myBox at: [-3,-2] size: [2,1]
  box id: otherControl at: [-3,0] size: [2,1]
  step: 'sequential actions'
  myBox -> (50,-100)
  otherControl -> +(200,0)">
- </dots-and-boxes>
+ </dot-and-box>
 ```
 
- <dots-and-boxes controls style={{height: 250}}  code="
+ <dot-and-box controls style={{height: 250}}  code="
  box id: myBox at: [-3,-2] size: [2,1]
  box id: otherControl at: [-3,0] size: [2,1]
  step: 'sequential actions'
  myBox -> (50,-100)
  otherControl -> +(200,0)">
- </dots-and-boxes>
+ </dot-and-box>
 
 ### parallel actions
 
@@ -73,21 +73,21 @@ Here we we define one step with two actions done in parallel:
  myBox -> (50,-100), otherControl -> +(200,0)
 ```
 ```html tab showLineNumbers
-<dots-and-boxes controls style="height: 250px"  code="
+<dot-and-box controls style="height: 250px"  code="
  box id: myBox at: [-3,-2] size: [2,1]
  box id: otherControl at: [-3,0] size: [2,1]
  step: 'parallel actions'
  myBox -> (50,-100), otherControl -> +(200,0)
 ">
- </dots-and-boxes>
+ </dot-and-box>
 ```
- <dots-and-boxes controls style={{height: 250}}  code="
+ <dot-and-box controls style={{height: 250}}  code="
  box id: myBox at: [-3,-2] size: [2,1]
  box id: otherControl at: [-3,0] size: [2,1]
  step: 'parallel actions'
  myBox -> (50,-100), otherControl -> +(200,0)
 ">
- </dots-and-boxes>
+ </dot-and-box>
 ### parallel and sequential actions
 
 Now lets try to mix both in one step.
@@ -101,23 +101,23 @@ myBox -> (50,-100), otherControl -> +(200,0)
 otherControl <-> myBox
 ```
 ```html tab showLineNumbers
-<dots-and-boxes controls style="height: 250"  code="
+<dot-and-box controls style="height: 250"  code="
  box id: myBox at: [-3,-2] size: [2,1]
  box id: otherControl at: [-3,0] size: [2,1]
  step: 'parallel and sequential actions'
  myBox -> (50,-100), otherControl -> +(200,0)
  otherControl <-> myBox
 ">
- </dots-and-boxes>
+ </dot-and-box>
 ```
-<dots-and-boxes controls style={{height: 250}}  code="
+<dot-and-box controls style={{height: 250}}  code="
  box id: myBox at: [-3,-2] size: [2,1]
  box id: otherControl at: [-3,0] size: [2,1]
  step: 'parallel and sequential actions'
  myBox -> (50,-100), otherControl -> +(200,0)
  otherControl <-> myBox
 ">
- </dots-and-boxes>
+ </dot-and-box>
 
 
 

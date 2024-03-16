@@ -1,7 +1,7 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {Control} from "../controls/control.ts"
 import {DUMMY_CONTROL} from "../shared/constants.ts";
-import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
+import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 
 export class Clone extends ActionBase {
     left: Control = DUMMY_CONTROL
@@ -10,7 +10,7 @@ export class Clone extends ActionBase {
     rightControlId: string
     isAdded: boolean
 
-    constructor(model: DotsAndBoxesModel, leftControlId: string, rightControlId: string) {
+    constructor(model: DotAndBoxModel, leftControlId: string, rightControlId: string) {
         super(model)
         this.isAdded = false
         this.leftControlId = leftControlId

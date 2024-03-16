@@ -3,7 +3,7 @@ import {Control} from "../controls/control.ts"
 import {Change} from "../shared/change.ts"
 import {PropertyChange} from "../shared/propertyChange.ts";
 import {DUMMY_CONTROL} from "../shared/constants.ts";
-import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
+import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 
 export class Assign extends ActionBase {
 
@@ -13,7 +13,7 @@ export class Assign extends ActionBase {
     change: Change
     applied = false
 
-    constructor(model: DotsAndBoxesModel, controlId: string, properties: Map<string, any>) {
+    constructor(model: DotAndBoxModel, controlId: string, properties: Map<string, any>) {
         super(model)
         this.controlId = controlId
         this.change = new Change(this.controlId, [])

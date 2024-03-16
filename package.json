@@ -1,16 +1,15 @@
 {
-  "name": "dotsjustdots",
-  "private": true,
+  "name": "dot-and-box",
   "version": "0.0.1",
-  "description": "dots and boxes is markdown for animations experiment",
+  "description": "dot and boxe is markdown for animations tool",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "cp-dot-and-boxes": "cp ./dist/assets/index*.js docs/static/dots-and-boxes.js",
-    "build-docs": "npm run build && npm run cp-dot-and-boxes && cd docs && npm install && npm run build",
-    "build-editor": "npm run build && cp ./dist/assets/index*.js editor/lib/dots-and-boxes.js",
+    "cp-dot-and-box": "cp ./dist/assets/index*.js docs/static/dot-and-box.js",
+    "build-docs": "npm run build && npm run cp-dot-and-box && cd docs && npm install && npm run build",
+    "build-editor": "npm run build && cp ./dist/assets/index*.js editor/lib/dot-and-box.js",
     "preview": "vite preview",
     "test": "vitest run"
   },

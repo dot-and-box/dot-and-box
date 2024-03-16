@@ -1,9 +1,9 @@
-import {DotsAndBoxesModel} from "./dotsAndBoxesModel.ts";
+import {DotAndBoxModel} from "./dotAndBoxModel.ts";
 
 export abstract class ActionBase {
-    model: DotsAndBoxesModel
+    model: DotAndBoxModel
 
-    protected constructor(model: DotsAndBoxesModel) {
+    protected constructor(model: DotAndBoxModel) {
         this.model = model
     }
 

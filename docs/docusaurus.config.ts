@@ -4,25 +4,25 @@ import type * as Preset from '@docusaurus/preset-classic';
 import tabBlocks from "docusaurus-remark-plugin-tab-blocks";
 
 const config: Config = {
-    title: 'Dots and boxes',
+    title: 'dot and box',
     tagline: 'Simple animations made easy',
     favicon: 'img/favicon.ico',
 
     // Set the production url of your site here
-    url: 'https://your-docusaurus-site.example.com',
+    url: 'https://dot-and-box.org',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/dots',
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: 'tomaszkubacki', // Usually your GitHub org/user name.
-    projectName: 'dotsandboxes', // Usually your repo name.
+    organizationName: 'tomaszkubacki',
+    projectName: 'dot-and-box',
 
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     scripts: [
-        './dots-and-boxes.js'
+        './dot-and-box.js'
     ],
     // Even if you don't use internationalization, you can use this field to set
     // useful metadata like html lang. For example, if your site is Chinese, you
@@ -69,14 +69,14 @@ const config: Config = {
         // Replace with your project's social card
         image: 'img/docusaurus-social-card.jpg',
         navbar: {
-            title: 'Dots and boxes',
+            title: 'dot and box',
             logo: {
-                alt: 'Dots and boxes logo',
+                alt: 'dot and box logo',
                 src: 'img/logo.svg',
             },
             items: [
                 {
-                    href: 'https://github.com/tomaszkubacki/dots_and_boxes',
+                    href: 'https://github.com/tomaszkubacki/dot_and_box',
                     label: 'GitHub',
                     position: 'right',
                 },
@@ -104,7 +104,7 @@ const config: Config = {
                     items: [
                         {
                             label: 'Github',
-                            to: 'https://github.com/tomaszkubacki/dots_and_boxes',
+                            to: 'https://github.com/tomaszkubacki/dot_and_box',
                         },
                         {
                             label: 'My Twitter',
@@ -113,7 +113,7 @@ const config: Config = {
                     ],
                 }
             ],
-            copyright: `Copyright © ${new Date().getFullYear()} Dots and Boxes, Built with Docusaurus.`,
+            copyright: `Copyright © ${new Date().getFullYear()} dot and box, Built with Docusaurus.`,
         },
         prism: {
             theme: prismThemes.github,

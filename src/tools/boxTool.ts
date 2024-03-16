@@ -10,14 +10,14 @@ export class BoxTool extends Tool {
     dragStart: Point = Point.zero()
 
     override click(point: Point): void {
-        const controls = this.dotsAndBoxes.model.controls
+        const controls = this.dotAndBox.model.controls
         this.dragStart = point
         const id = `box ${BoxControl.counter++}`
-        this.dotsAndBoxes.model.controls.push(
+        this.dotAndBox.model.controls.push(
             new BoxControl(id, point,
-                new Point(this.dotsAndBoxes.model.cellSize, this.dotsAndBoxes.model.cellSize, Sign.NONE, Unit.CELL),
+                new Point(this.dotAndBox.model.cellSize, this.dotAndBox.model.cellSize, Sign.NONE, Unit.CELL),
                 DEFAULT_FONT_SIZE, COLORS[controls.length % COLORS.length], id, true, false))
-        this.dotsAndBoxes.resetTool()
+        this.dotAndBox.resetTool()
     }
 
 }

@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>dots and boxes demo</title>
+    <title>dot and box editor experiment</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dots and boxes demos</title>
+    <title>Dot and box editor demos</title>
     <style>
         body {
             margin: 0;
@@ -55,17 +55,17 @@
         }
 
     </style>
-    <script type="module" crossorigin src="lib/dots-and-boxes-editor.js"></script>
-    <script type="module" crossorigin src="lib/dots-and-boxes.js"></script>
+    <script type="module" crossorigin src="lib/dot-and-box-editor.js"></script>
+    <script type="module" crossorigin src="lib/dot-and-box.js"></script>
 </head>
 <body>
 <div class="content">
 
-    <h2>dots and boxes demo</h2>
+    <h2>dot and box demo</h2>
     <div class="example">
-<dots-and-boxes-editor style="min-width: 300px" attach-selector="#dab0">
+<dot-and-box-editor style="min-width: 300px" attach-selector="#dab0">
 
-        <dots-and-boxes id="dab0" controls experimental code="
+        <dot-and-box id="dab0" controls experimental code="
 title: sort with bubble sort
 box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
 dots ids: 2 1 5 3 4 at: [-3,0] size: 20
@@ -85,9 +85,9 @@ win -> +[1,0]
 step: 'repeat from start'
 win -> -[3,0]
 ">
-        </dots-and-boxes>
+        </dot-and-box>
 
-</dots-and-boxes-editor>
+</dot-and-box-editor>
     </div>
 
 </body>

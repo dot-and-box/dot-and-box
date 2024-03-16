@@ -1,4 +1,4 @@
-import {DotsAndBoxes} from "./dotsAndBoxes.ts"
+import {DotAndBox} from "./dotAndBox.ts"
 import {Parser} from "./parser/parser.ts"
 import {Point} from "./shared/point.ts"
 import {
@@ -7,12 +7,12 @@ import {
 } from "./shared/elemConstants.ts";
 
 
-class DotsAndBoxesElement extends HTMLElement {
-    public static readonly ELEM_NAME: string = "dots-and-boxes"
+class DotAndBoxElement extends HTMLElement {
+    public static readonly ELEM_NAME: string = "dot-and-box"
     public static readonly ON_BEFORE_STEP_FORWARD: string = "on_before_step_forward"
     public static readonly ON_BEFORE_STEP_BACKWARD: string = "on_before_step_backward"
     static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, CONTROLS, AUTOPLAY, KEYBOARD, GRID]
-    dotsAndBoxes!: DotsAndBoxes
+    dotAndBox!: DotAndBox
     private _code: string = ''
     color: string = 'white'
     debug: boolean = false
@@ -43,13 +43,13 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     reset() {
-        if (this._code && this.dotsAndBoxes) {
+        if (this._code && this.dotAndBox) {
             this.updateCanvasStyle(this.canvas)
             this.applyCode()
-            this.dotsAndBoxes.showDebug = this.debug
-            this.dotsAndBoxes.showGrid = this.grid
-            this.dotsAndBoxes.updatePositionAndSize()
-            this.dotsAndBoxes.draw(0)
+            this.dotAndBox.showDebug = this.debug
+            this.dotAndBox.showGrid = this.grid
+            this.dotAndBox.updatePositionAndSize()
+            this.dotAndBox.draw(0)
         }
     }
 
@@ -59,7 +59,7 @@ class DotsAndBoxesElement extends HTMLElement {
         model.onBeforeStepBackwardCallback = (index) => this.dispatchOnBeforeStepBackward(index)
         model.updateSubtitleCallback = (text) => this.updateSubtitle(text)
         this.updateTitle(model.title)
-        this.dotsAndBoxes.apply(model)
+        this.dotAndBox.apply(model)
     }
 
     connectedCallback() {
@@ -155,7 +155,7 @@ class DotsAndBoxesElement extends HTMLElement {
     `
         this.buildControls(shadow)
         this.canvas = this.getCanvas(shadow)
-        this.dotsAndBoxes = new DotsAndBoxes(this.canvas)
+        this.dotAndBox = new DotAndBox(this.canvas)
         this.reset()
         this._initialized = true
         this._wrapper = this.shadowRoot!.getElementById('wrapper')
@@ -170,7 +170,7 @@ class DotsAndBoxesElement extends HTMLElement {
         this.onpointerdown = (e) => {
             e.stopPropagation()
             const rect = this.getBoundingClientRect()
-            this.dotsAndBoxes.rect = new Point(rect.x, rect.y)
+            this.dotAndBox.rect = new Point(rect.x, rect.y)
         }
     }
 
@@ -208,7 +208,7 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     dispatchOnBeforeStepForward(index: number) {
-        const stepSelected = new CustomEvent(DotsAndBoxesElement.ON_BEFORE_STEP_FORWARD, {
+        const stepSelected = new CustomEvent(DotAndBoxElement.ON_BEFORE_STEP_FORWARD, {
             bubbles: true,
             composed: true,
             detail: {step: index}
@@ -217,7 +217,7 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 
     dispatchOnBeforeStepBackward(index: number) {
-        const stepSelected = new CustomEvent(DotsAndBoxesElement.ON_BEFORE_STEP_BACKWARD, {
+        const stepSelected = new CustomEvent(DotAndBoxElement.ON_BEFORE_STEP_BACKWARD, {
             bubbles: true,
             composed: true,
             detail: {step: index}
@@ -239,7 +239,7 @@ class DotsAndBoxesElement extends HTMLElement {
         menu.append(backward)
 
         const pause = document.createElement("button")
-        pause.onclick = (_) => this.dotsAndBoxes.togglePause()
+        pause.onclick = (_) => this.dotAndBox.togglePause()
         pause.innerHTML = ` 
          <svg class="button-icon" viewBox="0 0 36 36">
           <rect x="11" y="11" width="14" height="14" />
@@ -283,7 +283,7 @@ class DotsAndBoxesElement extends HTMLElement {
         rangeControl.style.height = '100%'
         rangeControl.style.width = '100%'
         rangeControl.oninput = (e: any) => {
-            this.dotsAndBoxes.requestedStepProgress = parseFloat(e.target.value)
+            this.dotAndBox.requestedStepProgress = parseFloat(e.target.value)
         }
         extendedMenu.append(rangeControl)
 
@@ -292,7 +292,7 @@ class DotsAndBoxesElement extends HTMLElement {
         experimentalMenu.style.display = this.experimental ? 'flex' : 'none'
 
         const dotTool = document.createElement("button")
-        dotTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.DOT_TOOL)
+        dotTool.onclick = (_) => this.dotAndBox.selectTool(this.dotAndBox.DOT_TOOL)
         dotTool.innerHTML = ` 
         <svg class="button-icon" stroke="rgba(23,23,23,0.7)" viewBox="0 0 36 36">
             <circle cx="18" cy="18" r="8" stroke-width="2" fill="transparent"   />
@@ -300,7 +300,7 @@ class DotsAndBoxesElement extends HTMLElement {
         experimentalMenu.append(dotTool)
 
         const boxTool = document.createElement("button")
-        boxTool.onclick = (_) => this.dotsAndBoxes.selectTool(this.dotsAndBoxes.BOX_TOOL)
+        boxTool.onclick = (_) => this.dotAndBox.selectTool(this.dotAndBox.BOX_TOOL)
         boxTool.innerHTML = ` 
         <svg class="button-icon" stroke="rgba(23,23,23,0.7)" viewBox="0 0 36 36">
             <rect x="11" y="11" width="14" height="14" stroke-width="2" fill="transparent" />
@@ -308,7 +308,7 @@ class DotsAndBoxesElement extends HTMLElement {
         experimentalMenu.append(boxTool)
 
         const printModel = document.createElement("button")
-        printModel.onclick = (_) => console.log(this.dotsAndBoxes.model)
+        printModel.onclick = (_) => console.log(this.dotAndBox.model)
         printModel.append('\u{02148}')
         experimentalMenu.append(printModel)
         extendedMenu.append(experimentalMenu)
@@ -334,7 +334,7 @@ class DotsAndBoxesElement extends HTMLElement {
         if (!this.extendedMenu) {
             const extendedMenu: HTMLElement = this.shadowRoot!.getElementById('controls-menu-extended') as HTMLElement
             const progressRange: HTMLInputElement = this.shadowRoot!.getElementById('progress-range') as HTMLInputElement
-            progressRange.value = `${this.dotsAndBoxes.requestedStepProgress}`
+            progressRange.value = `${this.dotAndBox.requestedStepProgress}`
             this.extendedMenu = true
             extendedMenu.style.display = 'flex'
         }
@@ -352,36 +352,36 @@ class DotsAndBoxesElement extends HTMLElement {
 
     private handleKeyDown(k: KeyboardEvent) {
         if (k.key === "ArrowLeft") {
-            this.dotsAndBoxes.backward()
+            this.dotAndBox.backward()
         } else if (k.key === "ArrowRight") {
-            this.dotsAndBoxes.forward()
+            this.dotAndBox.forward()
         } else if (k.key === "Delete") {
-            this.dotsAndBoxes.deleteSelected()
+            this.dotAndBox.deleteSelected()
         }
     }
 
     public forward() {
         this.hideExtendedMenu()
-        this.dotsAndBoxes.forward()
+        this.dotAndBox.forward()
     }
 
     public fastForward() {
-        this.dotsAndBoxes.fastForward()
+        this.dotAndBox.fastForward()
     }
 
     public backward() {
         this.hideExtendedMenu()
-        this.dotsAndBoxes.backward()
+        this.dotAndBox.backward()
     }
 
     public fastBackward() {
-        this.dotsAndBoxes.fastBackward()
+        this.dotAndBox.fastBackward()
     }
 
     resize() {
         if (this.canvas) {
             this.updateCanvasStyle(this.canvas)
-            this.dotsAndBoxes.updatePositionAndSize()
+            this.dotAndBox.updatePositionAndSize()
         }
     }
 
@@ -400,7 +400,7 @@ class DotsAndBoxesElement extends HTMLElement {
                 break
             case CODE:
                 this._code = newValue.trim()
-                if (this.dotsAndBoxes) {
+                if (this.dotAndBox) {
                     this.applyCode()
                 }
                 break
@@ -412,13 +412,13 @@ class DotsAndBoxesElement extends HTMLElement {
                 break
             case CONTROLS:
                 this.showControls = newValue != null
-                if (this.dotsAndBoxes) {
+                if (this.dotAndBox) {
                     this.updateControls()
                 }
                 break
             case EXPERIMENTAL:
                 this.experimental = newValue != null
-                if (this.dotsAndBoxes) {
+                if (this.dotAndBox) {
                     this.updateControls()
                 }
                 break
@@ -428,20 +428,20 @@ class DotsAndBoxesElement extends HTMLElement {
                 break
             case AUTOPLAY:
                 this.autoplay = newValue != null
-                if (this.dotsAndBoxes) {
+                if (this.dotAndBox) {
                     this.fastForward()
                 }
                 break
             case DEBUG:
                 this.debug = newValue != null
-                if (this.dotsAndBoxes) {
-                    this.dotsAndBoxes.showDebug = this.debug
+                if (this.dotAndBox) {
+                    this.dotAndBox.showDebug = this.debug
                 }
                 break
             case GRID:
                 this.grid = newValue != null
-                if (this.dotsAndBoxes) {
-                    this.dotsAndBoxes.showGrid = this.grid
+                if (this.dotAndBox) {
+                    this.dotAndBox.showGrid = this.grid
                 }
                 break
             default:
@@ -451,4 +451,4 @@ class DotsAndBoxesElement extends HTMLElement {
     }
 }
 
-customElements.define(DotsAndBoxesElement.ELEM_NAME, DotsAndBoxesElement)
+customElements.define(DotAndBoxElement.ELEM_NAME, DotAndBoxElement)

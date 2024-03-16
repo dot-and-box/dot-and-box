@@ -12,16 +12,16 @@ title: 'red box'
 box id: b at: [-1,-1] size: [2,2] text: 'box' 
 ```
 ```html tab showLineNumbers
-<dots-and-boxes style="height: 250px" code="
+<dot-and-box style="height: 250px" code="
     title: 'red box'
     box id: b at: [-1,-1] size: [2,2] text: 'box'">
-</dots-and-boxes>
+ </dot-and-box>
 ```
 
-<dots-and-boxes style={{height: 250}}  code="
+<dot-and-box style={{height: 250}}  code="
     title: 'red box'
     box id: b at: [-1,-1] size: [2,2]  text: 'box'">
-</dots-and-boxes>
+ </dot-and-box>
 
 #### box attributes
 Box support number of attributes which are mostly self describing like:

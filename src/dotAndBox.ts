@@ -10,12 +10,12 @@ import {DotTool} from "./tools/dotTool.ts"
 import {EmptyTool} from "./shared/emptyTool.ts"
 import {PanZoomTool} from "./tools/panZoomTool.ts"
 import {BoxTool} from "./tools/boxTool.ts"
-import {DotsAndBoxesModel} from "./shared/dotsAndBoxesModel.ts";
+import {DotAndBoxModel} from "./shared/dotAndBoxModel.ts";
 
-export class DotsAndBoxes {
+export class DotAndBox {
     private readonly canvas: HTMLCanvasElement
     private readonly ctx: CanvasRenderingContext2D
-    public model: DotsAndBoxesModel = new DotsAndBoxesModel('', [], [])
+    public model: DotAndBoxModel = new DotAndBoxModel('', [], [])
     public isDragging = false
     private initialPinchDistance: number = 0
     private lastZoom = this.model.zoom
@@ -56,7 +56,7 @@ export class DotsAndBoxes {
         this.model.zoom = newZoom
     }
 
-    public initModel(model: DotsAndBoxesModel) {
+    public initModel(model: DotAndBoxModel) {
         this.requestedStepProgress = 0;
         this.model = model
         this.model.currentStepIndex = 0
@@ -65,7 +65,7 @@ export class DotsAndBoxes {
         }
     }
 
-    public apply(model: DotsAndBoxesModel) {
+    public apply(model: DotAndBoxModel) {
         this.initModel(model)
         if (this.model.steps.length > 0) {
             this.model.selectStep(0)

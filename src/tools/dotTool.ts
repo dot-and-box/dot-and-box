@@ -6,10 +6,10 @@ import {COLORS, DEFAULT_DOT_SIZE} from "../shared/constants.ts"
 export class DotTool extends Tool {
 
     override click(point: Point): void {
-        const controls = this.dotsAndBoxes.model.controls
+        const controls = this.dotAndBox.model.controls
         const id = `${controls.length + 1}`
         controls.push(new DotControl(id, point, DEFAULT_DOT_SIZE, COLORS[controls.length % COLORS.length], id, true, false))
-        this.dotsAndBoxes.resetTool()
+        this.dotAndBox.resetTool()
     }
 
 }

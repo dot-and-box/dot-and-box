@@ -5,7 +5,7 @@ import {StepState} from "./stepState.ts";
 import {StepDirection} from "./stepDirection.ts";
 import {Easing, EasingType} from "./easingFunctions.ts";
 
-export class DotsAndBoxesModel {
+export class DotAndBoxModel {
     get height(): number {
         return this._height;
     }
@@ -90,8 +90,8 @@ export class DotsAndBoxesModel {
     }
 
     findControl(controlId: string) {
-        if (controlId.startsWith(DotsAndBoxesModel.SELECTED_PREFIX)) {
-            const index = parseInt(controlId.substring(DotsAndBoxesModel.SELECTED_PREFIX.length), 10)
+        if (controlId.startsWith(DotAndBoxModel.SELECTED_PREFIX)) {
+            const index = parseInt(controlId.substring(DotAndBoxModel.SELECTED_PREFIX.length), 10)
             return index < this.selectedControls.length ? this.selectedControls[index] : undefined
         } else {
             return this.controls.find(c => c.id === controlId)

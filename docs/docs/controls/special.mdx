@@ -22,24 +22,24 @@ step: 'swap selected controls'
 selected0 <-> selected1
 ```
 ```html tab showLineNumbers
-<dots-and-boxes style="height: 250px" controls code="
+<dot-and-box style="height: 250px" controls code="
     title: 'selected controls'
     dot id: a at: [-2,-1] selected: true
     dot id: b at: [1,-1]  selected: true
     dot id: e at: [0,-2] color: green
     step: 'swap selected controls'
     selected0 <-> selected1">
-</dots-and-boxes>
+ </dot-and-box>
 ```
 
-<dots-and-boxes style={{height: 250}} controls code="
+<dot-and-box style={{height: 250}} controls code="
     title: 'selected controls'
     dot id: a at: [-2,-1] selected: true
     dot id: b at: [1,-1] selected: true
     dot id: e at: [0,-2] color: green
     step: 'swap selected controls'
     selected0 <-> selected1">
-</dots-and-boxes>
+ </dot-and-box>
 
 Try to unselect one of dots and select green one, restart and make step forward again to see how it works.
 
@@ -58,19 +58,19 @@ e.g.
  camera -> +[4,-1]
 ```
 ```html tab showLineNumbers
-<dots-and-boxes style="height: 250px" controls code="
+<dot-and-box style="height: 250px" controls code="
     title: 'camera move'
     dot id: c at: [-2,-1]
     dot id: d at: [1,-1]
     step: 'move camera 4 cells right and one up'
     camera -> +[4,-1]">
-</dots-and-boxes>
+ </dot-and-box>
 ```
 
-<dots-and-boxes style={{height: 250}} controls code="
+<dot-and-box style={{height: 250}} controls code="
     title: 'camera move'
     dot id: c at: [-2,-1]
     dot id: d at: [1,-1]
     step: 'move camera 4 cells right and one up'
     camera -> +[4,-1]">
-</dots-and-boxes>
+ </dot-and-box>

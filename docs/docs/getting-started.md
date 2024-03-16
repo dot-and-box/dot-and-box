@@ -4,15 +4,15 @@ sidebar_position: 2
 
 # Getting started
 
-All you need to do is add **dots and boxes** js script reference and add dots-and-boxes tag in your html page. 
+All you need to do is add **dot and box** js script reference and add dots-and-boxes tag in your html page. 
 
 1) Add script reference
     ```html
-    <script src="dots-and-boxes.js"></script>
+    <script src="dot-and-box.js"></script>
     ```
 2) Add *dots-and-boxes* tag to your html page e.g.
     ```html
-    <dots-and-boxes controls code="
+    <dot-and-box controls code="
       title: sort with bubble sort
       box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
       dots ids: 2 1 5 3 4 at: [-3,0] size: 20
@@ -31,5 +31,5 @@ All you need to do is add **dots and boxes** js script reference and add dots-an
       5 <-> 4
       step: 'repeat from start'
       win -> -[3,0]">
-    </dots-and-boxes>
+    </dot-and-box>
     ```

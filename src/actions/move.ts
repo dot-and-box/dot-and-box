@@ -3,7 +3,7 @@ import {Point} from "../shared/point.ts"
 import {Control} from "../controls/control.ts"
 import {Sign} from "../shared/sign.ts"
 import {DUMMY_CONTROL} from "../shared/constants.ts";
-import {DotsAndBoxesModel} from "../shared/dotsAndBoxesModel.ts";
+import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 
 export class Move extends ActionBase {
     start: Point
@@ -14,7 +14,7 @@ export class Move extends ActionBase {
     leftId: string
     rightId: string = ''
 
-    constructor(model: DotsAndBoxesModel, leftId: string, to: Point, rightId = '') {
+    constructor(model: DotAndBoxModel, leftId: string, to: Point, rightId = '') {
         super(model)
         this.start = Point.zero()
         this.to = to
