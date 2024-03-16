@@ -24,8 +24,8 @@ selected0 <-> selected1
 ```html tab showLineNumbers
 <dots-and-boxes style="height: 250px" controls code="
     title: 'selected controls'
-    dot id: a at: [-2,-1] color: red selected: true
-    dot id: b at: [1,-1] color: blue selected: true
+    dot id: a at: [-2,-1] selected: true
+    dot id: b at: [1,-1]  selected: true
     dot id: e at: [0,-2] color: green
     step: 'swap selected controls'
     selected0 <-> selected1">
@@ -34,8 +34,8 @@ selected0 <-> selected1
 
 <dots-and-boxes style={{height: 250}} controls code="
     title: 'selected controls'
-    dot id: a at: [-2,-1] color: red selected: true
-    dot id: b at: [1,-1] color: blue selected: true
+    dot id: a at: [-2,-1] selected: true
+    dot id: b at: [1,-1] selected: true
     dot id: e at: [0,-2] color: green
     step: 'swap selected controls'
     selected0 <-> selected1">
@@ -52,16 +52,16 @@ e.g.
 
 ```dabl tab showLineNumbers
  title: 'camera move'
- dot id: c at: [-2,-1] color: red selected: true
- dot id: d at: [1,-1] color: blue selected: true
+ dot id: c at: [-2,-1]
+ dot id: d at: [1,-1]
  step: 'move camera 4 cells right and one up'
  camera -> +[4,-1]
 ```
 ```html tab showLineNumbers
 <dots-and-boxes style="height: 250px" controls code="
     title: 'camera move'
-    dot id: c at: [-2,-1] color: red selected: true
-    dot id: d at: [1,-1] color: blue selected: true
+    dot id: c at: [-2,-1]
+    dot id: d at: [1,-1]
     step: 'move camera 4 cells right and one up'
     camera -> +[4,-1]">
 </dots-and-boxes>
@@ -69,8 +69,8 @@ e.g.
 
 <dots-and-boxes style={{height: 250}} controls code="
     title: 'camera move'
-    dot id: c at: [-2,-1] color: red selected: true
-    dot id: d at: [1,-1] color: blue selected: true
+    dot id: c at: [-2,-1]
+    dot id: d at: [1,-1]
     step: 'move camera 4 cells right and one up'
     camera -> +[4,-1]">
 </dots-and-boxes>

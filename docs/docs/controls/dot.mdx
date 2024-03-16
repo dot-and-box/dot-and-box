@@ -4,37 +4,39 @@ sidebar_position: 1
 
 # Dot
 
+Dot Control
+
 ```dabl tab showLineNumbers
 title: 'dot color and size'
-dot id: it at: [-3,0] size: 25 color: red  selected: true
-dot id: is at: [-1,0] size: 50 color: blue
-dot id: a at: [0.75,0] size: 20 color: brown
-dot id: C at: [3,0] size: 75 text: 'dot' color: orange
+dot id: it at: [-4,0] size: 25 selected: true
+dot id: is at: [-2,0] size: 50
+dot id: a at: [-0.2,0] size: 20 color: black
+dot id: C at: [2,0] size: 75 text: 'dot'
 ```
 ```html tab showLineNumbers
 <dots-and-boxes code="
     title: 'dot color and size'
-    dot id: it at: [-3,0] size: 25 color: red  selected: true
-    dot id: is at: [-1,0] size: 50 color: blue
-    dot id: a at: [0.75,0] size: 20 color: brown
-    dot id: C at: [3,0] size: 75 text: 'dot' color: orange">
+    dot id: it at: [-4,0] size: 25 selected: true
+    dot id: is at: [-2,0] size: 50
+    dot id: a at: [-0.2,0] size: 20 color: black
+    dot id: C at: [2,0] size: 75 text: 'dot'">
 </dots-and-boxes>
 ```
 
  <dots-and-boxes style={{height: 250}}  code="
-          title: 'dot color and size'
-          dot id: it at: [-3,0] size: 25 color: red  selected: true
-          dot id: is at: [-1,0] size: 50 color: blue
-          dot id: a at: [0.75,0] size: 20 color: brown
-          dot id: C at: [3,0] size: 75 text: 'dot' color: orange">
+   title: 'dot color and size'
+   dot id: it at: [-4,0] size: 25 selected: true
+   dot id: is at: [-2,0] size: 50
+   dot id: a at: [-0.2,0] size: 20 color: black
+   dot id: C at: [2,0] size: 75 text: 'dot'">
  </dots-and-boxes>
 
 #### dot attributes
 Dot attributes:
-- **id** - unique id of control - mandatory
-- **at** - control start location - optional - default: (0,0)
-- **text** - control text - optional - default: empty string
-- **size** - control size - optional - default: 20px
-- **visible** - is control visible - optional - default: true
-- **selected** - is control selected - optional - default: false
+- **id** - unique id of dot - mandatory
+- **at** - dot start location - optional - default: (0,0)
+- **text** - dot text - optional - default: empty string
+- **size** - dot size - optional - default: 20 units (unit usually mean pixel)
+- **visible** - is dot visible - optional - default: true
+- **selected** - is dot selected - optional - default: false
 - **color** - background color of control - optional - default: value from internal color table selected by: len(controls) modulo len(color_table)

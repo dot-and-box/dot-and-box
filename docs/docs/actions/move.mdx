@@ -4,26 +4,28 @@ sidebar_position: 1
 
 # Move
 
-move operator **-\>** allows to make
+move operator allows to move controls
+
+### a **-\>** (x, y)
 
 ```dabl tab showLineNumbers
 title: 'dot color and size'
-dot id: d1  text: 'dot' at: [-3,-1] size: 35 color: blue
+dot id: d1  text: 'dot' at: [-3,-1] size: 35
 step: 'move dot by 4 cells right'
 d1 -> +[4,0]
 ```
 ```html tab showLineNumbers
 <dots-and-boxes controls style="height: 250px" code="
   title: 'dot color and size'
-  dot id: d1  text: 'dot' at: [-3,-1] size: 35 color: blue
+  dot id: d1  text: 'dot' at: [-3,-1] size: 35
   step: 'move dot by 4 cells right'
   d1 -> +[4,0]">
 </dots-and-boxes>
 ```
 
 <dots-and-boxes controls style={{height: 250}} code="
-    title: 'dot color and size'
-    dot id: d1  text: 'dot' at: [-3,-1] size: 35 color: blue
-    step: 'move dot by 4 cells right'
-    d1 -> +[4,0]">
+title: 'dot color and size'
+dot id: d1  text: 'dot' at: [-3,-1] size: 35
+step: 'move dot by 4 cells right'
+d1 -> +[4,0]">
 </dots-and-boxes>

@@ -1,0 +1,50 @@
+---
+sidebar_position: 2
+---
+
+# Units and location
+
+## Units
+
+Units are used to define control size and movement distance.
+Dots and boxes supports two types of units:
+
+- default units created with brackets
+
+```dabl
+(90,150)
+```
+:::info
+default units *usually* refer to screen pixels, however it's not a rule and depends canvas api implementation details
+:::
+
+- grid cell units created with square brackets
+
+```dabl
+[2,4]
+```
+:::info
+by default cell size is 50 units. It was created to make on screen calculations easier.
+:::
+
+
+## Location
+
+Just like with the size, location can be expressed in two type of units default and grid cells.
+
+Controls are placed at point (0,0) on the dots-and-boxes surface area by default.
+Which is more o less center of the surface.1
+
+When using grid cells location [0,0] refers to right bottom side od point (0,0) marked as white dot at center below
+
+<dots-and-boxes style={{height: 250}} grid code="
+    boxes ids: '-2,-1' '-1,-1' '0,-1' '1,-1' '2,-1' at: [-2,-1]
+    boxes ids: '-2,0' '-1,0' '0,0' '1,0' '2,0' at: [-2,0]
+    dot text: '' at: 0, 0 size: 5 color: white
+    title: 'grid cell units'
+    ">
+</dots-and-boxes>
+
+
+
+

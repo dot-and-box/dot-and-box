@@ -4,22 +4,24 @@ sidebar_position: 2
 
 # Swap
 
-Swap operator **\<-\>** makes controls swap their positions.
+Swap operator makes controls swap their positions.
+
+### a **\<->** b
 
 e.g. following code swaps position of control d1 and d2
 
 ```dabl tab showLineNumbers
 title: 'dot color and size'
-dot id: d1 at: [-4,-1] size: 35 color: red
-dot id: d2 at: [3,-1] size: 35 color: black
+dot id: d1 at: [-3,-1] size: 35
+dot id: d2 at: [2,-1] size: 35
 step: 'swap control d1 and d2'
 d1 <-> d2
 ```
 ```html tab showLineNumbers
 <dots-and-boxes controls style="height: 250px" code="
   title: 'dot color and size'
-  dot id: d1 at: [-4,-1] size: 35 color: red
-  dot id: d2 at: [3,-1] size: 35 color: black
+  dot id: d1 at: [-4,-1] size: 35
+  dot id: d2 at: [3,-1] size: 35
   step: 'swap control d1 and d2'
   d1 <-> d2">
 </dots-and-boxes>
@@ -27,8 +29,8 @@ d1 <-> d2
 
 <dots-and-boxes controls style={{height: 250}} code="
    title: 'dot color and size'
-   dot id: d1 at: [-4,-1] size: 35 color: red
-   dot id: d2 at: [3,-1] size: 35 color: black
+   dot id: d1 at: [-3,-1] size: 35
+   dot id: d2 at: [2,-1] size: 35
    step: 'swap control d1 and d2'
    d1 <-> d2">
 </dots-and-boxes>

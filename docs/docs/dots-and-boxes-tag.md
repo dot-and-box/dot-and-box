@@ -5,9 +5,9 @@ sidebar_position: 5
 #  Dots and boxes tag
 
 ### \<dots-and-boxes\> tag elem
-**\<dots-and-boxes\>** is just a normal html tag (e.g. you can style it).
+**\<dots-and-boxes\>** is a custom html tag and behaves like standard html tag (e.g. you can style it).
 
-It supports number of attributes and events.
+It supports attributes and events.
 
 ### attributes
 
