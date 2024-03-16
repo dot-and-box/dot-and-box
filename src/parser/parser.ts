@@ -660,6 +660,7 @@ export class Parser {
         return token.type == TokenType.PLUS
             || token.type == TokenType.MINUS
             || token.type == TokenType.LEFT_BRACKET
+            || token.type == TokenType.LEFT_SQUARE_BRACKET
     }
 
     assign(controlId: string): Assign {

@@ -118,14 +118,16 @@
 ">
 </dot-and-box>
 
-<dot-and-boxe id="example4" style="margin:10px;height: 370px; width: 600px" debug controls code="
-    title: box control test
+Relative and absolute movement
+
+<dot-and-box id="example4" style="margin:10px;height: 370px; width: 600px" debug controls code="
+    title: Relative and absolute movement
     boxes ids: first second third size: [2,1] layout: col at: [-4,0] span: 1
     step:
     first -> +(50,70)
-    third -> +(50,-70)
+    third -> [0,0]
 ">
-</dot-and-boxe>
+</dot-and-box>
 
 <script type="module" src="/src/dotAndBoxElement.ts"></script>
 

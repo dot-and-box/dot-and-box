@@ -105,6 +105,24 @@ test('assign properties', () => {
 })
 
 
+test('relative and absolute moves', () => {
+    let eg1 = ` 
+title: 'dot color and size'
+dot id: d1  text: 'dot' at: [-3,-1] size: 35
+step: 'move dot by 4 cells right'
+d1 -> +[4,0]
+d1 ->  [0,0]
+`
+    let p = new Parser()
+    const model = p.parse(eg1)
+    expect(model).not.eq(null)
+    expect(model.steps.length).eq(1)
+})
+
+
+
+
+
 test('parse controls and actions', () => {
     let eg1 = ` 
 title: 'This is string'
