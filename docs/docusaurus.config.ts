@@ -16,7 +16,7 @@ const config: Config = {
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: 'dot_and_box',
+    organizationName: 'dot-and-box',
     projectName: 'dot_and_box',
 
     onBrokenLinks: 'throw',

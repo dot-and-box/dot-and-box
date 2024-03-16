@@ -7,7 +7,7 @@ visualise some algorithms or your raw ideas e.g. show event flow in a distribute
 
 ## Documentation and examples
 
-See documentation and see examples
+See [documentation](https://dot-and-box.github.io/) and see examples
 
 ## project goal
 
