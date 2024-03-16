@@ -76,7 +76,7 @@ const config: Config = {
             },
             items: [
                 {
-                    href: 'https://github.com/tomaszkubacki/dot_and_box',
+                    href: 'https://github.com/dot-and-box/dot_and_box',
                     label: 'GitHub',
                     position: 'right',
                 },
@@ -104,7 +104,7 @@ const config: Config = {
                     items: [
                         {
                             label: 'Github',
-                            to: 'https://github.com/tomaszkubacki/dot_and_box',
+                            to: 'https://github.com/dot-and-box/dot_and_box',
                         },
                         {
                             label: 'My Twitter',
