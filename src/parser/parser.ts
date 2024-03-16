@@ -10,7 +10,7 @@ import {Move} from "../actions/move.ts"
 import {Swap} from "../actions/swap.ts"
 import {Clone} from "../actions/clone.ts"
 import {Sign} from "../shared/sign.ts"
-import {BLACK, COLORS, DEFAULT_FONT_SIZE, WHITE} from "../shared/constants.ts"
+import {BLACK, COLORS, DEFAULT_FONT_SIZE} from "../shared/constants.ts"
 import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
@@ -169,7 +169,7 @@ export class Parser {
         let at = new Point(0, 0)
         let text = ''
         let id = null
-        let color = WHITE
+        let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
         let selected = false
         let fontSize = DEFAULT_FONT_SIZE
@@ -338,7 +338,7 @@ export class Parser {
         const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED]
         let size = 20
         let at = new Point(0, 0)
-        let text = ''
+        let text: string | null = null
         let id = ''
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
@@ -369,14 +369,19 @@ export class Parser {
                     break
             }
         }
-        if (id == '' && text == '') {
+        if (id === '' && text === '') {
             id = 'd' + this.model.controls.length
         }
+
+        if (text == null) {
+            text = id
+        }
+
         if (at.unit == Unit.CELL) {
             this.normalizeDotPosition(at)
         }
         const realId = this.getId(id != '' ? id : text)
-        const dot = new DotControl(realId, at, size, color, text != '' ? text : id, visible, selected)
+        const dot = new DotControl(realId, at, size, color, text, visible, selected)
         this.model.controls.push(dot)
         if (dot.selected) {
             this.model.selectedControls.push(dot)
@@ -411,7 +416,7 @@ export class Parser {
 
     color(): string {
         this.expectColon()
-        return  this.colorValue()
+        return this.colorValue()
     }
 
     colors(): string[] {
@@ -599,7 +604,7 @@ export class Parser {
         let token = this.advance()
         if (this.canBeId(token.type)) {
             let prefix = ''
-            if(token.type == TokenType.NUMBER && !this.eof() && this.peek().value.startsWith('_')){
+            if (token.type == TokenType.NUMBER && !this.eof() && this.peek().value.startsWith('_')) {
                 // quite a dirty hack - maybe we can find something more elegant
                 prefix = token.value
                 token = this.advance()

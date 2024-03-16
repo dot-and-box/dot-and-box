@@ -13,8 +13,8 @@ export const WHITE = "white"
 export const BLACK = "black"
 export const COLORS: string [] = [
     "#F44336",
-    "#E91E63",
     "#673AB7",
+    "#E91E63",
     "#FFC107",
     "#3F51B5",
     "#03A9F4",
