@@ -1,10 +1,19 @@
 ## dot and box
 
+**dot and box** allows drawing dots and boxes and do simple step based animations making it easy to
+visualise some algorithms or your raw ideas e.g. show event flow in a distributed system.
+
+![dab_view.png](docs%2Fstatic%2Fimg%2Fdab_view.png)
+
+## Documentation and examples
+
+See documentation and see examples
+
+## project goal
+
 Project goal is to create a simple language and visualizer to explain algorithms and common CS patterns
 or do simple step based animations visualizing your raw ideas. Technically dot and box is an *HTML5 custom element* you can add to your page with code 
 attribute defining dot and box and action (animation) steps.
-
-Project was highly inspired by [mermaid.js](https://mermaid.js.org/) project, although it has a very different goals
 
 #### Example use cases
 

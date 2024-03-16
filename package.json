@@ -1,7 +1,7 @@
 {
   "name": "dot-and-box",
   "version": "0.0.1",
-  "description": "dot and boxe is markdown for animations tool",
+  "description": "draw dots and boxes and do simple step based animations",
   "type": "module",
   "license": "MIT",
   "scripts": {
