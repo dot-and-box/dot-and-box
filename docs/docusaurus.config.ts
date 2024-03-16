@@ -16,7 +16,7 @@ const config: Config = {
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: 'tomaszkubacki',
+    organizationName: 'dot_and_box',
     projectName: 'dot-and-box',
 
     onBrokenLinks: 'throw',
@@ -42,7 +42,7 @@ const config: Config = {
                     // Please change this to your repo.
                     // Remove this to remove the "edit this page" links.
                     editUrl:
-                        'https://github.com/tomaszkubacki/dots_and_boxes/tree/main/docs',
+                        'https://github.com/dot_and_box/dot_and_box/tree/main/docs',
                     remarkPlugins: [
                         [
                             tabBlocks,
