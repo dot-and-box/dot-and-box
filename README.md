@@ -3,19 +3,11 @@
 **dot and box** allows drawing dots and boxes and do simple step based animations making it easy to
 visualise some algorithms or your raw ideas e.g. show event flow in a distributed system.
 
+
+[![dab_view.png](docs%2Fstatic%2Fimg%2Fdab_view.png)](https://dot-and-box.github.io/dot_and_box)
 ## Documentation and examples
 
 See [documentation](https://dot-and-box.github.io/dot_and_box) and see [examples](https://dot-and-box.github.io/dot_and_box/category/examples)
-
-![dab_view.png](docs%2Fstatic%2Fimg%2Fdab_view.png)
-
-
-
-## project goal
-
-Project goal is to create a simple language and visualizer to explain algorithms and common CS patterns
-or do simple step based animations visualizing your raw ideas. Technically dot and box is an *HTML5 custom element* you can add to your page with code 
-attribute defining dot and box and action (animation) steps.
 
 #### Example use cases
 
@@ -25,13 +17,11 @@ attribute defining dot and box and action (animation) steps.
 
 ## How to use it
 dot and box is using [HTML web components standard](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components)
-You need to do two things to start using it
 
 1) install script by npm 
    ```shell
    npm i dot-and-box
    ```
-
 2) Add script reference
     ```html
     <script src="dot-and-box.js"></script>
