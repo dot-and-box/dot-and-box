@@ -44,7 +44,7 @@ export class Move extends ActionBase {
             const foundRight = this.model.findControl(this.rightId)
             if (foundRight) {
                 this.right = foundRight
-                this.end = this.right.position.clone()
+                this.end = this.left.targetByCenter(this.right.center)
                 foundRight.normalizePositionUnit(this.end, this.model.cellSize)
             }
         }

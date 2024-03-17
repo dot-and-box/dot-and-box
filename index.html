@@ -130,10 +130,17 @@ Relative and absolute movement
 </dot-and-box>
 
 <dot-and-box id="example4" style="margin:10px;height: 370px; width: 600px"  grid controls code="
+box id: b1 at: [1,-2]
+box id: b2 at: [-3,-2]
+dot id: d2 at: [-3,-3]
 dot id: black text: '[-4,-2]' color: black at: [-4, -2] fontSize: 8
 title: 'grid cell units'
+step:
+b2 <-> black, b1 <-> d2
 step: 'move black do to [0,0]'
 black <- '[0,0]', black -> [0,0]
+step:
+black -> b1
 ">
 </dot-and-box>
 

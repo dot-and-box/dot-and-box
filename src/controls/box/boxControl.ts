@@ -26,6 +26,14 @@ export class BoxControl extends Control {
         this._text = value;
     }
 
+    override get center(): Point {
+        return new Point(this.position.x + this.size.x / 2, this.position.y + this.size.y / 2);
+    }
+
+    override targetByCenter(center: Point): Point {
+        return new Point(center.x - this.size.x / 2, center.y - this.size.y / 2);
+    }
+
     public color: string
     public size: Point
     private _text: string
