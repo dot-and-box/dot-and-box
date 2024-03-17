@@ -1,5 +1,12 @@
 import {Point} from "../../shared/point.ts"
-import {SELECTION_STROKE_STYLE, DEFAULT_FONT, WHITE, BLACK, DEFAULT_LINE_WIDTH} from "../../shared/constants.ts"
+import {
+    BLACK,
+    DEFAULT_FONT,
+    DEFAULT_FONT_SIZE,
+    DEFAULT_LINE_WIDTH,
+    SELECTION_STROKE_STYLE,
+    WHITE
+} from "../../shared/constants.ts"
 import {Control} from "../control.ts"
 
 export class DotControl extends Control {
@@ -9,8 +16,9 @@ export class DotControl extends Control {
     public id: string
     public selected: boolean
     public visible: boolean
+    public fontSize: number | null
 
-    constructor(id: string, position: Point, size: number, color: string, text: string, visible: boolean, selected: boolean) {
+    constructor(id: string, position: Point, size: number, color: string, text: string, visible: boolean, selected: boolean, fontSize: number | null = null) {
         super()
         this.id = id
         this.position = position
@@ -19,6 +27,7 @@ export class DotControl extends Control {
         this.text = text
         this.selected = selected
         this.visible = visible
+        this.fontSize = fontSize
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -32,11 +41,23 @@ export class DotControl extends Control {
             ctx.stroke()
         }
         ctx.closePath()
-        const textSize = this.text.length > 1 ? this.size * 0.8 : this.size * 1.2
-        ctx.font = `${textSize}px ${DEFAULT_FONT}`
+        let textOffset = 0
+        let xOffset = 0
+        let fontSize = this.fontSize != null ? this.fontSize : DEFAULT_FONT_SIZE
+
+        if (this.text.length > 3) {
+            const fontSize = this.fontSize
+            ctx.font = `${fontSize}px ${DEFAULT_FONT}`
+            let metric = ctx.measureText(this.text)
+            xOffset = metric.width / 2
+        } else {
+            let textSizeCoerced = this.text.length > 1 ? this.size * 0.8 : this.size * 1.2
+            fontSize = this.fontSize != null ? this.fontSize : textSizeCoerced
+            textOffset = textSizeCoerced / 2 - textSizeCoerced / 4 + 1
+            xOffset = textOffset * this.text.length
+        }
+        ctx.font = `${fontSize}px ${DEFAULT_FONT}`
         ctx.fillStyle = this.color != WHITE ? WHITE : BLACK
-        const textOffset = textSize / 2 - textSize / 4 + 1
-        const xOffset = textOffset * this.text.length
         ctx.fillText(this.text, this.position.x - xOffset, this.position.y + textOffset)
     }
 
@@ -49,6 +70,5 @@ export class DotControl extends Control {
     clone(): Control {
         return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString(), this.visible, this.selected)
     }
-
 
 }

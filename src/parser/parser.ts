@@ -335,7 +335,7 @@ export class Parser {
     }
 
     dot() {
-        const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED]
+        const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
         let size = 20
         let at = new Point(0, 0)
         let text: string | null = null
@@ -343,6 +343,8 @@ export class Parser {
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
         let selected = false
+        let fontSize: number | null = null
+
         while (!this.eof() && dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -367,6 +369,9 @@ export class Parser {
                 case TokenType.SELECTED:
                     selected = this.selected()
                     break
+                case TokenType.FONT_SIZE:
+                    fontSize = this.fontSize()
+                    break
             }
         }
         if (id === '' && text === '') {
@@ -381,7 +386,7 @@ export class Parser {
             this.normalizeDotPosition(at)
         }
         const realId = this.getId(id != '' ? id : text)
-        const dot = new DotControl(realId, at, size, color, text, visible, selected)
+        const dot = new DotControl(realId, at, size, color, text, visible, selected, fontSize)
         this.model.controls.push(dot)
         if (dot.selected) {
             this.model.selectedControls.push(dot)
