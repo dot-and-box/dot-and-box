@@ -8,32 +8,61 @@ move operator allows to move controls
 
 ### a **-\>** (x, y)
 
+There are three possible move type:
+- move by relative value
+  ```dabl
+    control -> +(50,100) // same as +[1,2]
+  ```
+- move to absolute position
+  ```dabl
+    control -> (100,100)
+  ```
+- move to other control position
+  ```dabl
+    control -> otherControl
+  ```
+
+
 ```dabl tab showLineNumbers
 title: 'move control'
+box id: otherBox at: [2,0]
 dot id: d1  text: 'dot' at: [-3,-2] size: 35
 step: 'move dot by 4 cells right'
 d1 -> +[4,0] // relative move
-d1 ->  -[0,-1] // relative move
-d1 ->  [0,0] // absolute position move
+step: 'move to [0,1]'
+d1 ->  [0,1] // absolute move
+step: 'move to otherBox'
+d1 -> otherBox // move to other control
 ```
 ```html tab showLineNumbers
 <dot-and-box controls style="height: 250px" code="
 title: 'move control'
+box id: otherBox at: [2,0]
 dot id: d1  text: 'dot' at: [-3,-2] size: 35
 step: 'move dot by 4 cells right'
 d1 -> +[4,0]
-d1 ->  -[0,-1]
-d1 ->  [0,0]
+step: 'move to [0,1]'
+d1 ->  [0,1]
+step: 'move to otherBox'
+d1 -> otherBox
   ">
  </dot-and-box>
 ```
 
-<dot-and-box experimental controls style={{height: 250}} code="
+:::info
+moving dot to otherControl in below example moves dot to upper left corner of box because that's how box position is denoted
+if you want to move dot to the center of box you would have to move position using square bracket [2,0] notation
+:::
+
+<dot-and-box experimental grid controls style={{height: 250}} code="
 title: 'move control'
+box id: otherBox at: [2,0]
 dot id: d1  text: 'dot' at: [-3,-2] size: 35
 step: 'move dot by 4 cells right'
 d1 -> +[4,0]
-d1 ->  -[0,-1]
-d1 ->  [0,0]
+step: 'move to [0,1]'
+d1 ->  [0,1]
+step: 'move to otherBox'
+d1 -> otherBox
 ">
  </dot-and-box>
