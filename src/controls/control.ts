@@ -15,6 +15,11 @@ export abstract class Control implements ControlBase {
 
     abstract hitTest(point: Point): boolean
 
+    get center(): Point {
+        return this.position
+    }
+
+
     updatePosition(x: number, y: number) {
         this.position.x = x
         this.position.y = y
@@ -25,4 +30,8 @@ export abstract class Control implements ControlBase {
     }
 
     abstract clone(): Control
+
+    targetByCenter(center: Point): Point {
+        return center;
+    }
 }
