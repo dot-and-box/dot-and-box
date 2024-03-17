@@ -18,6 +18,8 @@ export class Swap extends ActionBase {
         super(model)
         this.startLeft = Point.zero()
         this.endLeft = Point.zero()
+        this.startRight = Point.zero()
+        this.endRight = Point.zero()
         this.leftControlId = left
         this.rightControlId = right
     }

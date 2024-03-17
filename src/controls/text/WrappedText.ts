@@ -11,12 +11,12 @@ export class WrappedText extends Control {
         this._maxHeight = value;
     }
 
-    get center(): boolean {
-        return this._center;
+    get centered(): boolean {
+        return this._centered;
     }
 
-    set center(value: boolean) {
-        this._center = value;
+    set centered(value: boolean) {
+        this._centered = value;
     }
 
     get color(): string {
@@ -64,7 +64,7 @@ export class WrappedText extends Control {
         }
     }
 
-    private _center = false
+    private _centered = false
 
     private _color: string = 'black'
 
@@ -85,7 +85,7 @@ export class WrappedText extends Control {
     private _textData: Array<string>
 
 
-    constructor(text: string, position: Point, fontName: string, fontSize: number, color: string, maxWidth: number, maxHeight: number, center: boolean) {
+    constructor(text: string, position: Point, fontName: string, fontSize: number, color: string, maxWidth: number, maxHeight: number, centered: boolean) {
         super();
         this.position = position
         this._fontName = fontName;
@@ -94,12 +94,12 @@ export class WrappedText extends Control {
         this._maxHeight = maxHeight;
         this._text = text;
         this._color = color
-        this._center = center
+        this._centered = centered
         this._textData = [];
     }
 
     clone(): Control {
-        return new WrappedText(this._text, this.position, this._fontName, this._fontSize, this._color, this._maxWidth, this._maxHeight, this._center);
+        return new WrappedText(this._text, this.position, this._fontName, this._fontSize, this._color, this._maxWidth, this._maxHeight, this._centered);
     }
 
     override updatePosition(x: number, y: number) {
@@ -158,7 +158,7 @@ export class WrappedText extends Control {
             result.push(line);
             y += this._fontSize;
         }
-        if (this._center) {
+        if (this._centered) {
             this._spanX = this._maxWidth < maxLineWidth ? 0 : (this._maxWidth - maxLineWidth) / 2
             this._spanY = (this._maxHeight - (result.length * this.fontSize)) / 2 + this.fontSize / 2
         }
