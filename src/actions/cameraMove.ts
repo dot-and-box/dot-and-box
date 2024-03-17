@@ -9,7 +9,8 @@ export class CameraMove extends ActionBase {
 
     constructor(model: DotAndBoxModel, to: Point) {
         super(model)
-        this.to = to
+        this.to = to.clone()
+        this.to.normalizeUnit(model.cellSize)
     }
 
     onBeforeForward() {

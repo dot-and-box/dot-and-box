@@ -18,7 +18,7 @@
 
 <div style="position: relative; margin-left: 140px;background-color: #669900">
     <dot-and-box id="example1" style="margin-left:30px;height: 550px; width: 630px" controls grid  experimental keyboard code="
-    title: 'do movement'
+    title: 'simple movement'
     box id: win at: [-8, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
     dots ids: 1 2 3 5 4 6 at: [-3, 0]
     boxes ids: 0 1 2 3 4 5 at: [-3, 1] colors: transparent
@@ -120,7 +120,7 @@
 
 Relative and absolute movement
 
-<dot-and-box id="example4" style="margin:10px;height: 370px; width: 600px" debug controls code="
+<dot-and-box id="example4" style="margin:10px;height: 370px; width: 600px"  controls code="
     title: Relative and absolute movement
     boxes ids: first second third size: [2,1] layout: col at: [-4,0] span: 1
     step:
@@ -128,6 +128,16 @@ Relative and absolute movement
     third -> [0,0]
 ">
 </dot-and-box>
+
+<dot-and-box id="example4" style="margin:10px;height: 370px; width: 600px"  grid controls code="
+dot id: black text: '[-4,-2]' color: black at: [-4, -2] fontSize: 8
+title: 'grid cell units'
+step: 'move black do to [0,0]'
+black <- '[0,0]', black -> [0,0]
+">
+</dot-and-box>
+
+
 
 <script type="module" src="/src/dotAndBoxElement.ts"></script>
 

@@ -8,6 +8,8 @@ import {
     WHITE
 } from "../../shared/constants.ts"
 import {Control} from "../control.ts"
+import {Unit} from "../../shared/unit.ts";
+import {Sign} from "../../shared/sign.ts";
 
 export class DotControl extends Control {
     public color: string
@@ -65,6 +67,20 @@ export class DotControl extends Control {
         let tx = this.position.x - point.x
         let ty = this.position.y - point.y
         return tx * tx + ty * ty <= this.size * this.size
+    }
+
+    override normalizePositionUnit(point: Point, cellSize: number) {
+        if (point.unit == Unit.CELL && point.sign == Sign.NONE) {
+           DotControl.normalizeDotPosition(point, cellSize)
+        } else {
+            super.normalizePositionUnit(point, cellSize)
+        }
+    }
+
+    public static normalizeDotPosition(point: Point, cellSize: number){
+        point.x = point.x * cellSize + cellSize / 2
+        point.y = point.y * cellSize + cellSize / 2
+        point.unit = Unit.PIXEL
     }
 
     clone(): Control {

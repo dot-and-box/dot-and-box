@@ -15,7 +15,7 @@ export class Point {
     }
 
     clone(): Point {
-        return new Point(this.x, this.y, this.sign)
+        return new Point(this.x, this.y, this.sign, this.unit)
     }
 
     plus(point: Point): Point {
@@ -32,7 +32,14 @@ export class Point {
         return new Point(newX, newY, Sign.NONE, this.unit)
     }
 
-    static zero = (): Point => new Point(0, 0)
+    normalizeUnit(cellSize: number) {
+        if (this.unit == Unit.CELL) {
+            this.x = this.x * cellSize
+            this.y = this.y * cellSize
+            this.unit = Unit.PIXEL
+        }
+    }
 
+    static zero = (): Point => new Point(0, 0)
 
 }

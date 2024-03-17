@@ -33,7 +33,9 @@ export class Move extends ActionBase {
         if (foundControl) {
             this.left = foundControl
             this.start = this.left.position.clone()
-            this.end = this.calculateEnd(this.start, this.to)
+            let controlTo = this.to.clone()
+            foundControl.normalizePositionUnit(controlTo, this.model.cellSize)
+            this.end = this.calculateEnd(this.start, controlTo)
         } else {
             this.left = DUMMY_CONTROL
         }
@@ -43,6 +45,7 @@ export class Move extends ActionBase {
             if (foundRight) {
                 this.right = foundRight
                 this.end = this.right.position.clone()
+                foundRight.normalizePositionUnit(this.end, this.model.cellSize)
             }
         }
     }

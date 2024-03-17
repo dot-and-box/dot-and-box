@@ -133,7 +133,7 @@ export class Parser {
             throw new Error(`ids attribute is mandatory for boxes at ${this.peek().position}`)
         }
         if (at.unit == Unit.CELL) {
-            this.normalizePointUnit(at)
+            at.normalizeUnit(this.cellSize)
         }
         colors = colors.length > 0 ? colors : COLORS
 
@@ -206,21 +206,13 @@ export class Parser {
             id = 'b' + this.model.controls.length
         }
         if (at.unit == Unit.CELL) {
-            this.normalizePointUnit(at)
+           at.normalizeUnit(this.cellSize)
         }
         const realId = this.getId(id != '' ? id : text)
         const box = new BoxControl(realId, at, size, fontSize, color, text, visible, selected)
         this.model.controls.push(box)
         if (box.selected) {
             this.model.selectedControls.push(box)
-        }
-    }
-
-    normalizePointUnit(point: Point) {
-        if (point.unit == Unit.CELL) {
-            point.x = point.x * this.cellSize
-            point.y = point.y * this.cellSize
-            point.unit = Unit.PIXEL
         }
     }
 
@@ -241,11 +233,11 @@ export class Parser {
                     break
                 case TokenType.AT:
                     at = this.at()
-                    this.normalizePointUnit(at)
+                    at.normalizeUnit(this.cellSize)
                     break
                 case TokenType.END:
                     end = this.end()
-                    this.normalizePointUnit(end)
+                    end.normalizeUnit(this.cellSize)
                     break
                 case TokenType.WIDTH:
                     width = this.width()
@@ -313,16 +305,15 @@ export class Parser {
             throw new Error(`ids attribute is mandatory for dots at ${this.peek().position}`)
         }
 
-        if (at.unit == Unit.CELL) {
-            this.normalizeDotPosition(at)
-        }
-
         colors = colors.length > 0 ? colors : COLORS
         let i = 0;
         let spanInPixels = this.cellSize + (span * this.cellSize)
 
         for (id of ids) {
             const realId = this.getId(id != '' ? id : text)
+            if (at.unit == Unit.CELL && at.sign == Sign.NONE) {
+                DotControl.normalizeDotPosition(at, this.cellSize);
+            }
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = colors[i % colors.length]
             const dot = new DotControl(realId, position, size, color, text != '' ? text : id, true, false)
@@ -382,22 +373,12 @@ export class Parser {
             text = id
         }
 
-        if (at.unit == Unit.CELL) {
-            this.normalizeDotPosition(at)
-        }
         const realId = this.getId(id != '' ? id : text)
         const dot = new DotControl(realId, at, size, color, text, visible, selected, fontSize)
+        dot.normalizePositionUnit(dot.position, this.cellSize)
         this.model.controls.push(dot)
         if (dot.selected) {
             this.model.selectedControls.push(dot)
-        }
-    }
-
-    normalizeDotPosition(point: Point) {
-        if (point.unit == Unit.CELL) {
-            point.x = point.x * this.cellSize + this.cellSize / 2
-            point.y = point.y * this.cellSize + this.cellSize / 2
-            point.unit = Unit.PIXEL
         }
     }
 
@@ -645,7 +626,6 @@ export class Parser {
         let isPoint = this.pointInBracketsAhead()
         if (isPoint) {
             point = this.point()
-            this.normalizePointUnit(point)
         } else {
             let token = this.peek()
             rightId = token.value

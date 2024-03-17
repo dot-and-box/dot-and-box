@@ -120,8 +120,18 @@ d1 ->  [0,0]
 })
 
 
-
-
+test('absolute move with cell unit', () => {
+    let eg1 = ` 
+dot id: black text: '[-4,-2]' color: black at: [-4, -2] fontSize: 8
+title: 'grid cell units'
+step: 'move black do to [0,0]'
+black <- '[0,0]', black -> [0,0]
+`
+    let p = new Parser()
+    const model = p.parse(eg1)
+    expect(model).not.eq(null)
+    expect(model.steps.length).eq(1)
+})
 
 test('parse controls and actions', () => {
     let eg1 = ` 
@@ -168,7 +178,7 @@ step:
 
 test('new steps', () => {
     let eg1 = ` 
-   title: sort with bubble sort
+    title: sort with bubble sort
     box id: win at: -255, -25 size: (100, 50) color: rgba(254,193,7,0.6) visible: false
     dots ids: 1 2 3 5 4 at: -120, 0 size: 20
     step: '(1) select first two numbers'

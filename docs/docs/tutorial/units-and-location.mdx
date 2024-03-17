@@ -23,9 +23,14 @@ default units *usually* refer to screen pixels, however it's not a rule and depe
 ```dabl
 [2,4]
 ```
+which means 2 times *cellSize* by 4 times *cellSize*.
+
 :::info
 by default cell size is 50 units. It was created to make on screen calculations easier.
 :::
+
+so:
+[2,4] is equal to (100,200)
 
 
 ## Location
@@ -37,11 +42,14 @@ Which is more o less center of the surface.1
 
 When using grid cells location [0,0] refers to right bottom side od point (0,0) marked as white dot at center below
 
-<dot-and-box style={{height: 250}} grid code="
+<dot-and-box style={{height: 250}} controls experimental grid code="
     boxes ids: '-2,-1' '-1,-1' '0,-1' '1,-1' '2,-1' at: [-2,-1]
     boxes ids: '-2,0' '-1,0' '0,0' '1,0' '2,0' at: [-2,0]
     dot text: '' at: 0, 0 size: 5 color: white
+    dot id: black text: '[-4,-2]' color: black at: [-4, -2] fontSize: 8
     title: 'grid cell units'
+    step: 'move black do to [0,0]'
+    black <- '[0,0]', black -> [0,0]
     ">
 </dot-and-box>
 

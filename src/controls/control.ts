@@ -20,5 +20,9 @@ export abstract class Control implements ControlBase {
         this.position.y = y
     }
 
+    normalizePositionUnit(point: Point, cellSize: number): void {
+        point.normalizeUnit(cellSize)
+    }
+
     abstract clone(): Control
 }
