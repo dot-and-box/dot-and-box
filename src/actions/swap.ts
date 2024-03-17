@@ -7,15 +7,17 @@ import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 export class Swap extends ActionBase {
     left: Control = DUMMY_CONTROL
     right: Control = DUMMY_CONTROL
-    start: Point
-    end: Point
+    startLeft: Point
+    startRight: Point
+    endLeft: Point
+    endRight: Point
     leftControlId: string
     rightControlId: string
 
     constructor(model: DotAndBoxModel, left: string, right: string) {
         super(model)
-        this.start = Point.zero()
-        this.end = Point.zero()
+        this.startLeft = Point.zero()
+        this.endLeft = Point.zero()
         this.leftControlId = left
         this.rightControlId = right
     }
@@ -41,22 +43,27 @@ export class Swap extends ActionBase {
             ? foundRight
             : DUMMY_CONTROL
 
-        this.start = this.left.position.clone()
-        this.end = this.right.position.clone()
+        this.startLeft = this.left.position.clone()
+        this.endLeft = this.left.targetByCenter(this.right.center).clone()
+        this.startRight = this.right.position.clone()
+        this.endRight = this.right.targetByCenter(this.left.center).clone()
     }
 
     override updateValue(progress: number) {
         if (progress == 0) {
-            this.left.updatePosition(this.start.x, this.start.y)
-            this.right.updatePosition(this.end.x, this.end.y)
+            this.left.updatePosition(this.startLeft.x, this.startLeft.y)
+            this.right.updatePosition(this.startRight.x, this.startRight.y)
         } else if (progress == 1) {
-            this.left.updatePosition(this.end.x, this.end.y)
-            this.right.updatePosition(this.start.x, this.start.y)
+            this.left.updatePosition(this.endLeft.x, this.endLeft.y)
+            this.right.updatePosition(this.endRight.x, this.endRight.y)
         } else {
-            const dx = (this.end.x - this.start.x) * progress
-            const dy = (this.end.y - this.start.y) * progress
-            this.left.updatePosition(this.start.x + dx, this.start.y + dy)
-            this.right.updatePosition(this.end.x - dx, this.end.y - dy)
+            const dxl = (this.endLeft.x - this.startLeft.x) * progress
+            const dyl = (this.endLeft.y - this.startLeft.y) * progress
+            this.left.updatePosition(this.startLeft.x + dxl, this.startLeft.y + dyl)
+
+            const dxr = (this.endRight.x - this.startRight.x) * progress
+            const dyr = (this.endRight.y - this.startRight.y) * progress
+             this.right.updatePosition(this.startRight.x + dxr, this.startRight.y + dyr)
         }
 
     }
