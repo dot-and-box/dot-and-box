@@ -6,18 +6,18 @@ sidebar_position: 1
 
 Here you will learn about basic **dot and box** concepts
 
-dot and box language allows to define **[controls](/category/controls)** and **[actions](/category/actions)** grouped into **[steps](/tutorial/actions-and-steps#steps)**
+*Dot and box* language allows to define **[controls](/category/controls)** and **[actions](/category/actions)** grouped into **[steps](/tutorial/actions-and-steps#steps)**
 
-Let's start with an example. And try to explain what's happening line by line
+Let's start with an example and try to explain it line by line
 
 ```dabl tab showLineNumbers
-title: 'basic concepts' // this will a static title at the top left of dot and box surface
+title: 'basic concepts' // static title at the top left of dot and box surface
 dot id: d1  text: 'dot' at: (-120,0) size: 35 // create a dot
 box id: b1  text: 'box' at: [1,-1] size: [2,2] // create a box
-step: 'move d1 to point (0,0)' // this defines animation step
-d1 -> (0,0) // step has a move action '->' moving dot to location (0,0)
-step: 'move box by -(200,0)' // another step step with title
-b1 -> -(200,0) // here we move b1 box by -(200,0)
+step: 'move d1 to point (0,0)' // define animation step
+d1 -> (0,0) // step has a move action '->' move dot at location (0,0)
+step: 'move box by -(200,0)' // another step with title
+b1 -> -(200,0) // move b1 box by -(200,0)
 ```
 ```html tab showLineNumbers
 <dot-and-box controls style="height: 250px" code="

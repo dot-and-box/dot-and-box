@@ -7,7 +7,7 @@ sidebar_position: 2
 ## Units
 
 Units are used to define control size and movement distance.
-dot and box supports two types of units:
+**Dot and box* supports two types of units:
 
 - default units created with brackets
 
@@ -15,7 +15,7 @@ dot and box supports two types of units:
 (90,150)
 ```
 :::info
-default units *usually* refer to screen pixels, however it's not a rule and depends canvas api implementation details
+default units *usually* refer to screen pixels, however it's not a rule and it depends on canvas api implementation details
 :::
 
 - grid cell units created with square brackets
@@ -23,7 +23,7 @@ default units *usually* refer to screen pixels, however it's not a rule and depe
 ```dabl
 [2,4]
 ```
-which means 2 times *cellSize* by 4 times *cellSize*.
+which means: 2 times *cellSize* (x axis) by 4 times *cellSize* (y axis).
 
 :::info
 by default cell size is 50 units. It was created to make on screen calculations easier.
@@ -35,12 +35,12 @@ so:
 
 ## Location
 
-Just like with the size, location can be expressed in two type of units default and grid cells.
+Just like with the size, location can be expressed in two types of units: default and grid cells.
 
 Controls are placed at point (0,0) on the dots-and-boxes surface area by default.
-Which is more o less center of the surface.1
+Which is more o less center of the *dot and box* surface.
 
-When using grid cells location [0,0] refers to right bottom side od point (0,0) marked as white dot at center below
+When using grid cells location [0,0] refers to right bottom side of point (0,0) marked as white dot at center below
 
 <dot-and-box style={{height: 250}} controls experimental grid code="
     boxes ids: '-2,-1' '-1,-1' '0,-1' '1,-1' '2,-1' at: [-2,-1]
