@@ -1,6 +1,6 @@
 {
   "name": "dot-and-box",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "draw dots and boxes and do simple step based animations",
   "type": "module",
   "license": "MIT",
