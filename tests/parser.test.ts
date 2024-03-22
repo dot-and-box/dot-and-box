@@ -105,6 +105,16 @@ test('assign properties', () => {
 })
 
 
+test('just title', () => {
+    let eg1 = `title: zoo`
+    let p = new Parser()
+    const model = p.parse(eg1)
+    expect(model).not.eq(null)
+    expect(model.steps.length).eq(0)
+})
+
+
+
 test('relative and absolute moves', () => {
     let eg1 = ` 
 title: 'dot color and size'

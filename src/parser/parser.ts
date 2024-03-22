@@ -388,7 +388,7 @@ export class Parser {
             return this.advance().value
         }
         let result = ''
-        while (this.peek().type == TokenType.IDENTIFIER) {
+        while (!this.eof() && this.peek().type == TokenType.IDENTIFIER) {
             const token = this.advance()
             result += ' ' + token.value.toString()
         }
