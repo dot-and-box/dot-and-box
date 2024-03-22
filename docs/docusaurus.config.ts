@@ -42,7 +42,7 @@ const config: Config = {
                     // Please change this to your repo.
                     // Remove this to remove the "edit this page" links.
                     editUrl:
-                        'https://github.com/dot_and_box/dot_and_box/tree/main/docs',
+                        'https://github.com/dot-and-box/dot_and_box/tree/main/docs',
                     remarkPlugins: [
                         [
                             tabBlocks,
