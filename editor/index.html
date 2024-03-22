@@ -11,47 +11,8 @@
             overflow-x: hidden;
         }
         .example {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .example dots-and-boxes {
+            margin-left: 10px;
             margin-right: 10px;
-            margin-bottom: 10px;
-        }
-
-        dots-and-boxes {
-            height: 350px;
-        }
-
-        @media (min-width: 320px) {
-            dots-and-boxes {
-                width: 100%
-            }
-
-            dots-and-boxes-editor {
-                width: 100%
-            }
-        }
-
-        @media (min-width: 961px) {
-            dots-and-boxes {
-                width: 600px
-            }
-
-            dots-and-boxes-editor {
-                width: 450px
-            }
-        }
-
-        @media (min-width: 1281px) {
-            dots-and-boxes {
-                width: 800px
-            }
-
-            dots-and-boxes-editor {
-                width: 750px
-            }
         }
 
     </style>
@@ -61,11 +22,10 @@
 <body>
 <div class="content">
 
+
     <h2>dot and box demo</h2>
     <div class="example">
-<dot-and-box-editor style="min-width: 300px" attach-selector="#dab0">
-
-        <dot-and-box id="dab0" controls experimental code="
+<dot-and-box-editor style="min-width: 600px" code="
 title: sort with bubble sort
 box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
 dots ids: 2 1 5 3 4 at: [-3,0] size: 20
@@ -85,7 +45,7 @@ win -> +[1,0]
 step: 'repeat from start'
 win -> -[3,0]
 ">
-        </dot-and-box>
+
 
 </dot-and-box-editor>
     </div>

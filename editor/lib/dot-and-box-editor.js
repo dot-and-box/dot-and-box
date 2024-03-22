@@ -1,11 +1,10 @@
 import * as Prism from './prism.js'
 
 class DotAndBoxEditor extends HTMLElement {
-    static observedAttributes = ["code", "readonly", 'attach-selector']
+    static observedAttributes = ["code", "readonly"]
 
     // noinspection JSUnusedGlobalSymbols
     connectedCallback() {
-        this.code = ''
         const shadow = this.attachShadow({mode: "open"})
         shadow.innerHTML = `
       <link href="./lib/prism.css" rel="stylesheet" type="text/css">  
@@ -13,7 +12,7 @@ class DotAndBoxEditor extends HTMLElement {
       <style>
         :host { display: block;  padding: 0; }
         .content-wrapper {
-          overflow: auto;
+          overflow: hidden;
         }
         .editor {
           line-height:1.2em;
@@ -85,8 +84,10 @@ class DotAndBoxEditor extends HTMLElement {
         </div>
       <div class="content-wrapper">      
         <pre class="editor" spellcheck=false contenteditable></pre>
+            <slot name="player"><dot-and-box controls style="margin:5px; height: 400px"></dot-and-box> </slot>
       </div>
      `
+        this.dotAndBox = shadow.querySelector( 'dot-and-box' )
         const clipBoardButton = this.getControl('#copy-clipboard')
         clipBoardButton.onclick = (_) => this.copyToClipBoard(this.code)
 
@@ -96,30 +97,29 @@ class DotAndBoxEditor extends HTMLElement {
         const showGridCheckBox = this.getControl('#show-grid')
         showGridCheckBox.oninput = (v) => {
             if (v.target.checked) {
-                this.dotsAndBoxes.setAttribute('grid', true)
+                this.dotAndBox.setAttribute('grid', true)
             } else {
-                this.dotsAndBoxes.removeAttribute('grid')
+                this.dotAndBox.removeAttribute('grid')
             }
         }
 
         const showControlsCheckBox = this.getControl('#show-controls')
         showControlsCheckBox.oninput = (v) => {
             if (v.target.checked) {
-                this.dotsAndBoxes.setAttribute('controls', true)
+                this.dotAndBox.setAttribute('controls', true)
             } else {
-                this.dotsAndBoxes.removeAttribute('controls')
+                this.dotAndBox.removeAttribute('controls')
             }
         }
 
         const experimentalCheckBox = this.getControl('#show-experimental')
         experimentalCheckBox.oninput = (v) => {
             if (v.target.checked) {
-                this.dotsAndBoxes.setAttribute('experimental', true)
+                this.dotAndBox.setAttribute('experimental', true)
             } else {
-                this.dotsAndBoxes.removeAttribute('experimental')
+                this.dotAndBox.removeAttribute('experimental')
             }
         }
-
         this.extendDABLang()
         this.updateAttachedControl()
         this.updateCode()
@@ -136,9 +136,9 @@ class DotAndBoxEditor extends HTMLElement {
         const newCode = this.updateCodeFromEditor()
         this.updateCode()
         const autoplayCheckBox = this.getControl('#autoplay')
-        this.dotsAndBoxes.code = newCode
+        this.dotAndBox.code = newCode
         if (autoplayCheckBox.checked) {
-            setTimeout(()=> this.dotsAndBoxes.fastForward(), 10); //workaround - check out why
+            setTimeout(()=> this.dotAndBox.fastForward(), 10); //workaround - check out why
         }
     }
 
@@ -176,33 +176,31 @@ class DotAndBoxEditor extends HTMLElement {
     }
 
     updateAttachedControl() {
-        if (this.shadowRoot && this.attachSelector) {
-            const dab = document.querySelector(this.attachSelector)
-            if (dab) {
-                this.dotsAndBoxes = dab
-                this.reattachHandler()
-            }
-            if (this.dotsAndBoxes && this.dotsAndBoxes.initialized) {
-                this.code = this.dotsAndBoxes.code
+        if (this.shadowRoot) {
+            // if (this.dotAndBox) {
+            //     this.reattachHandler()
+            // }
+            if (this.dotAndBox && this.dotAndBox.initialized) {
+                this.code = this.dotAndBox.code
                 this.updateCode()
             }
         }
     }
 
-    reattachHandler() {
-        document.removeEventListener("initialized", this.initializeHandler)
-        document.addEventListener("initialized", this.initializeHandler)
-    }
+    // reattachHandler() {
+    //     document.removeEventListener("initialized", this.initializeHandler)
+    //     document.addEventListener("initialized", this.initializeHandler)
+    // }
 
-    initializeHandler = (evt) => this.onAttachedControlInitialize(evt)
+    // initializeHandler = (evt) => this.onAttachedControlInitialize(evt)
 
-    onAttachedControlInitialize(evt) {
-        if (evt.target === this.dotsAndBoxes) {
-            this.code = this.dotsAndBoxes.code
-            this.dotsAndBoxes.removeAttribute('experimental')
-            this.updateCode()
-        }
-    }
+    // onAttachedControlInitialize(evt) {
+    //     if (evt.target === this.dotAndBox) {
+    //         this.code = this.dotAndBox.code
+    //         this.dotAndBox.removeAttribute('experimental')
+    //         this.updateCode()
+    //     }
+    // }
 
     // noinspection JSUnusedGlobalSymbols
     attributeChangedCallback(name, oldValue, newValue) {
@@ -215,13 +213,8 @@ class DotAndBoxEditor extends HTMLElement {
             this.updateReadonly()
         }
 
-        if (name === 'attach-selector') {
-            this.attachSelector = newValue
-            this.updateReadonly()
-        }
-
     }
 
 }
 
-customElements.define('dots-and-boxes-editor', DotAndBoxEditor)
+customElements.define('dot-and-box-editor', DotAndBoxEditor)
