@@ -167,13 +167,15 @@ export class Parser {
         const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
         let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
-        let text = ''
+        let text: string | null = ''
         let id = null
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
         let selected = false
         let fontSize = DEFAULT_FONT_SIZE
         text = this.textAfterColon();
+        if (text == null)
+            text = ''
         while (!this.eof() && box_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -217,8 +219,8 @@ export class Parser {
         }
     }
 
-    private textAfterColon() {
-        let text = ''
+    textAfterColon(): string | null {
+        let text = null
         if (this.match(TokenType.COLON)) {
             if (!this.eof() && this.peek().type === TokenType.STRING || this.peek().type === TokenType.IDENTIFIER) {
                 text = this.peek().value;
