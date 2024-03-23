@@ -6,7 +6,8 @@ visualise some algorithms or your raw ideas e.g. show event flow in a distribute
 [![dab_view.png](https://dot-and-box.github.io/dot-and-box/img/dab_view.png)](https://dot-and-box.github.io/dot-and-box)
 ## Documentation and examples
 
-See [documentation](https://dot-and-box.github.io/dot-and-box) and see [examples](https://dot-and-box.github.io/dot-and-box/category/examples)
+See [documentation](https://dot-and-box.github.io/dot-and-box) and [examples](https://dot-and-box.github.io/dot-and-box/category/examples)
+or play with [live editor here](https://dot-and-box.github.io/dot-and-box-editor/)
 
 #### Example use cases
 
