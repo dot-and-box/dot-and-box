@@ -173,6 +173,7 @@ export class Parser {
         let visible = true
         let selected = false
         let fontSize = DEFAULT_FONT_SIZE
+        text = this.textAfterColon();
         while (!this.eof() && box_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
@@ -206,7 +207,7 @@ export class Parser {
             id = 'b' + this.model.controls.length
         }
         if (at.unit == Unit.CELL) {
-           at.normalizeUnit(this.cellSize)
+            at.normalizeUnit(this.cellSize)
         }
         const realId = this.getId(id != '' ? id : text)
         const box = new BoxControl(realId, at, size, fontSize, color, text, visible, selected)
@@ -214,6 +215,17 @@ export class Parser {
         if (box.selected) {
             this.model.selectedControls.push(box)
         }
+    }
+
+    private textAfterColon() {
+        let text = ''
+        if (this.match(TokenType.COLON)) {
+            if (!this.eof() && this.peek().type === TokenType.STRING || this.peek().type === TokenType.IDENTIFIER) {
+                text = this.peek().value;
+                this.advance()
+            }
+        }
+        return text
     }
 
     line() {
@@ -335,6 +347,8 @@ export class Parser {
         let visible = true
         let selected = false
         let fontSize: number | null = null
+
+        text = this.textAfterColon()
 
         while (!this.eof() && dot_tokens.includes(this.peek().type)) {
             const token = this.advance()
