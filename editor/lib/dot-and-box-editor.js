@@ -13,6 +13,9 @@ class DotAndBoxEditor extends HTMLElement {
         :host { display: block;  padding: 0; }
         .content-wrapper {
           overflow: hidden;
+          display: flex;
+          flex-wrap: nowrap;
+          
         }
         .editor {
           line-height:1.2em;
@@ -23,6 +26,7 @@ class DotAndBoxEditor extends HTMLElement {
           font-family: monospace;
           overflow: auto;
           width: max-content
+          flex-grow: 1
         }        
         [contenteditable]:focus { 
           outline: 0 solid transparent; 
@@ -82,9 +86,13 @@ class DotAndBoxEditor extends HTMLElement {
           <div><input type="checkbox" id="show-experimental" title="show controls">experimental</div>
           <div class="right-menu"><button id="copy-clipboard" title="copy to clipboard" >📋</button></div> 
         </div>
-      <div class="content-wrapper">      
+      <div class="content-wrapper">        
         <pre class="editor" spellcheck=false contenteditable></pre>
-            <slot name="player"><dot-and-box controls style="margin:5px; height: 400px"></dot-and-box> </slot>
+        <div style="flex-grow: 1">
+          <slot name="player" ><dot-and-box controls style="margin:5px; height: 400px"></dot-and-box></slot>
+        </div>
+              
+
       </div>
      `
         this.dotAndBox = shadow.querySelector( 'dot-and-box' )
@@ -92,7 +100,11 @@ class DotAndBoxEditor extends HTMLElement {
         clipBoardButton.onclick = (_) => this.copyToClipBoard(this.code)
 
         const runCodeButton = this.getControl('#run-code')
-        runCodeButton.onclick = (_) => this.runCode()
+        runCodeButton.onclick = (_) => {
+            const editor = this.getEditor()
+            // editor.style.display = 'none'
+            this.runCode()
+        }
 
         const showGridCheckBox = this.getControl('#show-grid')
         showGridCheckBox.oninput = (v) => {

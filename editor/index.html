@@ -8,26 +8,26 @@
     <style>
         body {
             margin: 0;
+
             overflow-x: hidden;
         }
-        .example {
-            margin-left: 10px;
-            margin-right: 10px;
+        .content{
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
         }
-
     </style>
     <script type="module" crossorigin src="lib/dot-and-box-editor.js"></script>
     <script type="module" crossorigin src="lib/dot-and-box.js"></script>
 </head>
 <body>
 <div class="content">
-
-
     <h2>dot and box demo</h2>
-    <div class="example">
-<dot-and-box-editor style="min-width: 600px" code="
+
+<dot-and-box-editor  code="
 title: sort with bubble sort
-box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
+box id: win at: [-6, 0] size: [2, 1]
+color: rgba(254,193,7,0.6) visible: false
 dots ids: 2 1 5 3 4 at: [-3,0] size: 20
 step: '(1) select first two numbers' duration: 0.8s
 win <- visible: true, win -> +[3,0]
@@ -45,10 +45,8 @@ win -> +[1,0]
 step: 'repeat from start'
 win -> -[3,0]
 ">
-
-
 </dot-and-box-editor>
-    </div>
 
+</div>
 </body>
 </html>

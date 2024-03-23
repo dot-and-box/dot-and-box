@@ -66,7 +66,7 @@ class DotAndBoxElement extends HTMLElement {
         const shadow = this.attachShadow({mode: "open"})
         shadow.innerHTML = `
       <style>
-      :host { display: block; padding: 0;border: ${this.border};}      
+      :host { display: block; padding: 0;border: ${this.border};}
       
       #title-wrapper {
         margin-top: 5px;
@@ -171,6 +171,9 @@ class DotAndBoxElement extends HTMLElement {
             e.stopPropagation()
             const rect = this.getBoundingClientRect()
             this.dotAndBox.rect = new Point(rect.x, rect.y)
+        }
+        if (!this.code) {
+            this.code = "title: ''"
         }
     }
 
@@ -385,13 +388,6 @@ class DotAndBoxElement extends HTMLElement {
         }
     }
 
-    disconnectedCallback() {
-        console.log("Custom element removed from page.")
-    }
-
-    adoptedCallback() {
-        console.log("Custom element moved to new page.")
-    }
 
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
         switch (name) {
