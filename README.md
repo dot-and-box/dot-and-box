@@ -3,7 +3,7 @@
 **dot and box** allows drawing dots and boxes and do simple step based animations making it easy to
 visualise some algorithms or your raw ideas e.g. show event flow in a distributed system.
 
-[![dab_view.png](https://dot-and-box.github.io/dot_and_box/img/dab_view.png)](https://dot-and-box.github.io/dot_and_box)
+[![dab_view.png](https://dot-and-box.github.io/dot-and-box/img/dab_view.png)](https://dot-and-box.github.io/dot-and-box)
 ## Documentation and examples
 
 See [documentation](https://dot-and-box.github.io/dot-and-box) and see [examples](https://dot-and-box.github.io/dot-and-box/category/examples)
