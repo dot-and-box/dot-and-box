@@ -17,9 +17,13 @@
 <div style="position: relative; margin-left: 140px;">
     <dot-and-box controls style="margin: 10px; height: 300px;" code="
     title: 'this is ok'
-    box: 'this is box' id: 3 size: [2,1] color: black
-    dot: 'coś' at: [-3,-2]
-    dot id: 9 at: [-2 , -1]
+    dot id: ag at: [-2,-1]
+    step:
+    ag -> +[3,0]
+    ag *-> ag1
+    ag1 -> +[0,3]
+    ag1 -> +[0,0]
+    ag1 <- visible: false
 "></dot-and-box>
 
     <dot-and-box id="example1" style="margin-left:30px;height: 550px; width: 630px" controls grid  experimental keyboard code="

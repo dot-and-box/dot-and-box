@@ -22,7 +22,6 @@ export class Clone extends ActionBase {
         const foundLeft = this.model.findControl(this.leftControlId)
         if (foundLeft) {
             this.left = foundLeft
-            this.cloneAndAddControl()
         } else {
             this.left = DUMMY_CONTROL
         }
