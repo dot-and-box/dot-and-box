@@ -14,3 +14,9 @@ export const GRID = 'grid'
 
 // events
 export const INITIALIZED = 'initialized'
+
+// tools
+export const EMPTY_TOOL = 'empty-tool'
+export const BOX_TOOL = 'box-tool'
+export const DOT_TOOL = 'dot-tool'
+export const PAN_AND_ZOOM = 'pan-zoom-tool'

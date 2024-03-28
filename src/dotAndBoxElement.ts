@@ -2,8 +2,8 @@ import {DotAndBox} from "./dotAndBox.ts"
 import {Parser} from "./parser/parser.ts"
 import {Point} from "./shared/point.ts"
 import {
-    AUTOPLAY, BORDER, CODE, COLOR, CONTROLS,
-    DEBUG, EXPERIMENTAL, GRID, HEIGHT, INITIALIZED, KEYBOARD, STYLE, WIDTH
+    AUTOPLAY, BORDER, BOX_TOOL, CODE, COLOR, CONTROLS,
+    DEBUG, DOT_TOOL, EXPERIMENTAL, GRID, HEIGHT, INITIALIZED, KEYBOARD, STYLE, WIDTH
 } from "./shared/elemConstants.ts";
 
 
@@ -295,7 +295,7 @@ class DotAndBoxElement extends HTMLElement {
         experimentalMenu.style.display = this.experimental ? 'flex' : 'none'
 
         const dotTool = document.createElement("button")
-        dotTool.onclick = (_) => this.dotAndBox.selectTool(this.dotAndBox.DOT_TOOL)
+        dotTool.onclick = (_) => this.dotAndBox.selectTool(DOT_TOOL)
         dotTool.innerHTML = ` 
         <svg class="button-icon" stroke="rgba(23,23,23,0.7)" viewBox="0 0 36 36">
             <circle cx="18" cy="18" r="8" stroke-width="2" fill="transparent"   />
@@ -303,7 +303,7 @@ class DotAndBoxElement extends HTMLElement {
         experimentalMenu.append(dotTool)
 
         const boxTool = document.createElement("button")
-        boxTool.onclick = (_) => this.dotAndBox.selectTool(this.dotAndBox.BOX_TOOL)
+        boxTool.onclick = (_) => this.dotAndBox.selectTool(BOX_TOOL)
         boxTool.innerHTML = ` 
         <svg class="button-icon" stroke="rgba(23,23,23,0.7)" viewBox="0 0 36 36">
             <rect x="11" y="11" width="14" height="14" stroke-width="2" fill="transparent" />

@@ -1,9 +1,9 @@
-import {Tool} from "./tool.ts"
-import {Point} from "./point.ts"
+import {EMPTY_TOOL} from "../shared/elemConstants.ts";
+import {Tool} from "../shared/tool.ts";
 
 export class EmptyTool extends Tool {
 
-    public static NAME: string = "empty-tool"
+    public static NAME: string = ""
 
     // @ts-ignore
     override click(point: Point): void {
@@ -15,7 +15,7 @@ export class EmptyTool extends Tool {
     }
 
     get name(): string {
-        return EmptyTool.NAME;
+        return EMPTY_TOOL
     }
 
 }

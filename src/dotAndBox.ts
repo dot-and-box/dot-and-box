@@ -7,10 +7,11 @@ import {
     SCROLL_SENSITIVITY,
 } from "./shared/constants.ts"
 import {DotTool} from "./tools/dotTool.ts"
-import {EmptyTool} from "./shared/emptyTool.ts"
 import {PanZoomTool} from "./tools/panZoomTool.ts"
 import {BoxTool} from "./tools/boxTool.ts"
 import {DotAndBoxModel} from "./shared/dotAndBoxModel.ts";
+import {BOX_TOOL, DOT_TOOL, EMPTY_TOOL, PAN_AND_ZOOM} from "./shared/elemConstants.ts";
+import {EmptyTool} from "./tools/emptyTool.ts";
 
 export class DotAndBox {
     private readonly canvas: HTMLCanvasElement
@@ -26,10 +27,10 @@ export class DotAndBox {
     public marginTop = 0
     private panZoomTool = new PanZoomTool()
     private tools: Map<string, Tool> = new Map([
-        [EmptyTool.NAME, new EmptyTool()],
-        [DotTool.NAME, new DotTool()],
-        [BoxTool.NAME, new BoxTool()],
-        [PanZoomTool.NAME, this.panZoomTool]
+        [EMPTY_TOOL, new EmptyTool()],
+        [DOT_TOOL, new DotTool()],
+        [BOX_TOOL, new BoxTool()],
+        [PAN_AND_ZOOM, this.panZoomTool]
     ])
     private tool: Tool = this.panZoomTool
     public pointerPosition: Point = Point.zero()
