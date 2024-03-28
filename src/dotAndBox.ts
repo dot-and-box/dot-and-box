@@ -24,16 +24,12 @@ export class DotAndBox {
     public showGrid = false
     public marginLeft = 0
     public marginTop = 0
-    public readonly EMPTY_TOOL: string = "empty-tool"
-    public readonly DOT_TOOL: string = "dot-tool"
-    public readonly BOX_TOOL: string = "box-tool"
-    public readonly PAN_ZOOM_TOOL: string = "pan-zoom-tool"
     private panZoomTool = new PanZoomTool()
     private tools: Map<string, Tool> = new Map([
-        [this.EMPTY_TOOL, new EmptyTool()],
-        [this.DOT_TOOL, new DotTool()],
-        [this.BOX_TOOL, new BoxTool()],
-        [this.PAN_ZOOM_TOOL, this.panZoomTool]
+        [EmptyTool.NAME, new EmptyTool()],
+        [DotTool.NAME, new DotTool()],
+        [BoxTool.NAME, new BoxTool()],
+        [PanZoomTool.NAME, this.panZoomTool]
     ])
     private tool: Tool = this.panZoomTool
     public pointerPosition: Point = Point.zero()
@@ -123,7 +119,7 @@ export class DotAndBox {
     }
 
     resetTool() {
-        this.selectTool(this.PAN_ZOOM_TOOL)
+        this.selectTool(PanZoomTool.NAME)
     }
 
     public fastForward() {
@@ -218,12 +214,16 @@ export class DotAndBox {
             this.pointerPosition.y / this.model.zoom - this.model.offset.y + this.model.origin.y - this.model.origin.y / this.model.zoom
         )
         this.tool.click(scaledPoint)
+        if (this.tool.name == PanZoomTool.NAME) {
+            this.canvas.style.cursor = "all-scroll"
+        }
     }
 
     private onPointerUp() {
         this.isDragging = false
         this.initialPinchDistance = 0
         this.lastZoom = this.model.zoom
+        this.canvas.style.cursor = "default"
     }
 
     private onPointerMove() {

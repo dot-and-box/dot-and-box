@@ -5,6 +5,8 @@ export abstract class Tool {
 
     dotAndBox!: DotAndBox
 
+    abstract get name(): string
+
     updateModel(dotAndBox: DotAndBox) {
         this.dotAndBox = dotAndBox
     }

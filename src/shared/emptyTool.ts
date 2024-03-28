@@ -3,6 +3,8 @@ import {Point} from "./point.ts"
 
 export class EmptyTool extends Tool {
 
+    public static NAME: string = "empty-tool"
+
     // @ts-ignore
     override click(point: Point): void {
     }
@@ -10,6 +12,10 @@ export class EmptyTool extends Tool {
     // @ts-ignore
     override move(movePoint: Point) {
 
+    }
+
+    get name(): string {
+        return EmptyTool.NAME;
     }
 
 }

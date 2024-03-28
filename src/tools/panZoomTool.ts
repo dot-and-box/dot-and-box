@@ -4,6 +4,8 @@ import {Control} from "../controls/control.ts";
 
 export class PanZoomTool extends Tool {
 
+    public static NAME: string = "pan-zoom-tool"
+
     dragStart: Point = Point.zero()
 
     override click(point: Point): void {
@@ -25,6 +27,10 @@ export class PanZoomTool extends Tool {
             movePoint.x - this.dragStart.x,
             movePoint.y - this.dragStart.y
         )
+    }
+
+    get name(): string {
+        return PanZoomTool.NAME;
     }
 
 }

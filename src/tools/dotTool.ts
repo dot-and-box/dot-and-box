@@ -5,11 +5,17 @@ import {COLORS, DEFAULT_DOT_SIZE} from "../shared/constants.ts"
 
 export class DotTool extends Tool {
 
+    public static NAME: string = "dot-tool"
+
     override click(point: Point): void {
         const controls = this.dotAndBox.model.controls
         const id = `${controls.length + 1}`
         controls.push(new DotControl(id, point, DEFAULT_DOT_SIZE, COLORS[controls.length % COLORS.length], id, true, false))
         this.dotAndBox.resetTool()
+    }
+
+    get name(): string {
+        return DotTool.NAME;
     }
 
 }

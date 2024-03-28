@@ -6,6 +6,7 @@ import {Sign} from "../shared/sign.ts";
 import {Unit} from "../shared/unit.ts";
 
 export class BoxTool extends Tool {
+    static NAME: string = "box-tool"
 
     dragStart: Point = Point.zero()
 
@@ -20,4 +21,7 @@ export class BoxTool extends Tool {
         this.dotAndBox.resetTool()
     }
 
+    get name(): string {
+        return BoxTool.NAME;
+    }
 }
