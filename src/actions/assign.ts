@@ -50,7 +50,7 @@ export class Assign extends ActionBase {
                 const newValue = this.properties.get(p)
                 control[p] = newValue
                 propertyChanges.push(new PropertyChange(p, newValue, oldValue))
-                if(p === 'selected'){
+                if (p === 'selected') {
                     this.model.applySelected([this.control])
                 }
             }
@@ -71,6 +71,10 @@ export class Assign extends ActionBase {
 
     // @ts-ignore
     override updateValue(progress: number) {
+    }
+
+    override get instant(): boolean {
+        return true;
     }
 
 }

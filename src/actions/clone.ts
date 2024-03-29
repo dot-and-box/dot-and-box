@@ -60,4 +60,8 @@ export class Clone extends ActionBase {
     override updateValue(progress: number) {
     }
 
+    override get instant(): boolean {
+        return true;
+    }
+
 }

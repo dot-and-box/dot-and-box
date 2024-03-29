@@ -7,6 +7,7 @@ export class Sequence {
     public actions: ActionBase[] = []
     public _start: number = 0
     public _end: number = 1
+    public instant: boolean = true
     private _startEndDiff: number = 1
 
     public get start() {
@@ -19,6 +20,11 @@ export class Sequence {
 
     calcDiff() {
         this._startEndDiff = this._end - this._start
+    }
+
+    public addAction(action: ActionBase) {
+        this.instant &&= action.instant
+        this.actions.push(action)
     }
 
     public constructor(start: number, end: number) {
@@ -40,7 +46,7 @@ export class Sequence {
         } else if (newGlobalProgress >= this.end) {
             newProgress = 1
         } else {
-            newProgress = (newGlobalProgress - this.start) / this._startEndDiff;
+            newProgress = this._startEndDiff > 0 ? (newGlobalProgress - this.start) / this._startEndDiff : 1;
         }
         if (this._progress === newProgress) {
             return
@@ -83,19 +89,26 @@ export class Step {
         if (this.sequences.length == 0) {
             this.sequences.push(new Sequence(0, 1));
         }
-        this.sequences[this.sequences.length - 1].actions.push(action)
+        this.sequences[this.sequences.length - 1].addAction(action)
     }
 
     public addSequentialAction(action: ActionBase) {
-        const sequencesCount = this.sequences.length + 1
-        const sequenceSpan = 1 / sequencesCount;
+        let nonInstantSequenceCount = this
+            .sequences
+            .reduce((acc: number, curr: Sequence) => acc + (curr.instant ? 0 : 1), 0) + (action.instant ? 0 : 1)
+
+        const sequenceSpan = 1 / nonInstantSequenceCount;
         let currentStart = 0;
         for (const seq of this.sequences) {
-            seq.updateStartEnd(currentStart, currentStart + sequenceSpan)
-            currentStart += sequenceSpan
+            if (seq.instant) {
+                seq.updateStartEnd(currentStart, currentStart)
+            } else {
+                seq.updateStartEnd(currentStart, currentStart + sequenceSpan)
+                currentStart += sequenceSpan
+            }
         }
         this.sequences.push(new Sequence(1 - sequenceSpan, 1));
-        this.sequences[this.sequences.length - 1].actions.push(action)
+        this.sequences[this.sequences.length - 1].addAction(action)
     }
 
     public get progress() {

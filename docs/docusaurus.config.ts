@@ -76,7 +76,7 @@ const config: Config = {
             },
             items: [
                 {
-                    href: 'https://github.com/dot-and-box/dot_and_box',
+                    href: 'https://github.com/dot-and-box/dot-and-box',
                     label: 'GitHub',
                     position: 'right',
                 },
@@ -97,6 +97,10 @@ const config: Config = {
                             label: 'Controls',
                             to: 'category/controls',
                         },
+                        {
+                            label: 'Actions',
+                            to: 'category/actions',
+                        },
                     ],
                 },
                 {
@@ -104,14 +108,19 @@ const config: Config = {
                     items: [
                         {
                             label: 'Github',
-                            to: 'https://github.com/dot-and-box/dot_and_box',
+                            to: 'https://github.com/dot-and-box/dot-and-box',
                         },
                         {
-                            label: 'My Twitter',
+                            label: 'Live Editor',
+                            to: 'https://dot-and-box.github.io/dot-and-box-editor',
+                        },
+                        {
+                            label: 'Twitter',
                             to: 'https://twitter.com/tomaszkubacki',
                         },
                     ],
                 }
+
             ],
             copyright: `Copyright © ${new Date().getFullYear()} dot and box, Built with Docusaurus.`,
         },

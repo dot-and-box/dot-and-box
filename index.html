@@ -16,14 +16,15 @@
 
 <div style="position: relative; margin-left: 140px;">
     <dot-and-box controls style="margin: 10px; height: 300px;" code="
-    title: 'this is ok'
-    dot id: ag at: [-2,-1]
-    step:
-    ag -> +[3,0]
-    ag *-> ag1
-    ag1 -> +[0,3]
-    ag1 -> +[0,0]
-    ag1 <- visible: false
+    title: 'Event driven communication'
+    boxes ids: 'e_commerce' 'payment' 'inventory' at: [-4,0] size: [2,2] span: 1
+    line at: [-5,-1] end: [5, -1] width: 2
+    dot id: op at: [-6.5,-1.5]
+    step: 'order placed'
+    op -> +[3,0]
+    op *-> op1
+    op -> +[0,2.5], op1 -> +[3,0]
+    op1 ->  +[0,2.5]
 "></dot-and-box>
 
     <dot-and-box id="example1" style="margin-left:30px;height: 550px; width: 630px" controls grid  experimental keyboard code="
