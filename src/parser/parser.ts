@@ -686,7 +686,6 @@ export class Parser {
             } else if (propertyTokenType === TokenType.SELECTED || propertyTokenType === TokenType.VISIBLE) {
                 this.expectColon()
                 value = this.boolean()
-                this.advance()
             } else {
                 value = valueToken.value
                 this.advance()
@@ -710,7 +709,7 @@ export class Parser {
     }
 
     boolean(): boolean {
-        const token = this.peek()
+        const token = this.advance()
         switch (token.type) {
             case TokenType.TRUE:
                 return true

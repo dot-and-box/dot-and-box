@@ -60,9 +60,9 @@ test('parse points', () => {
     expect(line.position.unit).eq(Unit.PIXEL)
 
     const dot = model.controls[1] as DotControl
-    expect(dot.position.x).eq(5)
-    expect(dot.position.y).eq(1)
-    expect(dot.position.unit).eq(Unit.CELL)
+    expect(dot.position.x).eq(250)
+    expect(dot.position.y).eq(50)
+    expect(dot.position.unit).eq(Unit.PIXEL)
 })
 
 
@@ -179,11 +179,10 @@ step:
     expect(model.steps.length).eq(4)
     expect(model.steps[2].sequences[0].actions.length).eq(2)
 
-    const moveAction = model.steps[2].sequences[0].actions[0] as Move
+    const moveAction = model.steps[2].sequences[0].actions[1] as Move
     expect(moveAction).not.eq(null)
     expect(moveAction.end.sign).eq(Sign.NONE)
 })
-
 
 
 test('new steps', () => {
@@ -211,4 +210,19 @@ test('new steps', () => {
     const model = p.parse(eg1)
     expect(model).not.eq(null)
 })
+
+
+
+test('assign black after visible', () => {
+    let eg1 = ` 
+    title: 'move me'
+    dot id: or at: [-5.5, 1] visible: false color: black
+    step: 'move'
+    or -> -(150,0)`
+
+    let p = new Parser()
+    const model = p.parse(eg1)
+    expect(model).not.eq(null)
+})
+
 
