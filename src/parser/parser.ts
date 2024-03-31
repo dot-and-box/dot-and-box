@@ -6,11 +6,11 @@ import {Point} from "../shared/point.ts"
 import {BoxControl} from "../controls/box/boxControl.ts"
 import {DotControl} from "../controls/dot/dotControl.ts"
 import {ActionBase} from "../shared/actionBase.ts"
-import {Move} from "../actions/move.ts"
+import {Animate} from "../actions/animate.ts"
 import {Swap} from "../actions/swap.ts"
 import {Clone} from "../actions/clone.ts"
 import {Sign} from "../shared/sign.ts"
-import {BLACK, COLORS, DEFAULT_FONT_SIZE} from "../shared/constants.ts"
+import {BLACK, COLORS, DEFAULT_FONT_SIZE, POSITION} from "../shared/constants.ts"
 import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
@@ -73,7 +73,6 @@ export class Parser {
                     break
             }
         }
-
         return this.model
     }
 
@@ -143,7 +142,7 @@ export class Parser {
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = colors[i % colors.length]
             const realId = this.getId(id != '' ? id : text)
-            const box = new BoxControl(realId, position, size, DEFAULT_FONT_SIZE, color, text != '' ? text : id, true, false)
+            const box = new BoxControl(realId, position, size.clone(), DEFAULT_FONT_SIZE, color, text != '' ? text : id, true, false)
             this.model.controls.push(box)
             if (box.selected) {
                 this.model.selectedControls.push(box)
@@ -167,7 +166,7 @@ export class Parser {
         const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
         let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
-        let text: string | null = ''
+        let text: string | null
         let id = null
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
@@ -212,7 +211,7 @@ export class Parser {
             at.normalizeUnit(this.cellSize)
         }
         const realId = this.getId(id != '' ? id : text)
-        const box = new BoxControl(realId, at, size, fontSize, color, text, visible, selected)
+        const box = new BoxControl(realId, at, size.clone(), fontSize, color, text, visible, selected)
         this.model.controls.push(box)
         if (box.selected) {
             this.model.selectedControls.push(box)
@@ -343,7 +342,7 @@ export class Parser {
         const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
         let size = 20
         let at = new Point(0, 0)
-        let text: string | null = null
+        let text: string | null
         let id = ''
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
@@ -634,7 +633,6 @@ export class Parser {
         return values
     }
 
-
     move(leftControlId: string): ActionBase {
         this.advance()
         let point: Point = Point.zero()
@@ -653,7 +651,7 @@ export class Parser {
             }
             return new CameraMove(this.model, point)
         }
-        return new Move(this.model, leftControlId, point, rightId)
+        return new Animate(this.model, POSITION, leftControlId, point, rightId)
     }
 
     pointInBracketsAhead(): boolean {

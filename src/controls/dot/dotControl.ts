@@ -3,8 +3,8 @@ import {
     BLACK,
     DEFAULT_FONT,
     DEFAULT_FONT_SIZE,
-    DEFAULT_LINE_WIDTH,
-    SELECTION_STROKE_STYLE,
+    DEFAULT_LINE_WIDTH, POSITION,
+    SELECTION_STROKE_STYLE, SIZE,
     WHITE
 } from "../../shared/constants.ts"
 import {Control} from "../control.ts"
@@ -44,7 +44,7 @@ export class DotControl extends Control {
         }
         ctx.closePath()
         let textOffset = 0
-        let xOffset = 0
+        let xOffset
         let fontSize = this.fontSize != null ? this.fontSize : DEFAULT_FONT_SIZE
 
         if (this.text.length > 3) {
@@ -71,13 +71,13 @@ export class DotControl extends Control {
 
     override normalizePositionUnit(point: Point, cellSize: number) {
         if (point.unit == Unit.CELL && point.sign == Sign.NONE) {
-           DotControl.normalizeDotPosition(point, cellSize)
+            DotControl.normalizeDotPosition(point, cellSize)
         } else {
             super.normalizePositionUnit(point, cellSize)
         }
     }
 
-    public static normalizeDotPosition(point: Point, cellSize: number){
+    public static normalizeDotPosition(point: Point, cellSize: number) {
         point.x = point.x * cellSize + cellSize / 2
         point.y = point.y * cellSize + cellSize / 2
         point.unit = Unit.PIXEL
@@ -85,6 +85,41 @@ export class DotControl extends Control {
 
     clone(): Control {
         return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString(), this.visible, this.selected)
+    }
+
+
+    override getPropertyUpdater(name: string): (x: number, y: number) => void {
+        if (name == 'position') {
+            return (x: number, y: number) => this.updatePosition(x,y)
+        } else if (name == 'size') {
+            return (x: number, _: number) => {
+                this.size = Math.abs(x)
+            }
+        } else {
+            throw new Error('not implemented')
+        }
+    }
+
+
+    getPropertyValue(name: string): Point {
+        switch (name) {
+            case 'position':
+                return this.position
+            case 'size':
+                return new Point(this.size, this.size)
+            default:
+                throw new Error('not implemented exception')
+        }
+    }
+
+    animateEndByPropertyAndTarget(propertyName: string, _: Control): Point {
+        if (propertyName == POSITION) {
+            return this.position
+        } else if (propertyName == SIZE) {
+            return new Point(this.size, this.size)
+        } else {
+            throw new Error('not implemented')
+        }
     }
 
 }

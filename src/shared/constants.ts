@@ -39,3 +39,6 @@ export const SIZES: number [] = [
 export const DEFAULT_DOT_SIZE = SIZES[0]
 
 export const DUMMY_CONTROL = DummyControl.getInstance()
+
+export const POSITION = "position"
+export const SIZE = "size"

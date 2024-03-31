@@ -65,25 +65,15 @@ export class WrappedText extends Control {
     }
 
     private _centered = false
-
     private _color: string = 'black'
-
     private _fontName: string = DEFAULT_FONT
-
     private _fontSize: number = DEFAULT_FONT_SIZE;
-
     private _maxWidth: number = 100;
-
     private _maxHeight: number = 100;
-
     private _spanX: number = 0;
-
     private _spanY: number = 0;
-
     private _text: string
-
     private _textData: Array<string>
-
 
     constructor(text: string, position: Point, fontName: string, fontSize: number, color: string, maxWidth: number, maxHeight: number, centered: boolean) {
         super();
@@ -164,6 +154,14 @@ export class WrappedText extends Control {
         }
 
         this._textData = result
+    }
+
+    getPropertyValue(_: string): Point {
+        return Point.zero();
+    }
+
+    animateEndByPropertyAndTarget(_: string, __: Control): Point {
+        throw new Error('unimplemented exception')
     }
 
 }

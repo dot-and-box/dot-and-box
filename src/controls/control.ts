@@ -15,12 +15,19 @@ export abstract class Control implements ControlBase {
 
     abstract hitTest(point: Point): boolean
 
+    abstract getPropertyValue(name: string): Point
+
+    abstract animateEndByPropertyAndTarget(propertyName: string, targetControl: Control): Point
+
+    getPropertyUpdater(_: string): (x: number, y: number) => void {
+        throw new Error('not implemented exception')
+    }
+
     get center(): Point {
         return this.position
     }
 
-
-    updatePosition(x: number, y: number) {
+    updatePosition(x: number, y: number): void {
         this.position.x = x
         this.position.y = y
     }
@@ -31,7 +38,4 @@ export abstract class Control implements ControlBase {
 
     abstract clone(): Control
 
-    targetByCenter(center: Point): Point {
-        return center;
-    }
 }

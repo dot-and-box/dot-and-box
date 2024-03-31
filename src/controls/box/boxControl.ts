@@ -2,8 +2,11 @@ import {Point} from "../../shared/point.ts"
 import {
     BLACK,
     DEFAULT_FONT,
-    DEFAULT_LINE_WIDTH, SELECTION_LINE_WIDTH,
+    DEFAULT_LINE_WIDTH,
+    POSITION,
+    SELECTION_LINE_WIDTH,
     SELECTION_STROKE_STYLE,
+    SIZE,
     WHITE
 } from "../../shared/constants.ts"
 import {Control} from "../control.ts"
@@ -30,10 +33,6 @@ export class BoxControl extends Control {
         return new Point(this.position.x + this.size.x / 2, this.position.y + this.size.y / 2);
     }
 
-    override targetByCenter(center: Point): Point {
-        return new Point(center.x - this.size.x / 2, center.y - this.size.y / 2);
-    }
-
     public color: string
     public size: Point
     private _text: string
@@ -42,7 +41,6 @@ export class BoxControl extends Control {
     public selected: boolean
     public visible: boolean
     private _fontSize: number
-
     textControl: WrappedText
 
     constructor(id: string, position: Point, size: Point, fontSize: number, color: string, text: string, visible: boolean, selected: boolean) {
@@ -89,5 +87,42 @@ export class BoxControl extends Control {
     clone(): Control {
         return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this._fontSize, this.color.toString(), this._text.toString(), this.visible, this.selected)
     }
+
+    override getPropertyUpdater(name: string): (x: number, y: number) => void {
+        if (name == POSITION) {
+            return (x: number, y: number) => {
+                this.updatePosition(x, y)
+            }
+        } else if (name == SIZE) {
+            return (x: number, y: number) => {
+                this.size.x = Math.abs(x)
+                this.size.y = Math.abs(y)
+            }
+        } else {
+            throw new Error('not implemented')
+        }
+    }
+
+    animateEndByPropertyAndTarget(propertyName: string, targetControl: Control): Point {
+        if (propertyName == POSITION) {
+            return new Point(targetControl.center.x - this.size.x / 2, targetControl.center.y - this.size.y / 2);
+        } else if (propertyName == SIZE) {
+            return this.size
+        } else {
+            throw new Error('not implemented')
+        }
+    }
+
+    getPropertyValue(name: string): Point {
+        switch (name) {
+            case POSITION:
+                return this.position
+            case SIZE:
+                return this.size
+            default:
+                throw new Error('not implemented exception')
+        }
+    }
+
 
 }
