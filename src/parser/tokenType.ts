@@ -16,6 +16,7 @@ export enum TokenType {
     CLONE = '*->',
     SWAP = '<->',
     MOVE = '->',
+    RESIZE = '+->',
     // literals
     IDENTIFIER = 'IDENTIFIER',
     NUMBER = 'NUMBER',

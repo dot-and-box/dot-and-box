@@ -10,7 +10,7 @@ import {Animate} from "../actions/animate.ts"
 import {Swap} from "../actions/swap.ts"
 import {Clone} from "../actions/clone.ts"
 import {Sign} from "../shared/sign.ts"
-import {BLACK, COLORS, DEFAULT_FONT_SIZE, POSITION} from "../shared/constants.ts"
+import {BLACK, COLORS, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../shared/constants.ts"
 import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
@@ -582,6 +582,8 @@ export class Parser {
                 return this.assign(controlId)
             case TokenType.MOVE:
                 return this.move(controlId)
+            case TokenType.RESIZE:
+                return this.resize(controlId)
             case TokenType.SWAP:
                 return this.swap(controlId)
             case TokenType.CLONE:
@@ -653,6 +655,24 @@ export class Parser {
         }
         return new Animate(this.model, POSITION, leftControlId, point, rightId)
     }
+
+    resize(leftControlId: string): ActionBase {
+        this.advance()
+        let point: Point = Point.zero()
+        let rightId = ''
+        let isPoint = this.pointInBracketsAhead()
+        if (isPoint) {
+            point = this.point()
+        } else {
+            let token = this.peek()
+            rightId = token.value
+            this.advance()
+        }
+
+        return new Animate(this.model, SIZE, leftControlId, point, rightId)
+    }
+
+
 
     pointInBracketsAhead(): boolean {
         const token = this.peek();
