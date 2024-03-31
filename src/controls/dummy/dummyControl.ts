@@ -3,7 +3,6 @@ import {Control} from "../control.ts"
 
 export class DummyControl extends Control {
     position: Point
-    size: Point
     selected: boolean = false
     visible: boolean = true
 

@@ -8,6 +8,7 @@ export interface ControlBase {
 export abstract class Control implements ControlBase {
     id: string = '';
     position: Point = Point.zero();
+    size: Point = Point.zero();
     selected: boolean = false
     visible: boolean = true
 

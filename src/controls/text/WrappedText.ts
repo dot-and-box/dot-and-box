@@ -1,6 +1,6 @@
 import {Control} from "../control.ts";
 import {Point} from "../../shared/point.ts";
-import {DEFAULT_FONT, DEFAULT_FONT_SIZE} from "../../shared/constants.ts";
+import {DEFAULT_FONT, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../../shared/constants.ts";
 
 export class WrappedText extends Control {
     get maxHeight(): number {
@@ -86,6 +86,7 @@ export class WrappedText extends Control {
         this._color = color
         this._centered = centered
         this._textData = [];
+        this.size = new Point(maxWidth, maxHeight)
     }
 
     clone(): Control {
@@ -156,8 +157,15 @@ export class WrappedText extends Control {
         this._textData = result
     }
 
-    getPropertyValue(_: string): Point {
-        return Point.zero();
+    getPropertyValue(name: string): Point {
+        switch (name) {
+            case POSITION:
+                return this.position
+            case SIZE:
+                return this.size
+            default:
+                throw new Error('not implemented exception')
+        }
     }
 
     animateEndByPropertyAndTarget(_: string, __: Control): Point {

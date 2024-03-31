@@ -13,7 +13,6 @@ import {Sign} from "../../shared/sign.ts";
 
 export class DotControl extends Control {
     public color: string
-    public size: number
     public text: string
     public id: string
     public selected: boolean
@@ -25,7 +24,7 @@ export class DotControl extends Control {
         this.id = id
         this.position = position
         this.color = color
-        this.size = size
+        this.size = new Point(size,size)
         this.text = text
         this.selected = selected
         this.visible = visible
@@ -34,7 +33,7 @@ export class DotControl extends Control {
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.beginPath()
-        ctx.arc(this.position.x, this.position.y, this.size, 0, 2 * Math.PI, false)
+        ctx.arc(this.position.x, this.position.y, this.size.x, 0, 2 * Math.PI, false)
         ctx.fillStyle = this.color
         ctx.fill()
         if (this.selected) {
@@ -53,7 +52,7 @@ export class DotControl extends Control {
             let metric = ctx.measureText(this.text)
             xOffset = metric.width / 2
         } else {
-            let textSizeCoerced = this.text.length > 1 ? this.size * 0.8 : this.size * 1.2
+            let textSizeCoerced = this.text.length > 1 ? this.size.x * 0.8 : this.size.x * 1.2
             fontSize = this.fontSize != null ? this.fontSize : textSizeCoerced
             textOffset = textSizeCoerced / 2 - textSizeCoerced / 4 + 1
             xOffset = textOffset * this.text.length
@@ -66,7 +65,7 @@ export class DotControl extends Control {
     hitTest(point: Point): boolean {
         let tx = this.position.x - point.x
         let ty = this.position.y - point.y
-        return tx * tx + ty * ty <= this.size * this.size
+        return tx * tx + ty * ty <= this.size.x * this.size.x
     }
 
     override normalizePositionUnit(point: Point, cellSize: number) {
@@ -84,16 +83,16 @@ export class DotControl extends Control {
     }
 
     clone(): Control {
-        return new DotControl(this.id.toString(), this.position.clone(), this.size, this.color.toString(), this.text.toString(), this.visible, this.selected)
+        return new DotControl(this.id.toString(), this.position.clone(), this.size.x, this.color.toString(), this.text.toString(), this.visible, this.selected)
     }
 
 
     override getPropertyUpdater(name: string): (x: number, y: number) => void {
-        if (name == 'position') {
+        if (name === POSITION) {
             return (x: number, y: number) => this.updatePosition(x,y)
         } else if (name == 'size') {
             return (x: number, _: number) => {
-                this.size = Math.abs(x)
+                this.size = new Point(Math.abs(x),Math.abs(x))
             }
         } else {
             throw new Error('not implemented')
@@ -103,20 +102,20 @@ export class DotControl extends Control {
 
     getPropertyValue(name: string): Point {
         switch (name) {
-            case 'position':
+            case POSITION:
                 return this.position
-            case 'size':
-                return new Point(this.size, this.size)
+            case SIZE:
+                return this.size
             default:
                 throw new Error('not implemented exception')
         }
     }
 
-    animateEndByPropertyAndTarget(propertyName: string, _: Control): Point {
+    animateEndByPropertyAndTarget(propertyName: string, targetControl: Control): Point {
         if (propertyName == POSITION) {
-            return this.position
+            return targetControl.center
         } else if (propertyName == SIZE) {
-            return new Point(this.size, this.size)
+            return targetControl.size
         } else {
             throw new Error('not implemented')
         }

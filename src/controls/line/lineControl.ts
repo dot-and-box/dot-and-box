@@ -10,7 +10,6 @@ export class LineControl extends Control {
     public selected: boolean
     public visible: boolean
     private distance: Point = Point.zero()
-    private size: Point
 
     public get end() {
         return this._end
@@ -66,7 +65,7 @@ export class LineControl extends Control {
 
     override getPropertyUpdater(name: string): (x: number, y: number) => void {
         if (name == 'position') {
-            return this.updatePosition
+            return (x: number, y: number) => this.updatePosition(x, y)
         } else if (name == 'size') {
             return (x: number, y: number) => {
                 this.size.x = Math.abs(x)
