@@ -36,7 +36,7 @@ box color: rgba(5,5,254,0.4) size: 100, 200 at: 100, -60
 line id: l1 at: -100, -10 end: 100, -10 width: 0.5
 line id: l2 at: -100, 90 end: 100, 90 width: 0.5
 box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
-dot text: 'req' at: -150, -10 size: 35
+dot text: 'req' at: -150, -10 radius: 35
 step: 'client app is making a request'
 req ->  +(300,0)
 step: 'server app is creating a response'
@@ -56,7 +56,7 @@ camera -> +(0,350), fin <- visible: true
   line id: l1 at: -100, -10 end: 100, -10 width: 0.5
   line id: l2 at: -100, 90 end: 100, 90 width: 0.5
   box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
-  dot text: 'req' at: -150, -10 size: 35
+  dot text: 'req' at: -150, -10 radius: 35
   step: 'client app is making a request'
   req ->  +(300,0)
   step: 'server app is creating a response'
