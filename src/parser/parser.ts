@@ -115,7 +115,7 @@ export class Parser {
                     size = this.sizePoint()
                     break
                 case TokenType.SPAN:
-                    span = this.size()
+                    span = this.span()
                     break
                 case TokenType.IDS:
                     ids = this.ids()
@@ -278,8 +278,8 @@ export class Parser {
     }
 
     dots() {
-        const dots_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
-        let size = 20
+        const dots_tokens: Array<TokenType> = [TokenType.RADIUS, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
+        let radius = 20
         let at = new Point(0, 0)
         let text = ''
         let id = ''
@@ -297,11 +297,11 @@ export class Parser {
                 case TokenType.AT:
                     at = this.at()
                     break
-                case TokenType.SIZE:
-                    size = this.size()
+                case TokenType.RADIUS:
+                    radius = this.radius()
                     break
                 case TokenType.SPAN:
-                    span = this.size()
+                    span = this.span()
                     break
                 case TokenType.IDS:
                     ids = this.ids()
@@ -329,7 +329,7 @@ export class Parser {
             }
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = colors[i % colors.length]
-            const dot = new DotControl(realId, position, size, color, text != '' ? text : id, true, false)
+            const dot = new DotControl(realId, position, radius, color, text != '' ? text : id, true, false)
             this.model.controls.push(dot)
             if (dot.selected) {
                 this.model.selectedControls.push(dot)
@@ -339,8 +339,8 @@ export class Parser {
     }
 
     dot() {
-        const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
-        let size = 20
+        const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.RADIUS, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
+        let radius = 20
         let at = new Point(0, 0)
         let text: string | null
         let id = ''
@@ -366,8 +366,8 @@ export class Parser {
                 case TokenType.AT:
                     at = this.at()
                     break
-                case TokenType.SIZE:
-                    size = this.size()
+                case TokenType.RADIUS:
+                    radius = this.radius()
                     break
                 case TokenType.VISIBLE:
                     visible = this.visible()
@@ -389,7 +389,7 @@ export class Parser {
         }
 
         const realId = this.getId(id != '' ? id : text)
-        const dot = new DotControl(realId, at, size, color, text, visible, selected, fontSize)
+        const dot = new DotControl(realId, at, radius, color, text, visible, selected, fontSize)
         dot.normalizePositionUnit(dot.position, this.cellSize)
         this.model.controls.push(dot)
         if (dot.selected) {
@@ -461,7 +461,12 @@ export class Parser {
         return this.point()
     }
 
-    size(): number {
+    radius(): number {
+        this.expectColon()
+        return this.number()
+    }
+
+    span(): number {
         this.expectColon()
         return this.number()
     }
@@ -671,8 +676,6 @@ export class Parser {
 
         return new Animate(this.model, SIZE, leftControlId, point, rightId)
     }
-
-
 
     pointInBracketsAhead(): boolean {
         const token = this.peek();

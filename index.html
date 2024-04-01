@@ -13,6 +13,16 @@
 </head>
 <body>
 <h1>Just dot and box...</h1>
+<dot-and-box style="height: 350px" controls code="
+title: 'move control'
+box id: otherBox at: [2,0] size: [1,1]
+dot id: d1  text: 'doty' at: [-3,-2] radius: 45
+step: 'resize dot by 1 cell'
+d1 +-> +[1,0]
+step: 'resize dot to [1,1]'
+d1 +-> [1,1], d1 -> otherBox
+step: 'resize to otherBox'
+d1 +-> otherBox"></dot-and-box>
 
 <div style="position: relative; margin-left: 140px;">
     <dot-and-box controls style="margin: 10px; height: 300px;" code="
@@ -61,7 +71,7 @@
     box id: win at: [-8, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
     dots ids: 1 2 3 5 4 6 at: [-3, 0]
     boxes ids: 0 1 2 3 4 5 at: [-3, 1] colors: transparent
-    dot id: z text: 'This is a dot' at: [-2,-2] fontSize: 10 size: 50
+    dot id: z text: 'This is a dot' at: [-2,-2] fontSize: 10 radius: 50
     step: 'starting point'
     1_1 -> +[0,-1]
     step: 'second point'
@@ -75,7 +85,7 @@
     box id: win at: [-8, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
     dots ids: 1 2 3 5 4 6 at: [-3, 0]
     boxes ids: 0 1 2 3 4 5 at: [-3,1]
-    dot id: z at: [-5, -2] size: 25
+    dot id: z at: [-5, -2] radius: 25
     box id: zx at: [-2, -2] size: [1,1] color: transparent text: '[-2,-2]' fontSize: 10
     box id: zx at: [0, 3] size: [1,1] color: brown //effective id will be 1_zx
     box id: zx at: [2, 3] size: [1,1] color: purple text: '2,2'
@@ -117,11 +127,11 @@
                         color="lightgreen" code="
         title: Ale heca
         line id: l at: -150, 70 end: 100, 70 color: gray width: 3
-        dot id: 1 color: rgba(100,200,50,0.6) at: -100, 0 size: 45
-        dot id: 2 color: purple at: -150, 0 size: 20
-        dot id: 3 color: orange at: -10, 0 size: 20 selected: true
-        dot id: 4 color: gray  at: -50, 0 size: 20 selected: true
-        dot id: 5 color: rgba(190,0,65,1) at: 50, 0  size: 20
+        dot id: 1 color: rgba(100,200,50,0.6) at: -100, 0 radius: 45
+        dot id: 2 color: purple at: -150, 0 radius: 20
+        dot id: 3 color: orange at: -10, 0 radius: 20 selected: true
+        dot id: 4 color: gray  at: -50, 0 radius: 20 selected: true
+        dot id: 5 color: rgba(190,0,65,1) at: 50, 0 radius: 20
         step: 'one'
         l -> -(0,140),  selected0 <-> selected1
         selected0 -> +(20,90)
@@ -142,7 +152,7 @@
     line id: l1 at: -100, -10 end: 100, -10 width: 0.5
     line id: l2 at: -100, 90 end: 100, 90 width: 0.5
     box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
-    dot text: 'req' at: -150, -10 size: 35
+    dot text: 'req' at: -150, -10 radius: 35
     step: 'client app is making a request'
     req ->  +(300,0)
     step: 'server app is creating a response'
@@ -163,6 +173,8 @@ Relative and absolute movement
     first -> +(50,70)
     third -> [0,2]
     second +-> +[2,0]
+    step:
+    second +-> [1,2], second -> -[1,2]
 ">
 </dot-and-box>
 

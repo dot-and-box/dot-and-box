@@ -2,13 +2,13 @@
 sidebar_position: 2
 ---
 
-# Animate
+# Move
 
 move operator allows to move controls
 
 ### a **-\>** (x, y)
 
-There are three possible move type:
+There are three possible move types:
 - move by relative value
   ```dabl
     control -> +(50,100) // same as +[1,2]
@@ -22,11 +22,10 @@ There are three possible move type:
     control -> otherControl
   ```
 
-
 ```dabl tab showLineNumbers
 title: 'move control'
 box id: otherBox at: [2,0]
-dot id: d1  text: 'dot' at: [-3,-2] size: 35
+dot id: d1  text: 'dot' at: [-3,-2] radius: 35
 step: 'move dot by 4 cells right'
 d1 -> +[4,0] // relative move
 step: 'move to [0,1]'
@@ -38,7 +37,7 @@ d1 -> otherBox // move to other control
 <dot-and-box controls style="height: 250px" code="
 title: 'move control'
 box id: otherBox at: [2,0]
-dot id: d1  text: 'dot' at: [-3,-2] size: 35
+dot id: d1  text: 'dot' at: [-3,-2] radius: 35
 step: 'move dot by 4 cells right'
 d1 -> +[4,0]
 step: 'move to [0,1]'
@@ -52,7 +51,7 @@ d1 -> otherBox
 <dot-and-box experimental grid controls style={{height: 250}} code="
 title: 'move control'
 box id: otherBox at: [2,0]
-dot id: d1  text: 'dot' at: [-3,-2] size: 35
+dot id: d1  text: 'dot' at: [-3,-2] radius: 35
 step: 'move dot by 4 cells right'
 d1 -> +[4,0]
 step: 'move to [0,1]'

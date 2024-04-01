@@ -12,7 +12,7 @@ Let's start with an example and try to explain it line by line
 
 ```dabl tab showLineNumbers
 title: 'basic concepts' // static title at the top left of dot and box surface
-dot id: d1  text: 'dot' at: (-120,0) size: 35 // create a dot
+dot id: d1  text: 'dot' at: (-120,0) radius: 35 // create a dot
 box id: b1  text: 'box' at: [1,-1] size: [2,2] // create a box
 step: 'move d1 to point (0,0)' // define animation step
 d1 -> (0,0) // step has a move action '->' move dot at location (0,0)
@@ -22,7 +22,7 @@ b1 -> -(200,0) // move b1 box by -(200,0)
 ```html tab showLineNumbers
 <dot-and-box controls style="height: 250px" code="
  title: 'basic concepts'
- dot id: d1  text: 'dot' at: (-120,0) size: 35
+ dot id: d1  text: 'dot' at: (-120,0) radius: 35
  box id: b1  text: 'box' at: [1,-1] size: [2,2]
  step: 'move d1 to point (0,0)'
  d1 -> (0,0)
@@ -33,7 +33,7 @@ b1 -> -(200,0) // move b1 box by -(200,0)
 
 <dot-and-box controls style={{height: 250}} code="
  title: 'basic concepts'
- dot id: d1  text: 'dot' at: (-120,0) size: 35
+ dot id: d1  text: 'dot' at: (-120,0) radius: 35
  box id: b1  text: 'box' at: [1,-1] size: [2,2]
  step: 'move d1 to point (0,0)'
  d1 -> (0,0)

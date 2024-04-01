@@ -18,13 +18,15 @@ export class DotControl extends Control {
     public selected: boolean
     public visible: boolean
     public fontSize: number | null
+    public radius: number
 
-    constructor(id: string, position: Point, size: number, color: string, text: string, visible: boolean, selected: boolean, fontSize: number | null = null) {
+    constructor(id: string, position: Point, radius: number, color: string, text: string, visible: boolean, selected: boolean, fontSize: number | null = null) {
         super()
         this.id = id
         this.position = position
+        this.radius = radius
         this.color = color
-        this.size = new Point(size,size)
+        this.size = new Point(radius * 2, radius * 2)
         this.text = text
         this.selected = selected
         this.visible = visible
@@ -33,7 +35,7 @@ export class DotControl extends Control {
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.beginPath()
-        ctx.arc(this.position.x, this.position.y, this.size.x, 0, 2 * Math.PI, false)
+        ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false)
         ctx.fillStyle = this.color
         ctx.fill()
         if (this.selected) {
@@ -52,7 +54,7 @@ export class DotControl extends Control {
             let metric = ctx.measureText(this.text)
             xOffset = metric.width / 2
         } else {
-            let textSizeCoerced = this.text.length > 1 ? this.size.x * 0.8 : this.size.x * 1.2
+            let textSizeCoerced = this.text.length > 1 ? this.radius * 0.8 : this.radius * 1.2
             fontSize = this.fontSize != null ? this.fontSize : textSizeCoerced
             textOffset = textSizeCoerced / 2 - textSizeCoerced / 4 + 1
             xOffset = textOffset * this.text.length
@@ -83,16 +85,17 @@ export class DotControl extends Control {
     }
 
     clone(): Control {
-        return new DotControl(this.id.toString(), this.position.clone(), this.size.x, this.color.toString(), this.text.toString(), this.visible, this.selected)
+        return new DotControl(this.id.toString(), this.position.clone(), this.radius, this.color.toString(), this.text.toString(), this.visible, this.selected)
     }
 
 
     override getPropertyUpdater(name: string): (x: number, y: number) => void {
         if (name === POSITION) {
-            return (x: number, y: number) => this.updatePosition(x,y)
-        } else if (name == 'size') {
+            return (x: number, y: number) => this.updatePosition(x, y)
+        } else if (name == SIZE) {
             return (x: number, _: number) => {
-                this.size = new Point(Math.abs(x),Math.abs(x))
+                this.size = new Point(Math.abs(x), Math.abs(x))
+                this.radius = this.size.x / 2
             }
         } else {
             throw new Error('not implemented')

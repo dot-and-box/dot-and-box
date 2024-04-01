@@ -32,6 +32,7 @@ export enum TokenType {
     BOXES = 'boxes',
     AT = 'at',
     SIZE = 'size',
+    RADIUS = 'radius',
     SPAN = 'span',
     FONT_SIZE = 'fontSize',
     END = 'end',

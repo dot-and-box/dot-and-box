@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # Assign
@@ -11,14 +11,14 @@ It changes property instantly when steps starts, which means change is not anima
 
 ```dabl tab showLineNumbers
 title: 'color and text change'
-dot id: d1  text: 'dot' at: [-2,-1] size: 45
+dot id: d1  text: 'dot' at: [-2,-1] radius: 45
 step: 'change dot to blue and set new text' duration: 200ms
 d1 <- color: blue text: 'tod'
 ```
 ```html tab showLineNumbers
 <dot-and-box controls style="height: 250px" code="
   title: 'color and text change'
-  dot id: d1  text: 'dot' at: [-2,-1] size: 45
+  dot id: d1  text: 'dot' at: [-2,-1] radius: 45
   step: 'change dot to blue and set new text' duration: 200ms
   d1 <- color: blue text: 'tod'">
  </dot-and-box>
@@ -26,7 +26,7 @@ d1 <- color: blue text: 'tod'
 
 <dot-and-box controls style={{height: 250}} code="
     title: 'color and text change'
-    dot id: d1  text: 'dot' at: [-2,-1] size: 45
+    dot id: d1  text: 'dot' at: [-2,-1] radius: 45
     step: 'change dot to blue and set new text' duration: 200ms
     d1 <- color: blue text: 'tod'">
  </dot-and-box>

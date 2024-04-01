@@ -53,7 +53,7 @@ export class BoxControl extends Control {
         this._text = text
         this.selected = selected
         this.visible = visible
-        this.textControl = new WrappedText(text, this.position, DEFAULT_FONT, this._fontSize, BLACK, this.size.x, this.size.y, true)
+        this.textControl = new WrappedText(text, this.position, DEFAULT_FONT, this._fontSize, BLACK, this.size, true)
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
