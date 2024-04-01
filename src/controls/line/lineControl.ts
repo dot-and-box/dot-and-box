@@ -1,5 +1,5 @@
 import {Point} from "../../shared/point.ts"
-import {SELECTION_STROKE_STYLE} from "../../shared/constants.ts"
+import {POSITION, SELECTION_STROKE_STYLE, SIZE} from "../../shared/constants.ts"
 import {Control} from "../control.ts"
 
 export class LineControl extends Control {
@@ -30,6 +30,7 @@ export class LineControl extends Control {
         this.color = color
         this.selected = selected
         this.visible = visible
+        this.size = new Point(this.width, this.width)
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -55,11 +56,45 @@ export class LineControl extends Control {
         return new LineControl(this.id.toString(), this.position.clone(), this.end.clone(), this.width, this.color.toString(), this.visible, this.selected)
     }
 
-    override updatePosition(x: number, y: number) {
+    updatePosition(x: number, y: number) {
         this.position.x = x
         this.position.y = y
         this._end.x = x + this.distance.x
         this._end.y = y + this.distance.y
+    }
+
+    override getPropertyUpdater(name: string): (x: number, y: number) => void {
+        if (name == 'position') {
+            return (x: number, y: number) => this.updatePosition(x, y)
+        } else if (name == 'size') {
+            return (x: number, y: number) => {
+                this.size.x = Math.abs(x)
+                this.size.y = Math.abs(y)
+            }
+        } else {
+            throw new Error('not implemented')
+        }
+    }
+
+    getPropertyValue(name: string): Point {
+        switch (name) {
+            case 'position':
+                return this.position
+            case 'size':
+                return this.size
+            default:
+                throw new Error('not implemented exception')
+        }
+    }
+
+    animateEndByPropertyAndTarget(propertyName: string, _: Control): Point {
+        if (propertyName == POSITION) {
+            return this.position
+        } else if (propertyName == SIZE) {
+            return this.size
+        } else {
+            throw new Error('not implemented')
+        }
     }
 
 }

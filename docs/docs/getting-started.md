@@ -19,7 +19,7 @@ All you need to do is add **dot and box** js script reference and add *dot-and-b
     <dot-and-box controls code="
       title: sort with bubble sort
       box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
-      dots ids: 2 1 5 3 4 at: [-3,0] size: 20
+      dots ids: 2 1 5 3 4 at: [-3,0] radius: 20
       step: '(1) select first two numbers' duration: 0.8s
       win <- visible: true, win -> +[3,0]
       step: '(2) swap if left bigger than right'

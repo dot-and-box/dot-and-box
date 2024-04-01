@@ -1,0 +1,71 @@
+---
+sidebar_position: 4
+---
+
+# Resize
+
+resize operator allows to resize controls
+
+### a **+-\>** (x, y)
+
+There are three possible resize types:
+- resize by relative value
+  ```dabl
+    control +-> +(50,100) // same as +[1,2]
+  ```
+- resize to absolute value
+  ```dabl
+    control +-> (100,100)
+  ```
+- resize to other control size
+  ```dabl
+    control +-> otherControl
+  ```
+  :::info
+  Notice that in case of dot (or dots) resize applies to radius
+  :::
+
+```dabl tab showLineNumbers
+title: 'move control'
+box id: otherBox at: [2,0]
+dot id: d1  text: 'dot' at: [-3,-1] radius: 45
+step: 'resize dot by 1 cell'
+d1 +-> +[1,0]
+step: 'resize dot to 3'
+d1 +-> [3,0]
+step: 'resize to otherBox'
+d1 ->  otherBox, d1 +-> otherBox // move to otherBox and resize to it's size
+step: 'resize otherBox'
+otherBox +-> +[1,1]
+```
+```html tab showLineNumbers
+<dot-and-box controls style="height: 250px" code="
+title: 'move control'
+box id: otherBox at: [2,0]
+dot id: d1  text: 'dot' at: [-3,-1] radius: 45
+step: 'resize dot by 1 cell'
+d1 +-> +[1,0]
+step: 'resize dot to 3'
+d1 +-> [3,0]
+step: 'resize to otherBox'
+d1 ->  otherBox, d1 +-> otherBox // move to otherBox and resize to it's size
+step: 'resize otherBox'
+otherBox +-> +[1,1]
+  ">
+ </dot-and-box>
+```
+
+<dot-and-box experimental grid controls style={{height: 250}} code="
+title: 'move control'
+box id: otherBox at: [2,0]
+dot id: d1  text: 'dot' at: [-3,-1] radius: 45
+step: 'resize dot by 1 cell'
+d1 +-> +[1,0]
+step: 'resize dot to 3'
+d1 +-> [3,0]
+step: 'resize to otherBox'
+d1 ->  otherBox, d1 +-> otherBox // move to otherBox and resize to it's size
+step: 'resize otherBox'
+otherBox +-> +[1,1]
+">
+ </dot-and-box>

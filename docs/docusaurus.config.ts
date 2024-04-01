@@ -22,7 +22,8 @@ const config: Config = {
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     scripts: [
-        'https://dot-and-box.github.io/dot-and-box/dot-and-box.js'
+         'https://dot-and-box.github.io/dot-and-box/dot-and-box.js'
+        //'./dot-and-box.js'
     ],
     // Even if you don't use internationalization, you can use this field to set
     // useful metadata like html lang. For example, if your site is Chinese, you

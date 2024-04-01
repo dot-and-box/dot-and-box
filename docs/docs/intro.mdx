@@ -20,7 +20,7 @@ It can be done writing *dot and box* code like one below:
 ```dabl tab showLineNumbers
 title: sort with bubble sort
 box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
-dots ids: 2 1 5 3 4 at: [-3,0] size: 20
+dots ids: 2 1 5 3 4 at: [-3,0] radius: 20
 step: '(1) select first two numbers' duration: 0.8s
 win <- visible: true, win -> +[3,0]
 step: '(2) swap if left bigger than right'
@@ -41,7 +41,7 @@ win -> -[3,0]
 <dot-and-box controls style="height: 300px"  code="
   title: sort with bubble sort
   box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
-  dots ids: 2 1 5 3 4 at: [-3,0] size: 20
+  dots ids: 2 1 5 3 4 at: [-3,0] radius: 20
   step: '(1) select first two numbers' duration: 0.8s
   win <- visible: true, win -> +[3,0]
   step: '(2) swap if left bigger than right'
@@ -65,7 +65,7 @@ and see **dot and box** visualization result:
  <dot-and-box controls style={{height: 300}}    code="
    title: sort with bubble sort
    box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
-   dots ids: 2 1 5 3 4 at: [-3,0] size: 20
+   dots ids: 2 1 5 3 4 at: [-3,0] radius: 20
    step: '(1) select first two numbers' duration: 0.8s
    win <- visible: true, win -> +[3,0]
    step: '(2) swap if left bigger than right'

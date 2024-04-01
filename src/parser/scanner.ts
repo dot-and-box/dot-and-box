@@ -49,7 +49,8 @@ export class Scanner {
                         this.addToken(TokenType.ASTERIX)
                     break
                 case '+':
-                    this.addToken(TokenType.PLUS)
+                    if (!this.matchResize())
+                        this.addToken(TokenType.PLUS)
                     break
                 case '-':
                     if (this.match('>'))
@@ -104,6 +105,15 @@ export class Scanner {
         if (this.match("-"))
             if (this.match(">")) {
                 this.addToken(TokenType.CLONE)
+                return true
+            }
+        return false
+    }
+
+    matchResize(): boolean {
+        if (this.match("-"))
+            if (this.match(">")) {
+                this.addToken(TokenType.RESIZE)
                 return true
             }
         return false

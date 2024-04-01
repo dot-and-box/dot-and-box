@@ -1,7 +1,7 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {Point} from "../shared/point.ts"
 import {Control} from "../controls/control.ts"
-import {DUMMY_CONTROL} from "../shared/constants.ts";
+import {DUMMY_CONTROL, POSITION} from "../shared/constants.ts";
 import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 
 export class Swap extends ActionBase {
@@ -46,9 +46,9 @@ export class Swap extends ActionBase {
             : DUMMY_CONTROL
 
         this.startLeft = this.left.position.clone()
-        this.endLeft = this.left.targetByCenter(this.right.center).clone()
+        this.endLeft = this.left.animateEndByPropertyAndTarget(POSITION, this.right).clone()
         this.startRight = this.right.position.clone()
-        this.endRight = this.right.targetByCenter(this.left.center).clone()
+        this.endRight = this.right.animateEndByPropertyAndTarget(POSITION, this.left).clone()
     }
 
     override updateValue(progress: number) {
@@ -65,7 +65,7 @@ export class Swap extends ActionBase {
 
             const dxr = (this.endRight.x - this.startRight.x) * progress
             const dyr = (this.endRight.y - this.startRight.y) * progress
-             this.right.updatePosition(this.startRight.x + dxr, this.startRight.y + dyr)
+            this.right.updatePosition(this.startRight.x + dxr, this.startRight.y + dyr)
         }
 
     }

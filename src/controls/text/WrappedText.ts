@@ -1,15 +1,8 @@
 import {Control} from "../control.ts";
 import {Point} from "../../shared/point.ts";
-import {DEFAULT_FONT, DEFAULT_FONT_SIZE} from "../../shared/constants.ts";
+import {DEFAULT_FONT, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../../shared/constants.ts";
 
 export class WrappedText extends Control {
-    get maxHeight(): number {
-        return this._maxHeight;
-    }
-
-    set maxHeight(value: number) {
-        this._maxHeight = value;
-    }
 
     get centered(): boolean {
         return this._centered;
@@ -44,14 +37,6 @@ export class WrappedText extends Control {
         this._textData = []
     }
 
-    get maxWidth(): number {
-        return this._maxWidth;
-    }
-
-    set maxWidth(value: number) {
-        this._maxWidth = value;
-        this._textData = []
-    }
 
     get text(): string {
         return this._text;
@@ -65,41 +50,28 @@ export class WrappedText extends Control {
     }
 
     private _centered = false
-
     private _color: string = 'black'
-
     private _fontName: string = DEFAULT_FONT
-
     private _fontSize: number = DEFAULT_FONT_SIZE;
-
-    private _maxWidth: number = 100;
-
-    private _maxHeight: number = 100;
-
     private _spanX: number = 0;
-
     private _spanY: number = 0;
-
     private _text: string
-
     private _textData: Array<string>
 
-
-    constructor(text: string, position: Point, fontName: string, fontSize: number, color: string, maxWidth: number, maxHeight: number, centered: boolean) {
+    constructor(text: string, position: Point, fontName: string, fontSize: number, color: string, size: Point, centered: boolean) {
         super();
         this.position = position
         this._fontName = fontName;
         this._fontSize = fontSize;
-        this._maxWidth = maxWidth;
-        this._maxHeight = maxHeight;
         this._text = text;
         this._color = color
         this._centered = centered
         this._textData = [];
+        this.size = size
     }
 
     clone(): Control {
-        return new WrappedText(this._text, this.position, this._fontName, this._fontSize, this._color, this._maxWidth, this._maxHeight, this._centered);
+        return new WrappedText(this._text, this.position, this._fontName, this._fontSize, this._color, this.size.clone(), this._centered);
     }
 
     override updatePosition(x: number, y: number) {
@@ -147,7 +119,7 @@ export class WrappedText extends Control {
                     maxLineWidth = testWidth
                 }
                 testLine += ' '
-                if (testWidth > this._maxWidth) {
+                if (testWidth > this.size.x) {
                     result.push(line);
                     line = words[j] + ' '
                     y += this._fontSize;
@@ -159,11 +131,26 @@ export class WrappedText extends Control {
             y += this._fontSize;
         }
         if (this._centered) {
-            this._spanX = this._maxWidth < maxLineWidth ? 0 : (this._maxWidth - maxLineWidth) / 2
-            this._spanY = (this._maxHeight - (result.length * this.fontSize)) / 2 + this.fontSize / 2
+            this._spanX = this.size.x < maxLineWidth ? 0 : (this.size.x - maxLineWidth) / 2
+            this._spanY = (this.size.y - (result.length * this.fontSize)) / 2 + this.fontSize / 2
         }
 
         this._textData = result
+    }
+
+    getPropertyValue(name: string): Point {
+        switch (name) {
+            case POSITION:
+                return this.position
+            case SIZE:
+                return this.size
+            default:
+                throw new Error('not implemented exception')
+        }
+    }
+
+    animateEndByPropertyAndTarget(_: string, __: Control): Point {
+        throw new Error('unimplemented exception')
     }
 
 }

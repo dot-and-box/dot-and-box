@@ -5,7 +5,7 @@ import {Sign} from "../shared/sign.ts"
 import {DUMMY_CONTROL} from "../shared/constants.ts";
 import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 
-export class Move extends ActionBase {
+export class Animate extends ActionBase {
     start: Point
     to: Point
     end: Point
@@ -13,14 +13,18 @@ export class Move extends ActionBase {
     right: Control = DUMMY_CONTROL
     leftId: string
     rightId: string = ''
+    propertyName: string = ''
+    updateControlValue: (x: number, y: number) => void
 
-    constructor(model: DotAndBoxModel, leftId: string, to: Point, rightId = '') {
+    constructor(model: DotAndBoxModel, property: string, leftId: string, to: Point, rightId = '') {
         super(model)
+        this.propertyName = property
         this.start = Point.zero()
         this.to = to
         this.end = to
         this.leftId = leftId
         this.rightId = rightId
+        this.updateControlValue = () => { }
     }
 
     override init() {
@@ -32,10 +36,11 @@ export class Move extends ActionBase {
         const foundControl = this.model.findControl(this.leftId)
         if (foundControl) {
             this.left = foundControl
-            this.start = this.left.position.clone()
+            this.start = this.left.getPropertyValue(this.propertyName).clone()
             let controlTo = this.to.clone()
             foundControl.normalizePositionUnit(controlTo, this.model.cellSize)
             this.end = this.calculateEnd(this.start, controlTo)
+            this.updateControlValue = this.left.getPropertyUpdater(this.propertyName)
         } else {
             this.left = DUMMY_CONTROL
         }
@@ -44,7 +49,7 @@ export class Move extends ActionBase {
             const foundRight = this.model.findControl(this.rightId)
             if (foundRight) {
                 this.right = foundRight
-                this.end = this.left.targetByCenter(this.right.center)
+                this.end = this.left.animateEndByPropertyAndTarget(this.propertyName, this.right)
                 foundRight.normalizePositionUnit(this.end, this.model.cellSize)
             }
         }
@@ -55,25 +60,25 @@ export class Move extends ActionBase {
         this.selectControls()
     }
 
-    calculateEnd(position: Point, change: Point) {
+    calculateEnd(start: Point, change: Point) {
         if (change.sign == Sign.NONE) {
             return new Point(change.x, change.y)
         } else if (change.sign == Sign.PLUS) {
-            return new Point(position.x + change.x, position.y + change.y)
+            return new Point(start.x + change.x, start.y + change.y)
         } else {
-            return new Point(position.x - change.x, position.y - change.y)
+            return new Point(start.x - change.x, start.y - change.y)
         }
     }
 
     override updateValue(progress: number) {
         if (progress == 0) {
-            this.left!.updatePosition(this.start.x, this.start.y)
+            this.updateControlValue(this.start.x, this.start.y)
 
         } else if (progress == 1) {
-            this.left!.updatePosition(this.end.x, this.end.y)
+            this.updateControlValue(this.end.x, this.end.y)
 
         } else {
-            this.left!.updatePosition(
+            this.updateControlValue(
                 this.start.x + (this.end.x - this.start.x) * progress,
                 this.start.y + (this.end.y - this.start.y) * progress
             )

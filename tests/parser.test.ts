@@ -3,7 +3,7 @@ import {Scanner} from "../src/parser/scanner";
 import {Parser} from "../src/parser/parser";
 import {BoxControl} from "../src/controls/box/boxControl";
 import {DotControl} from "../src/controls/dot/dotControl";
-import {Move} from "../src/actions/move";
+import {Animate} from "../src/actions/animate";
 import {Sign} from "../src/shared/sign";
 import {LineControl} from "../src/controls/line/lineControl";
 import {Unit} from "../src/shared/unit";
@@ -114,7 +114,6 @@ test('just title', () => {
 })
 
 
-
 test('relative and absolute moves', () => {
     let eg1 = ` 
 title: 'dot color and size'
@@ -179,7 +178,7 @@ step:
     expect(model.steps.length).eq(4)
     expect(model.steps[2].sequences[0].actions.length).eq(2)
 
-    const moveAction = model.steps[2].sequences[0].actions[1] as Move
+    const moveAction = model.steps[2].sequences[0].actions[1] as Animate
     expect(moveAction).not.eq(null)
     expect(moveAction.end.sign).eq(Sign.NONE)
 })
@@ -210,7 +209,6 @@ test('new steps', () => {
     const model = p.parse(eg1)
     expect(model).not.eq(null)
 })
-
 
 
 test('assign black after visible', () => {

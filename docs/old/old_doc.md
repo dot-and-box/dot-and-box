@@ -1,4 +1,3 @@
-
 ## DABL - (D)ot (A)nd (B)ox (L)anguage
 
 **DABL** allows to declare controls like dot and box
@@ -8,17 +7,21 @@ In a typical **DABL* program first you define controls like dot and box
 and then number of steps affecting their state e.g. changing their position or color
 
 ### Define a control
+
 To draw a dot or box beyond specifying control type you might have to set it attribute values.
 
 #### common attributes
+
 Controls support number of attributes which are mostly self describing like:
+
 - **id** - unique id of control - mandatory
 - **at** - control start location - optional - default: (0,0)
 - **text** - control text - optional - default: empty string
 - **size** - control size - optional - default:depend on control type
 - **visible** - is control visible - optional - default: true
 - **selected** - is control selected - optional - default: false
-- **color** - background color of control - optional - default: value from internal color table selected by: len(controls) modulo len(color_table)
+- **color** - background color of control - optional - default: value from internal color table selected by: len(
+  controls) modulo len(color_table)
 
 ### define a dot
 
@@ -27,7 +30,7 @@ It draws the control a dot
 e.g.
 
 ```dabl
-dot color: blue text: 'd1' size: 20
+dot color: blue text: 'd1' radius: 20
 ```
 
 ### define a box
@@ -35,15 +38,19 @@ dot color: blue text: 'd1' size: 20
 ```dabl
 box color: red text: 'a text in a box' size: (20,200) visible: true
 ```
+
 #### special attributes:
-- fontSize -  text font size - optional - defaults to DEFAULT_FONT_SIZE
+
+- fontSize - text font size - optional - defaults to DEFAULT_FONT_SIZE
 
 ### define a line
 
 ```dabl
 line color: orange at: (20,200) end: (200, 200) width: 0.5
 ```
+
 #### special attributes:
+
 - end - second point defining line - mandatory
 - width - width of line
 
@@ -51,9 +58,10 @@ line color: orange at: (20,200) end: (200, 200) width: 0.5
 
 Define a number of dots
 
-> dots ids: 1 2 3 5 4 at: -120, 0 size: 20
+> dots ids: 1 2 3 5 4 at: -120, 0 radius: 20
 
 #### special attributes:
+
 - ids - space separated ids of dots, mandatory
 - layout - *col* or *row*, optional - default: col
 - span - number of empty cells between dots
@@ -66,6 +74,7 @@ Define a number of boxes
 > boxes ids: one two three at: -120, 0 size: (100, 50)
 
 #### special attributes:
+
 - ids - space separated ids of boxes, mandatory
 - layout - *col* or *row*, optional - default: col
 - span - number of empty cells between boxes
@@ -81,6 +90,7 @@ So the simple step could look like this:
 step: 'this is my step title' duration: 2s
 myBox -> (100,50)
 ```
+
 Above step has title and takes 2s to run. It consists of one action moving control **myBox** to position 100 50
 
 Below we define possible actions.
@@ -105,7 +115,6 @@ last option is moving to other control's location
 
 > a1 -> b1
 
-
 #### swap controls
 
 > c1 <-> c2
@@ -113,6 +122,7 @@ last option is moving to other control's location
 swaps c1 and c2 position
 
 #### clone control
+
 e.g.
 > c1 *-> new_c1
 

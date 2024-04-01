@@ -15,7 +15,8 @@ test('scanner simple', () => {
     '4' <-> '7'
     '1' <-> '2'
     '3' *-> '12'
-    router <- selected
+    '3' +-> +[2,0]
+     router <- selected
     '12' -> +(50,-90)
      `
     let p = new Scanner()

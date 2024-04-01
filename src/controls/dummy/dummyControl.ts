@@ -11,14 +11,14 @@ export class DummyControl extends Control {
         super()
         this.id = 'dummy'
         this.position = Point.zero()
+        this.size = Point.zero()
     }
 
     clone(): Control {
         return new DummyControl()
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        console.log(`dummy draw on ${ctx}`)
+    draw(_: CanvasRenderingContext2D): void {
     }
 
     // @ts-ignore
@@ -29,4 +29,13 @@ export class DummyControl extends Control {
     static getInstance() {
         return new DummyControl()
     }
+
+    getPropertyValue(_: string): Point {
+        return Point.zero()
+    }
+
+    animateEndByPropertyAndTarget(_: string, __: Control): Point {
+        return Point.zero()
+    }
+
 }
