@@ -30,7 +30,7 @@ It draws the control a dot
 e.g.
 
 ```dabl
-dot color: blue text: 'd1' size: 20
+dot color: blue text: 'd1' radius: 20
 ```
 
 ### define a box
@@ -58,7 +58,7 @@ line color: orange at: (20,200) end: (200, 200) width: 0.5
 
 Define a number of dots
 
-> dots ids: 1 2 3 5 4 at: -120, 0 size: 20
+> dots ids: 1 2 3 5 4 at: -120, 0 radius: 20
 
 #### special attributes:
 
@@ -101,7 +101,7 @@ Below we define possible actions.
 
 > x -> (x,y)
 
-Animate action, moves control to point at position x, y
+Move action, moves control to point at position x, y
 
 e.g. moving control a1 to point at position (x,y) 56, 160 would be:
 
