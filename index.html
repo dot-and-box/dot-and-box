@@ -13,14 +13,14 @@
 </head>
 <body>
 <h1>Just dot and box...</h1>
-<dot-and-box style="height: 350px" controls code="
+<dot-and-box style="height: 350px" grid controls code="
 title: 'move control'
 box id: otherBox at: [2,0] size: [1,1]
 dot id: d1  text: 'doty' at: [-3,-2] radius: 45
 step: 'resize dot by 1 cell'
 d1 +-> +[1,0]
-step: 'resize dot to [1,1]'
-d1 +-> [1,1], d1 -> otherBox
+step: 'resize dot to 60'
+d1 +-> 60, d1 -> otherBox
 step: 'resize to otherBox'
 d1 +-> otherBox"></dot-and-box>
 

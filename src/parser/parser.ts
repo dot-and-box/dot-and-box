@@ -663,18 +663,20 @@ export class Parser {
 
     resize(leftControlId: string): ActionBase {
         this.advance()
-        let point: Point = Point.zero()
+        let size: Point = Point.zero()
         let rightId = ''
-        let isPoint = this.pointInBracketsAhead()
-        if (isPoint) {
-            point = this.point()
+        if (this.isNumberAhead()) {
+            const val = this.number()
+            size = new Point(val, val)
+        } else if (this.pointInBracketsAhead()) {
+            size = this.point()
         } else {
             let token = this.peek()
             rightId = token.value
             this.advance()
         }
 
-        return new Animate(this.model, SIZE, leftControlId, point, rightId)
+        return new Animate(this.model, SIZE, leftControlId, size, rightId)
     }
 
     pointInBracketsAhead(): boolean {
@@ -683,6 +685,12 @@ export class Parser {
             || token.type == TokenType.MINUS
             || token.type == TokenType.LEFT_BRACKET
             || token.type == TokenType.LEFT_SQUARE_BRACKET
+    }
+
+
+    isNumberAhead(): boolean {
+        const token = this.peek();
+        return token.type == TokenType.NUMBER
     }
 
     assign(controlId: string): Assign {
