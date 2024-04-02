@@ -67,7 +67,7 @@ export class DotControl extends Control {
     hitTest(point: Point): boolean {
         let tx = this.position.x - point.x
         let ty = this.position.y - point.y
-        return tx * tx + ty * ty <= this.size.x * this.size.x
+        return tx * tx + ty * ty <= this.radius * this.radius
     }
 
     override normalizePositionUnit(point: Point, cellSize: number) {
