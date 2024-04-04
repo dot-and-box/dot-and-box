@@ -51,7 +51,6 @@ export class Sequence {
         if (this._progress === newProgress) {
             return
         }
-
         if (newProgress > 0 && this._progress == 0) {
             this.actions.forEach(a => a.onBeforeForward())
         } else if (newProgress == 0 && this._progress > 0) {
@@ -120,7 +119,13 @@ export class Step {
             return
         this._progress = newProgress
 
-        this.sequences.forEach(ag => ag.progress = this._progress)
+        if (this.direction == StepDirection.FORWARD) {
+            this.sequences.forEach(ag => ag.progress = this._progress)
+        } else {
+            for (let i = this.sequences.length - 1; i >= 0; i--) {
+                this.sequences[i].progress = this._progress
+            }
+        }
         this.updateState()
     }
 
