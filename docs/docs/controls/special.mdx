@@ -9,9 +9,13 @@ There are two special built-in controls: **selected** and **camera**
 ### **selected** control
 
 selected is a virtual control pointing to currently selected control by user or code.
-selected0 is first selected control selected1 second and so on.
+selected_0 is first selected control selected_1 second and so on.
 
-e.g. we declare two preselected dots and one unselected. Then we use **selected0** and **selected1** to swap their positions.
+:::warning
+There was a breaking change in version 0.1.3 - selected use underscore to specify selected index.
+:::
+
+e.g. we declare two preselected dots and one unselected. Then we use **selected_0** and **selected_1** to swap their positions.
 
 ```dabl tab showLineNumbers
 title: 'selected controls'
@@ -19,7 +23,7 @@ dot id: a at: [-2,-1] color: red selected: true
 dot id: b at: [1,-1] color: blue selected: true
 dot id: e at: [0,-2] color: green
 step: 'swap selected controls'
-selected0 <-> selected1
+selected_0 <-> selected_1
 ```
 ```html tab showLineNumbers
 <dot-and-box style="height: 250px" controls code="
@@ -28,7 +32,7 @@ selected0 <-> selected1
     dot id: b at: [1,-1]  selected: true
     dot id: e at: [0,-2] color: green
     step: 'swap selected controls'
-    selected0 <-> selected1">
+    selected_0 <-> selected_1">
  </dot-and-box>
 ```
 
@@ -38,7 +42,7 @@ selected0 <-> selected1
     dot id: b at: [1,-1] selected: true
     dot id: e at: [0,-2] color: green
     step: 'swap selected controls'
-    selected0 <-> selected1">
+    selected_0 <-> selected_1">
  </dot-and-box>
 
 Try to unselect one of dots and select green one, restart and make step forward again to see how it works.

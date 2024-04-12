@@ -91,7 +91,7 @@ export class DotAndBoxModel {
 
     findControl(controlId: string) {
         if (controlId.startsWith(DotAndBoxModel.SELECTED_PREFIX)) {
-            const index = parseInt(controlId.substring(DotAndBoxModel.SELECTED_PREFIX.length), 10)
+            const index = parseInt(controlId.substring(DotAndBoxModel.SELECTED_PREFIX.length+1), 10)
             return index < this.selectedControls.length ? this.selectedControls[index] : undefined
         } else {
             return this.controls.find(c => c.id === controlId)

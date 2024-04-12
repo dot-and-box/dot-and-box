@@ -25,22 +25,21 @@ export class Parser {
     position = 0
     tokens: Token[] = []
     cellSize = 50
-
     identifiesCounter = new Map<string, number>()
 
     static newModel(): DotAndBoxModel {
         return new DotAndBoxModel('', [], [])
     }
 
-    public eof(): boolean {
+    eof(): boolean {
         return this.tokens.length <= this.position
     }
 
-    public advance(): Token {
+    advance(): Token {
         return this.tokens[this.position++]
     }
 
-    public peek(): Token {
+    peek(): Token {
         return this.tokens[this.position]
     }
 
@@ -92,7 +91,7 @@ export class Parser {
     }
 
     boxes() {
-        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
+        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.ID, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
         let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
         let text = ''
@@ -138,10 +137,11 @@ export class Parser {
 
         let spanInPixels = size.x + this.cellSize * span
         let i = 0;
-        for (id of ids) {
+        for (let subId of ids) {
+            const composedId = id != '' ? id + '_' + subId : subId
+            const realId = this.getId(composedId)
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = colors[i % colors.length]
-            const realId = this.getId(id != '' ? id : text)
             const box = new BoxControl(realId, position, size.clone(), DEFAULT_FONT_SIZE, color, text != '' ? text : id, true, false)
             this.model.controls.push(box)
             if (box.selected) {
@@ -278,7 +278,7 @@ export class Parser {
     }
 
     dots() {
-        const dots_tokens: Array<TokenType> = [TokenType.RADIUS, TokenType.AT, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
+        const dots_tokens: Array<TokenType> = [TokenType.RADIUS, TokenType.AT, TokenType.ID, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
         let radius = 20
         let at = new Point(0, 0)
         let text = ''
@@ -287,6 +287,7 @@ export class Parser {
         let colors: string[] = []
         let span = 0
         let layout = Layout.COL
+
 
         while (!this.eof() && dots_tokens.includes(this.peek().type)) {
             const token = this.advance()
@@ -322,14 +323,15 @@ export class Parser {
         let i = 0;
         let spanInPixels = this.cellSize + (span * this.cellSize)
 
-        for (id of ids) {
-            const realId = this.getId(id != '' ? id : text)
+        for (let subId of ids) {
+            const composedId = id != '' ? id + '_' + subId : subId
+            const realId = this.getId(composedId)
             if (at.unit == Unit.CELL && at.sign == Sign.NONE) {
                 DotControl.normalizeDotPosition(at, this.cellSize);
             }
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = colors[i % colors.length]
-            const dot = new DotControl(realId, position, radius, color, text != '' ? text : id, true, false)
+            const dot = new DotControl(realId, position, radius, color, text != '' ? text : subId, true, false)
             this.model.controls.push(dot)
             if (dot.selected) {
                 this.model.selectedControls.push(dot)

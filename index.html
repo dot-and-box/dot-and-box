@@ -13,11 +13,13 @@
 </head>
 <body>
 <h1>Just dot and box...</h1>
-<dot-and-box style="height: 350px" grid controls code="
+<dot-and-box style="height: 350px" grid controls experimental code="
 title: 'move control'
+dots  ids: 1 2 3 4 5 6 id: dd at: [-2,1]
 box id: otherBox at: [2,0] size: [1,1]
 dot id: d1  text: 'doty' at: [-3,-2] radius: 45
 step: 'resize dot by 1 cell'
+dd_2 -> +[0,2]
 d1 +-> +[1,0]
 step: 'resize dot to 60'
 d1 +-> 60, d1 -> otherBox
@@ -128,8 +130,8 @@ d1 -> +[0,-2]
         dot id: 4 color: gray  at: -50, 0 radius: 20 selected: true
         dot id: 5 color: rgba(190,0,65,1) at: 50, 0 radius: 20
         step: 'one'
-        l -> -(0,140),  selected0 <-> selected1
-        selected0 -> +(20,90)
+        l -> -(0,140),  selected_0 <-> selected_1
+        selected_0 -> +(20,90)
         5 -> +(50,-50)
         5 *-> z1, z1 <- text: '5*', z1 -> -(200,-150)
         step: 'two'
