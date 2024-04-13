@@ -210,7 +210,7 @@ export class Parser {
         }
         if (id == null) {
             let prefix = group != '' ? group : 'b'
-            id = prefix + this.model.controls.length
+            id = prefix + '_' + this.model.controls.length
         }
         if (at.unit == Unit.CELL) {
             at.normalizeUnit(this.cellSize)
@@ -278,7 +278,8 @@ export class Parser {
             }
         }
         if (id == null) {
-            id = 'l' + this.model.controls.length
+            let prefix = group === '' ? 'l' : group
+            id = prefix + '_' + this.model.controls.length
         }
         const realId = this.getId(id)
         const line = new LineControl(realId, at, end, width, color, visible, selected)
@@ -398,7 +399,7 @@ export class Parser {
         }
         if (id === '' && text === '') {
             let prefix = group === '' ? 'd' : group
-            id = prefix + this.model.controls.length
+            id = prefix + '_' + this.model.controls.length
         }
 
         if (text == null) {
