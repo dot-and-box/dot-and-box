@@ -142,7 +142,7 @@ export class Parser {
             const realId = this.getId(composedId)
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = colors[i % colors.length]
-            const box = new BoxControl(realId, position, size.clone(), DEFAULT_FONT_SIZE, color, text != '' ? text : id, true, false)
+            const box = new BoxControl(realId, position, size.clone(), DEFAULT_FONT_SIZE, color, text != '' ? text : subId, true, false)
             this.model.controls.push(box)
             if (box.selected) {
                 this.model.selectedControls.push(box)
