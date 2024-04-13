@@ -91,11 +91,11 @@ export class Parser {
     }
 
     boxes() {
-        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.ID, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
+        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.GROUP, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
         let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
         let text = ''
-        let id = ''
+        let group = ''
         let ids: string[] = []
         let colors: string[] = []
         let span = 0
@@ -104,8 +104,8 @@ export class Parser {
         while (!this.eof() && boxes_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
-                case TokenType.ID:
-                    id = this.propertyControlId()
+                case TokenType.GROUP:
+                    group = this.propertyControlId()
                     break
                 case TokenType.AT:
                     at = this.at()
@@ -138,7 +138,7 @@ export class Parser {
         let spanInPixels = size.x + this.cellSize * span
         let i = 0;
         for (let subId of ids) {
-            const composedId = id != '' ? id + '_' + subId : subId
+            const composedId = group != '' ? group + '_' + subId : subId
             const realId = this.getId(composedId)
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = colors[i % colors.length]
@@ -155,7 +155,7 @@ export class Parser {
         if (this.identifiesCounter.has(id.trim())) {
             let idCount = this.identifiesCounter.get(id)! + 1
             this.identifiesCounter.set(id, idCount)
-            return idCount + '_' + id
+            return id + '_' + idCount
         } else {
             this.identifiesCounter.set(id, 0)
             return id
@@ -163,11 +163,12 @@ export class Parser {
     }
 
     box() {
-        const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
+        const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.GROUP, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
         let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
         let text: string | null
         let id = null
+        let group = ''
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
         let selected = false
@@ -180,6 +181,9 @@ export class Parser {
             switch (token.type) {
                 case TokenType.ID:
                     id = this.propertyControlId()
+                    break
+                case TokenType.GROUP:
+                    group = this.propertyControlId()
                     break
                 case TokenType.TEXT:
                     text = this.text()
@@ -205,12 +209,15 @@ export class Parser {
             }
         }
         if (id == null) {
-            id = 'b' + this.model.controls.length
+            let prefix = group != '' ? group : 'b'
+            id = prefix + this.model.controls.length
         }
         if (at.unit == Unit.CELL) {
             at.normalizeUnit(this.cellSize)
         }
-        const realId = this.getId(id != '' ? id : text)
+        const composedId = group != '' ? group + '_' + id : id
+
+        const realId = this.getId(composedId != '' ? composedId : text)
         const box = new BoxControl(realId, at, size.clone(), fontSize, color, text, visible, selected)
         this.model.controls.push(box)
         if (box.selected) {
@@ -230,11 +237,12 @@ export class Parser {
     }
 
     line() {
-        const line_tokens: Array<TokenType> = [TokenType.ID, TokenType.END, TokenType.AT, TokenType.WIDTH, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED]
+        const line_tokens: Array<TokenType> = [TokenType.ID, TokenType.GROUP, TokenType.END, TokenType.AT, TokenType.WIDTH, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED]
         let end = new Point(100, 100)
         let at = new Point(0, 0)
         let width = 1
         let id = null
+        let group = null
         let color = BLACK
         let visible = true
         let selected = false
@@ -243,6 +251,9 @@ export class Parser {
             switch (token.type) {
                 case TokenType.ID:
                     id = this.propertyControlId()
+                    break
+                case TokenType.GROUP:
+                    group = this.propertyControlId()
                     break
                 case TokenType.AT:
                     at = this.at()
@@ -278,22 +289,21 @@ export class Parser {
     }
 
     dots() {
-        const dots_tokens: Array<TokenType> = [TokenType.RADIUS, TokenType.AT, TokenType.ID, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
+        const dots_tokens: Array<TokenType> = [TokenType.RADIUS, TokenType.AT, TokenType.GROUP, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
         let radius = 20
         let at = new Point(0, 0)
         let text = ''
-        let id = ''
+        let group = ''
         let ids: string[] = []
         let colors: string[] = []
         let span = 0
         let layout = Layout.COL
 
-
         while (!this.eof() && dots_tokens.includes(this.peek().type)) {
             const token = this.advance()
             switch (token.type) {
-                case TokenType.ID:
-                    id = this.propertyControlId()
+                case TokenType.GROUP:
+                    group = this.propertyControlId()
                     break
                 case TokenType.AT:
                     at = this.at()
@@ -324,7 +334,7 @@ export class Parser {
         let spanInPixels = this.cellSize + (span * this.cellSize)
 
         for (let subId of ids) {
-            const composedId = id != '' ? id + '_' + subId : subId
+            const composedId = group != '' ? group + '_' + subId : subId
             const realId = this.getId(composedId)
             if (at.unit == Unit.CELL && at.sign == Sign.NONE) {
                 DotControl.normalizeDotPosition(at, this.cellSize);
@@ -341,10 +351,11 @@ export class Parser {
     }
 
     dot() {
-        const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.RADIUS, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
+        const dot_tokens: Array<TokenType> = [TokenType.ID, TokenType.GROUP, TokenType.RADIUS, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
         let radius = 20
         let at = new Point(0, 0)
         let text: string | null
+        let group = ''
         let id = ''
         let color = COLORS[this.model.controls.length % COLORS.length]
         let visible = true
@@ -358,6 +369,9 @@ export class Parser {
             switch (token.type) {
                 case TokenType.ID:
                     id = this.propertyControlId()
+                    break
+                case TokenType.GROUP:
+                    group = this.propertyControlId()
                     break
                 case TokenType.TEXT:
                     text = this.text()
@@ -383,14 +397,15 @@ export class Parser {
             }
         }
         if (id === '' && text === '') {
-            id = 'd' + this.model.controls.length
+            let prefix = group === '' ? 'd' : group
+            id = prefix + this.model.controls.length
         }
 
         if (text == null) {
             text = id
         }
-
-        const realId = this.getId(id != '' ? id : text)
+        const composedId = group != '' ? group + '_' + id : id
+        const realId = this.getId(composedId != '' ? composedId : text)
         const dot = new DotControl(realId, at, radius, color, text, visible, selected, fontSize)
         dot.normalizePositionUnit(dot.position, this.cellSize)
         this.model.controls.push(dot)

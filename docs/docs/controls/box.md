@@ -26,6 +26,7 @@ box id: b at: [-1,-1] size: [2,2] text: 'box'
 #### box attributes
 Box support number of attributes which are mostly self describing like:
 - **id** - unique id of box - mandatory
+- **group** - prefix for id, optional
 - **at** - box start location - optional - default: (0,0)
 - **text** - box text - optional - default: empty string
 - **size** - box size - optional - default: cell size

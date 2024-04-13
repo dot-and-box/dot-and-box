@@ -25,6 +25,7 @@ export enum TokenType {
     TRUE = 'true',
     FALSE = 'false',
     ID = 'id',
+    GROUP = 'group',
     TITLE = 'title',
     TEXT = 'text',
     DOT = 'dot',
