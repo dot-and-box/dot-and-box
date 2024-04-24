@@ -138,7 +138,7 @@ export class WrappedText extends Control {
         this._textData = result
     }
 
-    getPropertyValue(name: string): Point {
+    getPointPropertyValue(name: string): Point {
         switch (name) {
             case POSITION:
                 return this.position

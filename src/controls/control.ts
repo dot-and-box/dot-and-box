@@ -20,11 +20,21 @@ export abstract class Control implements ControlBase {
 
     abstract hitTest(point: Point): boolean
 
-    abstract getPropertyValue(name: string): Point
+    abstract getPointPropertyValue(name: string): Point
 
     abstract animateEndByPropertyAndTarget(propertyName: string, targetControl: Control): Point
 
-    getPropertyUpdater(_: string): (x: number, y: number) => void {
+    getPropertyValue(name: string): Object {
+        const me = this as any;
+        return me[name] as Object
+    }
+
+    setPropertyValue(name: string, value: object): void {
+        const me = this as any;
+        me[name] = value
+    }
+
+    getPointPropertyUpdater(_: string): (x: number, y: number) => void {
         throw new Error('not implemented exception')
     }
 

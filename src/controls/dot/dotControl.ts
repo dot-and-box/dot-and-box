@@ -89,7 +89,7 @@ export class DotControl extends Control implements TextControl {
     }
 
 
-    override getPropertyUpdater(name: string): (x: number, y: number) => void {
+    override getPointPropertyUpdater(name: string): (x: number, y: number) => void {
         if (name === POSITION) {
             return (x: number, y: number) => this.updatePosition(x, y)
         } else if (name == SIZE) {
@@ -103,7 +103,7 @@ export class DotControl extends Control implements TextControl {
     }
 
 
-    getPropertyValue(name: string): Point {
+    getPointPropertyValue(name: string): Point {
         switch (name) {
             case POSITION:
                 return this.position

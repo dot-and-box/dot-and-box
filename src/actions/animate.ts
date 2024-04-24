@@ -36,11 +36,11 @@ export class Animate extends ActionBase {
         const foundControl = this.model.findControl(this.leftId)
         if (foundControl) {
             this.left = foundControl
-            this.start = this.left.getPropertyValue(this.propertyName).clone()
+            this.start = this.left.getPointPropertyValue(this.propertyName).clone()
             let controlTo = this.to.clone()
             foundControl.normalizePositionUnit(controlTo, this.model.cellSize)
             this.end = this.calculateEnd(this.start, controlTo)
-            this.updateControlValue = this.left.getPropertyUpdater(this.propertyName)
+            this.updateControlValue = this.left.getPointPropertyUpdater(this.propertyName)
         } else {
             this.left = DUMMY_CONTROL
         }

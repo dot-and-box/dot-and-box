@@ -46,9 +46,9 @@ export class Assign extends ActionBase {
             let control = this.control as any
             let propertyChanges = []
             for (const p of this.properties.keys()) {
-                const oldValue = control[p]
+                const oldValue = control.getPropertyValue(p)
                 const newValue = this.properties.get(p)
-                control[p] = newValue
+                control.setPropertyValue(p, newValue)
                 propertyChanges.push(new PropertyChange(p, newValue, oldValue))
                 if (p === 'selected') {
                     this.model.applySelected([this.control])

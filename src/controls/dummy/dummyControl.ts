@@ -30,7 +30,7 @@ export class DummyControl extends Control {
         return new DummyControl()
     }
 
-    getPropertyValue(_: string): Point {
+    getPointPropertyValue(_: string): Point {
         return Point.zero()
     }
 

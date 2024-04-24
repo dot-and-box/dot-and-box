@@ -63,7 +63,7 @@ export class LineControl extends Control {
         this._end.y = y + this.distance.y
     }
 
-    override getPropertyUpdater(name: string): (x: number, y: number) => void {
+    override getPointPropertyUpdater(name: string): (x: number, y: number) => void {
         if (name == 'position') {
             return (x: number, y: number) => this.updatePosition(x, y)
         } else if (name == 'size') {
@@ -76,7 +76,7 @@ export class LineControl extends Control {
         }
     }
 
-    getPropertyValue(name: string): Point {
+    getPointPropertyValue(name: string): Point {
         switch (name) {
             case 'position':
                 return this.position

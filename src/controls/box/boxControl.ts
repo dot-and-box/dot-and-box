@@ -12,7 +12,7 @@ import {
 import {Control, TextControl} from "../control.ts"
 import {WrappedText} from "../text/WrappedText.ts";
 
-export class BoxControl extends Control implements TextControl{
+export class BoxControl extends Control implements TextControl {
     get fontSize(): number {
         return this._fontSize;
     }
@@ -27,6 +27,7 @@ export class BoxControl extends Control implements TextControl{
 
     set text(value: string) {
         this._text = value;
+        this.textControl.text = this.text
     }
 
     override get center(): Point {
@@ -88,7 +89,7 @@ export class BoxControl extends Control implements TextControl{
         return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this._fontSize, this.color.toString(), this._text.toString(), this.visible, this.selected)
     }
 
-    override getPropertyUpdater(name: string): (x: number, y: number) => void {
+    override getPointPropertyUpdater(name: string): (x: number, y: number) => void {
         if (name == POSITION) {
             return (x: number, y: number) => {
                 this.updatePosition(x, y)
@@ -113,7 +114,7 @@ export class BoxControl extends Control implements TextControl{
         }
     }
 
-    getPropertyValue(name: string): Point {
+    getPointPropertyValue(name: string): Point {
         switch (name) {
             case POSITION:
                 return this.position
