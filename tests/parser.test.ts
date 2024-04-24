@@ -146,8 +146,8 @@ test('parse controls and actions', () => {
     let eg1 = ` 
 title: 'This is string'
 box id: b1 text: 'box' color: rgba(223,123,8,0.68) at: -150, 30 size: (100, 50)
-dot text: '1' color: purple at: (250, 20) size: 55
-dot text: '2' color: red at: (250, 20) size: 55
+dot text: '1' color: purple at: (250, 20) radius: 55
+dot text: '2' color: red at: (250, 20) radius: 20
 step:
 b1 <- selected: true text: 'zumba'
 b1 *-> b2
@@ -171,7 +171,7 @@ step:
 
     const dot = model.controls[1] as DotControl
     expect(dot).not.eq(null)
-    expect(dot.size).eq(55)
+    expect(dot.radius).eq(55)
     expect(dot.position.x).eq(250)
     expect(dot.position.y).eq(20)
 

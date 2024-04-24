@@ -9,8 +9,9 @@ export const SELECTION_LINE_WIDTH = 2
 export const DEFAULT_FONT = 'courier'
 export const DEFAULT_FONT_SIZE = 14
 export const DEFAULT_LINE_WIDTH = 1
-export const WHITE = "white"
-export const BLACK = "black"
+export const WHITE = 'white'
+export const BLACK = 'black'
+export const CAMERA = 'camera'
 export const COLORS: string [] = [
     "#F44336",
     "#673AB7",

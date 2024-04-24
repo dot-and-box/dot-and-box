@@ -5,6 +5,10 @@ export interface ControlBase {
     position: Point
 }
 
+export interface TextControl {
+    text: string
+}
+
 export abstract class Control implements ControlBase {
     id: string = '';
     position: Point = Point.zero();

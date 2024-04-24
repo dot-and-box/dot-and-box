@@ -10,7 +10,7 @@ import {Animate} from "../actions/animate.ts"
 import {Swap} from "../actions/swap.ts"
 import {Clone} from "../actions/clone.ts"
 import {Sign} from "../shared/sign.ts"
-import {BLACK, COLORS, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../shared/constants.ts"
+import {BLACK, CAMERA, COLORS, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../shared/constants.ts"
 import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
@@ -670,7 +670,7 @@ export class Parser {
             rightId = token.value
             this.advance()
         }
-        if (leftControlId == 'camera') {
+        if (leftControlId == CAMERA) {
             if (point.sign == Sign.NONE) {
                 throw new Error(`Only relative move for camera is currently supported`)
             }
@@ -725,8 +725,6 @@ export class Parser {
                 this.advance()
                 propertyName = token.type.toString()
             }
-
-            const valueToken = this.peek()
             let value
             if (propertyTokenType == TokenType.COLOR) {
                 value = this.color()
@@ -734,7 +732,8 @@ export class Parser {
                 this.expectColon()
                 value = this.boolean()
             } else {
-                value = valueToken.value
+                this.match(TokenType.COLON)
+                value = this.peek().value
                 this.advance()
             }
             properties.set(propertyName, value)

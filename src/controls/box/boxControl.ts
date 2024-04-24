@@ -9,10 +9,10 @@ import {
     SIZE,
     WHITE
 } from "../../shared/constants.ts"
-import {Control} from "../control.ts"
+import {Control, TextControl} from "../control.ts"
 import {WrappedText} from "../text/WrappedText.ts";
 
-export class BoxControl extends Control {
+export class BoxControl extends Control implements TextControl{
     get fontSize(): number {
         return this._fontSize;
     }
