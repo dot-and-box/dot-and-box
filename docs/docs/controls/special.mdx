@@ -27,19 +27,20 @@ selected_0 <-> selected_1
 ```
 ```html tab showLineNumbers
 <dot-and-box style="height: 250px" controls code="
-    title: 'selected controls'
-    dot id: a at: [-2,-1] selected: true
-    dot id: b at: [1,-1]  selected: true
-    dot id: e at: [0,-2] color: green
-    step: 'swap selected controls'
-    selected_0 <-> selected_1">
+title: 'selected controls'
+dot id: a at: [-2,-1] color: red selected: true
+dot id: b at: [1,-1] color: blue selected: true
+dot id: e at: [0,-2] color: green
+step: 'swap selected controls'
+selected_0 <-> selected_1"
+`>
  </dot-and-box>
 ```
 
 <dot-and-box style={{height: 250}} controls code="
     title: 'selected controls'
-    dot id: a at: [-2,-1] selected: true
-    dot id: b at: [1,-1] selected: true
+    dot id: a at: [-2,-1] color: red selected: true
+    dot id: b at: [1,-1] color: blue selected: true
     dot id: e at: [0,-2] color: green
     step: 'swap selected controls'
     selected_0 <-> selected_1">
