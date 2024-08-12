@@ -73,8 +73,5 @@ export class Assign extends ActionBase {
     override updateValue(progress: number) {
     }
 
-    override get instant(): boolean {
-        return true;
-    }
 
 }

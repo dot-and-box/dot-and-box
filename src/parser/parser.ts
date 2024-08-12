@@ -49,6 +49,8 @@ export class Parser {
         while (this.position < this.tokens.length) {
             const token = this.advance()
             switch (token.type) {
+                case TokenType.NEW_LINE:
+                    break
                 case TokenType.TITLE:
                     this.title()
                     break
@@ -574,21 +576,32 @@ export class Parser {
         if (this.match(TokenType.DURATION)) {
             step.duration = this.duration()
         }
+        this.match(TokenType.NEW_LINE)
         let action = this.action()
-        let lasTokenWasComma = true
+        let comma = true
         while (action != null) {
-            if (lasTokenWasComma) {
+            if (comma) {
                 step.addParallelAction(action)
             } else {
                 step.addSequentialAction(action)
             }
+            this.match(TokenType.NEW_LINE)
             if (this.eof() || this.peek().type == TokenType.STEP) {
                 if (step.sequences.length > 0) {
                     this.model.steps.push(step)
                 }
+                step.recalculateSequencesStartEnd()
                 return
             }
-            lasTokenWasComma = this.match(TokenType.COMMA)
+            comma = this.match(TokenType.COMMA)
+            this.match(TokenType.NEW_LINE)
+            if (!this.eof() && this.peek().type == TokenType.STEP) {
+                if (step.sequences.length > 0) {
+                    this.model.steps.push(step)
+                    step.recalculateSequencesStartEnd()
+                    return
+                }
+            }
             action = this.action()
         }
 
@@ -598,7 +611,6 @@ export class Parser {
         if (this.eof())
             return null
         let controlId = this.controlId()
-
         let token = this.peek()
         switch (token.type) {
             case TokenType.ASSIGN:

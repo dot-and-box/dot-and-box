@@ -18,6 +18,7 @@ export class Scanner {
                 case '\r':
                     break
                 case '\n':
+                    this.addToken(TokenType.NEW_LINE)
                     this.line++
                     break
                 case '\t':

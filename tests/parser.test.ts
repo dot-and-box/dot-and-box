@@ -224,3 +224,78 @@ test('assign black after visible', () => {
 })
 
 
+test('complex example', () => {
+    let eg1 = ` 
+    title: 'Event driven communication'
+    boxes ids: 'basket' 'order' 'payment' 'shipping' at: [-6,0] size: [2,2] span: 1
+    line at: [-7,-1] end: [6, -1] width: 2
+    line at: [-5,-1] end: [-5, 0] width: 2
+    line at: [-2,-1] end: [-2, 0] width: 2
+    line at: [1,-1] end: [1, 0] width: 2
+    line at: [4,-1] end: [4, 0] width: 2
+    box: 'event broker' at: [-7, -2] size: [3,1] color: white
+    dot id: or at: [-5.5, 1] visible: false color: black
+    dot id: ov at: [-2.5,1] visible: false color: black
+    dot id: pr at: [0.5,1] visible: false color: black
+    dot id: pc at: [0.5,1] visible: false color: black
+    dot id: os at: [3.5,1] visible: false color: black
+    step: '(1) order requested'
+    or <- visible: true, or -> -[0,2.5]
+    or -> +[3,0]
+    or ->  +[0,2.5]
+    or <- color: orange
+    step: '(2) order validated'
+    or <- visible: false
+    ov <- visible: true, ov -> -[0,2.5]
+    ov *-> ov1
+    ov -> -[3,0], ov1 -> +[3,0]
+    ov -> +[0,2.5], ov1 -> +[0,2.5]
+    step: '(3) payment requested'
+    ov1 <- visible: false, ov <- visible: false, pr <- visible: true
+    pr -> -[0,2.5]
+    pr -> -[6,0]
+    pr -> +[0,2.5]
+    step: '(4) payment confirmed'
+    pr <- visible: false, pc <- visible: true
+    pc -> -[0,2.5]
+    pc *-> pc1
+    pc -> -[3,0], pc1 -> +[3,0]
+    pc -> +[0,2.5], pc1 -> +[0,2.5]
+    step: '(5) order shipped'
+    pc <- visible: false, pc1 <- visible: false, os <- visible: true
+    os -> -[0,2.5]
+    os -> -[6,0]
+    os -> +[0,2.5]
+    `
+
+    let p = new Parser()
+    const model = p.parse(eg1)
+    expect(model).not.eq(null)
+})
+
+test('sequential example', () => {
+    let eg1 = ` 
+    title: 'Event driven communication 1'
+    boxes ids: 'basket' 'order' 'payment' 'shipping' at: [-6,0] size: [2,2] span: 1
+    line at: [-7,-1] end: [6, -1] width: 2
+    line at: [-5,-1] end: [-5, 0] width: 2
+    line at: [-2,-1] end: [-2, 0] width: 2
+    line at: [1,-1] end: [1, 0] width: 2
+    line at: [4,-1] end: [4, 0] width: 2
+    box: 'event broker' at: [-7, -2] size: [3,1] color: white
+    dot id: or at: [-5.5, 1] visible: false color: black
+    dot id: ov at: [-2.5,1] visible: false color: black
+    dot id: pr at: [0.5,1] visible: false color: black
+    dot id: pc at: [0.5,1] visible: false color: black
+    dot id: os at: [3.5,1] visible: false color: black
+    step: '(1) order requested'
+    or <- visible: true, or -> -[0,2.5]
+    or -> +[3,0]
+    or ->  +[0,2.5]
+    or <- color: red
+    `
+    let p = new Parser()
+    const model = p.parse(eg1)
+    expect(model).not.eq(null)
+})
+

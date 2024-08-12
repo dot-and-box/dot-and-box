@@ -7,7 +7,6 @@ export class Sequence {
     public actions: ActionBase[] = []
     public _start: number = 0
     public _end: number = 1
-    public instant: boolean = true
     private _startEndDiff: number = 1
 
     public get start() {
@@ -23,7 +22,6 @@ export class Sequence {
     }
 
     public addAction(action: ActionBase) {
-        this.instant &&= action.instant
         this.actions.push(action)
     }
 
@@ -91,22 +89,18 @@ export class Step {
         this.sequences[this.sequences.length - 1].addAction(action)
     }
 
-    public addSequentialAction(action: ActionBase) {
-        let nonInstantSequenceCount = this
-            .sequences
-            .reduce((acc: number, curr: Sequence) => acc + (curr.instant ? 0 : 1), 0) + (action.instant ? 0 : 1)
-
-        const sequenceSpan = 1 / nonInstantSequenceCount;
+    public recalculateSequencesStartEnd() {
+        let sequenceCount = this.sequences.length;
+        const sequenceSpan = 1 / sequenceCount;
         let currentStart = 0;
         for (const seq of this.sequences) {
-            if (seq.instant) {
-                seq.updateStartEnd(currentStart, currentStart)
-            } else {
-                seq.updateStartEnd(currentStart, currentStart + sequenceSpan)
-                currentStart += sequenceSpan
-            }
+            seq.updateStartEnd(currentStart, currentStart + sequenceSpan)
+            currentStart += sequenceSpan
         }
-        this.sequences.push(new Sequence(1 - sequenceSpan, 1));
+    }
+
+    public addSequentialAction(action: ActionBase) {
+        this.sequences.push(new Sequence(0, 1));
         this.sequences[this.sequences.length - 1].addAction(action)
     }
 

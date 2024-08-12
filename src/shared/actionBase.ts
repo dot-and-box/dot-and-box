@@ -18,8 +18,4 @@ export abstract class ActionBase {
 
     abstract updateValue(progress: number): void
 
-    get instant(): boolean {
-        return false
-    }
-
 }

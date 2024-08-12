@@ -28,7 +28,7 @@ step: 'resize to otherBox'
 zz_1 +-> bb_otherBox"></dot-and-box>
 
 <div style="position: relative; margin-left: 140px;">
-    <dot-and-box controls style="margin: 10px; height: 300px;" code="
+    <dot-and-box controls style="margin: 10px; height: 300px;" debug code="
     title: 'Event driven communication'
     boxes ids: 'basket' 'order' 'payment' 'shipping' at: [-6,0] size: [2,2] span: 1
     line at: [-7,-1] end: [6, -1] width: 2
@@ -46,26 +46,21 @@ zz_1 +-> bb_otherBox"></dot-and-box>
     or <- visible: true, or -> -[0,2.5]
     or -> +[3,0]
     or ->  +[0,2.5]
+    or <- color: red
     step: '(2) order validated'
-    or <- visible: false
-    ov <- visible: true, ov -> -[0,2.5]
-    ov *-> ov1
-    ov -> -[3,0], ov1 -> +[3,0]
+    or <- visible: false, ov <- visible: true, ov -> -[0,2.5]
+    ov *-> ov1,ov -> -[3,0], ov1 -> +[3,0]
     ov -> +[0,2.5], ov1 -> +[0,2.5]
     step: '(3) payment requested'
-    ov1 <- visible: false, ov <- visible: false, pr <- visible: true
-    pr -> -[0,2.5]
+    ov1 <- visible: false, ov <- visible: false, pr <- visible: true, pr -> -[0,2.5]
     pr -> -[6,0]
     pr -> +[0,2.5]
     step: '(4) payment confirmed'
-    pr <- visible: false, pc <- visible: true
-    pc -> -[0,2.5]
-    pc *-> pc1
-    pc -> -[3,0], pc1 -> +[3,0]
+    pr <- visible: false, pc <- visible: true, pc -> -[0,2.5]
+    pc *-> pc1, pc -> -[3,0], pc1 -> +[3,0]
     pc -> +[0,2.5], pc1 -> +[0,2.5]
     step: '(5) order shipped'
-    pc <- visible: false, pc1 <- visible: false, os <- visible: true
-    os -> -[0,2.5]
+    pc <- visible: false, pc1 <- visible: false, os <- visible: true, os -> -[0,2.5]
     os -> -[6,0]
     os -> +[0,2.5]"></dot-and-box>
 

@@ -5,6 +5,7 @@ export enum TokenType {
     COLON = ':',
     EQUALS = '=',
     LEFT_BRACKET = '(',
+    NEW_LINE = '\n',
     RIGHT_BRACKET = ')',
     LEFT_SQUARE_BRACKET = '[',
     RIGHT_SQUARE_BRACKET = ']',
