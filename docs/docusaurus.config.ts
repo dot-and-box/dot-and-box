@@ -114,11 +114,7 @@ const config: Config = {
                         {
                             label: 'Live Editor',
                             to: 'https://dot-and-box.github.io/dot-and-box-editor',
-                        },
-                        {
-                            label: 'Twitter',
-                            to: 'https://twitter.com/tomaszkubacki',
-                        },
+                        }
                     ],
                 }
 
