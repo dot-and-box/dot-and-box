@@ -3,19 +3,19 @@ import { Tool } from "../shared/tool.ts";
 
 export class EmptyTool extends Tool {
 
-  public static NAME: string = ""
+    public static NAME: string = ""
 
-  // @ts-ignore
-  override click(point: Point): void {
-  }
+    // @ts-ignore
+    override click(point: Point): void {
+    }
 
-  // @ts-ignore
-  override move(movePoint: Point) {
+    // @ts-ignore
+    override move(movePoint: Point) {
 
-  }
+    }
 
-  get name(): string {
-    return EMPTY_TOOL
-  }
+    get name(): string {
+        return EMPTY_TOOL
+    }
 
 }

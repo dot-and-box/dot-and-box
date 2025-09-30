@@ -1,12 +1,12 @@
-import {expect, test} from 'vitest'
-import {Scanner} from "../src/parser/scanner";
-import {Parser} from "../src/parser/parser";
-import {BoxControl} from "../src/controls/box/boxControl";
-import {DotControl} from "../src/controls/dot/dotControl";
-import {Animate} from "../src/actions/animate";
-import {Sign} from "../src/shared/sign";
-import {LineControl} from "../src/controls/line/lineControl";
-import {Unit} from "../src/shared/unit";
+import { expect, test } from 'vitest'
+import { Scanner } from "../src/parser/scanner";
+import { Parser } from "../src/parser/parser";
+import { BoxControl } from "../src/controls/box/boxControl";
+import { DotControl } from "../src/controls/dot/dotControl";
+import { Animate } from "../src/actions/animate";
+import { Sign } from "../src/shared/sign";
+import { LineControl } from "../src/controls/line/lineControl";
+import { Unit } from "../src/shared/unit";
 
 test('parser not null', () => {
     let p = new Scanner()

@@ -1,24 +1,24 @@
 {
-  "name": "dot-and-box",
-  "version": "0.1.8",
-  "description": "draw dots and boxes and do simple step based animations",
-  "type": "module",
-  "license": "MIT",
-  "files": [
-       "dist/dot-and-box.js",
-       "dist/dot-and-box.umd.cjs"
-  ],
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "cp-dot-and-box": "cp ./dist/dot-and-box.js docs/static/",
-    "build-docs": "npm run build && npm run cp-dot-and-box && cd docs && npm install && npm run build",
-    "preview": "vite preview",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "typescript": "^5.0.2",
-    "vite": "^5.0.12",
-    "vitest": "^0.34.4"
-  }
+    "name": "dot-and-box",
+    "version": "0.1.8",
+    "description": "draw dots and boxes and do simple step based animations",
+    "type": "module",
+    "license": "MIT",
+    "files": [
+        "dist/dot-and-box.js",
+        "dist/dot-and-box.umd.cjs"
+    ],
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "cp-dot-and-box": "cp ./dist/dot-and-box.js docs/static/",
+        "build-docs": "npm run build && npm run cp-dot-and-box && cd docs && npm install && npm run build",
+        "preview": "vite preview",
+        "test": "vitest run"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.2",
+        "vite": "^5.0.12",
+        "vitest": "^0.34.4"
+    }
 }

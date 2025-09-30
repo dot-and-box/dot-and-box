@@ -1,6 +1,6 @@
-import {expect, test} from "vitest";
-import {Parser} from "../src/parser/parser";
-import {TextControl} from "../src/controls/control";
+import { expect, test } from "vitest";
+import { Parser } from "../src/parser/parser";
+import { TextControl } from "../src/controls/control";
 
 test('change box text to new value', () => {
     let eg1 = `
