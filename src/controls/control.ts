@@ -1,4 +1,4 @@
-import {Point} from "../shared/point.ts"
+import { Point } from "../shared/point.ts"
 
 export interface ControlBase {
     id: string

@@ -1,6 +1,6 @@
-import {Tool} from "../shared/tool.ts"
-import {Point} from "../shared/point.ts"
-import {Control} from "../controls/control.ts";
+import { Tool } from "../shared/tool.ts"
+import { Point } from "../shared/point.ts"
+import { Control } from "../controls/control.ts";
 
 export class PanZoomTool extends Tool {
 
@@ -17,7 +17,7 @@ export class PanZoomTool extends Tool {
             }
         })
         if (hitControls.length > 0) {
-            hitControls.forEach(c=> c.selected = !c.selected)
+            hitControls.forEach(c => c.selected = !c.selected)
             this.dotAndBox.model.applySelected(hitControls)
         }
     }

@@ -1,6 +1,6 @@
-import {TokenType} from "./tokenType.ts"
-import {Token} from "./token.ts"
-import {Keywords} from "./keywords.ts"
+import { TokenType } from "./tokenType.ts"
+import { Token } from "./token.ts"
+import { Keywords } from "./keywords.ts"
 
 export class Scanner {
     start: number = 0

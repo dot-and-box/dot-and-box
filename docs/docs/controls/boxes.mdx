@@ -12,21 +12,26 @@ Boxes makes declaring multiple boxes easier
 title: 'boxes'
 boxes ids: 1 2 3 4 at: [-3,-0.5] span: 1
 ```
+
 ```html tab showLineNumbers
-<dot-and-box code="
+<dot-and-box
+  code="
     title: 'boxes'
-    boxes ids: 1 2 3 4 at: [-3,-0.5] span: 1">
- </dot-and-box>
+    boxes ids: 1 2 3 4 at: [-3,-0.5] span: 1"
+>
+</dot-and-box>
 ```
 
 <dot-and-box style={{height: 200}} code="
-    title: 'boxes'
-    boxes  ids: 1 2 3 4 at: [-4,-0.5] span: 1">
- </dot-and-box>
+title: 'boxes'
+boxes ids: 1 2 3 4 at: [-4,-0.5] span: 1">
+</dot-and-box>
 
-#### boxes attributes:
+#### boxes attributes
+
 - group - prefix for ids, optional
 - ids - space separated ids of boxes, mandatory
-- layout - *col* or *row*, optional - default: col
+- layout - _col_ or _row_, optional - default: col
 - span - number of empty cells between boxes
 - colors - space separated color list used to fill boxes
+

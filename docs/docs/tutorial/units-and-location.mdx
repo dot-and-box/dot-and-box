@@ -6,16 +6,16 @@ sidebar_position: 2
 
 ## Units
 
-Units are used to define control size and movement distance.
-**Dot and box* supports two types of units:
+Units are used to define control size and movement distance. \*_Dot and box_ supports two types of units:
 
 - default units created with brackets
 
 ```dabl
 (90,150)
 ```
+
 :::info
-default units *usually* refer to screen pixels, however it's not a rule and it depends on canvas api implementation details
+default units _usually_ refer to screen pixels, however it's not a rule and it depends on canvas api implementation details
 :::
 
 - grid cell units created with square brackets
@@ -23,7 +23,8 @@ default units *usually* refer to screen pixels, however it's not a rule and it d
 ```dabl
 [2,4]
 ```
-which means: 2 times *cellSize* (x axis) by 4 times *cellSize* (y axis).
+
+which means: 2 times _cellSize_ (x axis) by 4 times _cellSize_ (y axis).
 
 :::info
 by default cell size is 50 units. It was created to make on screen calculations easier.
@@ -32,27 +33,22 @@ by default cell size is 50 units. It was created to make on screen calculations 
 so:
 [2,4] is equal to (100,200)
 
-
 ## Location
 
 Just like with the size, location can be expressed in two types of units: default and grid cells.
 
 Controls are placed at point (0,0) on the dots-and-boxes surface area by default.
-Which is more o less center of the *dot and box* surface.
+Which is more o less center of the _dot and box_ surface.
 
 When using grid cells location [0,0] refers to right bottom side of point (0,0) marked as white dot at center below
 
 <dot-and-box style={{height: 250}} controls experimental grid code="
-    boxes ids: '-2,-1' '-1,-1' '0,-1' '1,-1' '2,-1' at: [-2,-1]
-    boxes ids: '-2,0' '-1,0' '0,0' '1,0' '2,0' at: [-2,0]
-    dot text: '' at: 0, 0 radius: 5 color: white
-    dot id: black text: '[-4,-2]' color: black at: [-4, -2] fontSize: 8
-    title: 'grid cell units'
-    step: 'move black do to [0,0]'
-    black <- '[0,0]', black -> [0,0]
-    ">
+boxes ids: '-2,-1' '-1,-1' '0,-1' '1,-1' '2,-1' at: [-2,-1]
+boxes ids: '-2,0' '-1,0' '0,0' '1,0' '2,0' at: [-2,0]
+dot text: '' at: 0, 0 radius: 5 color: white
+dot id: black text: '[-4,-2]' color: black at: [-4, -2] fontSize: 8
+title: 'grid cell units'
+step: 'move black do to [0,0]'
+black <- '[0,0]', black -> [0,0]
+">
 </dot-and-box>
-
-
-
-

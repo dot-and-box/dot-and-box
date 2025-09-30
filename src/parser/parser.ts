@@ -1,23 +1,23 @@
-import {Scanner} from "./scanner.ts"
-import {Step} from "../shared/step.ts"
-import {TokenType} from "./tokenType.ts"
-import {Token} from "./token.ts"
-import {Point} from "../shared/point.ts"
-import {BoxControl} from "../controls/box/boxControl.ts"
-import {DotControl} from "../controls/dot/dotControl.ts"
-import {ActionBase} from "../shared/actionBase.ts"
-import {Animate} from "../actions/animate.ts"
-import {Swap} from "../actions/swap.ts"
-import {Clone} from "../actions/clone.ts"
-import {Sign} from "../shared/sign.ts"
-import {BLACK, CAMERA, COLORS, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../shared/constants.ts"
-import {Assign} from "../actions/assign.ts"
-import {Keywords} from "./keywords.ts"
-import {CameraMove} from "../actions/cameraMove.ts";
-import {LineControl} from "../controls/line/lineControl.ts";
-import {Layout} from "../shared/layout.ts";
-import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
-import {Unit} from "../shared/unit.ts";
+import { Scanner } from "./scanner.ts"
+import { Step } from "../shared/step.ts"
+import { TokenType } from "./tokenType.ts"
+import { Token } from "./token.ts"
+import { Point } from "../shared/point.ts"
+import { BoxControl } from "../controls/box/boxControl.ts"
+import { DotControl } from "../controls/dot/dotControl.ts"
+import { ActionBase } from "../shared/actionBase.ts"
+import { Animate } from "../actions/animate.ts"
+import { Swap } from "../actions/swap.ts"
+import { Clone } from "../actions/clone.ts"
+import { Sign } from "../shared/sign.ts"
+import { BLACK, CAMERA, COLORS, DEFAULT_FONT_SIZE, POSITION, SIZE } from "../shared/constants.ts"
+import { Assign } from "../actions/assign.ts"
+import { Keywords } from "./keywords.ts"
+import { CameraMove } from "../actions/cameraMove.ts";
+import { LineControl } from "../controls/line/lineControl.ts";
+import { Layout } from "../shared/layout.ts";
+import { DotAndBoxModel } from "../shared/dotAndBoxModel.ts";
+import { Unit } from "../shared/unit.ts";
 
 export class Parser {
     scanner = new Scanner()

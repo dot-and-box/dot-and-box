@@ -1,4 +1,4 @@
-import {Point} from "../../shared/point.ts"
+import { Point } from "../../shared/point.ts"
 import {
     BLACK,
     DEFAULT_FONT,
@@ -7,9 +7,9 @@ import {
     SELECTION_STROKE_STYLE, SIZE,
     WHITE
 } from "../../shared/constants.ts"
-import {Control, TextControl} from "../control.ts"
-import {Unit} from "../../shared/unit.ts";
-import {Sign} from "../../shared/sign.ts";
+import { Control, TextControl } from "../control.ts"
+import { Unit } from "../../shared/unit.ts";
+import { Sign } from "../../shared/sign.ts";
 
 export class DotControl extends Control implements TextControl {
     public color: string

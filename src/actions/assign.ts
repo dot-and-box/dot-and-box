@@ -1,9 +1,9 @@
-import {ActionBase} from "../shared/actionBase.ts"
-import {Control} from "../controls/control.ts"
-import {Change} from "../shared/change.ts"
-import {PropertyChange} from "../shared/propertyChange.ts";
-import {DUMMY_CONTROL} from "../shared/constants.ts";
-import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
+import { ActionBase } from "../shared/actionBase.ts"
+import { Control } from "../controls/control.ts"
+import { Change } from "../shared/change.ts"
+import { PropertyChange } from "../shared/propertyChange.ts";
+import { DUMMY_CONTROL } from "../shared/constants.ts";
+import { DotAndBoxModel } from "../shared/dotAndBoxModel.ts";
 
 export class Assign extends ActionBase {
 

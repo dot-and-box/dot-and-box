@@ -1,5 +1,5 @@
-import {EMPTY_TOOL} from "../shared/elemConstants.ts";
-import {Tool} from "../shared/tool.ts";
+import { EMPTY_TOOL } from "../shared/elemConstants.ts";
+import { Tool } from "../shared/tool.ts";
 
 export class EmptyTool extends Tool {
 

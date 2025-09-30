@@ -1,4 +1,4 @@
-import {TokenType} from "./tokenType.ts"
+import { TokenType } from "./tokenType.ts"
 
 export class Keywords {
     private static KEYWORDS_MAP = new Map<string, TokenType>([
@@ -28,7 +28,7 @@ export class Keywords {
         [TokenType.SELECTED.toString(), TokenType.SELECTED],
         [TokenType.VISIBLE.toString(), TokenType.VISIBLE],
         [TokenType.LAYOUT.toString(), TokenType.LAYOUT]
-])
+    ])
 
     public static ASSIGN_PROPERTIES = [TokenType.SELECTED, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.STRING]
 

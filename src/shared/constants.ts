@@ -1,4 +1,4 @@
-import {DummyControl} from "../controls/dummy/dummyControl.ts";
+import { DummyControl } from "../controls/dummy/dummyControl.ts";
 
 export const MAX_ZOOM = 6
 export const MIN_ZOOM = 0.1
@@ -12,7 +12,7 @@ export const DEFAULT_LINE_WIDTH = 1
 export const WHITE = 'white'
 export const BLACK = 'black'
 export const CAMERA = 'camera'
-export const COLORS: string [] = [
+export const COLORS: string[] = [
     "#F44336",
     "#673AB7",
     "#E91E63",
@@ -33,7 +33,7 @@ export const COLORS: string [] = [
     "#607D8B",
 ]
 
-export const SIZES: number [] = [
+export const SIZES: number[] = [
     22, 14, 16, 17, 12, 32
 ]
 

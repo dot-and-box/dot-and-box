@@ -1,6 +1,6 @@
-import {ActionBase} from "./actionBase.ts"
-import {StepState} from "./stepState.ts"
-import {StepDirection} from "./stepDirection.ts"
+import { ActionBase } from "./actionBase.ts"
+import { StepState } from "./stepState.ts"
+import { StepDirection } from "./stepDirection.ts"
 
 export class Sequence {
     private _progress = 0.0

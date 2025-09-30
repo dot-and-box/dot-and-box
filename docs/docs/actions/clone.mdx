@@ -17,20 +17,26 @@ step: duration: 500ms
 d1 *-> d2,d2 <- 'd2*' color: blue
 d2 -> +[3,0]
 ```
+
 ```html tab showLineNumbers
-<dot-and-box controls style="height: 250px" code="
+<dot-and-box
+  controls
+  style="height: 250px"
+  code="
 title: 'clone control'
 dot id: d1 at: [-3,-1] radius: 35
 step: duration: 500ms
 d1 *-> d2, d2 <- 'd2*' color: blue
-d2 -> +[3,0]">
- </dot-and-box>
+d2 -> +[3,0]"
+>
+</dot-and-box>
 ```
 
 <dot-and-box controls style={{height: 250}} code="
 title: 'clone control'
 dot id: d1 at: [-3,-1] radius: 35
 step: duration: 500ms
-d1 *-> d2, d2 <- 'd2*' color: blue
+d1 _-> d2, d2 <- 'd2_' color: blue
 d2 -> +[3,0]">
- </dot-and-box>
+</dot-and-box>
+

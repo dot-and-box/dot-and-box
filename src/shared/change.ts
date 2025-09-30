@@ -1,4 +1,4 @@
-import {PropertyChange} from "./propertyChange.ts";
+import { PropertyChange } from "./propertyChange.ts";
 
 export class Change {
     controlId: string

@@ -1,9 +1,9 @@
-import {ActionBase} from "../shared/actionBase.ts"
-import {Point} from "../shared/point.ts"
-import {Control} from "../controls/control.ts"
-import {Sign} from "../shared/sign.ts"
-import {DUMMY_CONTROL} from "../shared/constants.ts";
-import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
+import { ActionBase } from "../shared/actionBase.ts"
+import { Point } from "../shared/point.ts"
+import { Control } from "../controls/control.ts"
+import { Sign } from "../shared/sign.ts"
+import { DUMMY_CONTROL } from "../shared/constants.ts";
+import { DotAndBoxModel } from "../shared/dotAndBoxModel.ts";
 
 export class Animate extends ActionBase {
     start: Point

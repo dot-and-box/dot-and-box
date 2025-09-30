@@ -1,5 +1,5 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import tabBlocks from "docusaurus-remark-plugin-tab-blocks";
 
@@ -22,7 +22,7 @@ const config: Config = {
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     scripts: [
-         'https://dot-and-box.github.io/dot-and-box/dot-and-box.js'
+        'https://dot-and-box.github.io/dot-and-box/dot-and-box.js'
         //'./dot-and-box.js'
     ],
     // Even if you don't use internationalization, you can use this field to set

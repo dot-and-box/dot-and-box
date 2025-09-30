@@ -15,18 +15,24 @@ dot id: d1  text: 'dot' at: [-2,-1] radius: 45
 step: 'change dot to blue and set new text' duration: 200ms
 d1 <- color: blue text: 'tod'
 ```
+
 ```html tab showLineNumbers
-<dot-and-box controls style="height: 250px" code="
+<dot-and-box
+  controls
+  style="height: 250px"
+  code="
   title: 'color and text change'
   dot id: d1  text: 'dot' at: [-2,-1] radius: 45
   step: 'change dot to blue and set new text' duration: 200ms
-  d1 <- color: blue text: 'tod'">
- </dot-and-box>
+  d1 <- color: blue text: 'tod'"
+>
+</dot-and-box>
 ```
 
 <dot-and-box controls style={{height: 250}} code="
-    title: 'color and text change'
-    dot id: d1  text: 'dot' at: [-2,-1] radius: 45
-    step: 'change dot to blue and set new text' duration: 200ms
-    d1 <- color: blue text: 'tod'">
- </dot-and-box>
+title: 'color and text change'
+dot id: d1 text: 'dot' at: [-2,-1] radius: 45
+step: 'change dot to blue and set new text' duration: 200ms
+d1 <- color: blue text: 'tod'">
+</dot-and-box>
+

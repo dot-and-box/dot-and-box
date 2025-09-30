@@ -1,5 +1,5 @@
-import {expect, test} from 'vitest'
-import {Scanner} from "../src/parser/scanner";
+import { expect, test } from 'vitest'
+import { Scanner } from "../src/parser/scanner";
 
 test('scanner not null', () => {
     let p = new Scanner()

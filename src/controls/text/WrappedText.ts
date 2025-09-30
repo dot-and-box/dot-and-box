@@ -1,6 +1,6 @@
-import {Control} from "../control.ts";
-import {Point} from "../../shared/point.ts";
-import {DEFAULT_FONT, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../../shared/constants.ts";
+import { Control } from "../control.ts";
+import { Point } from "../../shared/point.ts";
+import { DEFAULT_FONT, DEFAULT_FONT_SIZE, POSITION, SIZE } from "../../shared/constants.ts";
 
 export class WrappedText extends Control {
 

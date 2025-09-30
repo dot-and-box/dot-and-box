@@ -1,5 +1,5 @@
-import {Sign} from "./sign.ts"
-import {Unit} from "./unit.ts";
+import { Sign } from "./sign.ts"
+import { Unit } from "./unit.ts";
 
 export class Point {
     public x: number

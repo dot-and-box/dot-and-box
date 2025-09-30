@@ -1,9 +1,9 @@
-import {Control} from "../controls/control.ts";
-import {Point} from "./point.ts";
-import {Step} from "./step.ts";
-import {StepState} from "./stepState.ts";
-import {StepDirection} from "./stepDirection.ts";
-import {Easing, EasingType} from "./easingFunctions.ts";
+import { Control } from "../controls/control.ts";
+import { Point } from "./point.ts";
+import { Step } from "./step.ts";
+import { StepState } from "./stepState.ts";
+import { StepDirection } from "./stepDirection.ts";
+import { Easing, EasingType } from "./easingFunctions.ts";
 
 export class DotAndBoxModel {
     get height(): number {
@@ -34,9 +34,9 @@ export class DotAndBoxModel {
     easingFunc: (x: number) => number = Easing.getEasingByType(EasingType.IN_QUAD)
     inverseEasingFunc: (x: number) => number = Easing.getInverseEasingByType(EasingType.IN_QUAD)
     // noinspection JSUnusedGlobalSymbols
-    public onBeforeStepForwardCallback: (index: number) => void = () => {}
-    public onBeforeStepBackwardCallback: (index: number) => void = () => {}
-    public updateSubtitleCallback: (text: string) => void = () => {}
+    public onBeforeStepForwardCallback: (index: number) => void = () => { }
+    public onBeforeStepBackwardCallback: (index: number) => void = () => { }
+    public updateSubtitleCallback: (text: string) => void = () => { }
 
     public updateWidthAndHeight(width: number, height: number) {
         this._width = width
@@ -91,7 +91,7 @@ export class DotAndBoxModel {
 
     findControl(controlId: string) {
         if (controlId.startsWith(DotAndBoxModel.SELECTED_PREFIX)) {
-            const index = parseInt(controlId.substring(DotAndBoxModel.SELECTED_PREFIX.length+1), 10)
+            const index = parseInt(controlId.substring(DotAndBoxModel.SELECTED_PREFIX.length + 1), 10)
             return index < this.selectedControls.length ? this.selectedControls[index] : undefined
         } else {
             return this.controls.find(c => c.id === controlId)

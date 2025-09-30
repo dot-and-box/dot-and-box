@@ -1,5 +1,5 @@
-import {Point} from "./point.ts"
-import {DotAndBox} from "../dotAndBox.ts";
+import { Point } from "./point.ts"
+import { DotAndBox } from "../dotAndBox.ts";
 
 export abstract class Tool {
 

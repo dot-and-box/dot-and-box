@@ -1,10 +1,10 @@
-import {Tool} from "../shared/tool.ts"
-import {Point} from "../shared/point.ts"
-import {BoxControl} from "../controls/box/boxControl.ts"
-import {COLORS, DEFAULT_FONT_SIZE} from "../shared/constants.ts"
-import {Sign} from "../shared/sign.ts";
-import {Unit} from "../shared/unit.ts";
-import {BOX_TOOL} from "../shared/elemConstants.ts";
+import { Tool } from "../shared/tool.ts"
+import { Point } from "../shared/point.ts"
+import { BoxControl } from "../controls/box/boxControl.ts"
+import { COLORS, DEFAULT_FONT_SIZE } from "../shared/constants.ts"
+import { Sign } from "../shared/sign.ts";
+import { Unit } from "../shared/unit.ts";
+import { BOX_TOOL } from "../shared/elemConstants.ts";
 
 export class BoxTool extends Tool {
     dragStart: Point = Point.zero()

@@ -1,6 +1,6 @@
-import {Point} from "../../shared/point.ts"
-import {POSITION, SELECTION_STROKE_STYLE, SIZE} from "../../shared/constants.ts"
-import {Control} from "../control.ts"
+import { Point } from "../../shared/point.ts"
+import { POSITION, SELECTION_STROKE_STYLE, SIZE } from "../../shared/constants.ts"
+import { Control } from "../control.ts"
 
 export class LineControl extends Control {
     public color: string

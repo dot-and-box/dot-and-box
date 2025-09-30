@@ -1,4 +1,4 @@
-import {DotAndBoxModel} from "./dotAndBoxModel.ts";
+import { DotAndBoxModel } from "./dotAndBoxModel.ts";
 
 export abstract class ActionBase {
     model: DotAndBoxModel

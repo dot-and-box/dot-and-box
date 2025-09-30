@@ -1,6 +1,6 @@
-import {DotAndBox} from "./dotAndBox.ts"
-import {Parser} from "./parser/parser.ts"
-import {Point} from "./shared/point.ts"
+import { DotAndBox } from "./dotAndBox.ts"
+import { Parser } from "./parser/parser.ts"
+import { Point } from "./shared/point.ts"
 import {
     AUTOPLAY, BORDER, BOX_TOOL, CODE, COLOR, CONTROLS,
     DEBUG, DOT_TOOL, EXPERIMENTAL, GRID, HEIGHT, INITIALIZED, KEYBOARD, STYLE, WIDTH
@@ -63,7 +63,7 @@ class DotAndBoxElement extends HTMLElement {
     }
 
     connectedCallback() {
-        const shadow = this.attachShadow({mode: "open"})
+        const shadow = this.attachShadow({ mode: "open" })
         shadow.innerHTML = `
       <style>
       :host { display: block; padding: 0;border: ${this.border};}
@@ -214,7 +214,7 @@ class DotAndBoxElement extends HTMLElement {
         const stepSelected = new CustomEvent(DotAndBoxElement.ON_BEFORE_STEP_FORWARD, {
             bubbles: true,
             composed: true,
-            detail: {step: index}
+            detail: { step: index }
         });
         this._wrapper.dispatchEvent(stepSelected)
     }
@@ -223,7 +223,7 @@ class DotAndBoxElement extends HTMLElement {
         const stepSelected = new CustomEvent(DotAndBoxElement.ON_BEFORE_STEP_BACKWARD, {
             bubbles: true,
             composed: true,
-            detail: {step: index}
+            detail: { step: index }
         });
         this._wrapper.dispatchEvent(stepSelected)
     }

@@ -1,4 +1,4 @@
-import {Point} from "../../shared/point.ts"
+import { Point } from "../../shared/point.ts"
 import {
     BLACK,
     DEFAULT_FONT,
@@ -9,8 +9,8 @@ import {
     SIZE,
     WHITE
 } from "../../shared/constants.ts"
-import {Control, TextControl} from "../control.ts"
-import {WrappedText} from "../text/WrappedText.ts";
+import { Control, TextControl } from "../control.ts"
+import { WrappedText } from "../text/WrappedText.ts";
 
 export class BoxControl extends Control implements TextControl {
     get fontSize(): number {

@@ -1,4 +1,4 @@
-import {TokenType} from "./tokenType.ts"
+import { TokenType } from "./tokenType.ts"
 
 export class Token {
     position: number

@@ -1,5 +1,5 @@
-import {Point} from "../../shared/point.ts"
-import {Control} from "../control.ts"
+import { Point } from "../../shared/point.ts"
+import { Control } from "../control.ts"
 
 export class DummyControl extends Control {
     position: Point

@@ -1,17 +1,17 @@
-import {Point} from "./shared/point.ts"
-import {Tool} from "./shared/tool.ts"
+import { Point } from "./shared/point.ts"
+import { Tool } from "./shared/tool.ts"
 import {
     DEFAULT_FONT,
     MAX_ZOOM,
     MIN_ZOOM,
     SCROLL_SENSITIVITY,
 } from "./shared/constants.ts"
-import {DotTool} from "./tools/dotTool.ts"
-import {PanZoomTool} from "./tools/panZoomTool.ts"
-import {BoxTool} from "./tools/boxTool.ts"
-import {DotAndBoxModel} from "./shared/dotAndBoxModel.ts";
-import {BOX_TOOL, DOT_TOOL, EMPTY_TOOL, PAN_AND_ZOOM} from "./shared/elemConstants.ts";
-import {EmptyTool} from "./tools/emptyTool.ts";
+import { DotTool } from "./tools/dotTool.ts"
+import { PanZoomTool } from "./tools/panZoomTool.ts"
+import { BoxTool } from "./tools/boxTool.ts"
+import { DotAndBoxModel } from "./shared/dotAndBoxModel.ts";
+import { BOX_TOOL, DOT_TOOL, EMPTY_TOOL, PAN_AND_ZOOM } from "./shared/elemConstants.ts";
+import { EmptyTool } from "./tools/emptyTool.ts";
 
 export class DotAndBox {
     private readonly canvas: HTMLCanvasElement

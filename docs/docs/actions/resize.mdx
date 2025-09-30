@@ -9,18 +9,25 @@ resize operator allows to resize controls
 ### a **+-\>** (x, y)
 
 There are three possible resize types:
+
 - resize by relative value
+
   ```dabl
     control +-> +(50,100) // same as +[1,2]
   ```
+
 - resize to absolute value
+
   ```dabl
     control +-> (100,100)
   ```
+
 - resize to other control size
+
   ```dabl
     control +-> otherControl
   ```
+
   :::info
   Notice that in case of dot (or dots) resize applies to radius
   :::
@@ -38,8 +45,12 @@ d1 ->  otherBox, d1 +-> otherBox // move to otherBox and resize to it's size
 step: 'resize otherBox'
 otherBox +-> +[1,1]
 ```
+
 ```html tab showLineNumbers
-<dot-and-box controls style="height: 250px" code="
+<dot-and-box
+  controls
+  style="height: 250px"
+  code="
 title: 'resize control'
 box id: otherBox at: [2,0]
 dot id: d1  text: 'dot' at: [-3,-1] radius: 45
@@ -51,21 +62,23 @@ step: 'resize to otherBox'
 d1 ->  otherBox, d1 +-> otherBox // move to otherBox and resize to it's size
 step: 'resize otherBox'
 otherBox +-> +[1,1]
-  ">
- </dot-and-box>
+  "
+>
+</dot-and-box>
 ```
 
 <dot-and-box experimental grid controls style={{height: 250}} code="
 title: 'resize control'
 box id: otherBox at: [2,0]
-dot id: d1  text: 'dot' at: [-3,-1] radius: 45
+dot id: d1 text: 'dot' at: [-3,-1] radius: 45
 step: 'resize dot by 2 cells'
 d1 +-> +[2,0]
 step: 'resize dot to 150'
 d1 +-> 150
 step: 'resize to otherBox'
-d1 ->  otherBox, d1 +-> otherBox // move to otherBox and resize to it's size
+d1 -> otherBox, d1 +-> otherBox // move to otherBox and resize to it's size
 step: 'resize otherBox'
 otherBox +-> +[1,1]
 ">
- </dot-and-box>
+</dot-and-box>
+

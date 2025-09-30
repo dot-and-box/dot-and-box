@@ -22,17 +22,23 @@ e.g. following step consists of two actions done in total time of 2 seconds
 ```dabl tab showLineNumbers
 dot id: d1 at: [-3,0]
 step: 'move dot by 4 cells right and two up' duration: 2s
-d1 -> +[4,0] 
+d1 -> +[4,0]
 d1 -> +[0,-2]
 ```
+
 ```html tab showLineNumbers
-<dot-and-box controls style="height: 250px" code="
+<dot-and-box
+  controls
+  style="height: 250px"
+  code="
 dot id: d1 at: [-3,0]
 step: 'move dot by 4 cells right and two up' duration: 2s
 d1 -> +[4,0] 
-d1 -> +[0,-2]">
- </dot-and-box>
+d1 -> +[0,-2]"
+>
+</dot-and-box>
 ```
+
 <dot-and-box controls style={{height: 250}} code="
 dot id: d1 at: [-3,0]
 step: 'move dot by 4 cells right and two up' duration: 2s
@@ -44,9 +50,9 @@ d1 -> +[0,-2]">
 
 By default, duration is measured in milliseconds, but you can apply unit explicitly so e.g.
 following represent same duration
+
 ```dabl
 duration: 2000  // no unit means milliseconds
 duration:  2000ms // milliseconds
 duration: 2s  // seconds
 ```
-
