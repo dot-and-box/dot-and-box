@@ -4,7 +4,8 @@ sidebar_position: 2
 
 # Getting started
 
-All you need to do is add **dot and box** js script reference and add _dot-and-box_ tag to your html page.
+All you need to do is add **dot and box** _javascript_ script reference
+and add _dot-and-box_ tag to your html page.
 
 1. install script with npm
 
