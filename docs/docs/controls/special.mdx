@@ -25,35 +25,42 @@ dot id: e at: [0,-2] color: green
 step: 'swap selected controls'
 selected_0 <-> selected_1
 ```
+
 ```html tab showLineNumbers
-<dot-and-box style="height: 250px" controls code="
+<dot-and-box
+  style="height: 250px"
+  controls
+  code="
 title: 'selected controls'
 dot id: a at: [-2,-1] color: red selected: true
 dot id: b at: [1,-1] color: blue selected: true
 dot id: e at: [0,-2] color: green
 step: 'swap selected controls'
 selected_0 <-> selected_1"
-`>
- </dot-and-box>
+  `
+>
+</dot-and-box>
 ```
 
 <dot-and-box style={{height: 250}} controls code="
-    title: 'selected controls'
-    dot id: a at: [-2,-1] color: red selected: true
-    dot id: b at: [1,-1] color: blue selected: true
-    dot id: e at: [0,-2] color: green
-    step: 'swap selected controls'
-    selected_0 <-> selected_1">
- </dot-and-box>
+title: 'selected controls'
+dot id: a at: [-2,-1] color: red selected: true
+dot id: b at: [1,-1] color: blue selected: true
+dot id: e at: [0,-2] color: green
+step: 'swap selected controls'
+selected_0 <-> selected_1">
+</dot-and-box>
 
 Try to unselect one of dots and select green one, restart and make step forward again to see how it works.
 
 ### **camera** control
+
 camera is a virtual control used just to move viewport.
 e.g.
+
 ```C
  camera -> +(100,50)
- ```
+```
 
 ```dabl tab showLineNumbers
  title: 'camera move'
@@ -62,20 +69,25 @@ e.g.
  step: 'move camera 4 cells right and one up'
  camera -> +[4,-1]
 ```
+
 ```html tab showLineNumbers
-<dot-and-box style="height: 250px" controls code="
+<dot-and-box
+  style="height: 250px"
+  controls
+  code="
     title: 'camera move'
     dot id: c at: [-2,-1]
     dot id: d at: [1,-1]
     step: 'move camera 4 cells right and one up'
-    camera -> +[4,-1]">
- </dot-and-box>
+    camera -> +[4,-1]"
+>
+</dot-and-box>
 ```
 
 <dot-and-box style={{height: 250}} controls code="
-    title: 'camera move'
-    dot id: c at: [-2,-1]
-    dot id: d at: [1,-1]
-    step: 'move camera 4 cells right and one up'
-    camera -> +[4,-1]">
- </dot-and-box>
+title: 'camera move'
+dot id: c at: [-2,-1]
+dot id: d at: [1,-1]
+step: 'move camera 4 cells right and one up'
+camera -> +[4,-1]">
+</dot-and-box>

@@ -1,5 +1,5 @@
 export enum Sign {
-    NONE,
-    PLUS,
-    MINUS
+  NONE,
+  PLUS,
+  MINUS
 }

@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Here you will learn about basic **dot and box** concepts
 
-*Dot and box* language allows to define **[controls](/category/controls)** and **[actions](/category/actions)** grouped into **[steps](/tutorial/actions-and-steps#steps)**
+_Dot and box_ language allows to define **[controls](/category/controls)** and **[actions](/category/actions)** grouped into **[steps](/tutorial/actions-and-steps#steps)**
 
 Let's start with an example and try to explain it line by line
 
@@ -19,26 +19,29 @@ d1 -> (0,0) // step has a move action '->' move dot at location (0,0)
 step: 'move box by -(200,0)' // another step with title
 b1 -> -(200,0) // move b1 box by -(200,0)
 ```
+
 ```html tab showLineNumbers
-<dot-and-box controls style="height: 250px" code="
+<dot-and-box
+  controls
+  style="height: 250px"
+  code="
  title: 'basic concepts'
  dot id: d1  text: 'dot' at: (-120,0) radius: 35
  box id: b1  text: 'box' at: [1,-1] size: [2,2]
  step: 'move d1 to point (0,0)'
  d1 -> (0,0)
  step: 'move box by -(200,0)'
- b1 -> -(200,0)">
- </dot-and-box>
+ b1 -> -(200,0)"
+>
+</dot-and-box>
 ```
 
 <dot-and-box controls style={{height: 250}} code="
- title: 'basic concepts'
- dot id: d1  text: 'dot' at: (-120,0) radius: 35
- box id: b1  text: 'box' at: [1,-1] size: [2,2]
- step: 'move d1 to point (0,0)'
- d1 -> (0,0)
- step: 'move box by -(200,0)'
- b1 -> -(200,0)">
- </dot-and-box>
-
-
+title: 'basic concepts'
+dot id: d1 text: 'dot' at: (-120,0) radius: 35
+box id: b1 text: 'box' at: [1,-1] size: [2,2]
+step: 'move d1 to point (0,0)'
+d1 -> (0,0)
+step: 'move box by -(200,0)'
+b1 -> -(200,0)">
+</dot-and-box>

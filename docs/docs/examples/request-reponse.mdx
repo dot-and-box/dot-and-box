@@ -6,26 +6,25 @@ sidebar_position: 1
 
 Request response pattern visualization
 
-<dot-and-box  controls style={{height: 300}}  code="
-  title: request response pattern
-  box text: 'CLIENT' size: 100,40 at: -200, -100 color: rgb(187,105,13)
-  box color: orange size: 100,200 at: -200, -60
-  box text: 'SERVER' size: 100,40 at: 100, -100 color: rgba(5,5,254,0.6)
-  box color: rgba(5,5,254,0.4) size: 100, 200 at: 100, -60
-  line id: l1 at: -100, -10 end: 100, -10 width: 0.5
-  line id: l2 at: -100, 90 end: 100, 90 width: 0.5
-  box id: fin text: 'THE END' size: 100,80 at: -80, 300  visible: false
-  dot text: 'req' at: -150, -10 radius: 35
-  step: 'client app is making a request'
-  req ->  +(300,0)
-  step: 'server app is creating a response'
-  req *-> res, res <- 'res' color: purple,req <- color: gray, res -> +(0,100)
-  step:'the response is sent back to client'
-  res ->  -(300,0)
-  step: 'we can do camera move too'
-  camera -> +(0,350), fin <- visible: true">
+<dot-and-box controls style={{height: 300}} code="
+title: request response pattern
+box text: 'CLIENT' size: 100,40 at: -200, -100 color: rgb(187,105,13)
+box color: orange size: 100,200 at: -200, -60
+box text: 'SERVER' size: 100,40 at: 100, -100 color: rgba(5,5,254,0.6)
+box color: rgba(5,5,254,0.4) size: 100, 200 at: 100, -60
+line id: l1 at: -100, -10 end: 100, -10 width: 0.5
+line id: l2 at: -100, 90 end: 100, 90 width: 0.5
+box id: fin text: 'THE END' size: 100,80 at: -80, 300 visible: false
+dot text: 'req' at: -150, -10 radius: 35
+step: 'client app is making a request'
+req -> +(300,0)
+step: 'server app is creating a response'
+req \*-> res, res <- 'res' color: purple,req <- color: gray, res -> +(0,100)
+step:'the response is sent back to client'
+res -> -(300,0)
+step: 'we can do camera move too'
+camera -> +(0,350), fin <- visible: true">
 </dot-and-box>
-
 
 ```dabl tab showLineNumbers
 title: request response pattern
@@ -46,8 +45,12 @@ res ->  -(300,0)
 step: 'we can do camera move too'
 camera -> +(0,350), fin <- visible: true
 ```
+
 ```html tab showLineNumbers
-<dot-and-box controls style="height: 250px" code="
+<dot-and-box
+  controls
+  style="height: 250px"
+  code="
   title: request response pattern
   box text: 'CLIENT' size: 100,40 at: -200, -100 color: rgb(187,105,13)
   box color: orange size: 100,200 at: -200, -60
@@ -64,6 +67,8 @@ camera -> +(0,350), fin <- visible: true
   step:'the response is sent back to client'
   res ->  -(300,0)
   step: 'we can do camera move too'
-  camera -> +(0,350), fin <- visible: true">
- </dot-and-box>
+  camera -> +(0,350), fin <- visible: true"
+>
+</dot-and-box>
 ```
+

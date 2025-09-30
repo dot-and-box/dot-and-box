@@ -1,4 +1,4 @@
 export enum Unit {
-    PIXEL,
-    CELL
+  PIXEL,
+  CELL
 }

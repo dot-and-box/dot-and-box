@@ -1,13 +1,13 @@
 ---
 sidebar_position: 1
 slug: /
-
 ---
 
 # Dot and Box
 
 ### what and what for?
- **dot and box** allows drawing dots and boxes and do simple step based animations making it easy to
+
+**dot and box** allows drawing dots and boxes and do simple step based animations making it easy to
 visualise some algorithms or your raw ideas e.g. show event flow in a distributed system.
 
 But hey, you can use it for whatever you like!
@@ -15,7 +15,7 @@ But hey, you can use it for whatever you like!
 #### visualise algorithms
 
 Let's assume you want to explain how the bubble sort works.
-It can be done writing *dot and box* code like one below:
+It can be done writing _dot and box_ code like one below:
 
 ```dabl tab showLineNumbers
 title: sort with bubble sort
@@ -37,8 +37,12 @@ win -> +[1,0]
 step: 'repeat from start'
 win -> -[3,0]
 ```
+
 ```html tab showLineNumbers
-<dot-and-box controls style="height: 300px"  code="
+<dot-and-box
+  controls
+  style="height: 300px"
+  code="
   title: sort with bubble sort
   box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
   dots ids: 2 1 5 3 4 at: [-3,0] radius: 20
@@ -56,32 +60,33 @@ win -> -[3,0]
   win -> +[1,0]
   5 <-> 4
   step: 'repeat from start'
-  win -> -[3,0]">
- </dot-and-box>
+  win -> -[3,0]"
+>
+</dot-and-box>
 ```
 
 and see **dot and box** visualization result:
 
- <dot-and-box controls style={{height: 300}}    code="
-   title: sort with bubble sort
-   box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
-   dots ids: 2 1 5 3 4 at: [-3,0] radius: 20
-   step: '(1) select first two numbers' duration: 0.8s
-   win <- visible: true, win -> +[3,0]
-   step: '(2) swap if left bigger than right'
-   2 <-> 1 // swap dot 2 with 1
-   step: '(3) select next two numbers'
-   win -> +[1,0] // move window by 1 cell right
-   step: 'ignore if left is smaller and select next'
-   win -> +[1,0]
-   step: 'again swap if left bigger'
-   5 <-> 3
-   step: 'and again'
-   win -> +[1,0]
-   5 <-> 4
-   step: 'repeat from start'
-   win -> -[3,0]">
- </dot-and-box>
+<dot-and-box controls style={{height: 300}} code="
+title: sort with bubble sort
+box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false
+dots ids: 2 1 5 3 4 at: [-3,0] radius: 20
+step: '(1) select first two numbers' duration: 0.8s
+win <- visible: true, win -> +[3,0]
+step: '(2) swap if left bigger than right'
+2 <-> 1 // swap dot 2 with 1
+step: '(3) select next two numbers'
+win -> +[1,0] // move window by 1 cell right
+step: 'ignore if left is smaller and select next'
+win -> +[1,0]
+step: 'again swap if left bigger'
+5 <-> 3
+step: 'and again'
+win -> +[1,0]
+5 <-> 4
+step: 'repeat from start'
+win -> -[3,0]">
+</dot-and-box>
 
 Play with control buttons, to see what happens.
 
@@ -92,6 +97,4 @@ You can play with **dot and box** code on the [**live editor**](https://dot-and-
 ## How it works ?
 
 Technically **dot and box** is an [HTML5 custom element](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components/Using_custom_elements).
-You can add *dot-and-box* tag (just like normal *div* tag) to your page with code attribute defining controls and animation steps.  On the next page [getting started] page to see how to use it.
-
-
+You can add _dot-and-box_ tag (just like normal _div_ tag) to your page with code attribute defining controls and animation steps. On the next page [getting started] page to see how to use it.

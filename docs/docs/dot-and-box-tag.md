@@ -2,9 +2,10 @@
 sidebar_position: 5
 ---
 
-#  Dot and Box tag
+# Dot and Box tag
 
 ### \<dot-and-box\> tag elem
+
 **\<dot-and-box\>** is a custom html tag and behaves like standard html tag (e.g. you can style it).
 
 It supports attributes and events.
@@ -13,15 +14,15 @@ It supports attributes and events.
 
 **code** - this is where actual **DABL** code is assigned
 
-**controls**  - show controls menu
+**controls** - show controls menu
 
 **autoplay** - starts fast-forward on load
 
 **keyboard** - left and right arrow does backward and forward respectively
 
-**debug**  - show some debug information
+**debug** - show some debug information
 
-**experimental**  - show some experimental tools. Be aware that those can change or disappear without any notice.
+**experimental** - show some experimental tools. Be aware that those can change or disappear without any notice.
 
 ### events
 
