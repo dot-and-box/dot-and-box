@@ -19,7 +19,7 @@ dot text: 'req' at: -150, -10 radius: 35
 step: 'client app is making a request'
 req -> +(300,0)
 step: 'server app is creating a response'
-req \*-> res, res <- 'res' color: purple,req <- color: gray, res -> +(0,100)
+req *-> res, res <- 'res' color: purple,req <- color: gray, res -> +(0,100)
 step:'the response is sent back to client'
 res -> -(300,0)
 step: 'we can do camera move too'
@@ -71,4 +71,3 @@ camera -> +(0,350), fin <- visible: true
 >
 </dot-and-box>
 ```
-
