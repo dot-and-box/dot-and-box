@@ -10,7 +10,7 @@ import {
     WHITE
 } from "../../shared/constants.ts"
 import { Control, TextControl } from "../control.ts"
-import { WrappedText } from "../text/WrappedText.ts";
+import { WrappedText } from "../text/wrappedText.ts";
 
 export class BoxControl extends Control implements TextControl {
     get fontSize(): number {
