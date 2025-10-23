@@ -43,7 +43,7 @@ export class Assign extends ActionBase {
     applyChanges(): void {
         if (!this.applied && this.control) {
             this.applied = true
-            let control = this.control as any
+            let control = this.control as Control
             let propertyChanges = []
             for (const p of this.properties.keys()) {
                 const oldValue = control.getPropertyValue(p)

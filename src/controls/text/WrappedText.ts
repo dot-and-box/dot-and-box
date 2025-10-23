@@ -25,7 +25,10 @@ export class WrappedText extends Control {
     }
 
     set fontName(value: string) {
-        this._fontName = value;
+        if (this._fontName !== value) {
+            this._dirty = true;
+            this._fontName = value;
+        }
     }
 
     get fontSize(): number {
@@ -33,8 +36,10 @@ export class WrappedText extends Control {
     }
 
     set fontSize(value: number) {
-        this._fontSize = value;
-        this._textData = []
+        if (this._fontSize !== value) {
+            this._dirty = true
+            this._fontSize = value;
+        }
     }
 
 
@@ -42,12 +47,18 @@ export class WrappedText extends Control {
         return this._text;
     }
 
+    set visible(val: boolean) {
+        this._dirty = true;
+        this._visible = val;
+    }
+
     set text(value: string) {
         if (this._text !== value) {
+            this._dirty = true;
             this._text = value;
-            this._textData = []
         }
     }
+
 
     private _centered = false
     private _color: string = 'black'
@@ -56,6 +67,7 @@ export class WrappedText extends Control {
     private _spanX: number = 0;
     private _spanY: number = 0;
     private _text: string
+    private _dirty: boolean = true;
     private _textData: Array<string>
 
     constructor(text: string, position: Point, fontName: string, fontSize: number, color: string, size: Point, centered: boolean) {
@@ -75,25 +87,22 @@ export class WrappedText extends Control {
     }
 
     override updatePosition(x: number, y: number) {
-        super.updatePosition(x, y);
+        super.updatePosition(x, y)
+        this._dirty = true  // TODO better optimisation
         this._textData = []
     }
 
-    drawn = false
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this._color
         ctx.font = `${this._fontSize}px ${this._fontName}`
 
-        if (this._textData.length == 0) {
+        if (this._dirty) {
             this.wrapText(ctx)
         }
         let index = 0;
         for (const line of this._textData) {
             ctx.fillText(line, this.position.x + this._spanX, this.position.y + this._spanY + this._fontSize * index++)
-        }
-        if (!this.drawn) {
-            this.drawn = true
         }
     }
 
@@ -102,15 +111,16 @@ export class WrappedText extends Control {
         return false;
     }
 
-    // quite inefficient - needs better implementation
+    // TODO quite inefficient - needs better implementation
     wrapText(ctx: CanvasRenderingContext2D): void {
         let y: number = 0
         let maxLineWidth = 0
         const result: Array<string> = []
         const lines = this._text.split('\n');
+
         for (let i = 0; i < lines.length; i++) {
             let line = '';
-            let words = lines[i].split(' ');
+            let words = lines[i].trim().split(' ');
             for (let j = 0; j < words.length; j++) {
                 let testLine = line + words[j]
                 let metrics = ctx.measureText(testLine);
@@ -134,8 +144,8 @@ export class WrappedText extends Control {
             this._spanX = this.size.x < maxLineWidth ? 0 : (this.size.x - maxLineWidth) / 2
             this._spanY = (this.size.y - (result.length * this.fontSize)) / 2 + this.fontSize / 2
         }
-
         this._textData = result
+        this._dirty = false
     }
 
     getPointPropertyValue(name: string): Point {

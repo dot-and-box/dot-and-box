@@ -4,7 +4,6 @@ import { Control } from "../control.ts"
 export class DummyControl extends Control {
     position: Point
     selected: boolean = false
-    visible: boolean = true
 
 
     public constructor() {

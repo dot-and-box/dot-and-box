@@ -40,7 +40,6 @@ export class BoxControl extends Control implements TextControl {
     public id: string
     static counter = 1
     public selected: boolean
-    public visible: boolean
     private _fontSize: number
     textControl: WrappedText
 

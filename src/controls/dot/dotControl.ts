@@ -16,7 +16,6 @@ export class DotControl extends Control implements TextControl {
     public text: string
     public id: string
     public selected: boolean
-    public visible: boolean
     public fontSize: number | null
     public radius: number
 
