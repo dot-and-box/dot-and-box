@@ -27,7 +27,8 @@ class DotAndBoxElement extends HTMLElement {
     canvas!: HTMLCanvasElement
     keyboard: boolean = false
     _initialized: boolean = false
-    _wrapper: any = null
+    private _wrapper: any = null
+    _resizeObserver = new ResizeObserver((_) => this.resizeCallBack())
 
     public get initialized() {
         return this._initialized
@@ -73,13 +74,15 @@ class DotAndBoxElement extends HTMLElement {
         margin-left: 5px;
         margin-right: 5px;
         position: absolute;  
-        color: rgba(55,55,55);      
+        color: rgba(55,55,55); 
+        background: transparent;
+        pointer-events: none;
       }
       
       #title {
         font-size: 20px;
         font-weight: bold;
-        font-family: Verdana, Geneva, sans-serif
+        font-family: Verdana, Geneva, sans-serif;
       }
       
       #subtitle {     
@@ -98,6 +101,7 @@ class DotAndBoxElement extends HTMLElement {
         flex-wrap: nowrap;
         align-items: center;
         justify-content: center;
+        pointer-events: none;
       }               
       
       #controls-menu-extended {    
@@ -126,6 +130,7 @@ class DotAndBoxElement extends HTMLElement {
         padding: 0;
         border-radius: 50%;
         border: solid 1px gray;
+        pointer-events: auto;
       }
             
       #controls-menu button:hover  {
@@ -175,6 +180,13 @@ class DotAndBoxElement extends HTMLElement {
         if (!this.code) {
             this.code = "title: ''"
         }
+
+        this._resizeObserver.observe(this._wrapper);
+
+    }
+
+    resizeCallBack() {
+        this.resize()
     }
 
     getCanvas(shadow: ShadowRoot): HTMLCanvasElement {
