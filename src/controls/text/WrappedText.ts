@@ -47,11 +47,6 @@ export class WrappedText extends Control {
         return this._text;
     }
 
-    set visible(val: boolean) {
-        this._dirty = true;
-        this._visible = val;
-    }
-
     set text(value: string) {
         if (this._text !== value) {
             this._dirty = true;
