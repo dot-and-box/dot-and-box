@@ -74,6 +74,7 @@ export class BoxControl extends Control implements TextControl {
         }
         this.textControl.fontSize = this._fontSize
         this.textControl.color = this.color != WHITE && this.color != 'transparent' ? WHITE : BLACK
+        ctx.textBaseline = 'top'
         this.textControl.draw(ctx)
     }
 

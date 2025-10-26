@@ -17,7 +17,9 @@ export class DotControl extends Control implements TextControl {
     public id: string
     public selected: boolean
     public fontSize: number | null
+    public _coercedFontSize: number | null = null
     public radius: number
+    private _dirty: boolean = true
 
     constructor(id: string, position: Point, radius: number, color: string, text: string, visible: boolean, selected: boolean, fontSize: number | null = null) {
         super()
@@ -33,6 +35,7 @@ export class DotControl extends Control implements TextControl {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
+        ctx.textBaseline = 'middle'
         ctx.beginPath()
         ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false)
         ctx.fillStyle = this.color
@@ -43,24 +46,40 @@ export class DotControl extends Control implements TextControl {
             ctx.stroke()
         }
         ctx.closePath()
-        let textOffset = 0
-        let xOffset
-        let fontSize = this.fontSize != null ? this.fontSize : DEFAULT_FONT_SIZE
+        let autoSizeFont = this.fontSize == null
+        this._coercedFontSize = this.fontSize !== null ? this.fontSize : DEFAULT_FONT_SIZE
 
-        if (this.text.length > 3) {
-            const fontSize = this.fontSize
-            ctx.font = `${fontSize}px ${DEFAULT_FONT}`
-            let metric = ctx.measureText(this.text)
-            xOffset = metric.width / 2
-        } else {
-            let textSizeCoerced = this.text.length > 1 ? this.radius * 0.8 : this.radius * 1.2
-            fontSize = this.fontSize != null ? this.fontSize : textSizeCoerced
-            textOffset = textSizeCoerced / 2 - textSizeCoerced / 4 + 1
-            xOffset = textOffset * this.text.length
-        }
-        ctx.font = `${fontSize}px ${DEFAULT_FONT}`
+        let x = this.position.x
+        let y = this.position.y + 1
+        let ratio = 1
+        ctx.font = `${this._coercedFontSize}px ${DEFAULT_FONT}`
         ctx.fillStyle = this.color != WHITE ? WHITE : BLACK
-        ctx.fillText(this.text, this.position.x - xOffset, this.position.y + textOffset)
+        let metric = ctx.measureText(this.text)
+        let textWidth = metric.width
+
+        if (autoSizeFont && this._dirty) {
+            let spaceLeft = 2 * this.radius - textWidth
+            let sizePercent = this.text.length < 3 ? 0.45 : 0.85
+            ratio = sizePercent * 2 * this.radius / textWidth
+            this._coercedFontSize = spaceLeft > 0 ? this._coercedFontSize * ratio : this._coercedFontSize
+            ctx.font = `${this._coercedFontSize}px ${DEFAULT_FONT}`
+            this._dirty = true
+        }
+        x -= textWidth * ratio / 2
+        // TODO move debug drawings control to external util
+        // this.debugLine(ctx, x, y, x + (textWidth), y)
+        // this.debugLine(ctx, this.position.x, this.position.y - this.radius, this.position.x, this.position.y + this.radius)
+        ctx.fillText(this.text, x, y)
+    }
+
+    debugLine(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number) {
+        ctx.strokeStyle = 'blue'
+        ctx.beginPath();
+        ctx.lineWidth = 1
+        ctx.lineCap = "round"
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
     }
 
     hitTest(point: Point): boolean {
@@ -93,6 +112,7 @@ export class DotControl extends Control implements TextControl {
             return (x: number, y: number) => this.updatePosition(x, y)
         } else if (name == SIZE) {
             return (x: number, _: number) => {
+                this._dirty = true
                 this.size = new Point(Math.abs(x), Math.abs(x))
                 this.radius = this.size.x / 2
             }
