@@ -34,19 +34,14 @@ dot id: a at: [-0.2,0] radius: 20 color: black
 dot id: C at: [2,0] radius: 75 text: 'dot'">
 </dot-and-box>
 
-#### dot attributes
-
-Dot attributes:
+## dot attributes
 
 - **id** - unique id of dot - mandatory
 - **group** - prefix for id, optional
 - **at** - dot start location - optional - default: (0,0)
 - **text** - dot text - optional - default: empty string
 - **radius** - dot radius - optional - default: 20 units (unit usually mean pixel)
-  :::warning
-  There was a breaking change in version 0.1.2 - dot use property **radius** instead of size
-  :::
 - **visible** - is dot visible - optional - default: true
 - **selected** - is dot selected - optional - default: false
 - **color** - background color of control - optional - default: value from internal color table selected by: len(controls) modulo len(color_table)
-- **fontSize** - font size - optional (**this is experimental and subject to change**)
+- **fontSize** - font size - autosize is calculated if not set
