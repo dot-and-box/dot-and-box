@@ -5,6 +5,7 @@ import {
     AUTOPLAY, BORDER, BOX_TOOL, CODE, COLOR, CONTROLS,
     DEBUG, DOT_TOOL, EXPERIMENTAL, GRID, HEIGHT, INITIALIZED, KEYBOARD, STYLE, WIDTH
 } from "./shared/elemConstants.ts";
+import { DebugTool } from "./shared/debugTool.ts";
 
 
 class DotAndBoxElement extends HTMLElement {
@@ -47,7 +48,7 @@ class DotAndBoxElement extends HTMLElement {
         if (this._code && this.dotAndBox) {
             this.updateCanvasStyle(this.canvas)
             this.applyCode()
-            this.dotAndBox.showDebug = this.debug
+            DebugTool.showDebug = this.debug
             this.dotAndBox.showGrid = this.grid
             this.dotAndBox.updatePositionAndSize()
             this.dotAndBox.draw(0)
@@ -443,7 +444,7 @@ class DotAndBoxElement extends HTMLElement {
             case DEBUG:
                 this.debug = newValue != null
                 if (this.dotAndBox) {
-                    this.dotAndBox.showDebug = this.debug
+                    DebugTool.showDebug = this.debug
                 }
                 break
             case GRID:

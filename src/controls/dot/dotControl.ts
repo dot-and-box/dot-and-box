@@ -10,6 +10,7 @@ import {
 import { Control, TextControl } from "../control.ts"
 import { Unit } from "../../shared/unit.ts";
 import { Sign } from "../../shared/sign.ts";
+import { DebugTool } from "../../shared/debugTool.ts";
 
 export class DotControl extends Control implements TextControl {
     public color: string
@@ -50,7 +51,7 @@ export class DotControl extends Control implements TextControl {
         this._coercedFontSize = this.fontSize !== null ? this.fontSize : DEFAULT_FONT_SIZE
 
         let x = this.position.x
-        let y = this.position.y + 1
+        let y = this.position.y
         let ratio = 1
         ctx.font = `${this._coercedFontSize}px ${DEFAULT_FONT}`
         ctx.fillStyle = this.color != WHITE ? WHITE : BLACK
@@ -59,16 +60,20 @@ export class DotControl extends Control implements TextControl {
 
         if (autoSizeFont && this._dirty) {
             let spaceLeft = 2 * this.radius - textWidth
-            let sizePercent = this.text.length < 3 ? 0.45 : 0.85
+            let sizePercent = 0.35
+            if (this.text.length > 2) {
+                sizePercent = this.text.length < 4 ? 0.45 : 0.85
+            }
             ratio = sizePercent * 2 * this.radius / textWidth
             this._coercedFontSize = spaceLeft > 0 ? this._coercedFontSize * ratio : this._coercedFontSize
             ctx.font = `${this._coercedFontSize}px ${DEFAULT_FONT}`
             this._dirty = true
         }
         x -= textWidth * ratio / 2
-        // TODO move debug drawings control to external util
-        // this.debugLine(ctx, x, y, x + (textWidth), y)
-        // this.debugLine(ctx, this.position.x, this.position.y - this.radius, this.position.x, this.position.y + this.radius)
+        if (DebugTool.showDebug) {
+            this.debugLine(ctx, x, y, x + (textWidth * ratio), y)
+            this.debugLine(ctx, this.position.x, this.position.y - this.radius, this.position.x, this.position.y + this.radius)
+        }
         ctx.fillText(this.text, x, y)
     }
 

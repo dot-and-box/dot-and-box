@@ -11,6 +11,7 @@ import { PanZoomTool } from "./tools/panZoomTool.ts"
 import { BoxTool } from "./tools/boxTool.ts"
 import { DotAndBoxModel } from "./shared/dotAndBoxModel.ts";
 import { BOX_TOOL, DOT_TOOL, EMPTY_TOOL, PAN_AND_ZOOM } from "./shared/elemConstants.ts";
+import { DebugTool } from "./shared/debugTool.ts";
 import { EmptyTool } from "./tools/emptyTool.ts";
 
 export class DotAndBox {
@@ -21,7 +22,6 @@ export class DotAndBox {
     private initialPinchDistance: number = 0
     private lastZoom = this.model.zoom
     private fps = 1
-    public showDebug = false
     public showGrid = false
     public marginLeft = 0
     public marginTop = 0
@@ -161,7 +161,7 @@ export class DotAndBox {
     draw(time: number) {
         this.canvas.width = this.model.width
         this.canvas.height = this.model.height
-        if (this.showDebug) {
+        if (DebugTool.showDebug) {
             this.drawDebug(time)
         }
 
