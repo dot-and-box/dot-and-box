@@ -60,9 +60,9 @@ export class DotControl extends Control implements TextControl {
 
         if (autoSizeFont && this._dirty) {
             let spaceLeft = 2 * this.radius - textWidth
-            let sizePercent = 0.35
-            if (this.text.length > 2) {
-                sizePercent = this.text.length < 4 ? 0.45 : 0.85
+            let sizePercent = 0.30
+            if (this.text.length > 1) {
+                sizePercent = this.text.length < 3 ? 0.35 : 0.80
             }
             ratio = sizePercent * 2 * this.radius / textWidth
             this._coercedFontSize = spaceLeft > 0 ? this._coercedFontSize * ratio : this._coercedFontSize
