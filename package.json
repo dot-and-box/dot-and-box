@@ -1,6 +1,6 @@
 {
     "name": "dot-and-box",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "draw dots and boxes and do simple step based animations",
     "type": "module",
     "license": "MIT",
@@ -18,7 +18,7 @@
     },
     "devDependencies": {
         "typescript": "^5.0.2",
-        "vite": "^5.0.12",
-        "vitest": "^0.34.4"
+        "vite": "^7.0",
+        "vitest": "^0.4"
     }
 }

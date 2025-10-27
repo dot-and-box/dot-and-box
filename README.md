@@ -82,7 +82,7 @@ npm run test
 ### build docs
 
 ```shell
-nvm use 20
+nvm use 22
 cd docs
 npm run start
 ```
