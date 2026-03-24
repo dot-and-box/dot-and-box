@@ -1,18 +1,20 @@
-import { Point } from "./shared/point.ts"
-import { Tool } from "./shared/tool.ts"
+import {Point} from "./shared/point.ts"
+import {Tool} from "./shared/tool.ts"
 import {
     DEFAULT_FONT,
     MAX_ZOOM,
     MIN_ZOOM,
     SCROLL_SENSITIVITY,
 } from "./shared/constants.ts"
-import { DotTool } from "./tools/dotTool.ts"
-import { PanZoomTool } from "./tools/panZoomTool.ts"
-import { BoxTool } from "./tools/boxTool.ts"
-import { DotAndBoxModel } from "./shared/dotAndBoxModel.ts";
-import { BOX_TOOL, DOT_TOOL, EMPTY_TOOL, PAN_AND_ZOOM } from "./shared/elemConstants.ts";
-import { DebugTool } from "./shared/debugTool.ts";
-import { EmptyTool } from "./tools/emptyTool.ts";
+import {DotTool} from "./tools/dotTool.ts"
+import {PanZoomTool} from "./tools/panZoomTool.ts"
+import {BoxTool} from "./tools/boxTool.ts"
+import {DotAndBoxModel} from "./shared/dotAndBoxModel.ts";
+import {BOX_TOOL, DOT_TOOL, EMPTY_TOOL, PAN_AND_ZOOM, MOVE_TOOL, RESIZE_TOOL} from "./shared/elemConstants.ts";
+import {DebugTool} from "./shared/debugTool.ts";
+import {EmptyTool} from "./tools/emptyTool.ts";
+import {ResizeTool} from "./tools/resizeTool.ts";
+import {MoveTool} from "./tools/moveTool.ts";
 
 export class DotAndBox {
     private readonly canvas: HTMLCanvasElement
@@ -26,13 +28,17 @@ export class DotAndBox {
     public marginLeft = 0
     public marginTop = 0
     private panZoomTool = new PanZoomTool()
+    private moveTool = new MoveTool()
+    private resizeTool = new ResizeTool()
     private tools: Map<string, Tool> = new Map([
         [EMPTY_TOOL, new EmptyTool()],
         [DOT_TOOL, new DotTool()],
         [BOX_TOOL, new BoxTool()],
-        [PAN_AND_ZOOM, this.panZoomTool]
+        [PAN_AND_ZOOM, this.panZoomTool],
+        [MOVE_TOOL, this.moveTool],
+        [RESIZE_TOOL, this.resizeTool]
     ])
-    private tool: Tool = this.panZoomTool
+    private tool: Tool = this.resizeTool
     public pointerPosition: Point = Point.zero()
     public rect: Point = Point.zero()
 
@@ -210,14 +216,17 @@ export class DotAndBox {
 
     private onPointerDown() {
         this.isDragging = true
-        const scaledPoint = new Point(
-            this.pointerPosition.x / this.model.zoom - this.model.offset.x + this.model.origin.x - this.model.origin.x / this.model.zoom,
-            this.pointerPosition.y / this.model.zoom - this.model.offset.y + this.model.origin.y - this.model.origin.y / this.model.zoom
-        )
-        this.tool.click(scaledPoint)
+        this.tool.click(this.getPoint())
         if (this.tool.name == PanZoomTool.NAME) {
             this.canvas.style.cursor = "all-scroll"
         }
+    }
+
+    private getPoint(): Point {
+        return new Point(
+            this.pointerPosition.x / this.model.zoom - this.model.offset.x + this.model.origin.x - this.model.origin.x / this.model.zoom,
+            this.pointerPosition.y / this.model.zoom - this.model.offset.y + this.model.origin.y - this.model.origin.y / this.model.zoom
+        );
     }
 
     private onPointerUp() {
@@ -229,10 +238,7 @@ export class DotAndBox {
 
     private onPointerMove() {
         if (this.isDragging) {
-            this.tool.move(new Point(
-                this.pointerPosition.x / this.model.zoom + this.model.origin.x - this.model.origin.x / this.model.zoom,
-                this.pointerPosition.y / this.model.zoom + this.model.origin.y - this.model.origin.y / this.model.zoom
-            ))
+            this.tool.move(this.getPoint())
         }
     }
 

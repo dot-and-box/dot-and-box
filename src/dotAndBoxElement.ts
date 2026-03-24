@@ -3,7 +3,7 @@ import { Parser } from "./parser/parser.ts"
 import { Point } from "./shared/point.ts"
 import {
     AUTOPLAY, BORDER, BOX_TOOL, CODE, COLOR, CONTROLS,
-    DEBUG, DOT_TOOL, EXPERIMENTAL, GRID, HEIGHT, INITIALIZED, KEYBOARD, STYLE, WIDTH
+    DEBUG, DOT_TOOL, EXPERIMENTAL, GRID, HEIGHT, INITIALIZED, KEYBOARD, MOVE_TOOL, RESIZE_TOOL, STYLE, WIDTH
 } from "./shared/elemConstants.ts";
 import { DebugTool } from "./shared/debugTool.ts";
 
@@ -183,7 +183,6 @@ class DotAndBoxElement extends HTMLElement {
         }
 
         this._resizeObserver.observe(this._wrapper);
-
     }
 
     resizeCallBack() {
@@ -323,10 +322,21 @@ class DotAndBoxElement extends HTMLElement {
         </svg>`
         experimentalMenu.append(boxTool)
 
-        const printModel = document.createElement("button")
-        printModel.onclick = (_) => console.log(this.dotAndBox.model)
-        printModel.append('\u{02148}')
-        experimentalMenu.append(printModel)
+        const moveTool = document.createElement("button")
+        moveTool.onclick = (_) => this.dotAndBox.selectTool(MOVE_TOOL)
+        moveTool.append('\u{02722}')
+        experimentalMenu.append(moveTool)
+
+        const resizeTool = document.createElement("button")
+        resizeTool.onclick = (_) => this.dotAndBox.selectTool(RESIZE_TOOL)
+        resizeTool.append('\u{02921}')
+        experimentalMenu.append(resizeTool)
+
+        const infoTool = document.createElement("button")
+        infoTool.append('\u{02148}')
+        infoTool.onclick = (_) => console.log(this.dotAndBox.model)
+        experimentalMenu.append(infoTool)
+
         extendedMenu.append(experimentalMenu)
     }
 
