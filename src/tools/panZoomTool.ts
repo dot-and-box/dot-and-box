@@ -23,10 +23,9 @@ export class PanZoomTool extends Tool {
     }
 
     override move(movePoint: Point) {
-        this.dotAndBox.model.offset = new Point(
-            movePoint.x - this.dragStart.x,
-            movePoint.y - this.dragStart.y
-        )
+        let offset = this.dotAndBox.model.offset
+        this.dotAndBox.model.offset.x = movePoint.x + offset.x - this.dragStart.x
+        this.dotAndBox.model.offset.y = movePoint.y + offset.y - this.dragStart.y
     }
 
     get name(): string {
