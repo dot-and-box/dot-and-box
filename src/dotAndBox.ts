@@ -38,7 +38,7 @@ export class DotAndBox {
         [MOVE_TOOL, this.moveTool],
         [RESIZE_TOOL, this.resizeTool]
     ])
-    private tool: Tool = this.resizeTool
+    private tool: Tool = this.panZoomTool
     public pointerPosition: Point = Point.zero()
     public rect: Point = Point.zero()
 
