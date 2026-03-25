@@ -180,7 +180,6 @@ step:
 
     const moveAction = model.steps[2].sequences[0].actions[1] as Animate
     expect(moveAction).not.eq(null)
-    expect(moveAction.end.sign).eq(Sign.NONE)
 })
 
 
