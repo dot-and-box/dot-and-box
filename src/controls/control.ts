@@ -10,7 +10,7 @@ export interface TextControl {
 }
 
 export interface PropertyUpdater {
-    (x: number, y: number);
+    (x: number, y: number): void;
 }
 
 export abstract class Control implements ControlBase {
