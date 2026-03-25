@@ -633,6 +633,8 @@ export class Parser {
                     return new Clone(this.model, controlId, token.value)
                 }
                 break
+            default:
+                throw new Error(`Expected action identifier at ${token.position} got ${token.value} instead`)
         }
         return null
     }

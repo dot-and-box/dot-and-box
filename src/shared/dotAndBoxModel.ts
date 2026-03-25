@@ -90,12 +90,20 @@ export class DotAndBoxModel {
         this.controls = this.controls.filter(c => !c.selected)
     }
 
-    findControl(controlId: string) {
+    findControl(controlId: string): Control | undefined {
         if (controlId.startsWith(DotAndBoxModel.SELECTED_PREFIX)) {
             const index = parseInt(controlId.substring(DotAndBoxModel.SELECTED_PREFIX.length + 1), 10)
             return index < this.selectedControls.length ? this.selectedControls[index] : undefined
         } else {
             return this.controls.find(c => c.id === controlId)
+        }
+    }
+
+    findControls(controlId: string): Control[] {
+        if (controlId.startsWith(DotAndBoxModel.SELECTED_PREFIX)) {
+            return  this.selectedControls;
+        } else {
+            return this.controls.filter(c => c.id.startsWith(controlId))
         }
     }
 

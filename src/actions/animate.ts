@@ -6,16 +6,16 @@ import { DUMMY_CONTROL } from "../shared/constants.ts";
 import { DotAndBoxModel } from "../shared/dotAndBoxModel.ts";
 
 export class Animate extends ActionBase {
-    start: Point
+    private start: Point
     to: Point
     end: Point
-    left: Control = DUMMY_CONTROL
+    // left: Control = DUMMY_CONTROL
     right: Control = DUMMY_CONTROL
     leftId: string
     rightId: string = ''
     propertyName: string = ''
     relativeToRight: boolean = false;
-    updateControlValue: (x: number, y: number) => void
+    propertyUpdaters: [updateControlValue: (x: number, y: number) => void] = []
 
     constructor(model: DotAndBoxModel, property: string, leftId: string, to: Point, rightId = '', relativeToRight: boolean) {
         super(model)
@@ -26,7 +26,7 @@ export class Animate extends ActionBase {
         this.leftId = leftId
         this.rightId = rightId
         this.relativeToRight = relativeToRight;
-        this.updateControlValue = () => { }
+        this.propertyUpdaters = []
     }
 
     override init() {
@@ -35,8 +35,8 @@ export class Animate extends ActionBase {
     }
 
     selectControls() {
-        const foundControl = this.model.findControl(this.leftId)
-        if (foundControl) {
+        const foundControls = this.model.findControls(this.leftId)
+        if (foundControls.length > 0) {
             this.left = foundControl
             this.start = this.left.getPointPropertyValue(this.propertyName).clone()
             let controlTo = this.to.clone()
