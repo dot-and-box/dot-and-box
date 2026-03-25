@@ -38,6 +38,7 @@ export class DotAndBoxModel {
     public onBeforeStepForwardCallback: (index: number) => void = () => { }
     public onBeforeStepBackwardCallback: (index: number) => void = () => { }
     public updateSubtitleCallback: (text: string) => void = () => { }
+    public onFinish: () => void = () => { }
 
     public updateWidthAndHeight(width: number, height: number) {
         this._width = width
@@ -137,6 +138,9 @@ export class DotAndBoxModel {
             // here maybe something smarter...
             if (this.currentStep.state == StepState.START && this._currentStepIndex == 0) {
                 this.updateSubtitleCallback('');
+            }
+            if( this._requestedStepProgress == 1 && this.currentStepIndex == this.steps.length -1) {
+                this.onFinish()
             }
         }
     }

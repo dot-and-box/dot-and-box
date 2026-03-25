@@ -3,7 +3,7 @@ import { Parser } from "./parser/parser.ts"
 import { Point } from "./shared/point.ts"
 import {
     AUTOPLAY, BORDER, BOX_TOOL, CODE, COLOR, CONTROLS,
-    DEBUG, DOT_TOOL, EXPERIMENTAL, GRID, HEIGHT, INITIALIZED, KEYBOARD, MOVE_TOOL, RESIZE_TOOL, STYLE, WIDTH
+    DEBUG, DOT_TOOL, EXPERIMENTAL, GRID, HEIGHT, INITIALIZED, KEYBOARD, LOOP, MOVE_TOOL, RESIZE_TOOL, STYLE, WIDTH
 } from "./shared/elemConstants.ts";
 import { DebugTool } from "./shared/debugTool.ts";
 
@@ -12,7 +12,7 @@ class DotAndBoxElement extends HTMLElement {
     public static readonly ELEM_NAME: string = "dot-and-box"
     public static readonly ON_BEFORE_STEP_FORWARD: string = "on_before_step_forward"
     public static readonly ON_BEFORE_STEP_BACKWARD: string = "on_before_step_backward"
-    static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, CONTROLS, AUTOPLAY, KEYBOARD, GRID]
+    static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL,LOOP, CONTROLS, AUTOPLAY, KEYBOARD, GRID]
     dotAndBox!: DotAndBox
     private _code: string = ''
     color: string = 'white'
@@ -25,6 +25,7 @@ class DotAndBoxElement extends HTMLElement {
     extendedMenu = false
     experimental = false
     autoplay = false
+    loop = false
     canvas!: HTMLCanvasElement
     keyboard: boolean = false
     _initialized: boolean = false
@@ -60,6 +61,27 @@ class DotAndBoxElement extends HTMLElement {
         model.onBeforeStepForwardCallback = (index) => this.dispatchOnBeforeStepForward(index)
         model.onBeforeStepBackwardCallback = (index) => this.dispatchOnBeforeStepBackward(index)
         model.updateSubtitleCallback = (text) => this.updateSubtitle(text)
+        model.onFinish = () => {
+            if(this.loop) {
+
+                new Promise((_) => {
+                    setTimeout(() => {
+                        this.updateTitle('')
+                        this.updateSubtitle('')
+                        this.reset()
+                        const model = new Parser().parse(this._code)
+                        this.updateTitle(model.title)
+                        new Promise((_) => {
+                            setTimeout(() => {
+                                this.fastForward()
+                            }, 1000);
+                        }).then(_ => {});
+
+                    }, 2000);
+                }).then(_ => {});
+
+            }
+        }
         this.updateTitle(model.title)
         this.dotAndBox.apply(model)
     }
@@ -450,6 +472,9 @@ class DotAndBoxElement extends HTMLElement {
                 if (this.dotAndBox) {
                     this.fastForward()
                 }
+                break
+            case LOOP:
+                this.loop = newValue != null
                 break
             case DEBUG:
                 this.debug = newValue != null

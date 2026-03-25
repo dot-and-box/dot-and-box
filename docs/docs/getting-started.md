@@ -23,7 +23,7 @@ and add _dot-and-box_ tag to your html page.
 
    ```html
    <dot-and-box
-     controls
+     controls autoplay loop
      code="
      title: sort with bubble sort
      box id: win at: [-6, 0] size: [2, 1] color: rgba(254,193,7,0.6) visible: false

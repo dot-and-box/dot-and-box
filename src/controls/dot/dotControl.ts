@@ -3,11 +3,13 @@ import {
     BLACK,
     DEFAULT_FONT,
     DEFAULT_FONT_SIZE,
-    DEFAULT_LINE_WIDTH, POSITION,
-    SELECTION_STROKE_STYLE, SIZE,
+    DEFAULT_LINE_WIDTH,
+    POSITION,
+    SELECTION_STROKE_STYLE,
+    SIZE,
     WHITE
 } from "../../shared/constants.ts"
-import {Control, TextControl} from "../control.ts"
+import {Control, PropertyUpdater, TextControl} from "../control.ts"
 import {Unit} from "../../shared/unit.ts";
 import {Sign} from "../../shared/sign.ts";
 import {DebugTool} from "../../shared/debugTool.ts";
@@ -111,9 +113,8 @@ export class DotControl extends Control implements TextControl {
         return new DotControl(this.id.toString(), this.position.clone(), this.radius, this.color.toString(), this.text.toString(), this.visible, this.selected)
     }
 
-
-    override getPointPropertyUpdater(name: string): (x: number, y: number) => void {
-        if (name === POSITION) {
+    override getPointPropertyUpdater(name: string): PropertyUpdater {
+        if (name == POSITION) {
             return (x: number, y: number) => this.updatePosition(x, y)
         } else if (name == SIZE) {
             return (x: number, _: number) => {
@@ -125,7 +126,6 @@ export class DotControl extends Control implements TextControl {
             throw new Error('not implemented')
         }
     }
-
 
     getPointPropertyValue(name: string): Point {
         switch (name) {

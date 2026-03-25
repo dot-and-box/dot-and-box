@@ -1,4 +1,4 @@
-import { Point } from "../../shared/point.ts"
+import {Point} from "../../shared/point.ts"
 import {
     BLACK,
     DEFAULT_FONT,
@@ -9,8 +9,8 @@ import {
     SIZE,
     WHITE
 } from "../../shared/constants.ts"
-import { Control, TextControl } from "../control.ts"
-import { WrappedText } from "../text/wrappedText.ts";
+import {Control, PropertyUpdater, TextControl} from "../control.ts"
+import {WrappedText} from "../text/wrappedText.ts";
 
 export class BoxControl extends Control implements TextControl {
     get fontSize(): number {
@@ -89,7 +89,7 @@ export class BoxControl extends Control implements TextControl {
         return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this._fontSize, this.color.toString(), this._text.toString(), this.visible, this.selected)
     }
 
-    override getPointPropertyUpdater(name: string): (x: number, y: number) => void {
+    override getPointPropertyUpdater(name: string): PropertyUpdater {
         if (name == POSITION) {
             return (x: number, y: number) => {
                 this.updatePosition(x, y)

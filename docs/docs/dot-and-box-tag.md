@@ -19,6 +19,8 @@ It supports attributes and events.
 
 **autoplay** - starts fast-forward on load
 
+**loop** - whether to loop reset autoplay at end
+
 **keyboard** - left and right arrow does backward and forward respectively
 
 **debug** - show some debug information
