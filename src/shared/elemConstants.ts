@@ -9,6 +9,7 @@ export const DEBUG = 'debug'
 export const EXPERIMENTAL = 'experimental'
 export const CONTROLS = 'controls'
 export const AUTOPLAY = 'autoplay'
+export const LOOP = 'loop'
 export const KEYBOARD = 'keyboard'
 export const GRID = 'grid'
 

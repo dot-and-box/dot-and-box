@@ -1,32 +1,27 @@
-import { ActionBase } from "../shared/actionBase.ts"
-import { Point } from "../shared/point.ts"
-import { Control } from "../controls/control.ts"
-import { Sign } from "../shared/sign.ts"
-import { DUMMY_CONTROL } from "../shared/constants.ts";
-import { DotAndBoxModel } from "../shared/dotAndBoxModel.ts";
+import {ActionBase} from "../shared/actionBase.ts"
+import {Point} from "../shared/point.ts"
+import {Control, PropertyUpdater} from "../controls/control.ts"
+import {Sign} from "../shared/sign.ts"
+import {DUMMY_CONTROL} from "../shared/constants.ts";
+import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 
 export class Animate extends ActionBase {
-    start: Point
     to: Point
-    end: Point
-    left: Control = DUMMY_CONTROL
     right: Control = DUMMY_CONTROL
     leftId: string
     rightId: string = ''
     propertyName: string = ''
     relativeToRight: boolean = false;
-    updateControlValue: (x: number, y: number) => void
+    propertiesToUpdate: { control: Control, start: Point, end: Point, update: PropertyUpdater }[] = []
 
     constructor(model: DotAndBoxModel, property: string, leftId: string, to: Point, rightId = '', relativeToRight: boolean) {
         super(model)
         this.propertyName = property
-        this.start = Point.zero()
         this.to = to
-        this.end = to
         this.leftId = leftId
         this.rightId = rightId
         this.relativeToRight = relativeToRight;
-        this.updateControlValue = () => { }
+        this.propertiesToUpdate = []
     }
 
     override init() {
@@ -35,16 +30,19 @@ export class Animate extends ActionBase {
     }
 
     selectControls() {
-        const foundControl = this.model.findControl(this.leftId)
-        if (foundControl) {
-            this.left = foundControl
-            this.start = this.left.getPointPropertyValue(this.propertyName).clone()
+        const foundControls = this.model.findControls(this.leftId)
+        if (foundControls.length > 0) {
             let controlTo = this.to.clone()
-            foundControl.normalizePositionUnit(controlTo, this.model.cellSize)
-            this.end = this.calculateEnd(this.start, controlTo)
-            this.updateControlValue = this.left.getPointPropertyUpdater(this.propertyName)
-        } else {
-            this.left = DUMMY_CONTROL
+            for (const foundControl of foundControls) {
+                foundControl.normalizePositionUnit(controlTo, this.model.cellSize)
+                let start = foundControl.getPropertyValue(this.propertyName) as Point;
+                this.propertiesToUpdate.push({
+                    control: foundControl,
+                    start: start.clone(),
+                    end: this.calculateEnd(start, controlTo),
+                    update: foundControl.getPointPropertyUpdater(this.propertyName)
+                })
+            }
         }
 
         if (this.rightId !== '') {
@@ -52,8 +50,9 @@ export class Animate extends ActionBase {
             if (foundRight) {
                 this.right = foundRight
                 this.to.normalizeUnit(this.model.cellSize);
-                this.end = this.left.animateEndByPropertyAndTarget(this.propertyName, this.right, this.relativeToRight ? this.to : Point.zero())
-                foundRight.normalizePositionUnit(this.end, this.model.cellSize)
+                for (const property of this.propertiesToUpdate) {
+                    property.end = property.control.animateEndByPropertyAndTarget(this.propertyName, this.right, this.relativeToRight ? this.to : Point.zero())
+                }
             }
         }
     }
@@ -75,16 +74,17 @@ export class Animate extends ActionBase {
 
     override updateValue(progress: number) {
         if (progress == 0) {
-            this.updateControlValue(this.start.x, this.start.y)
-
+            this.propertiesToUpdate.forEach(c => c.update(c.start.x, c.start.y));
         } else if (progress == 1) {
-            this.updateControlValue(this.end.x, this.end.y)
-
+            this.propertiesToUpdate.forEach(c => c.update(c.end.x, c.end.y));
         } else {
-            this.updateControlValue(
-                this.start.x + (this.end.x - this.start.x) * progress,
-                this.start.y + (this.end.y - this.start.y) * progress
-            )
+            this.propertiesToUpdate.forEach(c => {
+                    c.update(
+                        c.start.x + (c.end.x - c.start.x) * progress,
+                        c.start.y + (c.end.y - c.start.y) * progress
+                    );
+                }
+            );
         }
     }
 

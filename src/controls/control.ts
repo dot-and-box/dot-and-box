@@ -9,6 +9,10 @@ export interface TextControl {
     text: string
 }
 
+export interface PropertyUpdater {
+    (x: number, y: number);
+}
+
 export abstract class Control implements ControlBase {
     id: string = '';
     position: Point = Point.zero();
@@ -19,8 +23,6 @@ export abstract class Control implements ControlBase {
     abstract draw(ctx: CanvasRenderingContext2D): void
 
     abstract hitTest(point: Point): boolean
-
-    abstract getPointPropertyValue(name: string): Point
 
     abstract animateEndByPropertyAndTarget(propertyName: string, targetControl: Control, offset: Point): Point
 
@@ -34,7 +36,7 @@ export abstract class Control implements ControlBase {
         me[name] = value
     }
 
-    getPointPropertyUpdater(_: string): (x: number, y: number) => void {
+    getPointPropertyUpdater(_: string): PropertyUpdater {
         throw new Error('not implemented exception')
     }
 
