@@ -160,7 +160,7 @@ export class WrappedText extends Control {
         }
     }
 
-    animateEndByPropertyAndTarget(_: string, __: Control): Point {
+    animateEndByPropertyAndTarget(_: string, __: Control, ___: Point): Point {
         throw new Error('unimplemented exception')
     }
 

@@ -104,11 +104,11 @@ export class BoxControl extends Control implements TextControl {
         }
     }
 
-    animateEndByPropertyAndTarget(propertyName: string, targetControl: Control): Point {
+    animateEndByPropertyAndTarget(propertyName: string, targetControl: Control, offset: Point): Point {
         if (propertyName == POSITION) {
-            return new Point(targetControl.center.x - this.size.x / 2, targetControl.center.y - this.size.y / 2);
+            return new Point(targetControl.center.x - this.size.x / 2 + offset.x, targetControl.center.y - this.size.y / 2 + offset.y);
         } else if (propertyName == SIZE) {
-            return this.size
+            return new Point(targetControl.size.x + offset.x, targetControl.size.y + offset.y)
         } else {
             throw new Error('not implemented')
         }

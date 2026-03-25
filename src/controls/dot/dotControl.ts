@@ -1,4 +1,4 @@
-import { Point } from "../../shared/point.ts"
+import {Point} from "../../shared/point.ts"
 import {
     BLACK,
     DEFAULT_FONT,
@@ -7,10 +7,10 @@ import {
     SELECTION_STROKE_STYLE, SIZE,
     WHITE
 } from "../../shared/constants.ts"
-import { Control, TextControl } from "../control.ts"
-import { Unit } from "../../shared/unit.ts";
-import { Sign } from "../../shared/sign.ts";
-import { DebugTool } from "../../shared/debugTool.ts";
+import {Control, TextControl} from "../control.ts"
+import {Unit} from "../../shared/unit.ts";
+import {Sign} from "../../shared/sign.ts";
+import {DebugTool} from "../../shared/debugTool.ts";
 
 export class DotControl extends Control implements TextControl {
     public color: string
@@ -138,11 +138,11 @@ export class DotControl extends Control implements TextControl {
         }
     }
 
-    animateEndByPropertyAndTarget(propertyName: string, targetControl: Control): Point {
+    animateEndByPropertyAndTarget(propertyName: string, targetControl: Control, offset: Point): Point {
         if (propertyName == POSITION) {
-            return targetControl.center
+            return new Point(targetControl.center.x + offset.x, targetControl.center.y + offset.y)
         } else if (propertyName == SIZE) {
-            return targetControl.size
+            return new Point(targetControl.size.x + offset.x, targetControl.size.y + offset.y)
         } else {
             throw new Error('not implemented')
         }

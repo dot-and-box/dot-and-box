@@ -17,6 +17,7 @@ export class DotAndBoxModel {
     static readonly SELECTED_PREFIX = "selected"
     title: string
     controls: Control[]
+    groups: string[] = []
     steps: Step[]
     currentStep: Step = new Step()
     origin: Point = Point.zero()

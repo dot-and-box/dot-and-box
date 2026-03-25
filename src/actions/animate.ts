@@ -14,9 +14,10 @@ export class Animate extends ActionBase {
     leftId: string
     rightId: string = ''
     propertyName: string = ''
+    relativeToRight: boolean = false;
     updateControlValue: (x: number, y: number) => void
 
-    constructor(model: DotAndBoxModel, property: string, leftId: string, to: Point, rightId = '') {
+    constructor(model: DotAndBoxModel, property: string, leftId: string, to: Point, rightId = '', relativeToRight: boolean) {
         super(model)
         this.propertyName = property
         this.start = Point.zero()
@@ -24,6 +25,7 @@ export class Animate extends ActionBase {
         this.end = to
         this.leftId = leftId
         this.rightId = rightId
+        this.relativeToRight = relativeToRight;
         this.updateControlValue = () => { }
     }
 
@@ -49,7 +51,8 @@ export class Animate extends ActionBase {
             const foundRight = this.model.findControl(this.rightId)
             if (foundRight) {
                 this.right = foundRight
-                this.end = this.left.animateEndByPropertyAndTarget(this.propertyName, this.right)
+                this.to.normalizeUnit(this.model.cellSize);
+                this.end = this.left.animateEndByPropertyAndTarget(this.propertyName, this.right, this.relativeToRight ? this.to : Point.zero())
                 foundRight.normalizePositionUnit(this.end, this.model.cellSize)
             }
         }

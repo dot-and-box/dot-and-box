@@ -22,7 +22,7 @@ export abstract class Control implements ControlBase {
 
     abstract getPointPropertyValue(name: string): Point
 
-    abstract animateEndByPropertyAndTarget(propertyName: string, targetControl: Control): Point
+    abstract animateEndByPropertyAndTarget(propertyName: string, targetControl: Control, offset: Point): Point
 
     getPropertyValue(name: string): Object {
         const me = this as any;

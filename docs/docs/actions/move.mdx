@@ -8,7 +8,7 @@ move operator allows to move controls
 
 ### a **-\>** (x, y)
 
-There are three possible move types:
+There are four possible move types:
 
 - move by relative value
 
@@ -27,17 +27,26 @@ There are three possible move types:
   ```dabl
     control -> otherControl
   ```
+- move to other control position with offset
+
+  ```dabl
+    control -> otherControl+[2,0]
+  ```
 
 ```dabl tab showLineNumbers
 title: 'move control'
 box id: otherBox at: [2,0]
-dot id: d1  text: 'dot' at: [-3,-2] radius: 35
+dot id: d1 text: 'dot' at: [-3,-2] radius: 35
 step: 'move dot by 4 cells right'
 d1 -> +[4,0] // relative move
 step: 'move to [0,1]'
 d1 ->  [0,1] // absolute move
 step: 'move to otherBox'
 d1 -> otherBox // move to other control
+step: 'move d1 by -[2,0]'
+d1 -> -[2,0]
+step: 'move d1 to other box with offset [2,0]'
+d1 -> otherBox+[2,0]
 ```
 
 ```html tab showLineNumbers
@@ -54,6 +63,10 @@ step: 'move to [0,1]'
 d1 ->  [0,1]
 step: 'move to otherBox'
 d1 -> otherBox
+step: 'move d1 by -[2,0]'
+d1 -> -[2,0]
+step: 'move d1 to other box with offset [2,0]'
+d1 -> otherBox+[2,0]
   "
 >
 </dot-and-box>

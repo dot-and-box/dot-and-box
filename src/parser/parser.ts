@@ -1,23 +1,23 @@
-import { Scanner } from "./scanner.ts"
-import { Step } from "../shared/step.ts"
-import { TokenType } from "./tokenType.ts"
-import { Token } from "./token.ts"
-import { Point } from "../shared/point.ts"
-import { BoxControl } from "../controls/box/boxControl.ts"
-import { DotControl } from "../controls/dot/dotControl.ts"
-import { ActionBase } from "../shared/actionBase.ts"
-import { Animate } from "../actions/animate.ts"
-import { Swap } from "../actions/swap.ts"
-import { Clone } from "../actions/clone.ts"
-import { Sign } from "../shared/sign.ts"
-import { BLACK, CAMERA, COLORS, DEFAULT_FONT_SIZE, POSITION, SIZE } from "../shared/constants.ts"
-import { Assign } from "../actions/assign.ts"
-import { Keywords } from "./keywords.ts"
-import { CameraMove } from "../actions/cameraMove.ts";
-import { LineControl } from "../controls/line/lineControl.ts";
-import { Layout } from "../shared/layout.ts";
-import { DotAndBoxModel } from "../shared/dotAndBoxModel.ts";
-import { Unit } from "../shared/unit.ts";
+import {Scanner} from "./scanner.ts"
+import {Step} from "../shared/step.ts"
+import {TokenType} from "./tokenType.ts"
+import {Token} from "./token.ts"
+import {Point} from "../shared/point.ts"
+import {BoxControl} from "../controls/box/boxControl.ts"
+import {DotControl} from "../controls/dot/dotControl.ts"
+import {ActionBase} from "../shared/actionBase.ts"
+import {Animate} from "../actions/animate.ts"
+import {Swap} from "../actions/swap.ts"
+import {Clone} from "../actions/clone.ts"
+import {Sign} from "../shared/sign.ts"
+import {BLACK, CAMERA, COLORS, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../shared/constants.ts"
+import {Assign} from "../actions/assign.ts"
+import {Keywords} from "./keywords.ts"
+import {CameraMove} from "../actions/cameraMove.ts";
+import {LineControl} from "../controls/line/lineControl.ts";
+import {Layout} from "../shared/layout.ts";
+import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
+import {Unit} from "../shared/unit.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -136,6 +136,10 @@ export class Parser {
             at.normalizeUnit(this.cellSize)
         }
         colors = colors.length > 0 ? colors : COLORS
+
+        if (group !== '') {
+            this.model.groups.push(group);
+        }
 
         let spanInPixels = size.x + this.cellSize * span
         let i = 0;
@@ -674,13 +678,15 @@ export class Parser {
         this.advance()
         let point: Point = Point.zero()
         let rightId = ''
-        let isPoint = this.pointInBracketsAhead()
-        if (isPoint) {
+
+        if (this.pointInBracketsAhead()) {
             point = this.point()
         } else {
-            let token = this.peek()
+            let token = this.advance()
             rightId = token.value
-            this.advance()
+            if (this.pointInBracketsAhead()) {
+                point = this.point()
+            }
         }
         if (leftControlId == CAMERA) {
             if (point.sign == Sign.NONE) {
@@ -688,7 +694,8 @@ export class Parser {
             }
             return new CameraMove(this.model, point)
         }
-        return new Animate(this.model, POSITION, leftControlId, point, rightId)
+
+        return new Animate(this.model, POSITION, leftControlId, point, rightId, true)
     }
 
     resize(leftControlId: string): ActionBase {
@@ -706,7 +713,7 @@ export class Parser {
             this.advance()
         }
 
-        return new Animate(this.model, SIZE, leftControlId, size, rightId)
+        return new Animate(this.model, SIZE, leftControlId, size, rightId, false)
     }
 
     pointInBracketsAhead(): boolean {

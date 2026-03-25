@@ -46,9 +46,9 @@ export class Swap extends ActionBase {
             : DUMMY_CONTROL
 
         this.startLeft = this.left.position.clone()
-        this.endLeft = this.left.animateEndByPropertyAndTarget(POSITION, this.right).clone()
+        this.endLeft = this.left.animateEndByPropertyAndTarget(POSITION, this.right, Point.zero()).clone()
         this.startRight = this.right.position.clone()
-        this.endRight = this.right.animateEndByPropertyAndTarget(POSITION, this.left).clone()
+        this.endRight = this.right.animateEndByPropertyAndTarget(POSITION, this.left, Point.zero()).clone()
     }
 
     override updateValue(progress: number) {

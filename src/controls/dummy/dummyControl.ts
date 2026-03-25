@@ -33,7 +33,7 @@ export class DummyControl extends Control {
         return Point.zero()
     }
 
-    animateEndByPropertyAndTarget(_: string, __: Control): Point {
+    animateEndByPropertyAndTarget(_: string, __: Control, ___: Point): Point {
         return Point.zero()
     }
 

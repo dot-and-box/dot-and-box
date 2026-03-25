@@ -1,6 +1,6 @@
-import { Point } from "../../shared/point.ts"
-import { POSITION, SELECTION_STROKE_STYLE, SIZE } from "../../shared/constants.ts"
-import { Control } from "../control.ts"
+import {Point} from "../../shared/point.ts"
+import {POSITION, SELECTION_STROKE_STYLE, SIZE} from "../../shared/constants.ts"
+import {Control} from "../control.ts"
 
 export class LineControl extends Control {
     public color: string
@@ -87,11 +87,11 @@ export class LineControl extends Control {
         }
     }
 
-    animateEndByPropertyAndTarget(propertyName: string, _: Control): Point {
+    animateEndByPropertyAndTarget(propertyName: string, targetControl: Control, offset: Point): Point {
         if (propertyName == POSITION) {
-            return this.position
+            return new Point(targetControl.position.x + offset.x, targetControl.position.y + offset.y)
         } else if (propertyName == SIZE) {
-            return this.size
+            return new Point(targetControl.size.x + offset.x, targetControl.size.y + offset.y)
         } else {
             throw new Error('not implemented')
         }

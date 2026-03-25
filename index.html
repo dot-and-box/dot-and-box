@@ -23,7 +23,7 @@
       debug
       code="
     title: 'Event driven communication'
-    boxes ids: 'basket' 'order' 'payment' 'shipping' at: [-6,0] size: [2,2] span: 1
+    boxes group: uu ids: 'basket' 'order' 'payment' 'shipping' at: [-6,0] size: [2,2] span: 1
     //line at: [-7,-1] end: [6, -1] width: 2
     //line at: [-5,-1] end: [-5, 0] width: 2
     //line at: [-2,-1] end: [-2, 0] width: 2
@@ -31,15 +31,14 @@
    // line at: [4,-1] end: [4, 0] width: 2
     box: 'event broker' at: [-7, -2] size: [3,1] color: white
     dot id: or text: 'order' at: [-5.5, 1] visible: false color: black
-    dot id: ov at: [-2.5,1] visible: false color: black
+    dot id: ov at: [-2.5,1] visible: true color: black
     dot id: pr at: [0.5,1] visible: false color: black
     dot id: pc at: [0.5,1] visible: false color: black
     dot id: os at: [3.5,1] visible: false color: black
     dot id: ronalisa at: [-2,-2.2] radius: 50
-    dot id: it at: [-4,0] radius: 25 selected: true
-    dot id: is at: [-2,0] radius: 50
-    dot id: a at: [-0.2,0] radius: 20 color: black
-    dot id: C at: [2,0] radius: 75 text: 'dot'
+
+    step: '(0) order requested'
+    ronalisa -> ov+[2,0]
     step: '(1) order requested'
     or <- visible: true, or -> -[0,2.5]
     or -> +[3,0]
