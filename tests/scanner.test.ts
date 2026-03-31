@@ -21,7 +21,5 @@ test('scanner simple', () => {
      `
     let p = new Scanner()
     p.scan(eg1)
-    console.log(p.tokens)
-
     expect(p).not.eq(null)
 })

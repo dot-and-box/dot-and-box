@@ -11,6 +11,8 @@ import {
 } from "../../shared/constants.ts"
 import {Control, PropertyUpdater, TextControl} from "../control.ts"
 import {WrappedText} from "../text/wrappedText.ts";
+import {Align} from "../../shared/align.ts";
+import {VerticalAlign} from "../../shared/verticalAlign.ts";
 
 export class BoxControl extends Control implements TextControl {
     get fontSize(): number {
@@ -35,6 +37,10 @@ export class BoxControl extends Control implements TextControl {
     }
 
     public color: string
+    public textColor: string
+    public borderColor: string
+    public align: Align
+    public verticalAlign: VerticalAlign
     public size: Point
     private _text: string
     public id: string
@@ -43,17 +49,25 @@ export class BoxControl extends Control implements TextControl {
     private _fontSize: number
     textControl: WrappedText
 
-    constructor(id: string, position: Point, size: Point, fontSize: number, color: string, text: string, visible: boolean, selected: boolean) {
+    constructor(id: string, position: Point, size: Point, fontSize: number, color: string,
+                textColor: string, borderColor: string,
+                align: Align, verticalAlign: VerticalAlign,
+                text: string,
+                visible: boolean, selected: boolean) {
         super()
         this.id = id
         this.position = position
         this.size = size
         this._fontSize = fontSize
         this.color = color
+        this.textColor = textColor
+        this.borderColor = borderColor
+        this.align = align
+        this.verticalAlign = verticalAlign
         this._text = text
         this.selected = selected
         this.visible = visible
-        this.textControl = new WrappedText(text, this.position, DEFAULT_FONT, this._fontSize, BLACK, this.size, true)
+        this.textControl = new WrappedText(text, this.position, DEFAULT_FONT, this._fontSize, BLACK, this.size, align, verticalAlign)
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -66,14 +80,12 @@ export class BoxControl extends Control implements TextControl {
             ctx.fillStyle = this.color
             ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
         }
+        ctx.strokeStyle = this.selected ? SELECTION_STROKE_STYLE : this.borderColor
+        ctx.lineWidth = this.selected ? SELECTION_LINE_WIDTH : DEFAULT_LINE_WIDTH
+        ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
 
-        if (this.selected || this.color != WHITE) {
-            ctx.strokeStyle = this.selected ? SELECTION_STROKE_STYLE : BLACK
-            ctx.lineWidth = this.selected ? SELECTION_LINE_WIDTH : DEFAULT_LINE_WIDTH
-            ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y)
-        }
         this.textControl.fontSize = this._fontSize
-        this.textControl.color = this.color != WHITE && this.color != 'transparent' ? WHITE : BLACK
+        this.textControl.color = this.textColor
         ctx.textBaseline = 'top'
         this.textControl.draw(ctx)
     }
@@ -86,7 +98,18 @@ export class BoxControl extends Control implements TextControl {
     }
 
     clone(): Control {
-        return new BoxControl(this.id.toString(), this.position.clone(), this.size.clone(), this._fontSize, this.color.toString(), this._text.toString(), this.visible, this.selected)
+        return new BoxControl(this.id.toString(),
+            this.position.clone(),
+            this.size.clone(),
+            this._fontSize,
+            this.color.toString(),
+            this.textColor.toString(),
+            this.borderColor.toString(),
+            this.align,
+            this.verticalAlign,
+            this._text.toString(),
+            this.visible,
+            this.selected)
     }
 
     override getPointPropertyUpdater(name: string): PropertyUpdater {

@@ -10,7 +10,7 @@ import {Animate} from "../actions/animate.ts"
 import {Swap} from "../actions/swap.ts"
 import {Clone} from "../actions/clone.ts"
 import {Sign} from "../shared/sign.ts"
-import {BLACK, CAMERA, COLORS, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../shared/constants.ts"
+import {BLACK, CAMERA, COLORS, DEFAULT_BORDER_COLOR, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../shared/constants.ts"
 import {Assign} from "../actions/assign.ts"
 import {Keywords} from "./keywords.ts"
 import {CameraMove} from "../actions/cameraMove.ts";
@@ -18,6 +18,8 @@ import {LineControl} from "../controls/line/lineControl.ts";
 import {Layout} from "../shared/layout.ts";
 import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 import {Unit} from "../shared/unit.ts";
+import {Align} from "../shared/align.ts";
+import {VerticalAlign} from "../shared/verticalAlign.ts";
 
 export class Parser {
     scanner = new Scanner()
@@ -93,7 +95,8 @@ export class Parser {
     }
 
     boxes() {
-        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT, TokenType.GROUP, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
+        const boxes_tokens: Array<TokenType> = [TokenType.SIZE, TokenType.AT,
+            TokenType.GROUP, TokenType.IDS, TokenType.LAYOUT, TokenType.SPAN, TokenType.COLORS]
         let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
         let text = ''
@@ -141,14 +144,14 @@ export class Parser {
             this.model.groups.push(group);
         }
 
-        let spanInPixels = size.x + this.cellSize * span
+        let spanInPixels = (layout == Layout.COL ? size.x : size.y) + this.cellSize * span
         let i = 0;
         for (let subId of ids) {
             const composedId = group != '' ? group + '_' + subId : subId
             const realId = this.getId(composedId)
             let position = this.calculateLayoutPosition(layout, at, i, spanInPixels)
             let color = colors[i % colors.length]
-            const box = new BoxControl(realId, position, size.clone(), DEFAULT_FONT_SIZE, color, text != '' ? text : subId, true, false)
+            const box = new BoxControl(realId, position, size.clone(), DEFAULT_FONT_SIZE, color, 'white', DEFAULT_BORDER_COLOR, Align.CENTER, VerticalAlign.CENTER, text != '' ? text : subId, true, false)
             this.model.controls.push(box)
             if (box.selected) {
                 this.model.selectedControls.push(box)
@@ -169,13 +172,19 @@ export class Parser {
     }
 
     box() {
-        const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.GROUP, TokenType.SIZE, TokenType.AT, TokenType.TEXT, TokenType.COLOR, TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
+        const box_tokens: Array<TokenType> = [TokenType.ID, TokenType.GROUP, TokenType.SIZE, TokenType.AT, TokenType.TEXT,
+            TokenType.COLOR, TokenType.BORDER_COLOR, TokenType.TEXT_COLOR, TokenType.ALIGN, TokenType.VERTICAL_ALIGN,
+            TokenType.VISIBLE, TokenType.SELECTED, TokenType.FONT_SIZE]
         let size = new Point(this.cellSize, this.cellSize)
         let at = new Point(0, 0)
         let text: string | null
         let id = null
         let group = ''
         let color = COLORS[this.model.controls.length % COLORS.length]
+        let textColor = 'white'
+        let borderColor = DEFAULT_BORDER_COLOR
+        let align = 'center'
+        let verticalAlign = 'center'
         let visible = true
         let selected = false
         let fontSize = DEFAULT_FONT_SIZE
@@ -203,6 +212,18 @@ export class Parser {
                 case TokenType.COLOR:
                     color = this.color()
                     break
+                case TokenType.TEXT_COLOR:
+                    textColor = this.color()
+                    break
+                case TokenType.BORDER_COLOR:
+                    borderColor = this.color()
+                    break
+                case TokenType.VERTICAL_ALIGN:
+                    verticalAlign = this.align()
+                    break
+                case TokenType.ALIGN:
+                    align = this.align()
+                    break
                 case TokenType.VISIBLE:
                     visible = this.visible()
                     break
@@ -224,7 +245,8 @@ export class Parser {
         const composedId = group != '' ? group + '_' + id : id
 
         const realId = this.getId(composedId != '' ? composedId : text)
-        const box = new BoxControl(realId, at, size.clone(), fontSize, color, text, visible, selected)
+        const box = new BoxControl(realId, at, size.clone(), fontSize, color, textColor,
+            borderColor, Align[align.toUpperCase()], VerticalAlign[verticalAlign.toUpperCase()], text, visible, selected)
         this.model.controls.push(box)
         if (box.selected) {
             this.model.selectedControls.push(box)
@@ -442,6 +464,11 @@ export class Parser {
     color(): string {
         this.expectColon()
         return this.colorValue()
+    }
+
+    align(): string {
+        this.expectColon()
+        return this.advance().value
     }
 
     colors(): string[] {

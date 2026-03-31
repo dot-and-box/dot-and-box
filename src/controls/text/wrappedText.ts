@@ -1,6 +1,8 @@
-import { Control } from "../control.ts";
-import { Point } from "../../shared/point.ts";
-import { DEFAULT_FONT, DEFAULT_FONT_SIZE, POSITION, SIZE } from "../../shared/constants.ts";
+import {Control} from "../control.ts";
+import {Point} from "../../shared/point.ts";
+import {DEFAULT_FONT, DEFAULT_FONT_SIZE, POSITION, SIZE} from "../../shared/constants.ts";
+import {Align} from "../../shared/align.ts";
+import {VerticalAlign} from "../../shared/verticalAlign.ts";
 
 export class WrappedText extends Control {
 
@@ -63,21 +65,24 @@ export class WrappedText extends Control {
     private _text: string
     private _dirty: boolean = true
     private _textData: Array<string>
+    private _align: Align
+    private _verticalAlign: VerticalAlign
 
-    constructor(text: string, position: Point, fontName: string, fontSize: number, color: string, size: Point, centered: boolean) {
+    constructor(text: string, position: Point, fontName: string, fontSize: number, color: string, size: Point, align: Align, verticalAlign: VerticalAlign) {
         super();
         this.position = position
         this._fontName = fontName
         this._fontSize = fontSize
         this._text = text;
         this._color = color
-        this._centered = centered
+        this._align = align
+        this._verticalAlign = verticalAlign
         this._textData = [];
         this.size = size
     }
 
     clone(): Control {
-        return new WrappedText(this._text, this.position, this._fontName, this._fontSize, this._color, this.size.clone(), this._centered);
+        return new WrappedText(this._text, this.position, this._fontName, this._fontSize, this._color, this.size.clone(), this._align, this._verticalAlign);
     }
 
     override updatePosition(x: number, y: number) {
@@ -140,9 +145,17 @@ export class WrappedText extends Control {
         this._spanY = this._padding
         this._spanX = this._padding
 
-        if (this._centered) {
+        if (this._align == Align.CENTER) {
             this._spanX = spannedX < maxLineWidth ? this._padding : this.size.x / 2 - maxLineWidth / 2
+
+        }
+
+        if (this._verticalAlign == VerticalAlign.CENTER) {
             this._spanY = (this.size.y - (result.length * this.fontSize)) / 2
+        }
+
+        if (this._verticalAlign == VerticalAlign.BOTTOM) {
+            this._spanY = (this.size.y - (result.length * this.fontSize))
         }
 
         this._textData = result
