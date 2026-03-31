@@ -246,7 +246,7 @@ export class Parser {
 
         const realId = this.getId(composedId != '' ? composedId : text)
         const box = new BoxControl(realId, at, size.clone(), fontSize, color, textColor,
-            borderColor, Align[align.toUpperCase()], VerticalAlign[verticalAlign.toUpperCase()], text, visible, selected)
+            borderColor, parseInt(Align[<any>align.toUpperCase()]), parseInt(VerticalAlign[<any>verticalAlign.toUpperCase()]), text, visible, selected)
         this.model.controls.push(box)
         if (box.selected) {
             this.model.selectedControls.push(box)
