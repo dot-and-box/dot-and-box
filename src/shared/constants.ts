@@ -8,6 +8,7 @@ export const SELECTION_STROKE_STYLE = 'yellow'
 export const SELECTION_LINE_WIDTH = 2
 export const DEFAULT_FONT = 'sans-serif'
 export const DEFAULT_FONT_SIZE = 16
+export const DEFAULT_BORDER_COLOR = 'black'
 export const DEFAULT_LINE_WIDTH = 1
 export const WHITE = 'white'
 export const BLACK = 'black'

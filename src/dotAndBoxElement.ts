@@ -403,6 +403,14 @@ class DotAndBoxElement extends HTMLElement {
             this.dotAndBox.backward()
         } else if (k.key === "ArrowRight") {
             this.dotAndBox.forward()
+        } else if (k.key === "f") {
+            this.dotAndBox.fastForward()
+        } else if (k.key === "b") {
+            this.dotAndBox.fastBackward()
+        } else if (k.key === "r") {
+            this.reset()
+        } else if (k.key === "p") {
+            this.dotAndBox.togglePause()
         } else if (k.key === "Delete") {
             this.dotAndBox.deleteSelected()
         }
