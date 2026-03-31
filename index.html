@@ -17,12 +17,12 @@
   <body>
     <h1>Just dot and box...</h1>
     <dot-and-box
-      controls
+      controls keyboard
       experimental
       style="margin: 10px; height: 600px"
 
       code="
-    title: 'Event driven communication'
+    title: 'Topic cleanup.policy=delete'
     box id: topic text: topic at: [-2.2,-3.2] size: [7.4,6.4] color: white textColor: black borderColor: black align: left verticalAlign: top
     boxes ids: 'partition 0' 'partition 1' 'partition 2' at: [-2,-2] size: [7,1.5] span: 0.2 layout: row
     line id: A at: [-4,0.5] end: [-2.2,0.5] color: black width: 2
@@ -33,14 +33,14 @@
     dot id: pp_1  text: ' k:4 ' at: [-4.8,0] radius: 25
     dot id: ppp_1  text: ' k:5 ' at: [-4.8,0] radius: 25
 
-    box id: producer text: 'producer' at: [-5.3,-2]  size: [2,5] color: orange
+    box id: producer text: 'producer' at: [-5.3,-2]  size: [2, 4.9] color: orange
 
-    step: 'first'
+    step: 'key: 1 mod 3 => partition 1'
     p_1 -> +[3,0]
-    step: 'second'
+    step: 'key: 2 mod 3 => partition 2'
     p_2 -> +[2,0]
     p_2 -> +[1,1.7]
-    step: 'third'
+    step: 'key: 3 mod 3 => partition 0'
     p_3 -> +[2,0]
     p_3 -> +[1,-1.7]
     step: 'fourth'

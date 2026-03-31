@@ -65,8 +65,8 @@ export class WrappedText extends Control {
     private _text: string
     private _dirty: boolean = true
     private _textData: Array<string>
-    private _align: Align
-    private _verticalAlign: VerticalAlign
+    private readonly _align: Align
+    private readonly _verticalAlign: VerticalAlign
 
     constructor(text: string, position: Point, fontName: string, fontSize: number, color: string, size: Point, align: Align, verticalAlign: VerticalAlign) {
         super();
@@ -147,7 +147,8 @@ export class WrappedText extends Control {
 
         if (this._align == Align.CENTER) {
             this._spanX = spannedX < maxLineWidth ? this._padding : this.size.x / 2 - maxLineWidth / 2
-
+        } else if (this._align == Align.RIGHT) {
+            this._spanX = spannedX < maxLineWidth ? this._padding : this.size.x - (maxLineWidth + this._padding)
         }
 
         if (this._verticalAlign == VerticalAlign.CENTER) {
@@ -155,7 +156,7 @@ export class WrappedText extends Control {
         }
 
         if (this._verticalAlign == VerticalAlign.BOTTOM) {
-            this._spanY = (this.size.y - (result.length * this.fontSize))
+            this._spanY = (this.size.y - (result.length * this.fontSize + this._padding))
         }
 
         this._textData = result
