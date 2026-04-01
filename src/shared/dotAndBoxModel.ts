@@ -103,8 +103,10 @@ export class DotAndBoxModel {
     findControls(controlId: string): Control[] {
         if (controlId.startsWith(DotAndBoxModel.SELECTED_PREFIX)) {
             return  this.selectedControls;
-        } else {
+        } else if (controlId.endsWith("_"))  {
             return this.controls.filter(c => c.id.startsWith(controlId))
+        } else {
+            return this.controls.filter(c => c.id === controlId)
         }
     }
 
