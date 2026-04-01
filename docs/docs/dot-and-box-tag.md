@@ -21,7 +21,7 @@ It supports attributes and events.
 
 **loop** - whether to loop reset autoplay at end
 
-**keyboard** - left and right arrow does backward and forward respectively
+**keyboard** - left and right arrow does backward and forward respectively, 'f' fast forward, 'b' fast backward, 'r' reset, 'p'  pause
 
 **debug** - show some debug information
 

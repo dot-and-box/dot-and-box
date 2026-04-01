@@ -38,5 +38,9 @@ Box support number of attributes which are mostly self describing like:
 - **visible** - is box visible - optional - default: true
 - **selected** - is box selected - optional - default: false
 - **color** - background color of box - optional - default:
+- **textColor** -  color of text - optional - default: black
+- **borderColor** - background color of box - optional - default: black
+- **align** - horizontal text alignment one of: left center right
+- **verticalAlign** - horizontal text alignment one of: top, center, bottom
   value from internal color table selected by: len(controls) modulo len(color_table)
 - **fontSize** - font size - optional (**this is experimental and subject to change**)
