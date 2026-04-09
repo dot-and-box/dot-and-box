@@ -3,6 +3,8 @@ export enum TokenType {
     PLUS = '+',
     COMMA = ',',
     COLON = ':',
+    PERIOD = '.',
+    EXCLAMATION = '!',
     EQUALS = '=',
     LEFT_BRACKET = '(',
     NEW_LINE = '\n',
@@ -50,6 +52,7 @@ export enum TokenType {
     LINE = 'line',
     STEP = 'step',
     DURATION = 'duration',
+    CONDITION = 'condition',
     SELECTED = 'selected',
     VISIBLE = 'visible',
     LAYOUT = 'layout'

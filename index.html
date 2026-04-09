@@ -17,46 +17,57 @@
   <body>
     <h1>Just dot and box...</h1>
     <dot-and-box
-      controls keyboard
+      controls
+      keyboard
       experimental
       style="margin: 10px; height: 600px"
-
       code="
-    title: 'Topic cleanup.policy=delete'
-    box id: topic text: topic at: [-2.2,-3.2] size: [7.4,6.4] color: white textColor: black borderColor: black align: left verticalAlign: top
-    boxes ids: 'partition 0' 'partition 1' 'partition 2' at: [-2,-2] size: [7,1.5] span: 0.2 layout: row
-    line id: A at: [-4,0.5] end: [-2.2,0.5] color: black width: 2
-    dot id: p_1 text: ' k:1 ' at: [-4.8,0] radius: 25
-    dot id: p_2  text: ' k:2 ' at: [-4.8,0] radius: 25
-    dot id: p_3  text: ' k:3 ' at: [-4.8,0] radius: 25
+title: 'Topic cleanup.policy=delete'
+box id: topic text: topic at: [-2.2,-3.2] size: [7.4,6.4] color: white textColor: black borderColor: black align: left verticalAlign: top
+boxes ids: 'partition 0' 'partition 1' 'partition 2' at: [-2,-2] size: [7,1.5] span: 0.2 layout: row
+line id: A at: [-4,0.5] end: [-2.2,0.5] color: black width: 2
+line id: B at: [5,0.5] end: [7,-1.2] color: black width: 2 visible: false
+line id: C at: [5,-1.2] end: [7,-1.2] color: black width: 2 visible: false
+line id: D at: [5, 2.2] end: [7, 2.2] color: black width: 2 visible: false
+box id: consumer text: 'consumer group' at: [6.2,-3.2] size: [7.4,6.4] color: white textColor: black borderColor: black align: left verticalAlign: top visible: false
+box id: consumer1 text: 'consumer 1' at: [7,-2]  size: [5, 1.5] visible: false
+box id: consumer2 text: 'consumer 2' at: [7,1.4]  size: [5, 1.5] visible: false
+dot id: p_1 text: ' k:1 ' at: [-4.8,0] radius: 25
+dot id: p_2  text: ' k:2 ' at: [-4.8,0] radius: 25
+dot id: p_3  text: ' k:3 ' at: [-4.8,0] radius: 25
+dot id: pp_1  text: ' k:4 ' at: [-4.8,0] radius: 25
+dot id: ppp_1  text: ' k:5 ' at: [-4.8,0] radius: 25
+box id: producer text: 'producer' at: [-5.3,-2]  size: [2, 4.9] color: orange
+step: 'key: 1 mod 3 => partition 1'
+p_1 -> +[3,0]
+step: 'key: 2 mod 3 => partition 2'
+p_2 -> +[2,0]
+p_2 -> +[1,1.7]
+step: 'key: 3 mod 3 => partition 0'
+p_3 -> +[2,0]
+p_3 -> +[1,-1.7]
+step: 'fourth'
+p_ -> +[1.2,0], pp_1 -> +[3,0]
+step: 'fifth'
+p_ -> +[1,0], pp_ -> +[1,0]
+step: 'sixth'
+p_ -> +[1,0], pp_ -> +[1,0]
+step: 'seventh'
+ppp_1 -> +[2,0], p_ -> +[1,0], pp_ -> +[1,0]
+ppp_1 -> +[1,1.7]
+step: 'ooo'
+ppp_ -> +[1,0], p_ -> +[1,0], pp_ -> +[1,0]
+step: 'consumer appears' duration: 0.1s condition: producer.selected
+consumer <- visible: true, consumer1 <- visible: true, consumer2 <- visible: true, B <- visible: true, C <- visible: true, D <- visible: true
+step: 'consumer gets messages' condition: producer.selected
+ppp_ -> +[1,0], p_2 -> +[4,0], p_1 -> +[4,-1.68], p_3 -> +[5.2,0],  pp_ -> +[1,0]
+step: 'consumer gets messages 1' condition: producer.selected
+ppp_ -> +[1,0], p_ -> +[1,0], pp_ -> +[1,0]
+pp_1 -> +[3,-1.68], ppp_1 -> +[6,0]
+step: 'final' condition: !consumer.visible
+ppp_ -> +[7,0], p_ -> +[5,0], pp_ -> +[5,0]
 
-    dot id: pp_1  text: ' k:4 ' at: [-4.8,0] radius: 25
-    dot id: ppp_1  text: ' k:5 ' at: [-4.8,0] radius: 25
 
-    box id: producer text: 'producer' at: [-5.3,-2]  size: [2, 4.9] color: orange
-
-    step: 'key: 1 mod 3 => partition 1'
-    p_1 -> +[3,0]
-    step: 'key: 2 mod 3 => partition 2'
-    p_2 -> +[2,0]
-    p_2 -> +[1,1.7]
-    step: 'key: 3 mod 3 => partition 0'
-    p_3 -> +[2,0]
-    p_3 -> +[1,-1.7]
-    step: 'fourth'
-    p_ -> +[1.2,0], pp_1 -> +[3,0]
-    step: 'fifth'
-    p_ -> +[1,0], pp_ -> +[1,0]
-    step: 'sixth'
-    p_ -> +[1,0], pp_ -> +[1,0]
-    step: 'seventh'
-    ppp_1 -> +[2,0], p_ -> +[1,0], pp_ -> +[1,0]
-    ppp_1 -> +[1,1.7]
-    step: 'eight'
-    ppp_ -> +[1,0], p_ -> +[1,0], pp_ -> +[1,0]
-    step: 'eight'
-    ppp_ -> +[1,0], p_ -> +[2,0], pp_ -> +[1,0]
-    p_1 <- visible: false, p_2 <- visible: false, p_3 <- visible: false
 "
     ></dot-and-box>
     <script type="module" src="/src/dotAndBoxElement.ts"></script>

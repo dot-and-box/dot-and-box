@@ -38,6 +38,12 @@ export class Scanner {
                 case ':':
                     this.addToken(TokenType.COLON)
                     break
+                case '.':
+                    this.addToken(TokenType.PERIOD)
+                    break
+                case '!':
+                    this.addToken(TokenType.EXCLAMATION)
+                    break
                 case ',':
                     this.addToken(TokenType.COMMA)
                     break

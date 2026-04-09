@@ -1,9 +1,9 @@
-import { Control } from "../controls/control.ts";
-import { Point } from "./point.ts";
-import { Step } from "./step.ts";
-import { StepState } from "./stepState.ts";
-import { StepDirection } from "./stepDirection.ts";
-import { Easing, EasingType } from "./easingFunctions.ts";
+import {Control} from "../controls/control.ts";
+import {Point} from "./point.ts";
+import {Step} from "./step.ts";
+import {StepState} from "./stepState.ts";
+import {StepDirection} from "./stepDirection.ts";
+import {Easing, EasingType} from "./easingFunctions.ts";
 
 export class DotAndBoxModel {
     get height(): number {
@@ -35,10 +35,14 @@ export class DotAndBoxModel {
     easingFunc: (x: number) => number = Easing.getEasingByType(EasingType.IN_QUAD)
     inverseEasingFunc: (x: number) => number = Easing.getInverseEasingByType(EasingType.IN_QUAD)
     // noinspection JSUnusedGlobalSymbols
-    public onBeforeStepForwardCallback: (index: number) => void = () => { }
-    public onBeforeStepBackwardCallback: (index: number) => void = () => { }
-    public updateSubtitleCallback: (text: string) => void = () => { }
-    public onFinish: () => void = () => { }
+    public onBeforeStepForwardCallback: (index: number) => void = () => {
+    }
+    public onBeforeStepBackwardCallback: (index: number) => void = () => {
+    }
+    public updateSubtitleCallback: (text: string) => void = () => {
+    }
+    public onFinish: () => void = () => {
+    }
 
     public updateWidthAndHeight(width: number, height: number) {
         this._width = width
@@ -102,8 +106,8 @@ export class DotAndBoxModel {
 
     findControls(controlId: string): Control[] {
         if (controlId.startsWith(DotAndBoxModel.SELECTED_PREFIX)) {
-            return  this.selectedControls;
-        } else if (controlId.endsWith("_"))  {
+            return this.selectedControls;
+        } else if (controlId.endsWith("_")) {
             return this.controls.filter(c => c.id.startsWith(controlId))
         } else {
             return this.controls.filter(c => c.id === controlId)
@@ -141,7 +145,7 @@ export class DotAndBoxModel {
             if (this.currentStep.state == StepState.START && this._currentStepIndex == 0) {
                 this.updateSubtitleCallback('');
             }
-            if( this._requestedStepProgress == 1 && this.currentStepIndex == this.steps.length -1) {
+            if (this._requestedStepProgress == 1 && this.currentStepIndex == this.steps.length - 1) {
                 this.onFinish()
             }
         }
@@ -193,23 +197,67 @@ export class DotAndBoxModel {
     public previousStep() {
         if (this.currentStep.state == StepState.START) {
             if (this._currentStepIndex > 0) {
-                this.selectStep(this._currentStepIndex - 1)
-                this._requestedStepProgress = 1
-                this.updateSubtitleCallback(this.currentStep.title)
+                if (this.evalCondition(this.steps[this._currentStepIndex - 1])) {
+                    this.selectStep(this._currentStepIndex - 1)
+                    this._requestedStepProgress = 1
+                    this.updateSubtitleCallback(this.currentStep.title)
+                } else {
+                    this._currentStepIndex = this._currentStepIndex - 1
+                    this.previousStep()
+                }
             }
         }
     }
 
-    public nextStep() {
-        if (this.currentStep.state == StepState.END && this._currentStepIndex < this.steps.length - 1) {
-            this.selectStep(this._currentStepIndex + 1)
-            this.currentStep.init()
-            this._requestedStepProgress = 0
+    public evalCondition(step: Step): boolean {
+        let res = true;
+        let negation = false;
+        if (step.condition !== '') {
+            let variable = step.condition.split('\.');
+
+            if (variable[0].startsWith('!')) {
+                negation = true;
+                variable[0] = variable[0].substring(1)
+            }
+            let ctrl = this.findControl(variable[0]);
+            res = false
+            if (variable.length === 1) {
+                res = ctrl.value
+            } else {
+                let property = variable[1]
+                if (property == 'selected') {
+                    res = ctrl.selected
+                }
+                if (property == 'visible') {
+                    res = ctrl.visible
+                }
+
+            }
         }
-        this.onBeforeStepForwardCallback(this._currentStepIndex)
-        this.currentStep.forward()
-        this.updateStartTime()
-        this.currentStep.run()
-        this.updateSubtitleCallback(this.currentStep.title)
+        return negation ? !res : res;
+    }
+
+    public nextStep() {
+        let res = true;
+        if (this.currentStep.state == StepState.END && this._currentStepIndex < this.steps.length - 1) {
+            res = this.evalCondition(this.steps[this._currentStepIndex + 1])
+
+            if (res) {
+                this.selectStep(this._currentStepIndex + 1)
+                this.currentStep.init()
+                this._requestedStepProgress = 0
+            }
+
+        }
+        if (!res) {
+            this._currentStepIndex = this._currentStepIndex + 1
+            this.nextStep()
+        } else {
+            this.onBeforeStepForwardCallback(this._currentStepIndex)
+            this.currentStep.forward()
+            this.updateStartTime()
+            this.currentStep.run()
+            this.updateSubtitleCallback(this.currentStep.title)
+        }
     }
 }

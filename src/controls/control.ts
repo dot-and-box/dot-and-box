@@ -26,6 +26,10 @@ export abstract class Control implements ControlBase {
 
     abstract animateEndByPropertyAndTarget(propertyName: string, targetControl: Control, offset: Point): Point
 
+    get value(): boolean {
+        return this.visible;
+    }
+
     getPropertyValue(name: string): Object {
         const me = this as any;
         return me[name] as Object

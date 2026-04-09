@@ -77,6 +77,7 @@ export class Step {
     public direction = StepDirection.NONE
     public state: StepState = StepState.START
     public duration: number = 1000
+    public condition: string = ''
 
     init() {
         this.sequences.forEach(a => a.init())
