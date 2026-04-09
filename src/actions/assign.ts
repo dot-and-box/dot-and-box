@@ -1,16 +1,14 @@
 import {ActionBase} from "../shared/actionBase.ts"
 import {Control} from "../controls/control.ts"
-import {Change} from "../shared/change.ts"
 import {PropertyChange} from "../shared/propertyChange.ts";
-import {DUMMY_CONTROL} from "../shared/constants.ts";
 import {DotAndBoxModel} from "../shared/dotAndBoxModel.ts";
 
 export class Assign extends ActionBase {
 
-    controls: Control []
+    controls: Control [] = []
     controlId: string
     properties: Map<string, any>
-    changes: Map<string, PropertyChange[]> =  new Map<string, PropertyChange[]>()
+    changes: Map<string, PropertyChange[]> = new Map<string, PropertyChange[]>()
     applied = false
 
     constructor(model: DotAndBoxModel, controlId: string, properties: Map<string, any>) {
@@ -63,8 +61,12 @@ export class Assign extends ActionBase {
         if (this.applied) {
             this.applied = false
             for (const control of this.controls) {
-                for (const propertyChange of this.changes.get(control.id)) {
-                    control[propertyChange.property] = propertyChange.oldValue
+                let ctrl : any = control as any
+                let changes = this.changes.get(control.id)
+                if(changes){
+                for (const propertyChange of changes) {
+                    ctrl[propertyChange.property] = propertyChange.oldValue
+                }
                 }
             }
             this.changes = new Map<string, PropertyChange[]>()

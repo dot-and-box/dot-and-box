@@ -219,19 +219,21 @@ export class DotAndBoxModel {
                 negation = true;
                 variable[0] = variable[0].substring(1)
             }
-            let ctrl = this.findControl(variable[0]);
+            let ctrl = this.findControl(variable[0])
             res = false
-            if (variable.length === 1) {
-                res = ctrl.value
-            } else {
-                let property = variable[1]
-                if (property == 'selected') {
-                    res = ctrl.selected
-                }
-                if (property == 'visible') {
-                    res = ctrl.visible
-                }
+            if(ctrl) {
+                if (variable.length === 1) {
+                    res = ctrl.value
+                } else {
+                    let property = variable[1]
+                    if (property == 'selected') {
+                        res = ctrl.selected
+                    }
+                    if (property == 'visible') {
+                        res = ctrl.visible
+                    }
 
+                }
             }
         }
         return negation ? !res : res;
