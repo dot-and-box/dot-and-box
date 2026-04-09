@@ -597,6 +597,24 @@ export class Parser {
         return res
     }
 
+    condition(): string {
+        this.expectColon()
+        let identifier = this.peek()
+        let val = ''
+        if (identifier.type == TokenType.EXCLAMATION) {
+            val = TokenType.EXCLAMATION
+            this.advance()
+        }
+        val += this.peek().value
+        this.advance()
+        identifier = this.peek()
+        if (identifier.type == TokenType.PERIOD) {
+            this.advance()
+            val += identifier.type + this.advance().value
+        }
+        return val
+    }
+
     step() {
         this.expectColon()
         let step = new Step()
@@ -606,6 +624,9 @@ export class Parser {
         }
         if (this.match(TokenType.DURATION)) {
             step.duration = this.duration()
+        }
+        if (this.match(TokenType.CONDITION)) {
+            step.condition = this.condition()
         }
         this.match(TokenType.NEW_LINE)
         let action = this.action()

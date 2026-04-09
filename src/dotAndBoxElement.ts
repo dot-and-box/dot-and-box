@@ -12,7 +12,7 @@ class DotAndBoxElement extends HTMLElement {
     public static readonly ELEM_NAME: string = "dot-and-box"
     public static readonly ON_BEFORE_STEP_FORWARD: string = "on_before_step_forward"
     public static readonly ON_BEFORE_STEP_BACKWARD: string = "on_before_step_backward"
-    static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL,LOOP, CONTROLS, AUTOPLAY, KEYBOARD, GRID]
+    static observedAttributes = [STYLE, COLOR, BORDER, CODE, WIDTH, HEIGHT, DEBUG, EXPERIMENTAL, LOOP, CONTROLS, AUTOPLAY, KEYBOARD, GRID]
     dotAndBox!: DotAndBox
     private _code: string = ''
     color: string = 'white'
@@ -62,7 +62,7 @@ class DotAndBoxElement extends HTMLElement {
         model.onBeforeStepBackwardCallback = (index) => this.dispatchOnBeforeStepBackward(index)
         model.updateSubtitleCallback = (text) => this.updateSubtitle(text)
         model.onFinish = () => {
-            if(this.loop) {
+            if (this.loop) {
 
                 new Promise((_) => {
                     setTimeout(() => {
@@ -75,10 +75,10 @@ class DotAndBoxElement extends HTMLElement {
                             setTimeout(() => {
                                 this.fastForward()
                             }, 1000);
-                        }).then(_ => {});
+                        }).then(_ => { });
 
                     }, 2000);
-                }).then(_ => {});
+                }).then(_ => { });
 
             }
         }
@@ -440,7 +440,6 @@ class DotAndBoxElement extends HTMLElement {
             this.dotAndBox.updatePositionAndSize()
         }
     }
-
 
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
         switch (name) {

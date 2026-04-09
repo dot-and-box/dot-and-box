@@ -29,6 +29,7 @@ export class Keywords {
         [TokenType.IDS.toString(), TokenType.IDS],
         [TokenType.STEP.toString(), TokenType.STEP],
         [TokenType.DURATION.toString(), TokenType.DURATION],
+        [TokenType.CONDITION.toString(), TokenType.CONDITION],
         [TokenType.SELECTED.toString(), TokenType.SELECTED],
         [TokenType.VISIBLE.toString(), TokenType.VISIBLE],
         [TokenType.LAYOUT.toString(), TokenType.LAYOUT]
