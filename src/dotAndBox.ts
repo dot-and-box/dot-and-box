@@ -173,6 +173,10 @@ export class DotAndBox {
 
         this.ctx.translate(this.model.origin.x, this.model.origin.y)
         this.ctx.scale(this.model.zoom, this.model.zoom)
+        let x = -this.model.origin.x + this.model.offset.x;
+        let y = -this.model.origin.y + this.model.offset.y;
+        this.drawLine(-this.model.origin.x + 5 , - this.model.origin.y + 5,this.model.origin.x - 5, - this.model.origin.y + 5)
+        // console.log(x,y)
         this.ctx.translate(-this.model.origin.x + this.model.offset.x, -this.model.origin.y + this.model.offset.y)
         this.model.updateRequestedProgressIfInMove()
         this.model.updateProgress()
